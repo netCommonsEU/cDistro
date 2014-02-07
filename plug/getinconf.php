@@ -1,7 +1,7 @@
 <?php
 //getinconf.php
 
-$getinconf_file="/tmp/getinconf-client.conf";
+$getinconf_file="/etc/getinconf-client.conf";
 
 function index_get(){
 
@@ -18,10 +18,13 @@ function index_get(){
 	$page .= addInput('INTERNAL_DEV','Device of Community IP',$variables);
 	$page .= addSubmit(array('label'=>'Executar'));
 
+	$page .= "<br/>";
 	if (isUp($variables['NETWORK_NAME'])){
-		$page .= addButton(array('label'=>'Stop','class'=>'btn btn-danger'));
+		$page .= "<div class='alert alert-success text-center'>Server UP</div>\n";
+		$page .= addButton(array('label'=>'Stop','class'=>'btn btn-danger','href'=>'getinconf/downService'));
 	} else {
-		$page .= addButton(array('label'=>'Start','class'=>'btn btn-success'));
+		$page .= "<div class='alert alert-error text-center'>Server DOWN</div>\n";
+		$page .= addButton(array('label'=>'Start','class'=>'btn btn-success', 'href'=>'getinconf/upService'));
 	}
 
 	return(array('type' => 'render','page' => $page));
@@ -32,7 +35,7 @@ function index_post(){
 	global $staticFile;
 
 	$pre = "#!/bin/sh\n\n# Automatically generate file with cGuifi\n";
-	$post = "# POST=665\n";
+	$post = "# POST=665\n# GETINCONF_IGNORE=1\n";
 
 	//Check info!!!
 	$datesToSave = array();
@@ -46,13 +49,34 @@ function index_post(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
-function isUp($dev){
-//	echo "exec? ip addr show dev $dev";
-//	echo passthru('ip addr show dev '.$dev);
+function upService(){
+	global $staticFile;
+/*
+	No se per què el server es pensa que la pàgina encarà no s'ha acabat de carregar. :-?
+	Revisar, per la parada si que funciona.
+	Potser l'script a de fer un fork que no depengui del pare.
+*/
+	execute_bg_shell('getinconf-client install');
+	$page = "";
+	$page .= "<div class='alert alert-warning'>Now, server is loading. Please come back <a href='".$staticFile.'/'.'getinconf'."'>previous page</a>.</div>";
+	return(array('type'=>'render', 'page'=> $page));
+	exit();
 }
 
-function upService(){
+function downService(){
+	global $staticFile;
 
+	$r = execute_program('getinconf-client uninstall');
+	if ($r['return'] == 0) {
+		setFlash('Server DOWN!');
+	}
+
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));	
+}
+
+function isUp($dev){
+	$r = execute_program('ip addr show dev '.$dev);
+	return ($r['return']==0);
 }
 
 

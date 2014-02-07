@@ -74,4 +74,6 @@ default:
 	break;	
 
 }
+
+ob_flush();
 ?>

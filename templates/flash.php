@@ -8,6 +8,6 @@ if (isset($_SESSION['flash'])){
 		$flash_class = $_SESSION['flash_class'];
 		unset($_SESSION['flash_class']);
 	}
-	echo "<div class='alert alert-".$flash_class."'>".$_SESSION['flash']."</div>\n";
+	echo "<div class='flash alert alert-".$flash_class."'>".$_SESSION['flash']."</div>\n";
 	unset($_SESSION['flash']);
 }

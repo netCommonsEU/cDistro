@@ -22,4 +22,53 @@ function write_conffile($file,$dates,$preinfo,$postinfo){
 		notWriteFile($file);
 	}
 }
+function execute_program($cmd){
+	if (exec("$cmd 2>&1", $output, $return) == FALSE){
+		errorExecuteExternalProgram($cmd);
+	}
+
+	return(array('output'=>$output,'return'=>$return));
+}
+function execute_shell($cmd){
+	if (($ret = shell_exec($cmd." > /dev/null 2>&1; echo $?")) == NULL){
+		errorExecuteExternalProgram($cmd);	
+	}
+	echo "return:".$ret;
+	return(array('output'=>"",'return'=>$ret));	
+}
+function execute_bg_shell($cmd){
+
+	exec('bash -c "exec nohup setsid '.$cmd.' > /dev/null 2>&1 &"');
+
+}
+function cmd_exec($cmd, &$stdout, &$stderr)
+{
+    $outfile = tempnam(".", "cmd");
+    $errfile = tempnam(".", "cmd");
+    $descriptorspec = array(
+        0 => array("pipe", "r"),
+        1 => array("file", $outfile, "w"),
+        2 => array("file", $errfile, "w")
+    );
+    $proc = proc_open($cmd, $descriptorspec, $pipes);
+   
+    if (!is_resource($proc)) return 255;
+
+    fclose($pipes[0]);    
+
+    $exit = proc_close($proc);
+    $stdout = file($outfile);
+    $stderr = file($errfile);
+
+    unlink($outfile);
+    unlink($errfile);
+    return $exit;
+}
+function execute_proc($cmd){
+	if (($return = cmd_exec("$cmd", $output, $outerr)) == NULL){
+		errorExecuteExternalProgram($cmd,serialize($output)."-".serialize($outerr));	
+	}
+	return(array('output'=>$output,'return'=>$return));	
+}
+
 ?>

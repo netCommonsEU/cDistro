@@ -71,6 +71,10 @@ function addButton($options=null){
 		$d = $o['divOptions'];
 		unset($o['divOptions']);
 	}
+	$tag="button";
+	if (isset($o['href'])){
+		$tag="a";
+	}
 
 	$str = "";
 	$str .="<div";
@@ -80,12 +84,13 @@ function addButton($options=null){
 		} 
 	}
 	$str .= ">";
-	$str .="<button ";
+	$str .="<$tag ";
 	foreach($o as $k=>$v){
 		$str .= " $k='".$v."'";
 	}
 	$str .= ">";
 	$str .= $o['label'];
+	$str .= "</$tag>";
 	$str .= "</div>";
 	return $str;	
 }

@@ -34,6 +34,12 @@ function callbackReturnUnknow($cmd){
 
 }
 
+function errorExecuteExternalProgram($cmd,$output=""){
+
+	ErrorPage(5,'errorExecuteExternalProgram',"$cmd: Error execute program.\n$output");
+
+}
+
 
 function ErrorPage($knum, $kstr, $explain){
 	global $css, $js, $appName, $staticPath, $appURL, $menu;
