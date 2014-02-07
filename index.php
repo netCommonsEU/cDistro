@@ -2,13 +2,13 @@
 
 // Config files
 require "config/global.php";
-require "config/menus.php";
 require "core.php";
-require "templates/form.php";
-require "templates/view.php";
-require "templates/errors.php";
-require "templates/utilio.php";
-require "templates/session.php";
+require "lib/form.php";
+require "lib/view.php";
+require "lib/errors.php";
+require "lib/utilio.php";
+require "lib/session.php";
+require "lib/menus.php";
 
 
 $css = array('bootstrap.min','bootstrap-responsive.min', 'main');
@@ -20,7 +20,7 @@ $controller = "default";
 $action="index";
 $method=strtolower($_SERVER['REQUEST_METHOD']);
 
-if (isset($Parameters) && is_array($Parameters) && isset($Parameters[0]) && file_exists($documentPath."/plug/".$Parameters[0].".php")){
+if (isset($Parameters) && is_array($Parameters) && isset($Parameters[0]) && file_exists($documentPath.$plugs_controllers.$Parameters[0].".php")){
 	$controller = $Parameters[0];
 	array_shift($Parameters);
 }
@@ -31,7 +31,7 @@ if (isset($Parameters) && isset($Parameters[0])) {
 	array_shift($Parameters);
 }
 
-require $documentPath."/plug/".$controller.".php";
+require $documentPath.$plugs_controllers.$controller.".php";
 
 if (!is_array($Parameters)){
 	$Parameters=array();

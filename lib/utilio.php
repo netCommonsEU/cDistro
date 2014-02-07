@@ -22,6 +22,20 @@ function write_conffile($file,$dates,$preinfo,$postinfo){
 		notWriteFile($file);
 	}
 }
+function isPackageInstall($pkg){
+	$cmd = "dpkg -l ".$pkg." > /dev/null 2>&1; echo $?";
+	return (shell_exec($cmd) == 0);
+
+}
+function installPackage($pkg){
+	$cmd = "apt-get install -y ".$pkg." 2>&1";
+	return (shell_exec($cmd));
+}
+function uninstallPackage($pkg){
+	$cmd = "apt-get purge -y ".$pkg." 2>&1";
+	return (shell_exec($cmd));
+}
+
 function execute_program($cmd){
 	if (exec("$cmd 2>&1", $output, $return) == FALSE){
 		errorExecuteExternalProgram($cmd);

@@ -11,4 +11,8 @@ $documentPath=$_SERVER['DOCUMENT_ROOT'];
 $appName = "cGuinux";
 $appURL="http://localhost:7000";
 $projectURL="http://guifi.net";
+
+// Dir webapp
+$plugs_controllers = "/plug/controllers/";
+$plugs_menus = "/plug/menus/";
 ?>
