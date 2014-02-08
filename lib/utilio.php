@@ -43,11 +43,15 @@ function execute_program($cmd){
 
 	return(array('output'=>$output,'return'=>$return));
 }
+function execute_program_shell($cmd){
+	$ret = shell_exec($cmd." 2>&1");
+	return(array('output'=>$ret,'return'=>""));	
+}
+
 function execute_shell($cmd){
 	if (($ret = shell_exec($cmd." > /dev/null 2>&1; echo $?")) == NULL){
 		errorExecuteExternalProgram($cmd);	
 	}
-	echo "return:".$ret;
 	return(array('output'=>"",'return'=>$ret));	
 }
 function execute_bg_shell($cmd){

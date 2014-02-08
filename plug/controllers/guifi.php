@@ -41,8 +41,6 @@ function proxy3_form($file,$options){
 function proxy3_get(){
 	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_defconfig;
 
-
-
 	if (!isPackageInstall($guifi_proxy3_pkg)){
 		$page = package_not_install($guifi_proxy3_pkg,$guifi_proxy3_desc);
 	} else {
