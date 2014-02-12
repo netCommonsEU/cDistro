@@ -62,21 +62,21 @@ function proxy3_form($file,$options){
 
 }
 function proxy3_get(){
-	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_variables;
+	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_variables, $staticFile;
 
 	$page = proxy3_form($guifi_proxy3_file,$guifi_proxy3_variables);
 	if (isPackageInstall($guifi_proxy3_pkg)){ 	
-		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>'default/uninstall/'.$guifi_proxy3_pkg));
+		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$guifi_proxy3_pkg));
 	}
 	return(array('type' => 'render','page' => $page));
 
 }
 
 function proxy3_post(){
-	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_variables;
+	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_variables, $staticFile;
 
 	$page = "";
-	
+
 	$datesToSave = array();
 	foreach ($_POST as $key => $value) {
 		$datesToSave[$key] = $value;
@@ -95,6 +95,7 @@ function proxy3_post(){
 			}
 		}
 		write_conffile($guifi_proxy3_file,$datesToSave);
+		setFlash("Save it!","success");
 		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/proxy3'));
 	}
 	return(array('type' => 'render','page' => $page));
