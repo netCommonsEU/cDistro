@@ -12,7 +12,8 @@ require "lib/menus.php";
 
 
 $css = array('bootstrap.min','bootstrap-responsive.min', 'main');
-$js = array('jquery-1.11.0.min','bootstrap.min','main');
+$js = array('jquery-1.11.0.min','bootstrap.min');
+$js_end = array('main');
 
 
 // Default 
@@ -31,6 +32,7 @@ if (isset($Parameters) && isset($Parameters[0])) {
 	array_shift($Parameters);
 }
 
+
 require $documentPath.$plugs_controllers.$controller.".php";
 
 if (!is_array($Parameters)){
@@ -42,7 +44,7 @@ if(function_exists($action."_".$method)){
 	$action=$action."_".$method;
 }
 
-if (!function_exists($action)) {
+if (!function_exists($action)) {	
 	array_unshift($Parameters, $action);
 	array_unshift($Parameters, $controller);	
 	$controller = "default";
@@ -67,6 +69,10 @@ case 'render':
 case 'redirect':
 	//Header to redirect!
 	header('Location: '.$cb['url'], true, 301);
+	break;
+
+case 'ajax':
+	echo $cb['page'];
 	break;
 
 default:
