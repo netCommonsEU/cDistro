@@ -31,6 +31,12 @@ function write_conffile($file,$dates,$preinfo="",$postinfo=""){
 		notWriteFile($file);
 	}
 }
+function write_merge_conffile($file,$dates){
+	foreach($dates as $k=>$v){
+		$cmd = "sed -i -e 's|".$k." *= *[a-zA-Z0-9]*;|".$k." = ".$v.";|g' ".$file;
+		shell_exec($cmd);
+	}
+}
 function isPackageInstall($pkg){
 	$cmd = "dpkg -l ".$pkg." > /dev/null 2>&1; echo $?";
 	return (shell_exec($cmd) == 0);
