@@ -65,7 +65,9 @@ function proxy3_get(){
 	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_variables;
 
 	$page = proxy3_form($guifi_proxy3_file,$guifi_proxy3_variables);
-	
+	if (isPackageInstall($guifi_proxy3_pkg)){ 	
+		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>'default/uninstall/'.$guifi_proxy3_pkg));
+	}
 	return(array('type' => 'render','page' => $page));
 
 }
@@ -73,6 +75,8 @@ function proxy3_get(){
 function proxy3_post(){
 	global $guifi_proxy3_file, $guifi_proxy3_pkg, $guifi_proxy3_desc, $guifi_proxy3_variables;
 
+	$page = "";
+	
 	$datesToSave = array();
 	foreach ($_POST as $key => $value) {
 		$datesToSave[$key] = $value;
@@ -80,16 +84,22 @@ function proxy3_post(){
 
 	if (!isPackageInstall($guifi_proxy3_pkg)){
 		if (($define_variables = package_default_variables($datesToSave,$guifi_proxy3_variables, $guifi_proxy3_pkg)) != ""){
-			$page = "<div class='alert'><pre>".$define_variables."</pre></div>";
+			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
 		}
 		$page .= package_not_install($guifi_proxy3_pkg,$guifi_proxy3_desc);
 	} else {
-		$page = "";
-		$page .=  __FUNCTION__." in ".__FILE__." at ".__LINE__."\n" ;
+		//Canviar el fitxer de configuració
+		foreach ($datesToSave as $key => $value) {
+			if($guifi_proxy3_variables[$key]['kdeb'] == 'string'){
+				$datesToSave[$key] = "'".$value."'";
+			}
+		}
+		write_conffile($guifi_proxy3_file,$datesToSave);
+		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/proxy3'));
 	}
 	return(array('type' => 'render','page' => $page));
-
 }
+
 
 // SNPSERVICES
 function snpservices_get(){

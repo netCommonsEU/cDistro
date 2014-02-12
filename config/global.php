@@ -15,4 +15,7 @@ $projectURL="http://guifi.net";
 // Dir webapp
 $plugs_controllers = "/plug/controllers/";
 $plugs_menus = "/plug/menus/";
+
+// Debug
+$debug = false;
 ?>

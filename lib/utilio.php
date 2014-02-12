@@ -1,23 +1,25 @@
 <?php
 	//utils I/O utilio.php
 function load_conffile($file,$default = null){
+	$variables = "";
 
 	if ($default != null) {
 		$variables = array();
 		foreach($default as $k=>$v){
 			$variables[$k]=(string)$v['default'];
 		}
-		return($variables);
 	}
 	if (!file_exists($file)){
+		if (is_array($variables)){return($variables);}
 		notFileExist($file);
 	}
 	if(($variables = parse_ini_file($file)) == FALSE) {
+		if (is_array($variables)){return($variables);}
 		notReadFile($file);
 	}
 	return($variables);
 }
-function write_conffile($file,$dates,$preinfo,$postinfo){
+function write_conffile($file,$dates,$preinfo="",$postinfo=""){
 	//Prepare file
 	$str = $preinfo;
 	foreach($dates as $k=>$v){
@@ -44,14 +46,17 @@ function uninstallPackage($pkg){
 }
 
 function package_default_variables($dts,$default,$pkgname){
+	global $debug;
 
 	$str = "";
 	foreach($dts as $k=>$v){
 		$variable = $default[$k];
+
 		$cmd="echo \"".$pkgname."	".$variable['vdeb']."	".$variable['kdeb']."	".$v."\" | debconf-set-selections 2>&1" ;
-		$str .= $cmd."\n";
+		if ($debug) $str .= $cmd."\n";
+
 		$str .= shell_exec($cmd);
-		//$str .= "\n";
+		if ($debug) $str .= "\n";
 	}
 
 	return($str);
