@@ -23,12 +23,13 @@ function createForm($options=null){
 
 function addInput($name=null, $label= null, $value = null, $options = null){
 
+
 	if (!is_null($name)){
 		$options['name'] = $name;
 	}
 	if (!is_null($value)){
 		if(is_array($value)) {
-			if ($value[$name]){
+			if (isset($value[$name])){
 				$options['value'] = $value[$name];
 			}
 		} else {

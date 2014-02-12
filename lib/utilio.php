@@ -1,7 +1,14 @@
 <?php
 	//utils I/O utilio.php
-function load_conffile($file){
+function load_conffile($file,$default = null){
 
+	if ($default != null) {
+		$variables = array();
+		foreach($default as $k=>$v){
+			$variables[$k]=(string)$v['default'];
+		}
+		return($variables);
+	}
 	if (!file_exists($file)){
 		notFileExist($file);
 	}
@@ -34,6 +41,20 @@ function installPackage($pkg){
 function uninstallPackage($pkg){
 	$cmd = "apt-get purge -y ".$pkg." 2>&1";
 	return (shell_exec($cmd));
+}
+
+function package_default_variables($dts,$default,$pkgname){
+
+	$str = "";
+	foreach($dts as $k=>$v){
+		$variable = $default[$k];
+		$cmd="echo \"".$pkgname."	".$variable['vdeb']."	".$variable['kdeb']."	".$v."\" | debconf-set-selections 2>&1" ;
+		$str .= $cmd."\n";
+		$str .= shell_exec($cmd);
+		//$str .= "\n";
+	}
+
+	return($str);
 }
 
 function execute_program($cmd){
