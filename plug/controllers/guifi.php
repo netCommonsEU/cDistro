@@ -174,7 +174,7 @@ function snpservices_post(){
 
 // DNSSERVICES
 
-$dnsservices_files="/etc/snpservices/config.php";
+$dnsservices_files="/etc/dnsservices/config.php";
 $dnsservices_pkg="dnsservices";
 $dnsservices_desc="This software provides graph services in the context of the guifi.net";
 $dnsservices_variables=array('DNSGraphServerId' => array('default' => '0',
