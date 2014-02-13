@@ -115,7 +115,8 @@ $snpservices_variables=array('SNPGraphServerId' => array('default' => '0',
 function snpservices_form($file,$options){
 	$page = "";
 
-	$variables = load_conffile($file,$options);
+
+	$variables = load_singlevalue($file,$options);
 	$page .= hl("Guifi SNPServices");
 	$page .= createForm(array('class'=>'form-horizontal'));
 

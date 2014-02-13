@@ -13,11 +13,37 @@ function load_conffile($file,$default = null){
 		if (is_array($variables)){return($variables);}
 		notFileExist($file);
 	}
-	if(($variables = parse_ini_file($file)) == FALSE) {
+	if(($v = parse_ini_file($file)) == FALSE) {
 		if (is_array($variables)){return($variables);}
 		notReadFile($file);
 	}
-	return($variables);
+	return($v);
+}
+function load_singlevalue($file,$varis ){
+
+	if (!file_exists($file)){
+		$variables = array();
+		foreach($default as $k=>$v){
+			$variables[$k]=(string)$v['default'];
+		}
+		return($variables);
+	}
+
+	$v = array();
+	// llegir fitxer
+	$c = file_get_contents($file);
+
+	foreach($varis as $vari=>$vals){
+		$p = "/{$vari}[ \t]*=[ \t]*([^;]*)/";
+		preg_match($p, $c, $a);
+		if (is_array($a) && isset($a[1])){
+			$v[$vari] = $a[1];
+		} else {
+			$v[$vari] = $vals['default'];
+		}
+	}
+	return($v);
+
 }
 function write_conffile($file,$dates,$preinfo="",$postinfo=""){
 	//Prepare file
