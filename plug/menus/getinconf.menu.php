@@ -1,4 +1,4 @@
 <?php
 //getinconf.menu
 
-addMenu('getinconf','getinconf');
+addMenu('getinconf','getinconf','clommunity');

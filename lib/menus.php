@@ -2,7 +2,7 @@
 // lib/menus.php
 $menu = array();
 
-function addMenu($name,$link,$side='right',$suboption='config'){
+function addMenu($name,$link,$suboption='config',$side='right'){
 	global $menu;
 
 	if (!isset($menu[$side])){

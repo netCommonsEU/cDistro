@@ -1,6 +1,6 @@
 <?php
 //getinconf.menu
 
-addMenu('guifi-proxy3','guifi/proxy3');
-addMenu('snpservices','guifi/snpservices');
-addMenu('dnsservices','guifi/dnsservices');
+addMenu('proxy3','guifi/proxy3','guinux');
+addMenu('snpservices','guifi/snpservices','guinux');
+addMenu('dnsservices','guifi/dnsservices','guinux');

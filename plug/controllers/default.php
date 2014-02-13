@@ -39,7 +39,8 @@ function realInstall(){
 		$page .= $ret;
 		$page .= "</pre>";
 	}
-	
+	$page .= "<a class='btn btn-primar' href='".$staticFile."'>Home</a>";
+
 	return(array('type'=>'ajax','page'=>$page));	
 
 }
@@ -66,6 +67,8 @@ function realUninstall(){
 		$page .= "</pre>";
 	}
 	
+	$page .= "<a class='btn btn-primar' href='".$staticFile."'>Home</a>";
+
 	return(array('type'=>'ajax','page'=>$page));	
 
 }

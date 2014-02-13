@@ -76,7 +76,7 @@ function downService(){
 }
 
 function viewDevice(){
-	global $Parameters;
+	global $Parameters,$staticFile;
 
 	if (isset($Parameters) && isset($Parameters[0])){
 		$r = execute_program_shell('ip addr show dev '.$Parameters[0]);		
