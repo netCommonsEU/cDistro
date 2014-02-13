@@ -92,7 +92,12 @@ function package_default_variables($dts,$default,$pkgname,$undefined_variables=n
 	}
 	if (is_array($undefined_variables)) {
 		foreach ($undefined_variables as $k => $v) {
-			$cmd="echo \"".$pkgname."	".$v['vdeb']."	".$v['kdeb']."	".$v['default']."\" | debconf-set-selections 2>&1" ;
+			if(isset($v['debpkg'])){
+				$p = $v['debpkg'];
+			} else {
+				$p = $pkgname;
+			}
+			$cmd="echo \"".$p."	".$v['vdeb']."	".$v['kdeb']."	".$v['default']."\" | debconf-set-selections 2>&1" ;
 			if ($debug) $str .= $cmd."\n";
 
 			$str .= shell_exec($cmd);

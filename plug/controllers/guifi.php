@@ -111,6 +111,13 @@ $snpservices_variables=array('SNPGraphServerId' => array('default' => '0',
 												'kdeb' => 'string')
 					    ); 
 
+$snpservices_undefined_variables=array(array('debpkg' => 'mrtg',
+											 'vdeb'=> 'mrtg/conf_mods', 
+										     'kdeb' => 'boolean',
+										     'default' => 'true'
+										     )
+									);
+
 // SNPSERVICES
 function snpservices_form($file,$options){
 	$page = "";
@@ -143,7 +150,7 @@ function snpservices_get(){
 
 function snpservices_post(){
 	
-	global $snpservices_files, $snpservices_pkg, $snpservices_desc, $snpservices_variables, $staticFile;
+	global $snpservices_files, $snpservices_pkg, $snpservices_desc, $snpservices_variables, $staticFile, $snpservices_undefined_variables;
 
 	$page = "";
 
@@ -153,7 +160,7 @@ function snpservices_post(){
 	}
 
 	if (!isPackageInstall($snpservices_pkg)){
-		if (($define_variables = package_default_variables($datesToSave,$snpservices_variables, $snpservices_pkg)) != ""){
+		if (($define_variables = package_default_variables($datesToSave,$snpservices_variables, $snpservices_pkg, $snpservices_undefined_variables)) != ""){
 			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
 		}
 		$page .= package_not_install($snpservices_pkg,$snpservices_desc);
