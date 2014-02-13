@@ -166,7 +166,7 @@ function snpservices_post(){
 		}
 		write_merge_conffile($snpservices_files,$datesToSave);
 		setFlash("Save it!","success");
-		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/proxy3'));
+		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/snpservices'));
 	}
 	return(array('type' => 'render','page' => $page));
 }
