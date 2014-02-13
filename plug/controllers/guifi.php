@@ -188,7 +188,7 @@ $dnsservices_variables=array('DNSGraphServerId' => array('default' => '0',
 												'desc' => 'Select your DNS Server Id to share your domains',
 												'vdeb' => 'dnsservices/DNSGraphServerId',
 												'kdeb' => 'string'),
-							 'DNSDataServerurl' => array('default' => 'http://guifi.net',
+							 'DNSDataServer_url' => array('default' => 'http://guifi.net',
 												'desc' => 'Url from DNSDataServer (without ending backslash)',
 												'vdeb' => 'dnsservices/DNSDataServerurl',
 												'kdeb' => 'string')
@@ -201,10 +201,13 @@ $dnsservices_undefined_variables=array(array('vdeb'=> 'dnsservices/forcefetch',
 									);
 
 function dnsservices_form($file,$options){
+	global $debug;
+
 	$page = "";
 
 
 	$variables = load_singlevalue($file,$options);
+	if($debug) { echo "<pre>"; print_r($variables); echo "</pre>"; }
 	$page .= hl("Guifi DNSServices");
 	$page .= createForm(array('class'=>'form-horizontal'));
 

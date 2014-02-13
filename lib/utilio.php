@@ -20,6 +20,7 @@ function load_conffile($file,$default = null){
 	return($v);
 }
 function load_singlevalue($file,$varis ){
+	global $debug;
 
 	if (!file_exists($file)){
 		$variables = array();
@@ -33,15 +34,24 @@ function load_singlevalue($file,$varis ){
 	// llegir fitxer
 	$c = file_get_contents($file);
 
+	if ($debug) { echo "<pre>";}
+
 	foreach($varis as $vari=>$vals){
 		$p = "/{$vari}[ \t]*=[ \t]*([^;]*)/";
 		preg_match($p, $c, $a);
+		if ($debug) { print_r($a); }
 		if (is_array($a) && isset($a[1])){
 			$v[$vari] = $a[1];
 		} else {
 			$v[$vari] = $vals['default'];
 		}
+		if (substr($v[$vari],0,1) == "'") $v[$vari] = substr($v[$vari],1);
+		if (substr($v[$vari],-1,1) == "'") $v[$vari] = substr($v[$vari],0,strlen($v[$vari])-1);
+		if ($debug) { echo "v=$v[$vari]";}
 	}
+
+	if ($debug) { echo "</pre>";}
+
 	return($v);
 
 }
@@ -58,10 +68,16 @@ function write_conffile($file,$dates,$preinfo="",$postinfo=""){
 	}
 }
 function write_merge_conffile($file,$dates){
+	global $debug;
+	
+	if ($debug) { echo "<pre>";}
 	foreach($dates as $k=>$v){
-		$cmd = "sed -i -e 's|".$k." *= *[a-zA-Z0-9]*;|".$k." = ".$v.";|g' ".$file;
+		$cmd = "sed -i -e 's|".$k." *= *[^;]*;|".$k." = ".$v.";|g' ".$file;
+		if ($debug) { echo $cmd;}
 		shell_exec($cmd);
 	}
+	if ($debug) { echo "</pre>";}
+
 }
 function isPackageInstall($pkg){
 	$cmd = "dpkg -l ".$pkg." > /dev/null 2>&1; echo $?";
