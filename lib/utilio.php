@@ -77,7 +77,7 @@ function uninstallPackage($pkg){
 	return (shell_exec($cmd));
 }
 
-function package_default_variables($dts,$default,$pkgname){
+function package_default_variables($dts,$default,$pkgname,$undefined_variables=null){
 	global $debug;
 
 	$str = "";
@@ -89,6 +89,13 @@ function package_default_variables($dts,$default,$pkgname){
 
 		$str .= shell_exec($cmd);
 		if ($debug) $str .= "\n";
+	}
+	foreach ($undefined_variables as $k => $v) {
+		$cmd="echo \"".$pkgname."	".$v['vdeb']."	".$v['kdeb']."	".$v['default']."\" | debconf-set-selections 2>&1" ;
+		if ($debug) $str .= $cmd."\n";
+
+		$str .= shell_exec($cmd);
+		if ($debug) $str .= "\n";		
 	}
 
 	return($str);

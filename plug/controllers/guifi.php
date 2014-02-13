@@ -173,18 +173,80 @@ function snpservices_post(){
 
 
 // DNSSERVICES
-function dnsservices_get(){
-	
+
+$dnsservices_files="/etc/snpservices/config.php";
+$dnsservices_pkg="dnsservices";
+$dnsservices_desc="This software provides graph services in the context of the guifi.net";
+$dnsservices_variables=array('DNSGraphServerId' => array('default' => '0',
+												'desc' => 'Select your DNS Server Id to share your domains',
+												'vdeb' => 'dnsservices/DNSGraphServerId',
+												'kdeb' => 'string'),
+							 'DNSDataServerurl' => array('default' => 'http://guifi.net',
+												'desc' => 'Url from DNSDataServer (without ending backslash)',
+												'vdeb' => 'dnsservices/DNSDataServerurl',
+												'kdeb' => 'string')
+					    ); 
+
+$dnsservices_undefined_variables=array(array('vdeb'=> 'dnsservices/forcefetch', 
+										     'kdeb' => 'boolean',
+										     'default' => 'false'
+										     )
+									);
+
+function dnsservices_form($file,$options){
 	$page = "";
-	$page .=  __FUNCTION__." in ".__FILE__." at ".__LINE__."\n" ;
-	
+
+
+	$variables = load_singlevalue($file,$options);
+	$page .= hl("Guifi DNSServices");
+	$page .= createForm(array('class'=>'form-horizontal'));
+
+	foreach($options as $op=>$val){
+		$page .= addInput($op,$val['desc'],$variables);
+	}
+
+	$page .= addSubmit(array('label'=>'Executar'));
+
+	return($page);
+
+}
+function dnsservices_get(){
+
+	global $dnsservices_files, $dnsservices_pkg, $dnsservices_desc, $dnsservices_variables, $staticFile;
+
+	$page = dnsservices_form($dnsservices_files,$dnsservices_variables);
+	if (isPackageInstall($dnsservices_pkg)){ 	
+		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$dnsservices_pkg));
+	}
 	return(array('type' => 'render','page' => $page));
+
 }
 
 function dnsservices_post(){
 	
+	global $dnsservices_files, $dnsservices_pkg, $dnsservices_desc, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables;
+
 	$page = "";
-	$page .=  __FUNCTION__." in ".__FILE__." at ".__LINE__."\n" ;
-	
+
+	$datesToSave = array();
+	foreach ($_POST as $key => $value) {
+		$datesToSave[$key] = $value;
+	}
+	if (!isPackageInstall($dnsservices_pkg)){
+		if (($define_variables = package_default_variables($datesToSave,$dnsservices_variables, $dnsservices_pkg,$dnsservices_undefined_variables)) != ""){
+			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
+		}
+		$page .= package_not_install($dnsservices_pkg,$dnsservices_desc);
+	} else {
+		//Canviar el fitxer de configuració
+		foreach ($datesToSave as $key => $value) {
+			if($dnsservices_variables[$key]['kdeb'] == 'string'){
+				$datesToSave[$key] = "'".$value."'";
+			}
+		}
+		write_merge_conffile($dnsservices_files,$datesToSave);
+		setFlash("Save it!","success");
+		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/dnsservices'));
+	}
 	return(array('type' => 'render','page' => $page));
 }
