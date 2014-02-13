@@ -23,7 +23,7 @@ function load_singlevalue($file,$varis ){
 
 	if (!file_exists($file)){
 		$variables = array();
-		foreach($default as $k=>$v){
+		foreach($varis as $k=>$v){
 			$variables[$k]=(string)$v['default'];
 		}
 		return($variables);
