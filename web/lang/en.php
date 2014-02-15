@@ -11,9 +11,11 @@ addS ('Welcome!','Welcome!');
 addS ('Define language to: ', 'Define language to: ');
 addS ('Configure your system!','Configure your system!');
 addS ('is already installed.','is already installed.');
-addS ("Install","Install");
 addS ("isn't installed.","isn't installed.");
+addS ("Install","Install");
 addS ("Uninstall","Uninstall");
+addS ("Installed","Installed");
+addS ("Uninstalled","Uninstalled");
 addS ("Home","Home");
 addS ("package, please wait!","package, please wait!");
 

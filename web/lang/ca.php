@@ -11,9 +11,11 @@ addS ('Welcome!','Benvingut !');
 addS ('Define language to: ', 'Idioma sel·leccionat: ');
 addS ('Configure your system!','Configura el sistema!');
 addS ('is already installed.','ja està instal·lat');
-addS ("Install","Instal·lar");
 addS ("isn't installed.","no està instal·lat.");
+addS ("Install","Instal·lar");
 addS ("Uninstall","Desinstal·la");
+addS ("Installed","Instal·lat");
+addS ("Uninstalled","Desinstal·lat");
 addS ("Home","Inici");
 addS ("package, please wait!","paquet, si et plau espera!");
 

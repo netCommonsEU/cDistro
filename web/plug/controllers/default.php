@@ -46,7 +46,7 @@ function realInstall(){
 			$ret = "$pkg ".t("is already installed.");
 		}
 
-		$page .= hl(t("Install")." '".$pkg."'");
+		$page .= hl(t("Installed")." '".$pkg."'");
 		$page .= "<pre>";
 		$page .= $ret;
 		$page .= "</pre>";
@@ -73,7 +73,7 @@ function realUninstall(){
 			$ret = "$pkg ".t("isn't installed.");
 		}
 
-		$page .= hl(t("Uninstall")." '".$pkg."'");
+		$page .= hl(t("Uninstalled")." '".$pkg."'");
 		$page .= "<pre>";
 		$page .= $ret;
 		$page .= "</pre>";
@@ -92,7 +92,8 @@ function _genericInstallUninstall($strFunction){
 		$pkg = $Parameters[0];
 		$ret = "";
 
-		$page = "<div id='console'><img src='".$staticPath."images/ajax_loader.gif' width='40px' height='40px' /> ".$strFunction." '".$pkg."' ".t("package, please wait!")."</div>";
+		$page = "<div id='console'><img src='".$staticPath."images/ajax_loader.gif' width='40px' height='40px' /> "
+		$page .= t($strFunction)." '".$pkg."' ".t("package, please wait!")."</div>";
 		$page .= "<script>\n";
 		$page .= "$('#console').load('".$staticFile."/default/real".$strFunction."/".$pkg."');\n";
 		$page .= "</script>\n";
