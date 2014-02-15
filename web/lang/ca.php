@@ -51,3 +51,7 @@ addS ("This software provides graph services in the context of the guifi.net","T
 addS ('Select your DNS Server Id to share your domains','Id del Servei DNS per compartir el teu domini');
 addS ('Url from DNSDataServer (without ending backslash)','Url de DNSDataServer (sense barra obliqua invertida al final)');
 addS ("Guifi DNSServices","Servei de DNS a Guifi");
+
+// lib/view.php
+addS ('Not Install','No Instal·lat');
+addS ('Install','Instal·lar');

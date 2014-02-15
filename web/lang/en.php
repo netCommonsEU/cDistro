@@ -12,7 +12,7 @@ addS ('Define language to: ', 'Define language to: ');
 addS ('Configure your system!','Configure your system!');
 addS ('is already installed.','is already installed.');
 addS ("Install","Install");
-addS (" isn't installed."," isn't installed.");
+addS ("isn't installed.","isn't installed.");
 addS ("Uninstall","Uninstall");
 addS ("Home","Home");
 addS ("package, please wait!","package, please wait!");
@@ -51,3 +51,7 @@ addS ("Guifi SNPServices","Guifi SNPServices");
 addS ('Select your DNS Server Id to share your domains','Select your DNS Server Id to share your domains');
 addS ('Url from DNSDataServer (without ending backslash)','Url from DNSDataServer (without ending backslash)');
 addS ("Guifi DNSServices","Guifi DNSServices");
+
+// lib/view.php
+addS ('Not Install','Not Install');
+addS ('Install','Install');

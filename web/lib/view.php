@@ -15,10 +15,10 @@ function package_not_install($pkg,$des){
 
 	$page = "";
 
-	$page .= hl('Not Install!');
+	$page .= hl(t('Not Install').'!');
 	$page .= hl($pkg, 2);
 	$page .= "<p>".$des."</p>";
-	$page .= addButton(array('label'=>'Install','class'=>'btn btn-warning','href'=> $staticFile.'/default/install/'.$pkg));
+	$page .= addButton(array('label'=>t('Install'),'class'=>'btn btn-warning','href'=> $staticFile.'/default/install/'.$pkg));
 
 	return($page);
 }
