@@ -5,43 +5,43 @@ $guifi_proxy3_file="/etc/guifi-proxy3/config.sh";
 $guifi_proxy3_pkg="guifi-proxy3";
 $guifi_proxy3_variables = array(
 				'base_url'=> array('default'=>'http://www.guifi.net', 
-									'desc'=>'Server URL Base', 
+									'desc'=>t('Server URL Base'), 
 									'vdeb'=>'guifi-proxy3/baseurl',
 									'kdeb'=>'string'),
 				   'node' =>  array('default'=>'0', 
-				   					'desc'=>'Guifi Proxy node number', 
+				   					'desc'=>t('Guifi Proxy node number'), 
 				   					'vdeb'=>'guifi-proxy3/node',
 									'kdeb'=>'string'),
 				   'ldap_main' =>  array('default'=>'ldap.guifi.net', 
-				   						'desc'=>'Main Server Ldap', 
+				   						'desc'=>t('Main Server Ldap'), 
 				   						'vdeb'=>'guifi-proxy3/ldap_main',
 										'kdeb'=>'string'),
 				   'ldap_backup' =>  array('default'=>'ldap2.guifi.net', 
-				   							'desc'=>'Main Server Ldap2', 
+				   							'desc'=>t('Main Server Ldap2'), 
 				   							'vdeb'=>'guifi-proxy3/ldap_backup',
 											'kdeb'=>'string'),
 				   'realm' =>  array('default'=>'Guifi-server Squid proxy-caching web server', 
-				   					 'desc'=>'Proxy Welcome Message',
+				   					 'desc'=>t('Proxy Welcome Message'),
 				   					 'vdeb'=>'guifi-proxy3/proxy_name',
 									 'kdeb'=>'string'),
 				   'manager' =>  array('default'=>'webmaster', 
-				   					'desc'=>'Contact email proxy server', 
+				   					'desc'=>t('Contact email proxy server'), 
 				   					'vdeb'=>'guifi-proxy3/email',
 									'kdeb'=>'string'),
 				   'language' =>  array('default'=>'Catalan', 
-				   						'desc'=>'Choosemanager a language for error pages generated', 
+				   						'desc'=>t('Choosemanager a language for error pages generated'), 
 				   						'vdeb'=>'guifi-proxy3/language',
 										'kdeb'=>'string'),
 				   'cache_size' =>  array('default'=>'10240', 
-				   						'desc'=>'Disk cache space (MB)', 
+				   						'desc'=>t('Disk cache space (MB)'), 
 				   						'vdeb'=>'guifi-proxy3/hd',
 										'kdeb'=>'string'),
 				   'cache_mem' =>  array('default'=>'100', 
-				   						'desc'=>'Ram cache space (MB)', 
+				   						'desc'=>t('Ram cache space (MB)'), 
 				   						'vdeb'=>'guifi-proxy3/ram',
 										'kdeb'=>'string')
 				   );
-$guifi_proxy3_desc = "Guifi.net Proxy federation system.";
+$guifi_proxy3_desc = t("Guifi.net Proxy federation system.");
 
 
 // PROXY3
@@ -49,14 +49,14 @@ function proxy3_form($file,$options){
 	$page = "";
 
 	$variables = load_conffile($file,$options);
-	$page .= hl("Guifi Proxy3");
+	$page .= hl(t("Guifi Proxy3"));
 	$page .= createForm(array('class'=>'form-horizontal'));
 
 	foreach($options as $op=>$val){
 		$page .= addInput($op,$val['desc'],$variables);
 	}
 
-	$page .= addSubmit(array('label'=>'Executar'));
+	$page .= addSubmit(array('label'=>t('Executar')));
 
 	return($page);
 
@@ -66,7 +66,7 @@ function proxy3_get(){
 
 	$page = proxy3_form($guifi_proxy3_file,$guifi_proxy3_variables);
 	if (isPackageInstall($guifi_proxy3_pkg)){ 	
-		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$guifi_proxy3_pkg));
+		$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$guifi_proxy3_pkg));
 	}
 	return(array('type' => 'render','page' => $page));
 
@@ -95,7 +95,7 @@ function proxy3_post(){
 			}
 		}
 		write_conffile($guifi_proxy3_file,$datesToSave);
-		setFlash("Save it!","success");
+		setFlash(t("Save it")."!","success");
 		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/proxy3'));
 	}
 	return(array('type' => 'render','page' => $page));
@@ -104,9 +104,9 @@ function proxy3_post(){
 
 $snpservices_files="/etc/snpservices/config.php";
 $snpservices_pkg="snpservices";
-$snpservices_desc="This software provides graph services in the context of the guifi.net";
+$snpservices_desc=t("This software provides graph services in the context of the guifi.net");
 $snpservices_variables=array('SNPGraphServerId' => array('default' => '0',
-												'desc' => 'SNP Graph Server Id',
+												'desc' => t('SNP Graph Server Id'),
 												'vdeb' => 'snpservices/SNPGraphServerId',
 												'kdeb' => 'string')
 					    ); 
@@ -124,7 +124,7 @@ function snpservices_form($file,$options){
 
 
 	$variables = load_singlevalue($file,$options);
-	$page .= hl("Guifi SNPServices");
+	$page .= hl(t("Guifi SNPServices"));
 	$page .= createForm(array('class'=>'form-horizontal'));
 
 	foreach($options as $op=>$val){
@@ -142,7 +142,7 @@ function snpservices_get(){
 
 	$page = snpservices_form($snpservices_files,$snpservices_variables);
 	if (isPackageInstall($snpservices_pkg)){ 	
-		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$snpservices_pkg));
+		$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$snpservices_pkg));
 	}
 	return(array('type' => 'render','page' => $page));
 
@@ -172,7 +172,7 @@ function snpservices_post(){
 			}
 		}
 		write_merge_conffile($snpservices_files,$datesToSave);
-		setFlash("Save it!","success");
+		setFlash(t("Save it")."!","success");
 		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi/snpservices'));
 	}
 	return(array('type' => 'render','page' => $page));
@@ -183,13 +183,13 @@ function snpservices_post(){
 
 $dnsservices_files="/etc/dnsservices/config.php";
 $dnsservices_pkg="dnsservices";
-$dnsservices_desc="This software provides graph services in the context of the guifi.net";
+$dnsservices_desc=t("This software provides graph services in the context of the guifi.net");
 $dnsservices_variables=array('DNSGraphServerId' => array('default' => '0',
-												'desc' => 'Select your DNS Server Id to share your domains',
+												'desc' => t('Select your DNS Server Id to share your domains'),
 												'vdeb' => 'dnsservices/DNSGraphServerId',
 												'kdeb' => 'string'),
 							 'DNSDataServer_url' => array('default' => 'http://guifi.net',
-												'desc' => 'Url from DNSDataServer (without ending backslash)',
+												'desc' => t('Url from DNSDataServer (without ending backslash)'),
 												'vdeb' => 'dnsservices/DNSDataServerurl',
 												'kdeb' => 'string')
 					    ); 
@@ -208,7 +208,7 @@ function dnsservices_form($file,$options){
 
 	$variables = load_singlevalue($file,$options);
 	if($debug) { echo "<pre>"; print_r($variables); echo "</pre>"; }
-	$page .= hl("Guifi DNSServices");
+	$page .= hl(t("Guifi DNSServices"));
 	$page .= createForm(array('class'=>'form-horizontal'));
 
 	foreach($options as $op=>$val){
@@ -226,7 +226,7 @@ function dnsservices_get(){
 
 	$page = dnsservices_form($dnsservices_files,$dnsservices_variables);
 	if (isPackageInstall($dnsservices_pkg)){ 	
-		$page .= addButton(array('label'=>'Uninstall package','class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$dnsservices_pkg));
+		$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$dnsservices_pkg));
 	}
 	return(array('type' => 'render','page' => $page));
 

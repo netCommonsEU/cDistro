@@ -12,19 +12,19 @@ function index_get(){
 	$variables = load_conffile($getinconf_file);
 	$page .= hl("getinconf-client");
 	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('GTC_SERVER_URL','Getinconf Server URL',$variables);
-	$page .= addInput('NETWORK_NAME','Network',$variables);
-	$page .= addInput('NETWORK_KEY','Network Password',$variables);
-	$page .= addInput('INTERNAL_DEV','Device of Community IP',$variables);
-	$page .= addSubmit(array('label'=>'Executar'));
+	$page .= addInput('GTC_SERVER_URL',t('Getinconf Server URL'),$variables);
+	$page .= addInput('NETWORK_NAME',t('Network'),$variables);
+	$page .= addInput('NETWORK_KEY',t('Network Password'),$variables);
+	$page .= addInput('INTERNAL_DEV',t('Device of Community IP'),$variables);
+	$page .= addSubmit(array('label'=>t('Execute')));
 
 	$page .= "<br/>";
 	if (isUp($variables['NETWORK_NAME'])){
-		$page .= "<div class='alert alert-success text-center'>Service UP</div>\n";
+		$page .= "<div class='alert alert-success text-center'>".t("Service UP")."</div>\n";
 		$page .= addButton(array('label'=>'Stop','class'=>'btn btn-danger','href'=>'getinconf/downService'));
 		$page .= addButton(array('label'=>'View device', 'href' => 'getinconf/viewDevice/'.$variables['NETWORK_NAME']));
 	} else {
-		$page .= "<div class='alert alert-error text-center'>Service DOWN</div>\n";
+		$page .= "<div class='alert alert-error text-center'>".t("Service DOWN")."</div>\n";
 		$page .= addButton(array('label'=>'Start','class'=>'btn btn-success', 'href'=>'getinconf/upService'));
 	}
 
@@ -46,7 +46,7 @@ function index_post(){
 	}
 	write_conffile($getinconf_file,$datesToSave,$pre,$post);
 
-	setFlash("Save it!","success");
+	setFlash(t("Save it")."!","success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
@@ -59,7 +59,7 @@ function upService(){
 */
 	execute_bg_shell('getinconf-client install');
 	$page = "";
-	$page .= "<div class='alert alert-warning'>Now, service is loading. Please come back <a href='".$staticFile.'/'.'getinconf'."'>previous page</a>.</div>";
+	$page .= "<div class='alert alert-warning'>".t("Now, service is loading. Please come back")." <a href='".$staticFile.'/'.'getinconf'."'>".t("previous page")."</a>.</div>";
 	return(array('type'=>'render', 'page'=> $page));
 	exit();
 }
@@ -69,7 +69,7 @@ function downService(){
 
 	$r = execute_program('getinconf-client uninstall');
 	if ($r['return'] == 0) {
-		setFlash('Service DOWN!');
+		setFlash(t('Service DOWN').'!');
 	}
 
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));	
@@ -85,7 +85,7 @@ function viewDevice(){
 		$page .= "<pre>";
 		$page .= $r['output'];
 		$page .= "</pre>";
-		$page .= "You can return to the previous <a href='".$staticFile.'/'.'getinconf'."'>page</a>.</div>";
+		$page .= t("You can return to the previous")." <a href='".$staticFile.'/'.'getinconf'."'>page</a>.</div>";
 		return(array('type'=>'render', 'page'=> $page));
 	}
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));		

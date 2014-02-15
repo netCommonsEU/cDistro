@@ -1,5 +1,5 @@
 <?php
-//getinconf.menu
+//guifi.menu
 
 addMenu('proxy3','guifi/proxy3','guinux');
 addMenu('snpservices','guifi/snpservices','guinux');

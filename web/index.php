@@ -3,12 +3,14 @@
 // Config files
 require "config/global.php";
 require "core.php";
+require "lib/session.php";
+require "lib/lang.php";
 require "lib/form.php";
 require "lib/view.php";
 require "lib/errors.php";
 require "lib/utilio.php";
-require "lib/session.php";
 require "lib/menus.php";
+
 
 
 $css = array('bootstrap.min','bootstrap-responsive.min', 'main');

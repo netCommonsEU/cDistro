@@ -11,10 +11,12 @@ $documentPath=$_SERVER['DOCUMENT_ROOT'];
 $appName = "cGuinux";
 $appURL="http://localhost:7000";
 $projectURL="http://guifi.net";
+$LANG="en";
 
 // Dir webapp
 $plugs_controllers = "/plug/controllers/";
 $plugs_menus = "/plug/menus/";
+$lang_dir = "/lang/";
 
 // Debug
 $debug = false;

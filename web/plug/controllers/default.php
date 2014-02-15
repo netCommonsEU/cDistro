@@ -5,8 +5,8 @@ function index(){
 
 	$page = "";
 
-	$page .= hl("Configure Guifi!");
-	$page .= 'Configure your system!';
+	$page .= hl(t('Welcome!'));
+	$page .= t('Configure your system!');
 
 	return(array('type'=>'render','page'=>$page));
 } 
@@ -17,6 +17,18 @@ function install(){
 
 function uninstall(){
 	return(_genericInstallUninstall('Uninstall'));
+}
+
+function lang() {
+	global $LANG,$staticFile,$Parameters;
+
+
+	if (isset($Parameters[0]) && ($Parameters[0]  != "" )) {
+		$LANG=$Parameters[0];
+		setSessionValue('lang',$LANG);
+		setFlash(t('Define language to: ')."$LANG");
+	}
+	return(array('type'=>'redirect','url' => $staticFile));
 }
 
 function realInstall(){
@@ -31,10 +43,10 @@ function realInstall(){
 		if (!isPackageInstall($pkg)){
 			$ret = installPackage($pkg);
 		} else {
-			$ret = "$pkg is already install.";
+			$ret = "$pkg ".t("is already installed.");
 		}
 
-		$page .= hl("Install '".$pkg."'");
+		$page .= hl(t("Install")." '".$pkg."'");
 		$page .= "<pre>";
 		$page .= $ret;
 		$page .= "</pre>";
@@ -58,16 +70,16 @@ function realUninstall(){
 		if (isPackageInstall($pkg)){
 			$ret = uninstallPackage($pkg);
 		} else {
-			$ret = "$pkg isn't install.";
+			$ret = "$pkg ".t("isn't installed.");
 		}
 
-		$page .= hl("Uninstall '".$pkg."'");
+		$page .= hl(t("Uninstall")." '".$pkg."'");
 		$page .= "<pre>";
 		$page .= $ret;
 		$page .= "</pre>";
 	}
 	
-	$page .= "<a class='btn btn-primar' href='".$staticFile."'>Home</a>";
+	$page .= "<a class='btn btn-primar' href='".$staticFile."'>".t("Home")."</a>";
 
 	return(array('type'=>'ajax','page'=>$page));	
 
@@ -80,7 +92,7 @@ function _genericInstallUninstall($strFunction){
 		$pkg = $Parameters[0];
 		$ret = "";
 
-		$page = "<div id='console'><img src='".$staticPath."images/ajax_loader.gif' width='40px' height='40px' /> ".$strFunction." '".$pkg."' package, please wait!</div>";
+		$page = "<div id='console'><img src='".$staticPath."images/ajax_loader.gif' width='40px' height='40px' /> ".$strFunction." '".$pkg."' ".t("package, please wait!")."</div>";
 		$page .= "<script>\n";
 		$page .= "$('#console').load('".$staticFile."/default/real".$strFunction."/".$pkg."');\n";
 		$page .= "</script>\n";
