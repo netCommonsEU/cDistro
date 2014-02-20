@@ -57,3 +57,14 @@ addS ("Guifi DNSServices","Guifi DNSServices");
 // lib/view.php
 addS ('Not Install','Not Install');
 addS ('Install','Install');
+
+// plug/menus/avahi.php
+addS ('Search','Search');
+
+// plug/controllers/avahi.php
+addS ('Type','Type');
+addS ('Description','Description');
+addS ('Host','Host');
+addS ('IP','IP');
+addS ('Port','Port');
+addS ('Action','Action');

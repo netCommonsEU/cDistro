@@ -22,3 +22,35 @@ function package_not_install($pkg,$des){
 
 	return($page);
 }
+
+function addTableHeader($values, $options=array()){
+ 
+	$default = array('class'=>'table');
+	$op = array_merge($default,$options);
+
+	$page = "<table";
+	foreach ($op as $key => $value) {
+		$page .= " ".$key."='".$value."'";
+	}
+	$page .= ">\n<thead>\n<tr>\n";
+    
+	foreach($values as $v){
+    	$page .= "<th>".$v."</th>\n";
+  	}
+    $page .= "</tr>\n</thead>\n<tbody>";
+
+    return($page);
+}
+
+function addTableRow($values){
+	$page = "<tr>";
+	foreach($values as $v){
+    	$page .= "<td>".$v."</td>\n";
+  	}
+  	$page .= "</tr>";
+  	return ($page);
+}
+
+function addTableFooter(){
+	$page = "</tbody>\n</table>\n";
+}

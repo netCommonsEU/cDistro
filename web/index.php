@@ -10,6 +10,7 @@ require "lib/view.php";
 require "lib/errors.php";
 require "lib/utilio.php";
 require "lib/menus.php";
+require "lib/avahi.php";
 
 
 

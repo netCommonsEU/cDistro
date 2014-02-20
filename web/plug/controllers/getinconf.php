@@ -96,5 +96,14 @@ function isUp($dev){
 	return ($r['return']==0);
 }
 
+function nothing(){
+
+		$page = "";
+		$page .= "<div class='alert alert-warning'>";
+		$page .= t("Nothing to do.");
+		$page .= "</div>";
+		return(array('type'=>'render', 'page'=> $page));
+
+}
 
 ?>

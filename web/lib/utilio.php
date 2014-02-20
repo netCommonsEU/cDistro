@@ -177,4 +177,24 @@ function execute_proc($cmd){
 	return(array('output'=>$output,'return'=>$return));	
 }
 
+function avahi_search(){
+	$ret = execute_program("avahi-ps search");
+	$services = $ret['output'];
+	$aServices = array();
+	foreach($services as $service)
+	{
+		$lServer = explode(";",$service);
+		if(count($lServer) > 4){
+			$type = $lServer[0];
+			$pos = strrpos($type, "."); 
+			$type = substr($type, 1, $pos - 1);
+			$aServices[] = array('type'=> $type, 'description'=>$lServer[1], 'host'=>$lServer[2], 'ip'=>$lServer[3], 'port'=>$lServer[4]);
+		}
+	}
+	/*echo "<pre>";
+	print_r($aServices);
+	echo "</pre>";*/
+	return ($aServices);
+}
+
 ?>

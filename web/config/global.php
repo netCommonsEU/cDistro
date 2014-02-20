@@ -16,6 +16,7 @@ $LANG="en";
 // Dir webapp
 $plugs_controllers = "/plug/controllers/";
 $plugs_menus = "/plug/menus/";
+$plugs_avahi = "/plug/avahi/";
 $lang_dir = "/lang/";
 
 // Debug
