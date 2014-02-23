@@ -92,8 +92,7 @@ function _genericInstallUninstall($strFunction){
 		$pkg = $Parameters[0];
 		$ret = "";
 
-		$page = "<div id='console'><img src='".$staticPath."images/ajax_loader.gif' width='40px' height='40px' /> ";
-		$page .= t($strFunction)." '".$pkg."' ".t("package, please wait!")."</div>";
+		$page .= ajaxStr('console',t($strFunction)." '".$pkg."' ".t("package, please wait!"));
 		$page .= "<script>\n";
 		$page .= "$('#console').load('".$staticFile."/default/real".$strFunction."/".$pkg."');\n";
 		$page .= "</script>\n";

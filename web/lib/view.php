@@ -54,3 +54,12 @@ function addTableRow($values){
 function addTableFooter(){
 	$page = "</tbody>\n</table>\n";
 }
+
+function ajaxStr($div,$label){
+	global $staticPath;
+
+	$page = "<div id='".$div."'><img src='".$staticPath."images/ajax_loader.gif' width='40px' height='40px' /> ";
+	$page .= $label."</div>";
+
+	return($page);
+}

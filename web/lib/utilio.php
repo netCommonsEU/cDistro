@@ -178,7 +178,7 @@ function execute_proc($cmd){
 }
 
 function avahi_search(){
-	$ret = execute_program("avahi-ps search");
+	$ret = execute_program("/usr/sbin/avahi-ps search");
 	$services = $ret['output'];
 	$aServices = array();
 	foreach($services as $service)
@@ -197,4 +197,9 @@ function avahi_search(){
 	return ($aServices);
 }
 
+function port_listen($port){
+
+	$cmd='netstat -nlt|grep ":'.$port.'"|grep -q LISTEN; echo $?';
+
+}
 ?>
