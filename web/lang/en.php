@@ -32,6 +32,18 @@ addS ("Now, service is loading. Please come back","Now, service is loading. Plea
 addS ("previous page","previous page");
 addS ("You can return to the previous","You can return to the previous");
 
+// plug/controllers/tahoe-lafs.php
+addS ('A cloud storage system that distributes your data across multiple servers.','A cloud storage system that distributes your data across multiple servers');
+addS ('Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers. Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.',
+		'Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers. Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.');
+addS ('To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network. Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.',
+		'To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network. Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.');
+addS ('Tahoe-LAFS introducer running','Tahoe-LAFS introducer running');
+addS ('Tahoe-LAFS introducer stopped','Tahoe-LAFS introducer stopped');
+addS ('Tahoe-LAFS node running','Tahoe-LAFS node running');
+addS ('Tahoe-LAFS node stopped','Tahoe-LAFS node stopped');
+addS ('Install Tahoe-LAFS','Install Tahoe-LAFS');
+
 //addS ()
 
 addS ('Server URL Base','Server URL Base');

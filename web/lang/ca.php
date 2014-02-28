@@ -32,6 +32,19 @@ addS ("Now, service is loading. Please come back","Ara, el servei s'està activa
 addS ("previous page","pàgina anterior");
 addS ("You can return to the previous","Pots tornar a la pàgina anterior");
 
+// plug/controllers/tahoe-lafs.php
+addS ('A cloud storage system that distributes your data across multiple servers.','Un sistema d\'emmagatzematge al núvol que distribueix les dades en múltiples servidors');
+addS ('Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers. Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.',
+		'Tahoe-LAFS és un sistema d\'emmagatzematge al núvol lliure i obert. Distribueix les dades en múltiples servidors de manera que, si algun servidor cau o és pres per un atacant, el sistema de fitxers sencer continua funcionant correctament, preservant la privacitat i la seguretat.');
+addS ('To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network. Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.',
+		'Per desplegar un sistem d\'emmagatzematge amb Tahoe-LAFS necessiteu un <strong>introducer</strong> i múltiples <strong>nodes</strong> distribuïts per la xarxa. Feu clic al botó per instal·lar Tahoe-LAFS i començar a crear un sistema d\'emmagatzematge o per unir-vos a un ja existent.');
+addS ('Tahoe-LAFS introducer running','Tahoe-LAFS introducer en marxa');
+addS ('Tahoe-LAFS introducer stopped','Tahoe-LAFS introducer aturat');
+addS ('Tahoe-LAFS node running','Tahoe-LAFS node en marxa');
+addS ('Tahoe-LAFS node stopped','Tahoe-LAFS node aturat');
+addS ('Install Tahoe-LAFS','Instal·la Tahoe-LAFS');		
+
+//addS ()
 addS ('Server URL Base','URL del Servidor');
 addS ('Guifi Proxy node number','Id del node Guifi Proxy');
 addS ('Main Server Ldap','Principal servidor Ldap');
