@@ -8,17 +8,12 @@ function index_get(){
 	global $tahoeLAFS_conf;
 	$tahoeVariables = load_conffile($tahoeLAFS_conf);
 
-	$installButtonText = t("Install Tahoe-LAFS"); 
-
 	$page = "";
 
-	
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("A cloud storage system that distributes your data across multiple servers."),4);
 	$page .= par(t("Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers. Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security."));
 		
-	$page .= createForm(array('class'=>'form-horizontal'));
-	
 	if ( introducerCreated($tahoeVariables['TAHOE_HOMEDIR']) )
 		if ( introducerStarted($tahoeVariables['TAHOE_HOMEDIR'],$tahoeVariables['TAHOE_PID_FILE']) )
 			$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS introducer running")."</div>\n";
@@ -59,6 +54,21 @@ function index_post(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
+function install(){
+
+	global $tahoeLAFS_conf;
+	$tahoeVariables = load_conffile($tahoeLAFS_conf);
+
+	$r = execute_program_shell('ls -la');
+	
+	$page = "";
+
+	$page .= txt("<pre>");
+	$page .= txt(print_r($r[output]));
+	$page .= txt("</pre>");
+	
+	return(array('type' => 'render','page' => $page));
+}
 function upService(){
 	global $staticFile;
 /*
