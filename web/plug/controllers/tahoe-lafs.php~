@@ -22,7 +22,7 @@ function index_get(){
 		$page .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>'tahoe-lafs/install'));
 	}
 	
-	else if( ! (introducerCreated($tahoeVariables['DAEMON_HOMEDIR']) || nodeCreated($tahoeVariables['DAEMON_HOMEDIR'])) ) {
+	else if( ! (introducerCreated($tahoeVariables['TAHOE_HOMEDIR']) || nodeCreated($tahoeVariables['TAHOE_HOMEDIR'])) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is installed on this machine but has not been configured yet")."</div>\n";
 		$page .= par(t("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network. Click on the buttons below to set up an introducer and start creating a storage grid or to add a storage node to an existing grid."));
 		$page .= addButton(array('label'=>t("Create an introducer"),'class'=>'btn btn-success', 'href'=>'tahoe-lafs/introducer'));
@@ -32,14 +32,14 @@ function index_get(){
 
 	else {	
 	
-	if ( introducerCreated($tahoeVariables['DAEMON_HOMEDIR']) )
-		if ( introducerStarted($tahoeVariables['DAEMON_HOMEDIR'],$tahoeVariables['TAHOE_PID_FILE']) )
+	if ( introducerCreated($tahoeVariables['TAHOE_HOMEDIR']) )
+		if ( introducerStarted($tahoeVariables['TAHOE_HOMEDIR'],$tahoeVariables['TAHOE_PID_FILE']) )
 			$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS introducer running")."</div>\n";
 		else
 			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS introducer stopped")."</div>\n";
 	
-	if ( nodeCreated($tahoeVariables['DAEMON_HOMEDIR']) )
-		if ( nodeStarted($tahoeVariables['DAEMON_HOMEDIR'],$tahoeVariables['TAHOE_PID_FILE']) )
+	if ( nodeCreated($tahoeVariables['TAHOE_HOMEDIR']) )
+		if ( nodeStarted($tahoeVariables['TAHOE_HOMEDIR'],$tahoeVariables['TAHOE_PID_FILE']) )
 			$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS node running")."</div>\n";
 		else
 			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS node stopped")."</div>\n";
@@ -134,20 +134,20 @@ function purge(){
  			$page .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>'../tahoe-lafs'));
 		}
  	
- 	else if ( introducerCreated($tahoeVariables['DAEMON_HOMEDIR']) || nodeCreated($tahoeVariables['DAEMON_HOMEDIR'])) {
-		if ( introducerCreated($tahoeVariables['DAEMON_HOMEDIR']) ){
+ 	else if ( introducerCreated($tahoeVariables['TAHOE_HOMEDIR']) || nodeCreated($tahoeVariables['TAHOE_HOMEDIR'])) {
+		if ( introducerCreated($tahoeVariables['TAHOE_HOMEDIR']) ){
 		$page .= "<div class='alert alert-warning text-center'>".t("A Tahoe-LAFS introducer is currently configured. Stop it and remove it before uninstalling Tahoe-LAFS.")."</div>\n";
 		$page .= addButton(array('label'=>t("Remove Tahoe-LAFS introducer"),'class'=>'btn btn-danger', 'href'=>'introducer'));
 		$page .= "<br/> <br/>";
 		}
-		if ( nodeCreated($tahoeVariables['DAEMON_HOMEDIR']) ){
+		if ( nodeCreated($tahoeVariables['TAHOE_HOMEDIR']) ){
 		$page .= "<div class='alert alert-warning text-center'>".t("A Tahoe-LAFS node is currently configured. Stop it and remove it before uninstalling Tahoe-LAFS.")."</div>\n";
 		$page .= addButton(array('label'=>t("Manage Tahoe-LAFS node"),'class'=>'btn btn-danger', 'href'=>'node'));
 		$page .= "<br/> <br/>";
 		}
 	}
 	
-	else{
+	/*else{
 		$pkgUninstall = ptxt(uninstallPackage("tahoe-lafs"));
 	
 		if (isPackageInstall("tahoe-lafs")) {
@@ -179,7 +179,7 @@ function purge(){
 		}		
 		
 	
-	}
+	}*/
 	
 		return(array('type' => 'render','page' => $page));
 	
