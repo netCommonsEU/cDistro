@@ -25,6 +25,12 @@ function par($text=null){
 	}
 }
 
+function ptxt($text=null){
+	if (!is_null($text)){
+		return ("<div><pre>".$text."</pre></div>");
+	}
+}
+
 function txt($text=null){
 	if (!is_null($text)){
 		return ("<div>".$text."</div>");
