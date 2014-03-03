@@ -82,7 +82,14 @@ function write_merge_conffile($file,$dates){
 function isPackageInstall($pkg){
 	$cmd = "dpkg -l ".$pkg." > /dev/null 2>&1; echo $?";
 	return (shell_exec($cmd) == 0);
-
+}
+function packageIsInstalled($pkg){
+	$cmd = 'dpkg-query -Wf\'${db:Status-abbrev}\' '.$pkg.' 2>/dev/null | grep -q \'^i\'';
+	return (shell_exec($cmd) == 0);
+}
+function packageInstallationInfo($pkg){
+	$cmd = 'dpkg-query -s '.$pkg;
+	return (shell_exec($cmd));
 }
 function installPackage($pkg){
 	$cmd = "apt-get install -y ".$pkg." 2>&1";
