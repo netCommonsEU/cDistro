@@ -21,7 +21,7 @@ function createForm($options=null){
 	return $str;
 }
 
-function addInput($name=null, $label= null, $value = null, $options = null){
+function addInput($name=null, $label= null, $value = null, $options = null, $tooltip = null){
 
 
 	if (!is_null($name)){
@@ -48,11 +48,50 @@ function addInput($name=null, $label= null, $value = null, $options = null){
 		}
 	}
 	$str .= ">\n";
+	if (!is_null($tooltip))
+		$str .= '<br/>'.'<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';	
 	$str .="</div>\n";
 	$str .="</div>\n";
 
 	return $str;
 }
+
+function addFixedInput($name=null, $label= null, $value = null, $options = null, $tooltip = null){
+
+
+	if (!is_null($name)){
+		$options['name'] = $name;
+	}
+	if (!is_null($value)){
+		if(is_array($value)) {
+			if (isset($value[$name])){
+				$options['value'] = $value[$name];
+			}
+		} else {
+			$options['value'] = $value;
+		}
+	}
+
+	$str = "";
+	$str .= "<div class='control-group'>\n";
+	$str .="<label class='control-label'>$label:</label>\n";
+	$str .="<div class='controls'>\n";
+	$str .= "<input";
+	if (is_array($options)){
+		foreach($options as $k=>$v){
+			$str .= " $k='".$v."'"; 
+		}
+	}
+	$str .= "readonly>\n";
+	if (!is_null($tooltip))
+		$str .= '<br/>'.'<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';	
+	$str .="</div>\n";
+	$str .="</div>\n";
+
+	return $str;
+}
+
+
 function addCheckbox($name=null, $label= null, $value = null, $options = null){
 
 }
@@ -100,7 +139,7 @@ function addSubmit($options=null){
 
 	$default = array(
 		'label' => "Submit",
-		'class' => "btn btn-primar",
+		'class' => "btn btn-submit",
 		'type' => "submit");
 
 	if (!is_array($options)){
