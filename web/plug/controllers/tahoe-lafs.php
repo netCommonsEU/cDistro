@@ -6,7 +6,6 @@ $TAHOELAFS_CONF="tahoe-lafs.conf";
 $TAHOE_VARS=file_get_contents($RESOURCES_PATH.'/'.$TAHOELAFS_CONF);
 
 function index(){
-
 	global $TAHOE_VARS;
 	
 	$page = "";
@@ -63,6 +62,7 @@ function index(){
 }
 
 function install(){
+	global $RESOURCES_PATH;
 	global $TAHOE_VARS;
 
 	$page = "";
@@ -97,8 +97,8 @@ function install(){
 		foreach (execute_program( 'addgroup --system tahoe' )['output'] as $key => $value) { $postInstall[] = $value; }
 		foreach (execute_program( 'adduser --system --ingroup tahoe --home /var/lib/tahoe-lafs --shell /sbin/nologin tahoe' )['output'] as $key => $value) { $postInstall[] = $value; }
 		foreach (execute_program( 'chown -vR tahoe:tahoe /var/lib/tahoe-lafs' )['output'] as $key => $value) { $postInstall[] = $value;}
-		$postInstall[] = execute_program( 'cp -fv /usr/lib/cDistro/tahoe-lafs-manager/tahoe-lafs.init.d /etc/init.d/tahoe-lafs' )['output'][0];
-		$postInstall[] = execute_program( 'cp -fv /usr/lib/cDistro/tahoe-lafs-manager/tahoe-lafs.etc.default /etc/default/tahoe-lafs' )['output'][0];
+		$postInstall[] = execute_program( 'cp -fv '.$RESOURCES_PATH.'/tahoe-lafs.init.d /etc/init.d/tahoe-lafs' )['output'][0];
+		$postInstall[] = execute_program( 'cp -fv '.$RESOURCES_PATH.'/tahoe-lafs.etc.default /etc/default/tahoe-lafs' )['output'][0];
 		foreach (execute_program( 'chmod -v +x /etc/init.d/tahoe-lafs' )['output'] as $key => $value) { $postInstall[] = $value; }
 		$postInstall[] = execute_program( 'update-rc.d tahoe-lafs defaults' )['output'][0];
 
