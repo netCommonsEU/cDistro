@@ -194,7 +194,7 @@ function avahi_search(){
 			$type = $lServer[0];
 			$pos = strrpos($type, "."); 
 			$type = substr($type, 1, $pos - 1);
-			$aServices[] = array('type'=> $type, 'description'=>$lServer[1], 'host'=>$lServer[2], 'ip'=>$lServer[3], 'port'=>$lServer[4]);
+			$aServices[] = array('type'=> $type, 'description'=>$lServer[1], 'host'=>$lServer[2], 'ip'=>$lServer[3], 'port'=>$lServer[4],'txt'=>$lServer[5]);
 		}
 	}
 	/*echo "<pre>";
