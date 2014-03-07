@@ -3,11 +3,11 @@
 
 $RESOURCES_PATH=$_SERVER['DOCUMENT_ROOT'].'/plug/resources/tahoe-lafs';
 $TAHOELAFS_CONF="tahoe-lafs.conf";
-$TAHOE_VARS=file_get_contents($RESOURCES_PATH.'/'.$TAHOELAFS_CONF);
+$TAHOE_VARS=load_conffile($RESOURCES_PATH.'/'.$TAHOELAFS_CONF);
 
 function index(){
 	global $TAHOE_VARS;
-	
+		
 	$page = "";
 	$buttons = "";
 	
