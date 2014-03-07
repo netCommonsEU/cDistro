@@ -6,5 +6,5 @@ addAvahi('tincvpn','ftincvpn');
 function ftincvpn($dates){
 	global $staticFile;
 
-	return ("<a class='button' href='".$staticFile."/getinconf/nothing/".$dates['ip']."/".$dates['port']."'>View</a>");
+	return ("<a class='btn' href='".$staticFile."/getinconf/nothing/".$dates['ip']."/".$dates['port']."'>View</a>");
 }

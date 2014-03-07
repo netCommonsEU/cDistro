@@ -7,7 +7,7 @@ function search()
 
 	$page = "";
 
-	$page .= ajaxStr('tableAvahi',t("Serach services, please wait!") );
+	$page .= ajaxStr('tableAvahi',t("Searching services, please wait!") );
 	$page .= "<script>\n";
 	$page .= "$('#tableAvahi').load('".$staticFile."/avahi/ajaxsearch');\n";
 	$page .= "</script>\n";
@@ -24,6 +24,7 @@ function ajaxsearch()
 	$page .= addTableHeader(array(t('Type'),t('Description'),t('Host'),t('IP'),t('Port'),t('Action')), array('class'=>'table table-striped'));
 	foreach($aServices as $serv){
 		$serv['action'] = checkAvahi($serv['type'],array($serv));
+		unset($serv['txt']);
 		$page .= addTableRow($serv);
 	}
 	$page .= addTableFooter();

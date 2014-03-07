@@ -12,7 +12,7 @@ function createForm($options=null){
 	}
 	$str = "";
 	$str .= "<div class='form'>\n";
-	$str .= "<form method='".$method."' accept-charset='utf-8'";
+	$str .= "<form method='".$method."' accept-charset='utf-8' ";
 	foreach($options as $k=>$v){
 		$str .= " $k='".$v."'";
 	}
@@ -21,7 +21,7 @@ function createForm($options=null){
 	return $str;
 }
 
-function addInput($name=null, $label= null, $value = null, $options = null, $tooltip = null){
+function addInput($name=null, $label= null, $value = null, $options = null, $attributes = null, $tooltip = null, $nobr = null){
 
 
 	if (!is_null($name)){
@@ -47,61 +47,28 @@ function addInput($name=null, $label= null, $value = null, $options = null, $too
 			$str .= " $k='".$v."'"; 
 		}
 	}
+	
+	if (!is_null($attributes))
+		$str .= $attributes;
+	
 	$str .= ">\n";
 	if (!is_null($tooltip))
-		$str .= '<br/>'.'<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';	
+		if (is_null($nobr))
+			$str .= '<br/>';
+		$str .= '<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';	
 	$str .="</div>\n";
 	$str .="</div>\n";
 
 	return $str;
-}
-
-function addFixedInput($name=null, $label= null, $value = null, $options = null, $tooltip = null){
-
-
-	if (!is_null($name)){
-		$options['name'] = $name;
-	}
-	if (!is_null($value)){
-		if(is_array($value)) {
-			if (isset($value[$name])){
-				$options['value'] = $value[$name];
-			}
-		} else {
-			$options['value'] = $value;
-		}
-	}
-
-	$str = "";
-	$str .= "<div class='control-group'>\n";
-	$str .="<label class='control-label'>$label:</label>\n";
-	$str .="<div class='controls'>\n";
-	$str .= "<input";
-	if (is_array($options)){
-		foreach($options as $k=>$v){
-			$str .= " $k='".$v."'"; 
-		}
-	}
-	$str .= "readonly>\n";
-	if (!is_null($tooltip))
-		$str .= '<br/>'.'<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';	
-	$str .="</div>\n";
-	$str .="</div>\n";
-
-	return $str;
-}
-
-
-function addCheckbox($name=null, $label= null, $value = null, $options = null){
-
 }
 
 function addButton($options=null){
 
 	$d = null;
 	$default = array(
-		'class' => "btn btn-primar"
-		);
+		'class' => "btn btn-primary",
+		'divOptions' => array('class'=>'btn-group'));
+		
 
 	if (!is_array($options)){
 		$options=array();
@@ -147,7 +114,7 @@ function addSubmit($options=null){
 	}
 	$o = array_merge($default,$options);
 
-	$str = addButton($default);
+	$str = addButton($o);
 
 	return $str;	
 }
