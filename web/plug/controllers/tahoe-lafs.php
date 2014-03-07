@@ -54,7 +54,7 @@ function index(){
 		$buttons .= addButton(array('label'=>t("Manage node"),'class'=>'btn btn-primary', 'href'=>'tahoe-lafs/node','divOptions'=>array('class'=>'btn-group')));	
 	}
 	else
-			$buttons .= addButton(array('label'=>t("Create a storage node"),'class'=>'btn btn-success', 'href'=>'tahoe-lafs/createnode'));
+			$buttons .= addButton(array('label'=>t("Create a storage node"),'class'=>'btn btn-success', 'href'=>'tahoe-lafs/createNode'));
 		
 		
 	$page .= $buttons;	
@@ -260,9 +260,7 @@ function introducerStatusPage(){
 }
 
 function introducerStatusButtons(){
-	global $CONFIG_DIR;	
-	global $TAHOELAFS_CONF;
-	$TAHOE_VARS = load_conffile($CONFIG_DIR.$TAHOELAFS_CONF);
+	global $TAHOE_VARS;
 	
 	$r = _introducerStatus($TAHOE_VARS['DAEMON_HOMEDIR'],$TAHOE_VARS['TAHOE_PID_FILE']);
 	return (array('type'=>'ajax', 'page' => $r['buttons']));
@@ -270,9 +268,7 @@ function introducerStatusButtons(){
 
 
 function _introducerStatus($homedir,$pidfile) {
-	global $CONFIG_DIR;	
-	global $TAHOELAFS_CONF;
-	$TAHOE_VARS = load_conffile($CONFIG_DIR.$TAHOELAFS_CONF);
+	global $TAHOE_VARS;
 
 	$page = '';
 	$buttons = '';
@@ -539,7 +535,7 @@ function createNode(){
 		$page .= createForm(array('class'=>'form-horizontal'));
 		$page .= addInput('NODE_NICKNAME',t('Nickname'),'MyGrid-MyStorageNode','',t("A short nickname to identify the storage node in the grid."));
 		$page .= addInput('NODE_INTRODUCER_FURL',t('Introducer FURL'),'pb://abcdefghijklmnopqrstuvwxyz1234567890@example.com:12345/introducer','',t("The introducer's FURL of the storage grid you want to join."));
-		$page .= addFixedInput('NODE_DIR',t('Folder'),$TAHOE_VARS['DAEMON_HOMEDIR'].'/node','',t("The installation path for the node."));
+		$page .= addInput('NODE_DIR',t('Folder'),$TAHOE_VARS['DAEMON_HOMEDIR'].'/node','','readonly',t("The installation path for the node."));
 		//$page .= addInput('NODE_PUBLIC',t('Public'),true,'',t("Check this box to make this introducer public and announce to the network via Avahi."));
 		$buttons .= addSubmit(array('label'=>t('Create node'),'class'=>'btn btn-success'));
 		
