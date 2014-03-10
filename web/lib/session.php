@@ -2,6 +2,9 @@
 
 //Session!!
 
+	function isSesionValue($key) {
+		return (isset($_SESSION[$key]));
+	}
 
 	function getSessionValue($key){
 		if (isset($_SESSION[$key])){
@@ -13,6 +16,10 @@
 
 	function setSessionValue($key,$value){
 		$_SESSION[$key] = $value;
+	}
+
+	function unsetSessionValue($key){
+		unset($_SESSION[$key]);
 	}
 
 	function setFlash($msg,$class="alert"){

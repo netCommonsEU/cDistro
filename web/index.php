@@ -9,51 +9,56 @@ require "lib/form.php";
 require "lib/view.php";
 require "lib/errors.php";
 require "lib/utilio.php";
-require "lib/menus.php";
-require "lib/avahi.php";
+require "lib/auth.php";
 
-
+if (isset($user)) {
+	require "lib/menus.php";
+	require "lib/avahi.php";
+}
 
 $css = array('bootstrap.min','bootstrap-responsive.min', 'main');
 $js = array('jquery-1.11.0.min','bootstrap.min');
 $js_end = array('main');
 
 
-// Default 
-$controller = "default";
-$action="index";
-$method=strtolower($_SERVER['REQUEST_METHOD']);
-
-if (isset($Parameters) && is_array($Parameters) && isset($Parameters[0]) && file_exists($documentPath.$plugs_controllers.$Parameters[0].".php")){
-	$controller = $Parameters[0];
-	array_shift($Parameters);
-}
-// Load Controller
-
-if (isset($Parameters) && isset($Parameters[0])) {
-	$action=$Parameters[0];
-	array_shift($Parameters);
-}
-
-
-require $documentPath.$plugs_controllers.$controller.".php";
-
-if (!is_array($Parameters)){
-	$Parameters=array();
-} 
-
-// Add method type to action
-if(function_exists($action."_".$method)){
-	$action=$action."_".$method;
-}
-
-if (!function_exists($action)) {	
-	array_unshift($Parameters, $action);
-	array_unshift($Parameters, $controller);	
+if (isset($user)) {
+	// Default 
 	$controller = "default";
-	$action="notFunctionExist";
+	$action="index";
+	$method=strtolower($_SERVER['REQUEST_METHOD']);
+
+	if (isset($Parameters) && is_array($Parameters) && isset($Parameters[0]) && file_exists($documentPath.$plugs_controllers.$Parameters[0].".php")){
+		$controller = $Parameters[0];
+		array_shift($Parameters);
+	}
+	// Load Controller
+
+	if (isset($Parameters) && isset($Parameters[0])) {
+		$action=$Parameters[0];
+		array_shift($Parameters);
+	}
+
+
+	require $documentPath.$plugs_controllers.$controller.".php";
+
+	if (!is_array($Parameters)){
+		$Parameters=array();
+	} 
+
+	// Add method type to action
+	if(function_exists($action."_".$method)){
+		$action=$action."_".$method;
+	}
+
+	if (!function_exists($action)) {	
+		array_unshift($Parameters, $action);
+		array_unshift($Parameters, $controller);	
+		$controller = "default";
+		$action="notFunctionExist";
+	}
+	$cb = call_user_func_array($action,$Parameters);
 }
-$cb = call_user_func_array($action,$Parameters);
+//print_r($cb);
 
 switch ( $cb['type'] ){
 

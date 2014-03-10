@@ -109,7 +109,7 @@ function addUser_post(){
 	if ( execute_shell('/usr/bin/htpasswd -b '.$htpasswd.' '.$user.' '.$password)['return'] == 0 ){
 		setFlash(t("Save user."),"success");
 	} 
-	return(array('type'=>'redirect','url'=>'/webdav'));
+	return(array('type'=>'redirect','url'=>$staticFile.'/webdav'));
 
 }
 
