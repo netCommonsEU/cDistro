@@ -8,7 +8,7 @@ $staticPath=dirname($staticFile);
 $documentPath=$_SERVER['DOCUMENT_ROOT'];
 
 // App configure
-$appName = "cGuinux";
+$appName = 'cDistro';
 $appURL="http://".$_SERVER['HTTP_HOST'];
 $projectURL="http://guifi.net";
 $LANG="en";
