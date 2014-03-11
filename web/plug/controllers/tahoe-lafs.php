@@ -244,8 +244,13 @@ function introducer(){
 	$page .= txt(t("Introducer web page:"));		
 	$webPage = 'http://'.substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':')+1). file_get_contents('/var/lib/tahoe-lafs/introducer/web.port'); ;
 	$page .= ptxt('<a href="'.$webPage.'" >'.$webPage.'</a>');
-	
-	
+
+	$page .= txt(t("Service announcement:"));	
+	if (file_exists($TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer/introducer.public')) 
+		$page .= ptxt(t("The storage grid is public and the introducer is being announced via Avahi"));
+	else
+		$page .= ptxt(t("The storage grid is private"));
+		
 	
 	$page .= $buttons;	
 	
@@ -278,13 +283,25 @@ function _introducerStatus($homedir,$pidfile) {
 		
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>'../tahoe-lafs'));
 		$buttons .= addButton(array('label'=>t("Stop Tahoe-LAFS introducer"),'class'=>'btn btn-danger', 'href'=>'stopIntroducer'));
+		if (file_exists($TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer/introducer.public'))
+			$buttons .= addButton(array('label'=>t("Make this introducer private"),'class'=>'btn btn-warning', 'href'=>'unpublishIntroducer'));
+		else
+			$buttons .= addButton(array('label'=>t("Make this introducer public"),'class'=>'btn btn-info', 'href'=>'publishIntroducer'));
 	} 	
 	else {
 		$page = "<div class='alert alert-error text-center'>".t("Tahoe-LAFS introducer is stopped")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>'../tahoe-lafs'));
 		$buttons .= addButton(array('label'=>t("Start Tahoe-LAFS introducer"),'class'=>'btn btn-success', 'href'=>'startIntroducer'));
-		$buttons .= addButton(array('label'=>t("Delete Tahoe-LAFS introducer"),'class'=>'btn btn-danger', 'href'=>'deleteIntroducer'));
+		if (file_exists($TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer/introducer.public'))
+			$buttons .= addButton(array('label'=>t("Make this introducer private"),'class'=>'btn btn-warning', 'href'=>'unpublishIntroducer'));
+		else
+			$buttons .= addButton(array('label'=>t("Make this introducer public"),'class'=>'btn btn-info', 'href'=>'publishIntroducer'));
+		$buttons .= addButton(array('label'=>t("Delete Tahoe-LAFS introducer"),'class'=>'btn btn-warning', 'href'=>'deleteIntroducer'));
 	}
+	
+
+		
+			
 	
 	return(array('page'=>$page,'buttons'=>$buttons));
 }
@@ -376,7 +393,7 @@ function createIntroducer(){
 		$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS introducer is running")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Stop Tahoe-LAFS introducer"),'class'=>'btn btn-danger', 'href'=>'stopIntroducer'));
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>'../tahoe-lafs'));
-		$page .= ptxt(execute_program("sed 's/,127\.0\.0\.1:.*\//\//' /var/lib/tahoe-lafs/introducer/introducer.furl")['output'][0]);
+		$page .= ptxt(execute_program("sed 's/,127\.0\.0\.1:.*\//\//' /var/lib/tahoe-lafs/introducer/introducer.furl | sed 's/,192\.168\..*\..*:.*\//\//'")['output'][0]);
 		
 		$page .= $buttons; 			
  		return(array('type' => 'render','page' => $page));
@@ -491,9 +508,10 @@ function createIntroducer_post(){
 
 	$postStart = array();
 	foreach (execute_program( '/etc/init.d/tahoe-lafs start introducer')['output'] as $k => $v) { $postStart[] = $v; }
+	
 	//This pause is needed in order to let the server start before showing the success/error text
 	sleep(2);
-	foreach (execute_program( 'ps aux | grep tahoe | grep introducer | grep -v grep')['output'] as $k => $v) { $postStart[] = $v; }	
+	foreach (execute_program( 'ps aux | grep tahoe | grep introducer | grep python | grep -v grep')['output'] as $k => $v) { $postStart[] = $v; }	
 	
 	$postStartAll = "";
 		foreach ($postStart as $k => $v) { $postStartAll .= $v.'<br/>'; }
@@ -790,6 +808,15 @@ function startIntroducer(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));
 }
 
+function restartIntroducer(){
+	global $staticFile;
+
+   $pid = detached_exec('/etc/init.d/tahoe-lafs restart introducer >/dev/null 2>&1');
+
+	setFlash(t('Starting Tahoe-LAFS introducer...'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));
+}
+
 function stopIntroducer(){
 	global $staticFile;
 
@@ -797,6 +824,29 @@ function stopIntroducer(){
 
 	setFlash(t('Stopping Tahoe-LAFS introducer...'));
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));	
+}
+
+function unpublishIntroducer(){
+	global $staticFile;
+	global $TAHOE_VARS;
+
+	execute_program_shell( 'rm -vf '.$TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer/introducer.public');
+	execute_program_shell( 'sed -i "s/^web\.port.*$/web\.port = tcp:'.file_get_contents($TAHOE_VARS['DAEMON_USERNAME'].'/introducer/web.port').':interface=127.0.0.1/" '.$TAHOE_VARS['DAEMON_USERNAME'].'/introducer/tahoe.cfg' );
+   
+	setFlash(t('Unpublishing Tahoe-LAFS introducer...'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));
+}
+
+function publishIntroducer(){
+	global $staticFile;
+	global $TAHOE_VARS;
+
+	execute_program_shell( 'touch '.$TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer/introducer.public');
+	execute_program_shell( 'chown '.$TAHOE_VARS['DAEMON_USERNAME'].':'.$TAHOE_VARS['DAEMON_GROUP'].' '.$TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer/introducer.public');
+	execute_program_shell( 'sed -i "s/^web\.port.*$/web\.port = tcp:'.file_get_contents($TAHOE_VARS['DAEMON_USERNAME'].'/introducer/web.port').':interface=0.0.0.0/" '.$TAHOE_VARS['DAEMON_USERNAME'].'/introducer/tahoe.cfg' );
+   
+	setFlash(t('Publishing Tahoe-LAFS introducer...'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));
 }
 
 function stopNode(){
