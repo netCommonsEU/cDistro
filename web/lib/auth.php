@@ -5,8 +5,20 @@ $auth_file = "/etc/cdistro.conf";
 
 function checkUser($login,$pass){
 	global $auth_file;
+	
+	$ret = false;
 	$variables = load_conffile($auth_file);
-	return ($login == $variables['LOGIN'] && md5(md5($pass)) == $variables['PASSWORD']);
+
+	if (isset($variables['SSHAUTH']) && ($variables['SSHAUTH'] == 1)){
+		error_reporting(E_ERROR | E_PARSE);
+		$connection = ssh2_connect('127.0.0.1', 22);
+		$ret = ssh2_auth_password($connection, $login, $pass);
+		error_reporting(E_ALL ^ E_NOTICE); 
+	} 
+	if (!$ret){
+		$ret = ((isset($variables['LOGIN'])) && (isset($variables['PASSWORD'])) && ($login == $variables['LOGIN']) && (md5(md5($pass)) == $variables['PASSWORD']));
+	}
+	return ($ret);
 }
 
 function logout() {
