@@ -1,7 +1,7 @@
 <?php
 // plug/avahi/tahoe-lafs.avahi.php
 
-addAvahi('tahoeintro','ftahoeintroducer');
+addAvahi('tahoe-lafs','ftahoeintroducer');
 
 function ftahoeintroducer($dates){
 	global $staticFile;
