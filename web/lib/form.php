@@ -44,18 +44,18 @@ function addInput($name=null, $label= null, $value = null, $options = null, $att
 	$str .= "<input";
 	if (is_array($options)){
 		foreach($options as $k=>$v){
-			$str .= " $k='".$v."'"; 
+			$str .= " $k='".$v."'";
 		}
 	}
-	
+
 	if (!is_null($attributes))
 		$str .= $attributes;
-	
 	$str .= ">\n";
+
 	if (!is_null($tooltip))
 		if (is_null($nobr))
 			$str .= '<br/>';
-		$str .= '<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';	
+		$str .= '<span style="font-size: smaller;"><span style="font-size: smaller;">'.$tooltip.'</span></span>';
 	$str .="</div>\n";
 	$str .="</div>\n";
 
@@ -68,7 +68,7 @@ function addButton($options=null){
 	$default = array(
 		'class' => "btn btn-primary",
 		'divOptions' => array('class'=>'btn-group'));
-		
+
 
 	if (!is_array($options)){
 		$options=array();
@@ -88,7 +88,7 @@ function addButton($options=null){
 	if (is_array($d)){
 		foreach($d as $k=>$v){
 			$str .= " $k='".$v."'";
-		} 
+		}
 	}
 	$str .= ">";
 	$str .="<$tag ";
@@ -99,7 +99,7 @@ function addButton($options=null){
 	$str .= $o['label'];
 	$str .= "</$tag>";
 	$str .= "</div>";
-	return $str;	
+	return $str;
 }
 
 function addSubmit($options=null){
@@ -116,7 +116,7 @@ function addSubmit($options=null){
 
 	$str = addButton($o);
 
-	return $str;	
+	return $str;
 }
 
 function endForm($options=null){
@@ -124,7 +124,7 @@ function endForm($options=null){
 	$str .= "</form>\n</div>\n";
 
 	return $str;
-	
+
 }
 
 ?>

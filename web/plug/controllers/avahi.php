@@ -7,7 +7,7 @@ function search()
 
 	$page = "";
 
-	$page .= ajaxStr('tableAvahi',t("Searching services, please wait!") );
+	$page .= ajaxStr('tableAvahi',t("Searching for published services, please wait a moment...") );
 	$page .= "<script>\n";
 	$page .= "$('#tableAvahi').load('".$staticFile."/avahi/ajaxsearch');\n";
 	$page .= "</script>\n";
