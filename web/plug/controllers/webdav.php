@@ -4,6 +4,8 @@
 $webdav_pkg = "libapache2-mod-encoding";
 $webdav_desc = t("Install WEBDAV Server");
 $folders = "/etc/apache2/conf.d/";
+$file_module = '../mods-enable/dav_fs.load';
+$module = 'dav_fs';
 $htpasswd = $folders.".htpasswd";
 $extension = ".webdav.conf";
 $title = t("WEBDAV Server (Apache2)");
@@ -105,10 +107,16 @@ function addUser_post(){
 		return(array('type'=>'render','page'=>addUser_form(array('user'=>$user))));
 	}
 
+	$options = "";
+	if (!file_exists($htpasswd)) {
+		$options = "c";
+	}
 
-	if ( execute_shell('/usr/bin/htpasswd -b '.$htpasswd.' '.$user.' '.$password)['return'] == 0 ){
+	if ( execute_shell('/usr/bin/htpasswd -b'.$options.' '.$htpasswd.' '.$user.' '.$password)['return'] == 0 ){
 		setFlash(t("Save user."),"success");
-	} 
+	} else {
+		setFlash('/usr/bin/htpasswd -b '.$htpasswd.' '.$user.' '.$password,"error");
+	}
 	return(array('type'=>'redirect','url'=>$staticFile.'/webdav'));
 
 }
@@ -391,6 +399,13 @@ function addMount_post(){
 		$flash_type = "error";		
 	}
 
+	if (_checkDAVApacheModule()) {
+		$flash .= par(t("DAV Module is active."));
+	} else {
+		$flash .= par(t("Error when active DAV Module."));
+		$flash_type = "error";			
+	}
+
 	if (_restartApache()) {
 		$flash .= par(t("Reloaded apache2."));
 	} else {
@@ -451,6 +466,15 @@ function _makeWebdabFile($name,$mp){
 
 }
 
+function _checkDAVApacheModule(){
+	global $folders, $file_module, $module; 
+
+	if (!file_exists($folders.$file_module)){
+		return( execute_shell("/usr/sbin/a2enmod ".$module)['return'] == 0); 
+	}
+
+	return(true);
+}
 function _restartApache(){
 
 	return ( execute_shell("/usr/sbin/service apache2 reload")['return'] == 0 );
