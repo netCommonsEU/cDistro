@@ -25,6 +25,12 @@ function par($text=null){
 	}
 }
 
+function spar($text=null){
+	if (!is_null($text)){
+		return ('<div><span style="font-size: smaller;">'.$text.'</span></div><br/>');
+	}
+}
+
 function ptxt($text=null){
 	if (!is_null($text)){
 		return ("<div><pre>".$text."</pre></div>");
@@ -34,6 +40,12 @@ function ptxt($text=null){
 function txt($text=null){
 	if (!is_null($text)){
 		return ("<div>".$text."</div>");
+	}
+}
+
+function stxt($text=null){
+	if (!is_null($text)){
+		return ('<div><span style="font-size: smaller;">'.$text.'</span></div>');
 	}
 }
 
@@ -51,7 +63,7 @@ function package_not_install($pkg,$des){
 }
 
 function addTableHeader($values, $options=array()){
- 
+
 	$default = array('class'=>'table');
 	$op = array_merge($default,$options);
 
@@ -60,7 +72,7 @@ function addTableHeader($values, $options=array()){
 		$page .= " ".$key."='".$value."'";
 	}
 	$page .= ">\n<thead>\n<tr>\n";
-    
+
 	foreach($values as $v){
     	$page .= "<th>".$v."</th>\n";
   	}
