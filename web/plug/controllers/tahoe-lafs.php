@@ -98,6 +98,7 @@ function install(){
 		$page .= txt(t("Post-installation process details:"));
 		foreach (execute_program( 'addgroup --system tahoe' )['output'] as $key => $value) { $postInstall[] = $value; }
 		foreach (execute_program( 'adduser --system --ingroup tahoe --home '.$TAHOE_VARS['DAEMON_HOMEDIR'].' --shell '.$TAHOE_VARS['DAEMON_SHELL'].' '.$TAHOE_VARS['DAEMON_USERNAME'] )['output'] as $key => $value) { $postInstall[] = $value; }
+		execute_program_shell( 'touch ' .$TAHOE_VARS['DAEMON_HOMEDIR'] );
 		foreach (execute_program( 'chown -vR '.$TAHOE_VARS['DAEMON_USERNAME'].':'.$TAHOE_VARS['DAEMON_GROUP'].' '.$TAHOE_VARS['DAEMON_HOMEDIR'])['output'] as $key => $value) { $postInstall[] = $value;}
 		$postInstall[] = execute_program( 'cp -fv '.$RESOURCES_PATH.'/'.$TAHOE_VARS['TAHOE_INITD_FILE'].' '.$TAHOE_VARS['TAHOE_ETC_INITD_FILE'])['output'][0];
 		$postInstall[] = execute_program( 'cp -fv '.$RESOURCES_PATH.'/'.$TAHOE_VARS['TAHOE_DEFAULT_FILE'].' '.$TAHOE_VARS['TAHOE_ETC_DEFAULT_FILE'])['output'][0];
@@ -291,7 +292,7 @@ function _introducerStatus($homedir,$pidfile) {
 	$page .= ptxt(execute_program("sed 's/,127\.0\.0\.1:.*\//\//' ".$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['INTRODUCER_FURLFILE']. " | sed 's/,192\.168\..*\..*:.*\//\//' ")['output'][0]);
 	$page .= txt(t("Tahoe-LAFS introducer web page:"));
 	$webPage = 'http://'.substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':')+1). file_get_contents($TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['WEBPORT_FILENAME']); ;
-	$page .= ptxt('<a href="'.$webPage.'" >'.$webPage.'</a>');
+	$page .= ptxt('<a href="'.$webPage.'" target=_blank>'.$webPage.'</a>');
 	$page .= txt(t("Service announcement:"));
 	if (file_exists($TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['INTRODUCER_PUBLIC_FILE']))
 		$page .= ptxt(t("The storage grid is public and is being announced via Avahi"));
@@ -327,7 +328,7 @@ function createIntroducer(){
 		$page .= addInput('GRID_NAME',t("Grid name"),'Example-Grid-'.sprintf('%03d',mt_rand(0,999)),'','',t("A short name to identify the storage grid."));
 		$page .= addInput('INTRODUCER_NAME',t('Introducer name'),'MyIntroducer','','',t("A short nickname to identify the introducer in the storage grid."));
 		$page .= addInput('INTRODUCER_WEBPORT',t('Web port'),8228,array('type'=>'number','min'=>'1024','max'=>'65535'),'',t("The port where the introducer's web management interface will run on."));
-		$page .= addInput('INTRODUCER_DIR',t('Folder'),$TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer','','readonly',t("The instroducer will be installed in this folder."));
+		$page .= addInput('INTRODUCER_DIR',t('Folder'),$TAHOE_VARS['DAEMON_HOMEDIR'].'/introducer','','readonly',t("The introducer will be installed in this folder."));
 		$page .= addInput('INTRODUCER_PUBLIC',t('Public'), true, array('type'=>'checkbox'),'checked',t("Announce the introducer service through Avahi and allow storage nodes to join the grid."),'no');
  		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
  		$buttons .= addSubmit(array('label'=>t('Create introducer'),'class'=>'btn btn-success'));
@@ -440,8 +441,8 @@ function createIntroducer_post(){
 	else
 		execute_program_shell( 'echo "AUTOSTART=\"introducer\"" >> '.$TAHOE_VARS['TAHOE_ETC_DEFAULT_FILE'] );
 
-
 	foreach (execute_program( 'chown -vR tahoe:tahoe '.$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'] )['output'] as $key => $value) { $postCreate[] = $value; }
+
 	$postCreateAll = "";
 		foreach ($postCreate as $k => $v) { $postCreateAll .= $v.'<br/>'; }
 
@@ -459,6 +460,9 @@ function createIntroducer_post(){
 	//This pause is needed in order to let the server start before showing the success/error text
 	sleep(2);
 	foreach (execute_program_shell( 'ps aux | grep tahoe | grep introducer | grep python | grep -v grep') as $k => $v) { $postStart[] = $v; }
+
+	execute_program_shell($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' enable '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
+	execute_program_shell($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' start '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
 
 	$postStartAll = "";
 		foreach ($postStart as $k => $v) { $postStartAll .= $v.'<br/>'; }
@@ -751,6 +755,10 @@ function deleteIntroducer(){
 
 	$postDelete = array();
 	$postDeleteAll = "";
+
+	execute_program_shell($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' stop '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
+	execute_program_shell($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' disable '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
+
 	foreach (execute_program( 'rm -vrf '.$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/*')['output'] as $k => $v) { $postDelete[] = $v; }
 
 	if( execute_shell( "grep -q '^AUTOSTART' /etc/default/tahoe-lafs" )['return'] == 0 ) {
@@ -892,6 +900,17 @@ function restartIntroducer(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));
 }
 
+function restartAndPublishIntroducer(){
+	global $staticFile;
+	global $TAHOE_VARS;
+
+   $pid = detached_exec($TAHOE_VARS['TAHOE_ETC_INITD_FILE'].' restart introducer >/dev/null 2>&1');
+	sleep (1);
+
+	setFlash(t('Restarting Tahoe-LAFS introducer...'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/startAvahi'));
+}
+
 function startNode(){
 	global $staticFile;
 	global $TAHOE_VARS;
@@ -912,14 +931,26 @@ function stopNode(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/node'));
 }
 
-function restartNode(){
+function startAvahi(){
 	global $staticFile;
 	global $TAHOE_VARS;
 
-   $pid = detached_exec($TAHOE_VARS['TAHOE_ETC_INITD_FILE'].' restart node >/dev/null 2>&1');
+	sleep (1);
+   $pid = detached_exec($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' start '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
+   $pid = detached_exec($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' start '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
 
-	setFlash(t('Restarting Tahoe-LAFS storage node...'));
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/tahoe-lafs/node'));
+	setFlash(t('Publishing Tahoe-LAFS introducer...'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/introducer'));
+}
+
+function stopAvahi(){
+	global $staticFile;
+	global $TAHOE_VARS;
+
+   $pid = detached_exec($TAHOE_VARS['AVAHI_SERVICE_COMMAND'].' stop '.$TAHOE_VARS['AVAHI_SERVICE_TAHOE'].' >/dev/null 2>&1');
+
+	setFlash(t('Publishing Tahoe-LAFS introducer...'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/restartIntroducer'));
 }
 
 function publishIntroducer(){
@@ -934,7 +965,7 @@ function publishIntroducer(){
 	execute_program_shell( "sed -i 's/^web\.port.*/web\.port = tcp:".intval(file_get_contents($TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['WEBPORT_FILENAME'])).":interface=0\.0\.0\.0/' ".$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['TAHOE_CONFIG_FILE'] );
 
 	setFlash(t('Publishing Tahoe-LAFS introducer...'));
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/restartIntroducer'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/restartAndPublishIntroducer'));
 }
 
 function unpublishIntroducer(){
@@ -945,7 +976,7 @@ function unpublishIntroducer(){
 	execute_program_shell( "sed -i 's/^web\.port.*/web\.port = tcp:".intval(file_get_contents($TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['WEBPORT_FILENAME'])).":interface=127\.0\.0\.1/' ".$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['INTRODUCER_DIRNAME'].'/'.$TAHOE_VARS['TAHOE_CONFIG_FILE'] );
 
 	setFlash(t('Unpublishing Tahoe-LAFS introducer...'));
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/restartIntroducer'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'tahoe-lafs/stopAvahi'));
 }
 
 function tahoeCreated($dir,$name) {

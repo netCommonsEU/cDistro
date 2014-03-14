@@ -82,7 +82,7 @@ addS ("A short nickname to identify the introducer in the storage grid.","A shor
 addS ("Web port","Web port");
 addS ("The port where the introducer's web management interface will run on.","The port where the introducer's web management interface will run on.");
 addS ("Folder","Folder");
-addS ("The instroducer will be installed in this folder.","The instroducer will be installed in this folder.");
+addS ("The introducer will be installed in this folder.","The introducer will be installed in this folder.");
 addS ("Public","Public");
 addS ("Announce the introducer service through Avahi and allow storage nodes to join the grid.","Announce the introducer service through Avahi and allow storage nodes to join the grid.");
 //createIntroducer_post
