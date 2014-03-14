@@ -171,7 +171,7 @@ addS ("Tahoe-LAFS node creation failed","Tahoe-LAFS node creation failed");
 addS ("Starting Tahoe-LAFS node:","Starting Tahoe-LAFS node:");
 addS ("Tahoe-LAFS node successfully started","Tahoe-LAFS node successfully started");
 addS ("Tahoe-LAFS node start failed","Tahoe-LAFS node start failed");
-addS ("Start Tahoe-LAFS node","Start Tahoe-LAFS node");
+addS ("Start storage node","Start storage node");
 //deleteIntroducer
 addS ("Introducer deletion","Introducer deletion");
 addS ("Tahoe-LAFS introducer is not created","Tahoe-LAFS introducer is not created");

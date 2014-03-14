@@ -695,13 +695,14 @@ function createNode_post(){
 		foreach ($postStart as $k => $v) { $postStartAll .= $v.'<br/>'; }
 
 	$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
+	$buttons .= addButton(array('label'=>t("Manage storage node"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/tahoe-lafs/node'));
 
 	$page .= txt(t("Starting Tahoe-LAFS node:"));
 	if ( nodeStarted($TAHOE_VARS['DAEMON_HOMEDIR'],$TAHOE_VARS['TAHOE_PID_FILE']) )
 		$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS node successfully started")."</div>\n";
 	else {
 		$page .= "<div class='alert alert-error text-center'>".t("Tahoe-LAFS node start failed")."</div>\n";
-		$buttons .= addButton(array('label'=>t("Start Tahoe-LAFS node"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/startNode'));
+		$buttons .= addButton(array('label'=>t("Start storage node"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/startNode'));
 		}
 	$page .= ptxt($postStartAll);
 
