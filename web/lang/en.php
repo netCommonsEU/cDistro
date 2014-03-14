@@ -34,6 +34,28 @@ addS ("You can return to the previous","You can return to the previous");
 
 // plug/controllers/tahoe-lafs.php
 //index
+addS ("Tahoe-LAFS","Tahoe-LAFS");
+addS ("A cloud storage system that distributes your data across multiple servers.","A cloud storage system that distributes your data across multiple servers.");
+addS ("Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers.","Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers.");
+addS ("Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.","Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.");
+addS ("Tahoe-LAFS status:","Tahoe-LAFS status:");
+addS ("Tahoe-LAFS is not installed on this machine","Tahoe-LAFS is not installed on this machine");
+addS ("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.");
+addS ("Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.","Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.");
+addS ("Install Tahoe-LAFS","Install Tahoe-LAFS");
+addS ("Tahoe-LAFS is installed on this machine but has not been configured yet","Tahoe-LAFS is installed on this machine but has not been configured yet");
+addS ("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.");
+addS ("Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.","Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.");
+addS ("Create an introducer and start a storage grid","Create an introducer and start a storage grid");
+addS ("Create a storage node to join a storage grid","Create a storage node to join a storage grid");
+addS ("Uninstall Tahoe-LAFS","Uninstall Tahoe-LAFS");
+addS ("Tahoe-LAFS introducer is running","Tahoe-LAFS introducer is running");
+addS ("Tahoe-LAFS introducer is stopped","Tahoe-LAFS introducer is stopped");
+addS ("Tahoe-LAFS storage node is running","Tahoe-LAFS storage node is running");
+addS ("Tahoe-LAFS storage node is stopped","Tahoe-LAFS storage node is stopped");
+addS ("Manage introducer","Manage introducer");
+addS ("Manage storage node","Manage storage node");
+addS ("Create a storage node","Create a storage node");
 //install
 addS ("Installation","Installation");
 addS ("Installation process result:","Installation process result:");
