@@ -92,6 +92,7 @@ function addTableRow($values){
 
 function addTableFooter(){
 	$page = "</tbody>\n</table>\n";
+	return($page);
 }
 
 function ajaxStr($div,$label){
