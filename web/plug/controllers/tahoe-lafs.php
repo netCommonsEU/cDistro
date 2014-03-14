@@ -13,11 +13,11 @@ function index(){
 	$buttons = "";
 
 	$page .= hlc(t("Tahoe-LAFS"));
-	$page .= hl(t("A cloud storage system that distributes your data across multiple servers."),4);
-	$page .= par(t("Tahoe-LAFS is a free and open cloud storage system. It distributes your data across multiple servers.") .' '. t("Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security."));
+	$page .= hl(t("A cloud storage system that distributes your data across multiple servers"),4);
+	$page .= par(t("Tahoe-LAFS is a free and open cloud storage system.").' '.t("It distributes your data across multiple servers.") .' '. t("Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security."));
 	$page .= txt(t("Tahoe-LAFS status:"));
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-error text-center'>".t("Tahoe-LAFS is not installed on this machine")."</div>\n";
 		$page .= par(t("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.") . t("Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one."));
 		$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -28,7 +28,7 @@ function index(){
 
 	if( ! ( tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'introducer') || tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'node') ) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is installed on this machine but has not been configured yet")."</div>\n";
-		$page .= par(t("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.") .' '. t("Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one."));
+		$page .= par(t("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed by the network.") .' '. t("Click on the buttons to start creating a storage grid or to join an existing one."));
 		$buttons .= addButton(array('label'=>t("Create an introducer and start a storage grid"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/createIntroducer'));
 		$buttons .= addButton(array('label'=>t("Create a storage node to join a storage grid"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/createNode'));
 
@@ -48,9 +48,9 @@ function index(){
 	}
 	if ( tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'node') ) {
 		if ( nodeStarted($TAHOE_VARS['DAEMON_HOMEDIR'],$TAHOE_VARS['TAHOE_PID_FILE']) )
-			$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS storage node running")."</div>\n";
+			$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS storage node is running")."</div>\n";
 		else
-			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS storage node stopped")."</div>\n";
+			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS storage node is stopped")."</div>\n";
 
 		$buttons .= addButton(array('label'=>t("Manage storage node"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/tahoe-lafs/node','divOptions'=>array('class'=>'btn-group')));
 	}
@@ -65,6 +65,7 @@ function index(){
 function install(){
 	global $RESOURCES_PATH;
 	global $TAHOE_VARS;
+	global $staticFile;
 
 	$page = "";
 	$buttons = "";
@@ -72,7 +73,7 @@ function install(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Installation"),4);
 
-	if ( isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= txt(t("Installation process result:"));
  		$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS is already installed")."</div>\n";
 		$page .= txt(t("Tahoe-LAFS installation information:"));
@@ -83,7 +84,7 @@ function install(){
 		return(array('type' => 'render','page' => $page));
 	}
 
- 	$pkgInstall = ptxt(installPackage("tahoe-lafs"));
+ 	$pkgInstall = ptxt(installPackage($TAHOE_VARS['PACKAGE_NAME']));
 
 	if ( isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= txt(t("Installation process result:"));
@@ -132,7 +133,7 @@ function uninstall(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Uninstallation"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 			$page .= txt(t("Uninstallation process result:"));
 			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
  			$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
@@ -145,11 +146,11 @@ function uninstall(){
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 		if ( tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'introducer') ){
 		$page .= txt(t("Uninstallation process result:"));
-		$page .= "<div class='alert alert-warning text-center'>".t("A Tahoe-LAFS introducer is currently configured.") .' '. t("Stop it and remove it before uninstalling Tahoe-LAFS.")."</div>\n";
+		$page .= "<div class='alert alert-warning text-center'>".t("A Tahoe-LAFS introducer is currently configured.") .' '. t("Stop it and remove it before uninstalling Tahoe-LAFS")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Manage Tahoe-LAFS introducer"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/tahoe-lafs/introducer'));
 		}
 		if ( tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'node') ){
-		$page .= "<div class='alert alert-warning text-center'>".t("A Tahoe-LAFS node is currently configured.") .' '. t("Stop it and remove it before uninstalling Tahoe-LAFS.")."</div>\n";
+		$page .= "<div class='alert alert-warning text-center'>".t("A Tahoe-LAFS node is currently configured.") .' '. t("Stop it and remove it before uninstalling Tahoe-LAFS")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Manage Tahoe-LAFS node"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/tahoe-lafs/node'));
 		}
 
@@ -159,7 +160,7 @@ function uninstall(){
 
 	$pkgUninstall = ptxt(uninstallPackage("tahoe-lafs"));
 
-	if ( isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= txt(t("Uninstallation process result:"));
 		$page .= "<div class='alert alert-error text-center'>".t("Tahoe-LAFS uninstallation failed")."</div>\n";
 		$page .= txt(t("Uninstallation process result:"));
@@ -207,7 +208,7 @@ function introducer(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Introducer"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
  			$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
  			$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -311,7 +312,7 @@ function createIntroducer(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Introducer creation"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 		$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -360,7 +361,7 @@ function createIntroducer_post(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Introducer creation"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 		$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -490,7 +491,7 @@ function node(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Storage node"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 			$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
  			$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
  			$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -579,7 +580,7 @@ function createNode_get(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Storage node creation"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 		$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -640,7 +641,7 @@ function createNode_post(){
 	$page .= hlc("Tahoe-LAFS");
 	$page .= hl(t("Storage node creation"),4);
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 		$buttons .= addButton(array('label'=>t("Install Tahoe-LAFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/install'));
@@ -723,7 +724,7 @@ function deleteIntroducer(){
 	$page .= hl(t("Introducer deletion"),4);
 
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 
@@ -790,7 +791,7 @@ function deleteNode(){
 	$page .= hl(t("Storage node deletion"),4);
 
 
-	if ( ! isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
+	if ( ! isTahoeInstalled($TAHOE_VARS['PACKAGE_NAME']) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is currently uninstalled")."</div>\n";
 		$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 
@@ -964,5 +965,15 @@ function nodeStarted($dir,$pidfile){
 	else
 		return 0;
 }
+
+function isTahoeInstalled($pkg){
+	global $TAHOE_VARS;
+
+	if ( isPackageInstall($pkg) && is_dir($TAHOE_VARS['DAEMON_HOMEDIR']) && is_file($TAHOE_VARS['TAHOE_ETC_INITD_FILE']) && is_file($TAHOE_VARS['TAHOE_ETC_DEFAULT_FILE']))
+		return 1;
+	else
+		return 0;
+}
+
 
 ?>

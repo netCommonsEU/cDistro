@@ -69,7 +69,7 @@ function write_conffile($file,$dates,$preinfo="",$postinfo=""){
 }
 function write_merge_conffile($file,$dates){
 	global $debug;
-	
+
 	if ($debug) { echo "<pre>";}
 	foreach($dates as $k=>$v){
 		$cmd = "sed -i -e 's|".$k." *= *[^;]*;|".$k." = ".$v.";|g' ".$file;
@@ -123,7 +123,7 @@ function package_default_variables($dts,$default,$pkgname,$undefined_variables=n
 			if ($debug) $str .= $cmd."\n";
 
 			$str .= shell_exec($cmd);
-			if ($debug) $str .= "\n";		
+			if ($debug) $str .= "\n";
 		}
 	}
 
@@ -139,14 +139,14 @@ function execute_program($cmd){
 }
 function execute_program_shell($cmd){
 	$ret = shell_exec($cmd." 2>&1");
-	return(array('output'=>$ret,'return'=>""));	
+	return(array('output'=>$ret,'return'=>""));
 }
 
 function execute_shell($cmd){
 	if (($ret = shell_exec($cmd." > /dev/null 2>&1; echo $?")) == NULL){
-		errorExecuteExternalProgram($cmd);	
+		errorExecuteExternalProgram($cmd);
 	}
-	return(array('output'=>"",'return'=>$ret));	
+	return(array('output'=>"",'return'=>$ret));
 }
 function execute_bg_shell($cmd){
 
@@ -163,10 +163,10 @@ function cmd_exec($cmd, &$stdout, &$stderr)
         2 => array("file", $errfile, "w")
     );
     $proc = proc_open($cmd, $descriptorspec, $pipes);
-   
+
     if (!is_resource($proc)) return 255;
 
-    fclose($pipes[0]);    
+    fclose($pipes[0]);
 
     $exit = proc_close($proc);
     $stdout = file($outfile);
@@ -178,9 +178,9 @@ function cmd_exec($cmd, &$stdout, &$stderr)
 }
 function execute_proc($cmd){
 	if (($return = cmd_exec("$cmd", $output, $outerr)) == NULL){
-		errorExecuteExternalProgram($cmd,serialize($output)."-".serialize($outerr));	
+		errorExecuteExternalProgram($cmd,serialize($output)."-".serialize($outerr));
 	}
-	return(array('output'=>$output,'return'=>$return));	
+	return(array('output'=>$output,'return'=>$return));
 }
 
 function avahi_search(){
@@ -192,7 +192,7 @@ function avahi_search(){
 		$lServer = explode(";",$service);
 		if(count($lServer) > 4){
 			$type = $lServer[0];
-			$pos = strrpos($type, "."); 
+			$pos = strrpos($type, ".");
 			$type = substr($type, 1, $pos - 1);
 			$aServices[] = array('type'=> $type, 'description'=>$lServer[1], 'host'=>$lServer[2], 'ip'=>$lServer[3], 'port'=>$lServer[4],'txt'=>$lServer[5]);
 		}
