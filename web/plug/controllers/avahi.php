@@ -9,7 +9,9 @@ function search()
 
 	$page .= ajaxStr('tableAvahi',t("Searching for published services, please wait a moment...") );
 	$page .= "<script>\n";
-	$page .= "$('#tableAvahi').load('".$staticFile."/avahi/ajaxsearch');\n";
+	$page .= "$('#tableAvahi').load('".$staticFile."/avahi/ajaxsearch',function(){\n";
+	$page .= "	$('#tags').tab();\n";	
+	$page .= "});\n";
 	$page .= "</script>\n";
 
 
@@ -20,15 +22,47 @@ function ajaxsearch()
 {
 	$aServices = avahi_search(); // This function is in lib/utilio.php
 
-	$page = "";
-	$page .= addTableHeader(array(t('Type'),t('Description'),t('Host'),t('IP'),t('Port'),t('Action')), array('class'=>'table table-striped'));
+	// Reorganizar dades
+
+	$nServices = array();
 	foreach($aServices as $serv){
+		$type = $serv['type'];
+		if(!isset($nServices[$type])){ $nServices[$type] = array(); }
 		$serv['action'] = checkAvahi($serv['type'],array($serv));
 		unset($serv['txt']);
-		$page .= addTableRow($serv);
+		$nServices[$type][] = $serv;
 	}
-	$page .= addTableFooter();
 
+	// Sort
+	ksort($nServices);
+
+	$page = "";
+	$page .= "<ul id='tabs' class='nav nav-tabs' data-tabs='tabs'>\n";
+	$active = "";
+	foreach($nServices as $k => $v){
+		if ($active == "") $active = $k;
+		$page .= "	<li";
+		if($active == $k) $page .= " class='active'";
+		$page .= "><a href='#".$k."' data-toggle='tab'>".$k."</a></li>\n";
+	}
+	$page .= "</ul>\n";
+	$page .= "<div id='my-tab-content' class='tab-content'>\n";
+	foreach($nServices as $k => $v){	
+		$page .= "	<div class='tab-pane";
+		if($active == $k) $page .= " active";		
+		$page .= "' id='".$k."'>";
+
+		$page .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('Action')), array('class'=>'table table-striped'));
+		foreach($v as $serv){
+			$serv['action'] = checkAvahi($serv['type'],array($serv));
+			unset($serv['txt']);
+			unset($serv['type']);
+			$page .= addTableRow($serv);
+		}
+		$page .= addTableFooter();
+		$page .= " 	</div>";
+	}
+	$page .= "</div>";
 	return(array('type'=>'ajax','page'=>$page));
 }
 
