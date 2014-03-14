@@ -29,8 +29,8 @@ function index(){
 	if( ! ( tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'introducer') || tahoeCreated($TAHOE_VARS['DAEMON_HOMEDIR'],'node') ) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("Tahoe-LAFS is installed on this machine but has not been configured yet")."</div>\n";
 		$page .= par(t("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>nodes</strong> distributed by the network.") .' '. t("Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one."));
-		$buttons .= addButton(array('label'=>t("Create an introducer and start a storage grid"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/createIntroducer','divOptions'=>array('class'=>'btn-group')));
-		$buttons .= addButton(array('label'=>t("Create a storage node to join a storage grid"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/createIntroducer','divOptions'=>array('class'=>'btn-group')));
+		$buttons .= addButton(array('label'=>t("Create an introducer and start a storage grid"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/createIntroducer'));
+		$buttons .= addButton(array('label'=>t("Create a storage node to join a storage grid"),'class'=>'btn btn-success', 'href'=>$staticFile.'/tahoe-lafs/createNode'));
 
 		$buttons .= addButton(array('label'=>t("Uninstall Tahoe-LAFS"),'class'=>'btn btn-danger', 'href'=>$staticFile.'/tahoe-lafs/uninstall','divOptions'=>array('class'=>'btn-group')));
 
@@ -160,7 +160,7 @@ function uninstall(){
 	$pkgUninstall = ptxt(uninstallPackage("tahoe-lafs"));
 
 	if ( isPackageInstall($TAHOE_VARS['PACKAGE_NAME']) ) {
-		$page .= txt(t("Unistallation process result:"));
+		$page .= txt(t("Uninstallation process result:"));
 		$page .= "<div class='alert alert-error text-center'>".t("Tahoe-LAFS uninstallation failed")."</div>\n";
 		$page .= txt(t("Uninstallation process result:"));
 		$page .= $pkgUninstall;
@@ -171,7 +171,7 @@ function uninstall(){
 		return(array('type' => 'render','page' => $page));
 	}
 
-	$page .= txt(t("Unistallation process result:"));
+	$page .= txt(t("Uninstallation process result:"));
 	$page .= "<div class='alert alert-success text-center'>".t("Tahoe-LAFS has been successfully uninstalled")."</div>\n";
 	$page .= txt(t("Uninstallation process details:"));
 	$page .= $pkgUninstall;
