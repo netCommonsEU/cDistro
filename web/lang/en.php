@@ -111,13 +111,13 @@ addS ("Grid name:","Grid name:");
 addS ("Grid name","Grid name");
 addS ("Create introducer","Create introducer");
 addS ("A short name to identify the storage grid.","A short name to identify the storage grid.");
-addS ("Introducer name:","Introducer name:");
+addS ("Introducer name","Introducer name");
 addS ("A short nickname to identify the introducer in the storage grid.","A short nickname to identify the introducer in the storage grid.");
-addS ("Web port:","Web port:");
+addS ("Web port","Web port");
 addS ("The port where the introducer's web management interface will run on.","The port where the introducer's web management interface will run on.");
-addS ("Folder:","Folder:");
+addS ("Folder","Folder");
 addS ("The instroducer will be installed in this folder.","The instroducer will be installed in this folder.");
-addS ("Public:","Public:");
+addS ("Public","Public");
 addS ("Announce the introducer service through Avahi and allow storage nodes to join the grid.","Announce the introducer service through Avahi and allow storage nodes to join the grid.");
 //createIntroducer_post
 addS ("Tahoe-LAFS introducer creation failed","Tahoe-LAFS introducer creation failed");
@@ -180,6 +180,7 @@ addS ("Introducer deletion process result:","Introducer deletion process result:
 addS ("Tahoe-LAFS introducer deletion failed","Tahoe-LAFS introducer deletion failed");
 addS ("Tahoe-LAFS introducer successfully deleted","Tahoe-LAFS introducer successfully deleted");
 //deleteNode
+addS ("Storage node deletion","Storage node deletion");
 addS ("Storage deletion process result:","Storage deletion process result:");
 addS ("Tahoe-LAFS storage node successfully deleted","Tahoe-LAFS storage node successfully deleted");
 //flash
