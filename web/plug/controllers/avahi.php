@@ -54,8 +54,6 @@ function ajaxsearch()
 
 		$page .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('Action')), array('class'=>'table table-striped'));
 		foreach($v as $serv){
-			$serv['action'] = checkAvahi($serv['type'],array($serv));
-			unset($serv['txt']);
 			unset($serv['type']);
 			$page .= addTableRow($serv);
 		}

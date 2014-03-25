@@ -202,6 +202,20 @@ function avahi_search(){
 	echo "</pre>";*/
 	return ($aServices);
 }
+function active_services(){
+	$ret = execute_program("/usr/sbin/avahi-service isActive");
+	$services = $ret['output'];
+	$aServices = array();
+	foreach($services as $service)
+	{
+		$lServer = explode(" ",$service);
+		$aServices[] = array('name'=>$lServer[0], 'status'=>$lServer[1]);
+	}
+/*	echo "<pre>";
+	print_r($aServices);
+	echo "</pre>";*/
+	return ($aServices);	
+}
 
 function port_listen($port){
 

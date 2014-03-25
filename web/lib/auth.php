@@ -31,12 +31,13 @@ function logout() {
 
 function login_form($values=null){
 
+	$page = "";
 	$datos = array(
 				array('name'=>'user','type'=>'text','desc'=>t("Username")),
 				array('name'=>'password','type'=>'password','desc'=>t("Password"))
 			);
 
-	$page = hl(t("Login"),2);
+	$page .= hl(t("Login"),2);
 	$page .= createForm(array('class'=>'form-horizontal'));
 
 	foreach($datos as $dato){
@@ -47,7 +48,22 @@ function login_form($values=null){
 	}
 
 	$page .= addSubmit(array('label'=>t('Login')));
-
+	$services = active_services();
+	$page .= hlc(t("Active services: "),3);
+	/*$page .= addTableHeader(array(t('Name'),t('Status')), array('class'=>'table table-striped'));
+	foreach($services as $serv){
+		$page .= addTableRow($serv);
+	}
+	$page .= addTableFooter();
+	*/
+	$p = "";
+	foreach ($services as $service) {
+		if ($service['status'] == "UP") {
+			if ($p != "") { $p .= ", ";}
+			$p .= $service['name'];
+		}
+	}
+	$page .= $p;
 	return($page);
 
 }
