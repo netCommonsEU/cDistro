@@ -58,7 +58,7 @@ addS ('Url from DNSDataServer (without ending backslash)','Url from DNSDataServe
 addS ("Guifi DNSServices","Guifi DNSServices");
 
 // lib/view.php
-addS ('Not Install','Not Install');
+addS ('This package is not yet installed','This package is not yet installed:');
 addS ('Install','Install');
 
 // plug/menus/avahi.php

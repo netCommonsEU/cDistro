@@ -41,7 +41,7 @@ $guifi_proxy3_variables = array(
 				   						'vdeb'=>'guifi-proxy3/ram',
 										'kdeb'=>'string')
 				   );
-$guifi_proxy3_desc = t("Guifi.net Proxy federation system.");
+$guifi_proxy3_desc = t("This software provides a federated proxy service in the context of Guifi.net");
 
 
 // PROXY3
@@ -104,7 +104,7 @@ function proxy3_post(){
 
 $snpservices_files="/etc/snpservices/config.php";
 $snpservices_pkg="snpservices";
-$snpservices_desc=t("This software provides graph services in the context of the guifi.net");
+$snpservices_desc=t("This software provides graphing services in the context of Guifi.net");
 $snpservices_variables=array('SNPGraphServerId' => array('default' => '0',
 												'desc' => t('SNP Graph Server Id'),
 												'vdeb' => 'snpservices/SNPGraphServerId',
@@ -183,7 +183,7 @@ function snpservices_post(){
 
 $dnsservices_files="/etc/dnsservices/config.php";
 $dnsservices_pkg="dnsservices";
-$dnsservices_desc=t("This software provides graph services in the context of the guifi.net");
+$dnsservices_desc=t("This software provides DNS services in the context of Guifi.net");
 $dnsservices_variables=array('DNSGraphServerId' => array('default' => '0',
 												'desc' => t('Select your DNS Server Id to share your domains'),
 												'vdeb' => 'dnsservices/DNSGraphServerId',

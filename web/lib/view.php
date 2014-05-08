@@ -54,7 +54,7 @@ function package_not_install($pkg,$des){
 
 	$page = "";
 
-	$page .= hl(t('Not Install').'!');
+	$page .= hl(t('This package is not yet installed'));
 	$page .= hl($pkg, 2);
 	$page .= "<p>".$des."</p>";
 	$page .= addButton(array('label'=>t('Install'),'class'=>'btn btn-warning','href'=> $staticFile.'/default/install/'.$pkg));

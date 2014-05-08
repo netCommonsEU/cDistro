@@ -46,19 +46,19 @@ addS ('Contact email proxy server','Email de contacte del servidor proxy');
 addS ('Choosemanager a language for error pages generated',"Escull l'idioma dels missatges d'error.");
 addS ('Disk cache space (MB)','Espai de memòria cau (MB)');
 addS ('Ram cache space (MB)','Espai de RAM de memòria cau (MB)');
-addS ("Guifi.net Proxy federation system.","Sistema Federa de Proxys a Guifi.net");
+addS ("This software provides a federated proxy service in the context of Guifi.net","Sistema Federa de Proxys a Guifi.net");
 addS ("Guifi Proxy3","Guifi Proxy3");
 
 addS ('Uninstall package','Desinstal·la el paquet');
-addS ("This software provides graph services in the context of the guifi.net","Aquest programarí genera el servei de gràfiques a guifi.net");
+addS ("This software provides graphing services in the context of Guifi.net","Aquest programarí genera el servei de gràfiques a guifi.net");
 addS ('SNP Graph Server Id','Id del Servidor de grafiques SNP');
 addS ("Guifi SNPServices","Guifi SNPServices");
 
-addS ("This software provides graph services in the context of the guifi.net","This software provides graph services in the context of the guifi.net");
+addS ("This software provides DNS services in the context of Guifi.net","Aquest programarí genera el servei de DNS a guifi.net");
 addS ('Select your DNS Server Id to share your domains','Id del Servei DNS per compartir el teu domini');
 addS ('Url from DNSDataServer (without ending backslash)','Url de DNSDataServer (sense barra obliqua invertida al final)');
 addS ("Guifi DNSServices","Servei de DNS a Guifi");
 
 // lib/view.php
-addS ('Not Install','No Instal·lat');
+addS ('Not Install','Aquest paquet encara no està Instal·lat:');
 addS ('Install','Instal·lar');
