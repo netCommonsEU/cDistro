@@ -60,5 +60,5 @@ addS ('Url from DNSDataServer (without ending backslash)','Url de DNSDataServer 
 addS ("Guifi DNSServices","Servei de DNS a Guifi");
 
 // lib/view.php
-addS ('Not Install','Aquest paquet encara no està Instal·lat:');
+addS ('This package is not yet installed','Aquest paquet encara no està Instal·lat:');
 addS ('Install','Instal·lar');
