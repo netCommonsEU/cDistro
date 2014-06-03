@@ -1,0 +1,3 @@
+<?php
+//peerstreamer.menu.php
+addMenu('Peer Streamer','peerstreamer','clommunity');

@@ -183,6 +183,31 @@ function execute_proc($cmd){
 	return(array('output'=>$output,'return'=>$return));
 }
 
+function execute_program_detached($c){
+	define('S_IFMT',0170000);
+	define('S_IFIFO',0010000);	
+
+	$fdpipe="/tmp/cDistroEP";
+
+	$s = stat($fdpipe);
+	$mode = $s['mode'];
+	if (S_IFIFO != ($mode & S_IFMT)) {  
+		setFlash('<i>'.$fdpipe.'</i> '.t('is not file type FIFO, maybe daemon is not running.'),"error"); 
+	} else {
+	    $fh = fopen($fdpipe, "a");
+	    if($fh==false)
+	            setFlash(t("Some problemes in open file!"));
+
+	    fprintf ($fh, "%s\n",$c);
+	    fclose ($fh);
+	}
+}
+function execute_program_detached_user($cmd,$user){
+
+	$cmd = "/bin/su ".$user." -c '" . addslashes($cmd) . "'";
+	execute_program_detached($cmd);
+}
+
 function avahi_search(){
 	$ret = execute_program("/usr/sbin/avahi-ps search");
 	$services = $ret['output'];
@@ -215,6 +240,21 @@ function active_services(){
 	print_r($aServices);
 	echo "</pre>";*/
 	return ($aServices);	
+}
+
+function avahi_publish($type, $description, $port, $txt){
+	$cmd = '/usr/sbin/avahi-ps publish "'.$description.'" '.$type.' '.$port.' "'.$txt.'"';
+	execute_program_detached($cmd);
+
+	return($cmd);
+}
+
+function getCommunityDev(){
+	$cmd = '/usr/sbin/avahi-ps info communitydev';
+	$ret = execute_program($cmd);
+	//$ret = $cmd;
+
+	return($ret);
 }
 
 function port_listen($port){
