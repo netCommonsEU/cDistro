@@ -22,6 +22,8 @@ function end_program {
 if [[ ! -p $pipe ]]; then
     mkfifo $pipe
 fi
+chown root:root $pipe
+chmod go-rw $pipe
 
 while true
 do
