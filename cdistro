@@ -13,16 +13,22 @@
 NAME=cdistro
 CONFFILE="/etc/$NAME.conf"
 PIDFILE="/var/run/cdistro.pid"
+PIDDAEMON="/var/run/cdistrod.pid"
+DAEMON="/usr/sbin/cdistrod"
 
 test -f $CONFFILE && . $CONFFILE || exit 0
 
 start() {
   $SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &
   echo $! > $PIDFILE  
+  $DAEMON >/dev/null 2>&1 &
+  echo $! > $PIDDAEMON
 }
 stop() {
   kill -9 $(cat $PIDFILE)
   rm $PIDFILE
+  kill -9 $(cat $PIDDAEMON)
+  rm $PIDDAEMON
 }
 restart() {
   stop
