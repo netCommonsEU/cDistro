@@ -187,7 +187,7 @@ function execute_program_detached($c){
 	define('S_IFMT',0170000);
 	define('S_IFIFO',0010000);	
 
-	$fdpipe="/tmp/cDistroEP";
+	$fdpipe="/tmp/cDistrod";
 
 	$s = stat($fdpipe);
 	$mode = $s['mode'];
