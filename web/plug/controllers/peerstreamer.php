@@ -102,7 +102,7 @@ function publish_post(){
 
 }
 
-function vlcobject($client,$port){
+function vlcobject($client,$port,$type){
 
 	$o = "";
 	$o .= '<div id="vlc-plugin" >';
@@ -114,7 +114,15 @@ function vlcobject($client,$port){
 	$o .= 'height="480"';
 	$o .= 'name="vlc" id="vlc"';
 	$o .= 'autoplay="true" allowfullscreen="true" windowless="true" loop="true" toolbar="false"';
-	$o .= 'target="udp://@'.$client.':'.$port.'">';
+	if ($type == 'udp') {
+		$target = "udp://@";
+		$end = "";
+	}
+	if ($type == 'rtsp') {
+		$target = "rtsp://";
+		$end = "/";
+	}	
+	$o .= ' target="'.$target.$client.':'.$port.$end.'">';
 	$o .= '</embed>';
 	$o .= '</div>';
 
@@ -141,19 +149,24 @@ function _psshell($ip,$port,$myport)
 	$portclient = $myport;
 	$device = getCommunityDev()['output'][0];
 	$ipserver = getCommunityIP()['output'][0];
-
-	//$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
-	$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=127.0.0.1 -I ". $device .  " &";
-
-	execute_program_detached($cmd);
-
-	$cmd = $vlcpath."/". $vlcprogramcvlc .' "udp://@127.0.0.1:' . $portclient.' --sout=#rtp{sdp=rtsp://:' . $port . '/} --sout-keep';
-
-	execute_program_detached($cmd);
-
 	$page = hlc(t($title));
-	$page .= par(t('Please open your Video Player with <b>'). 'rtsp://' . $ipserver . ":" . $port . '</b>');
-	//$page .= vlcobject($ipclient,$portclient);
+
+
+	$page .= par(t('Start peerstreamer:'));
+	//$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
+	$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=127.0.0.1 -I ". $device ;
+	$page .= ptxt($cmd);
+
+	execute_program_detached($cmd);
+
+	$page .= par(t('Start vlc like rtsp server:'));
+
+	$cmd = $vlcpath."/". $vlcprogram .' udp://@127.0.0.1:' . $portclient.' --sout=#rtp{sdp=rtsp://:' . $port . '/} --sout-keep';
+	$page .= ptxt($cmd);
+
+	execute_program_detached_user($cmd,$vlcuser);
+	$page .= par(t('Please open your Video Player with <b>'). 'rtsp://' . $ipserver . ":" . $port . '/</b>');
+	$page .= vlcobject($ipserver,$port,"rtsp");
 	//$page .= par(t('Also you can connect your player to ')."udp://@"+$ipclient+":"+$portclient);
 
 	return($page);
