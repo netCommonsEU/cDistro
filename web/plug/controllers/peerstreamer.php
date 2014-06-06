@@ -75,7 +75,7 @@ function publish_get(){
 	$page .= hlc(t('Publish video stream'),2); 
 	$page .= par(t("Please write a stream source"));
 	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('url',t('URL Source'));
+	$page .= addInput('url',t('URL Source'),'',array('class'=>'input-xxlarge'));
 	$page .= addInput('port',t('Port Address'));
 	$page .= addInput('description',t('Describe this channel'));
 	$page .= addSubmit(array('label'=>t('Publish'),'class'=>'btn btn-primary'));
@@ -135,20 +135,26 @@ function runps(){
 // Utils
 function _psshell($ip,$port,$myport) 
 {
-	global $pspath,$title,$psprogram;
+	global $pspath,$title,$psprogram,$vlcpath,$vlcprogram,$vlcuser;
 
 	$ipclient = $_SERVER['REMOTE_ADDR'];
 	$portclient = $myport;
 	$device = getCommunityDev()['output'][0];
+	$ipserver = getCommunityIP()['output'][0];
 
-
-	$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
+	//$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
+	$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=127.0.0.1 -I ". $device .  " &";
 
 	execute_program_detached($cmd);
+
+	$cmd = $vlcpath."/". $vlcprogramcvlc .' "udp://@127.0.0.1:' . $portclient.' --sout=#rtp{sdp=rtsp://:' . $port . '/} --sout-keep';
+
+	execute_program_detached($cmd);
+
 	$page = hlc(t($title));
-	//$page .= par(t('Please open your Video Player with <b>'). 'udp://@'.$ipclient.":".$portclient.'</b>');
-	$page .= vlcobject($ipclient,$portclient);
-	$page .= t('Also you can connect your player to ')."udp://@"+$ipclient+":"+$portclient;
+	$page .= par(t('Please open your Video Player with <b>'). 'rtsp://' . $ipserver . ":" . $port . '</b>');
+	//$page .= vlcobject($ipclient,$portclient);
+	//$page .= par(t('Also you can connect your player to ')."udp://@"+$ipclient+":"+$portclient);
 
 	return($page);
 }
@@ -168,7 +174,7 @@ function _pssource($url,$ip,$port,$description){
 	// Crear Stream con vlc
 
 	$page .= par(t('Started VLC to get stream to pass PeerStreamer.'));
-	$cmd = "/bin/su " . $vlcuser . " -c '" . $vlcpath . "/". $vlcprogram .' "'.$url.'"  --sout "#std{access=udp,mux=ts,dst='. $vlcipclient .':'. $portclient .' "'."'";
+	$cmd = "/bin/su " . $vlcuser . " -c '" . $vlcpath . "/". $vlcprogram .' "'.$url.'"  --sout "#std{access=udp,mux=ts,dst='. $vlcipclient .':'. $portclient .'} "'."'";
 	$temp = $cmd."\n";
 	execute_program_detached($cmd);
 	$page .= ptxt($temp);
@@ -191,6 +197,7 @@ function _pssource($url,$ip,$port,$description){
 
 function _listPSProcs(){
 	// Fer un llistat del PS actius!
+
 } 
 
 function install_get(){
