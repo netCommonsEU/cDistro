@@ -35,6 +35,11 @@ addS ("You can return to the previous","Pots tornar a la pàgina anterior");
 // plug/controllers/tahoe-lafs.php
 include 'ca.tahoe-lafs.php';
 
+// Guifi
+//
+// plug/controllers/guifi.php
+//
+include 'ca.guifi.php';
 
 //Guifi
 addS ('Server URL Base','URL del Servidor');

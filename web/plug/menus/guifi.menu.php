@@ -1,6 +1,6 @@
 <?php
 //guifi.menu
 
-addMenu('proxy3','guifi/proxy3','guinux');
-addMenu('snpservices','guifi/snpservices','guinux');
-addMenu('dnsservices','guifi/dnsservices','guinux');
+addMenu('Proxy3','guifi/proxy3','guinux');
+addMenu('SNPServices','guifi/snpservices','guinux');
+addMenu('DNSServices','guifi/dnsservices','guinux');

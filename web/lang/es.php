@@ -13,3 +13,9 @@ addS ('Configure your system!','Configura tu sistema!');
 
 // plug/controllers/tahoe-lafs.php
 include 'es.tahoe-lafs.php';
+
+// Guifi
+//
+// plug/controllers/guifi.php
+//
+include 'es.guifi.php';
