@@ -257,6 +257,14 @@ function getCommunityDev(){
 	return($ret);
 }
 
+function getCommunityIP(){
+	$cmd = '/usr/sbin/avahi-ps info ip';
+	$ret = execute_program($cmd);
+	//$ret = $cmd;
+
+	return($ret);
+}
+
 function port_listen($port){
 
 	$cmd='netstat -nlt|grep ":'.$port.'"|grep -q LISTEN; echo $?';
