@@ -32,11 +32,19 @@ addS ("Now, service is loading. Please come back","Now, service is loading. Plea
 addS ("previous page","previous page");
 addS ("You can return to the previous","You can return to the previous");
 
+// Tahoe-LAFS
+//
 // plug/controllers/tahoe-lafs.php
+//
 include 'en.tahoe-lafs.php';
 
 
-//Guifi
+// Guifi
+//
+// plug/controllers/guifi.php
+//
+include 'en.guifi.php';
+
 addS ('Server URL Base','Server URL Base');
 addS ('Guifi Proxy node number','Guifi Proxy node number');
 addS ('Main Server Ldap','Main Server Ldap');
@@ -51,8 +59,7 @@ addS ("Guifi Proxy3","Guifi Proxy3");
 
 addS ('Uninstall package','Uninstall package');
 addS ("This software provides graph services in the context of the guifi.net","This software provides graph services in the context of the guifi.net");
-addS ('SNP Graph Server Id','SNP Graph Server Id');
-addS ("Guifi SNPServices","Guifi SNPServices");
+
 addS ('Select your DNS Server Id to share your domains','Select your DNS Server Id to share your domains');
 addS ('Url from DNSDataServer (without ending backslash)','Url from DNSDataServer (without ending backslash)');
 addS ("Guifi DNSServices","Guifi DNSServices");
