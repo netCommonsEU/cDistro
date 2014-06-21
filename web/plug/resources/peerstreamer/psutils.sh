@@ -14,15 +14,15 @@ doHelp(){
 	echo "Use $0 <publish|unpublish|connectrtsp|connectudp|disconnect|info>:"
 	echo "	publish <urlstream> <port> [Device] [Description]"
 	echo "	unpublish <port>"
-	echo "	Use connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
+	echo "	connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
 	echo "	connectudp <ip> <port> [IP UDP Server] [Port UDP Server] [Device]"
 	echo "	disconnect <port>"
-	echo "	info"
+	echo "	info [json]"
 	return
 }
 
 doDebug(){
-	[ $DEBUG -eq 1 ] && echo "[Info]:$@"
+	[ $DEBUG -eq 1 ] && echo "[DEBUG]:$@"
 }
 
 checkPrograms() {
@@ -87,40 +87,50 @@ getInfoPeer(){
 }
 
 doInfo(){
+
+	local json=${1:-""}
 	local procesos=($(cat $FILEPEERS))
 	local ofs
 	local auxline
+	local notFirst
 
+	notFirst=false
+	[ "$json" == "json" ] && echo "[";
 	for auxline in ${procesos[@]};
 	do  
 		ofs=$IFS
 		IFS=$S read -a data <<< "$auxline"
 		IFS=$ofs
-		case ${data[4]} in
-			"Source")
-				echo "Source from '"${data[5]}"'"
-				echo "	In port ${data[0]}."
-				echo "	Internal publish UDP 127.0.0.1:${data[3]}."
-				echo "	VLC pid ${data[1]}."
-				echo "	PeerStreamer pid ${data[2]}."
-				;;
-			"PeerUDP")
-				echo "Peer in port ${data[0]}"
-				echo "	To UDP Server in ${data[5]}."
-				echo "	PeerStreamer pid ${data[2]}."
-				;;
-			"PeerRTSPServer")
-				echo "Peer in port ${data[0]}"
-				echo "	To RTSP Server in ${data[5]}."
-				echo "	Internal UDP Port ${data[3]}."
-				echo "	VLC pid ${data[1]}."
-				echo "	PeerStreamer pid ${data[2]}."
-				;;			
-		esac
-
-
+		if [ "$json" == "json" ]
+		then
+			if $notFirst ; then  echo ','; fi
+			echo '{ "port" : '${data[0]}', "type": "'${data[4]}'", "vlcpid": '${data[1]}', "peerstreamerpid": '${data[2]}', "internalport": '${data[3]}', "other": "'${data[5]}'" }'
+			notFirst=true
+		else
+			case ${data[4]} in
+				"Source")
+					echo "Source from '"${data[5]}"'"
+					echo "	In port ${data[0]}."
+					echo "	Internal publish UDP 127.0.0.1:${data[3]}."
+					echo "	VLC pid ${data[1]}."
+					echo "	PeerStreamer pid ${data[2]}."
+					;;
+				"PeerUDP")
+					echo "Peer in port ${data[0]}"
+					echo "	To UDP Server in ${data[5]}."
+					echo "	PeerStreamer pid ${data[2]}."
+					;;
+				"PeerRTSPServer")
+					echo "Peer in port ${data[0]}"
+					echo "	To RTSP Server in ${data[5]}."
+					echo "	Internal UDP Port ${data[3]}."
+					echo "	VLC pid ${data[1]}."
+					echo "	PeerStreamer pid ${data[2]}."
+					;;			
+			esac
+		fi
 	done
-
+	[ "$json" == "json" ] && echo "]";
 }
 
 # Function peer-soucer

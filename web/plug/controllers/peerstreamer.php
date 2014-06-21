@@ -10,6 +10,9 @@ $vlcpath="/usr/bin";
 $vlcprogram="cvlc";
 $vlcuser="nobody";
 
+//
+$psutils=dirname(__FILE__)."/../resources/peerstreamer/psutils.sh";
+
 // Aquest paquest no existeix encarà i per tant pot donar algun problema.
 $pspackages="peer_web_gui";
 
@@ -50,8 +53,11 @@ function connect_get(){
 	$page .= addInput('ip',t('IP Address'));
 	$page .= addInput('port',t('Port Address'));
 	$page .= t('You:');
-	$page .= addInput('myudpport',t('Your UDP Port'));
-	$page .= addSubmit(array('label'=>t('Connect')));
+	$page .= addCheckbox('type', t('Server Type'), array('RTSP'=>t('Create RTSP Server'),'UDP'=>t('Send to UDP Server')));
+	$page .= addInput('myport',t('Port'));
+	$page .= addSubmit(array('label'=>t('Connect'),'class'=>'btn btn-primary'));
+	$page .= addButton(array('label'=>t('Cancel'),'href'=>$staticFile.'/peerstreamer'));
+
 
 	return(array('type' => 'render','page' => $page));
 }
@@ -60,10 +66,11 @@ function connect_post(){
 	//Validar dades
 	$ip = $_POST['ip'];
 	$port = $_POST['port'];
-	$myudpport = $_POST['myudpport'];
+	$myport = $_POST['myport'];
+	$tipo = $_POST['type'];
 
 	if ( 0 == 0 ){  // validar
-		return(array('type' => 'render','page' => _psshell($ip,$port,$myudpport))); 
+		return(array('type' => 'render','page' => _psshell($ip,$port,$myport,$tipo))); 
 	}
 }
 
@@ -102,7 +109,7 @@ function publish_post(){
 
 }
 
-function vlcobject($client,$port,$type){
+function vlcobject($url){
 
 	$o = "";
 	$o .= '<div id="vlc-plugin" >';
@@ -114,44 +121,24 @@ function vlcobject($client,$port,$type){
 	$o .= 'height="480"';
 	$o .= 'name="vlc" id="vlc"';
 	$o .= 'autoplay="true" allowfullscreen="true" windowless="true" loop="true" toolbar="false"';
-	if ($type == 'udp') {
-		$target = "udp://@";
-		$end = "";
-	}
-	if ($type == 'rtsp') {
-		$target = "rtsp://";
-		$end = "/";
-	}	
-	$o .= ' target="'.$target.$client.':'.$port.$end.'">';
+	$o .= ' target="'.$url.'">';
 	$o .= '</embed>';
 	$o .= '</div>';
 
 	return($o);
 }
-function runps(){
-
-	$ippeer = $_GET['ip'];
-	$portpeer = $_GET['port'];
-	if (isset($_GET['myudpport']))
-		$portclient = $_GET['myudpport'];
-	else
-		$portclient = "4214";
-
-	return(array('type' => 'render','page' => _psshell($ippeer,$portpeer,$portclient)));
-}
 
 // Utils
-function _psshell($ip,$port,$myport) 
+function _psshell($ip,$port,$myport,$type) 
 {
-	global $pspath,$title,$psprogram,$vlcpath,$vlcprogram,$vlcuser;
+	global $pspath,$psprogram,$vlcpath,$vlcprogram,$vlcuser,$psutils;
 
 	$ipclient = $_SERVER['REMOTE_ADDR'];
 	$portclient = $myport;
 	$device = getCommunityDev()['output'][0];
 	$ipserver = getCommunityIP()['output'][0];
-	$page = hlc(t($title));
 
-
+	/*
 	$page .= par(t('Start peerstreamer:'));
 	//$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
 	$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=127.0.0.1 -I ". $device ;
@@ -166,24 +153,55 @@ function _psshell($ip,$port,$myport)
 
 	execute_program_detached_user($cmd,$vlcuser);
 	$page .= par(t('Please open your Video Player with <b>'). 'rtsp://' . $ipserver . ":" . $port . '/</b>');
-	$page .= vlcobject($ipserver,$port,"rtsp");
-	//$page .= par(t('Also you can connect your player to ')."udp://@"+$ipclient+":"+$portclient);
+	*/
+	if ($type == "UDP") {
+		$cmd = $psutils." connectudp $ip $port $ipclient $myport $device";
+		execute_program_detached($cmd);
+		_psviewer("udp://@".$ipclient.":".$myport);
+	} else {
+		$cmd = $psutils." connectrtsp $ip $port $myport $ipserver $device";
+		execute_program_detached($cmd);
+		$page .= _psviewer("rtsp://".$ipserver.":".$myport."/");
+	}
+	return($page);
+}
+
+function _psviewer($url){
+
+	global $title;
+
+	$page = hlc(t($title));
+	$page .= par(t("PeerStreamer s'està executant en segon pla, si tens el connector de vlc podràs veure el video al teu navegador.")); 
+	$page .= vlcobject($url);
+	$page .= par(t("Alternativament pots accedir al video usant el següent enllaç al teu player preferit."));
+	$page .= ptxt($url );
 
 	return($page);
 }
+
+function psviewer(){
+
+	global $staticFile;
+
+	$url = $_GET['u'];
+
+	$p = _psviewer($url);
+	$p .=  addButton(array('label'=>t('List'),'href'=>$staticFile.'/peerstreamer'));
+	return(array('type' => 'render','page' => $p));
+}
+
 function _pssource($url,$ip,$port,$description){
 
-	global $pspath,$psprogram,$title,$vlcpath,$vlcprogram,$vlcuser;
+	//global $pspath,$psprogram,$title,$vlcpath,$vlcprogram,$vlcuser;
+	global $pspath,$psprogram,$title,$vlcpath,$vlcprogram,$vlcuser,$psutils;
 
-	$portclient = "4214";
 	$type = "peerstreamer";
-	$vlcipclient = "127.0.0.1";
-	$psipclient = "127.0.0.1";
 	$page = "";
 	$device = getCommunityDev()['output'][0];
 	
 	if ($description == "") $description = $type;
 
+/*
 	// Crear Stream con vlc
 
 	$page .= par(t('Started VLC to get stream to pass PeerStreamer.'));
@@ -198,6 +216,9 @@ function _pssource($url,$ip,$port,$description){
 	$temp = $cmd."\n";
 	execute_program_detached_user($cmd,$vlcuser);
 	$page .= ptxt($temp);
+*/
+	$cmd = $psutils." publish $url $port $device $description";
+	execute_program_detached($cmd);
 
 	// Publish in avahi system.
 	$page .= par(t('Published this stream.'));
@@ -205,13 +226,56 @@ function _pssource($url,$ip,$port,$description){
 	$temp = avahi_publish($type, $description, $port, "");
 	$page .= ptxt($temp);
 
+	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/peerstreamer'));
+
 	return($page);
 }
 
 function _listPSProcs(){
 	// Fer un llistat del PS actius!
+	$ret = execute_program(dirname(__FILE__)."/../resources/peerstreamer/psutils.sh info json");	
+	$datos = json_decode(implode("\n",$ret['output']),true);
+
+	if (count($datos) > 0) {
+		$page = hl(t('List PeerStreamer'),3);
+
+		$table = addTableHeader(array('Type', 'Port', 'Internal Port', 'Others', 'Actions'));
+		foreach($datos as $v){
+			switch ($v['type']) {
+				case 'PeerRTSPServer':
+					$actions = addButton(array('label'=>t('View'),'href'=>$staticFile.'/peerstreamer/psviewer?u='.urlencode($v['other'])));
+					$actions .= addButton(array('label'=>t('Stop'),'href'=>$staticFile.'/peerstreamer/psstop?p='.$v['port']));
+					break;
+				case 'Source':
+					$actions = "";
+					$actions .= addButton(array('label'=>t('Stop'),'href'=>$staticFile.'/peerstreamer/psstop?p='.$v['port']));
+					break;
+			}
+			$d = array($v['type'], $v['port'], $v['internalport'],$v['other'], $actions);
+			$table .= addTableRow($d);
+		}
+		$table .= addTableFooter();
+		$page .= $table;
+	}
+	//print_r($datos);
+	//exit();
+
+	return ($page);
 
 } 
+function psstop(){
+
+	global $psutils,$staticFile;
+
+	$port = $_GET['p'];
+
+	// validar $port is integer!
+
+	$cmd = $psutils." disconnect ".$port;
+	execute_program_detached($cmd);
+
+	return(array('type'=>'redirect','url'=>$staticFile.'/peerstreamer'));
+}
 
 function install_get(){
 
