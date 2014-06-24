@@ -9,6 +9,9 @@ $vlcpath="/usr/bin";
 $vlcprogram="cvlc";
 $vlcuser="nobody";
 
+//Avahi type
+$avahi_type="peerstreamer";
+
 //psutils
 $psutils=dirname(__FILE__)."/../resources/peerstreamer/pscontroller";
 
@@ -194,10 +197,8 @@ function psviewer(){
 
 function _pssource($url,$ip,$port,$description){
 
-	//global $pspath,$psprogram,$title,$vlcpath,$vlcprogram,$vlcuser;
-	global $pspath,$psprogram,$title,$vlcpath,$vlcprogram,$vlcuser,$psutils;
+	global $pspath,$psprogram,$title,$vlcpath,$vlcprogram,$vlcuser,$psutils,$avahi_type;
 
-	$type = "peerstreamer";
 	$page = "";
 	$device = getCommunityDev()['output'][0];
 	
@@ -225,7 +226,7 @@ function _pssource($url,$ip,$port,$description){
 	// Publish in avahi system.
 	$page .= par(t('Published this stream.'));
 	$description = str_replace(' ', '', $description);
-	$temp = avahi_publish($type, $description, $port, "");
+	$temp = avahi_publish($avahi_type, $description, $port, "");
 	$page .= ptxt($temp);
 
 	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/peerstreamer'));
@@ -269,7 +270,7 @@ function _listPSProcs(){
 } 
 function psstop(){
 
-	global $psutils,$staticFile;
+	global $psutils,$staticFile,$avahi_type;
 
 	$port = $_GET['p'];
 
@@ -277,6 +278,9 @@ function psstop(){
 
 	$cmd = $psutils." disconnect ".$port;
 	execute_program_detached($cmd);
+	$temp = avahi_unpublish($avahi_type, $port);
+	$flash = ptxt($temp);
+	setFlash($flash);
 
 	return(array('type'=>'redirect','url'=>$staticFile.'/peerstreamer'));
 }
