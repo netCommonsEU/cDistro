@@ -1,7 +1,6 @@
 <?php
 //peerstreamer
-
-$pspath="/opt/peerstreamer";
+$pspath="/opt/peerstreamer/";
 $psprogram="streamer-udp-grapes-static";
 $title="Peer Streamer";
 
@@ -10,8 +9,11 @@ $vlcpath="/usr/bin";
 $vlcprogram="cvlc";
 $vlcuser="nobody";
 
-//
-$psutils=dirname(__FILE__)."/../resources/peerstreamer/psutils.sh";
+//psutils
+$psutils=dirname(__FILE__)."/../resources/peerstreamer/pscontroller";
+
+//curl
+$curlprogram="/usr/bin/curl";
 
 // Aquest paquest no existeix encarà i per tant pot donar algun problema.
 $pspackages="peer_web_gui";
@@ -28,7 +30,7 @@ function index_get(){
 	if ( ! isPSInstalled() ) {
 		$page .= "<div class='alert alert-error text-center'>".t("PeerStreamer is not install")."</div>\n";
 		$page .= par(t("Click on the button to install PeerStreamer and view share videos from users."));
-		$buttons .= addButton(array('label'=>t("Install PeerStreamer"),'class'=>'btn btn-success', 'href'=>$staticFile.'/peerstreamer/install'));
+		$buttons .= addButton(array('label'=>t("Install PeerStreamer"),'class'=>'btn btn-success', 'href'=>$staticFile.'/peerstreamer/getprogram'));
 		$page .= $buttons;
 		return(array('type'=>'render','page'=>$page));
 	} else {
@@ -140,8 +142,8 @@ function _psshell($ip,$port,$myport,$type)
 
 	/*
 	$page .= par(t('Start peerstreamer:'));
-	//$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
-	$cmd = $pspath . "/" . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=127.0.0.1 -I ". $device ;
+	//$cmd = $pspath  . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=" . $ipclient . " -I ". $device .  " &";
+	$cmd = $pspath  . $psprogram . " -i " . $ip . " -p " . $port . " -P " . $port . " -F null,dechunkiser=udp,port0=" . $portclient . ",addr=127.0.0.1 -I ". $device ;
 	$page .= ptxt($cmd);
 
 	execute_program_detached($cmd);
@@ -212,7 +214,7 @@ function _pssource($url,$ip,$port,$description){
 
 	// Activar ps
 	$page .= par(t('Started PeerStreamer instance, and send stream to client.'));
-	$cmd = $pspath . "/" . $psprogram . " -f null,chunkiser=udp,port0=" . $portclient . ",addr=" . $psipclient .  " -P " . $port . " -I " . $device ."";
+	$cmd = $pspath  . $psprogram . " -f null,chunkiser=udp,port0=" . $portclient . ",addr=" . $psipclient .  " -P " . $port . " -I " . $device ."";
 	$temp = $cmd."\n";
 	execute_program_detached_user($cmd,$vlcuser);
 	$page .= ptxt($temp);
@@ -232,8 +234,10 @@ function _pssource($url,$ip,$port,$description){
 }
 
 function _listPSProcs(){
+
+	global $psutils,$staticFile;
 	// Fer un llistat del PS actius!
-	$ret = execute_program(dirname(__FILE__)."/../resources/peerstreamer/psutils.sh info json");	
+	$ret = execute_program($psutils." info json");	
 	$datos = json_decode(implode("\n",$ret['output']),true);
 
 	if (count($datos) > 0) {
@@ -277,14 +281,59 @@ function psstop(){
 	return(array('type'=>'redirect','url'=>$staticFile.'/peerstreamer'));
 }
 
-function install_get(){
+function getprogram(){
+	global $psutils,$staticFile;
+
+/*	//Exist directory?
+	if (is_dir($pspath)){
+
+	}
+	//Exist file?
+	if (!file_exists($pspath.$psprogram)){
+
+	}
+
+	$machine_path="";
+	$uname=posix_uname();
+	switch($uname['machine']){
+		case "i686":
+		case "i386":
+			$machine_path = "i386";
+			break;
+		case "x86_64":
+			$machine_path = "amd64";
+			break;
+		case "armv6l":
+			$machine_path = "arm";
+			break;
+	}
+	
+	$geturlfile=$ghpath.$machine_path."/".$psprogram;
+	$savefile=$pspath.$psprogram;
+
+	$output=execute_program($curlprogram." '".$geturlfile."' -o ".$savefile);
+
+	$ret = ptxt(implode("\n", $output['output']));
+	chmod($savefile, 755); 
+
+	*/
+
+	$ret = execute_program($psutils." install");	
+	$output = ptxt(implode("\n",$ret['output']));
+
+	setFlash($output);
+
+	return(array('type'=>'redirect','url'=>$staticFile.'/peerstreamer'));
+
 
 }
 
-function install_post(){
+function getprogram_post(){
 
 }
 
 function isPSInstalled(){
-	return(true);
+	global $pspath, $psprogram;
+
+	return(file_exists($pspath.$psprogram));
 }
