@@ -2,10 +2,13 @@
 VLCUSER=${VLCUSER:-"nobody"}
 PSUSER=${PSUSER:-$VLCUSER}
 VLCPATH="/usr/bin/vlc"
-PSPATH="/opt/peerstreamer/streamer-udp-grapes-static"
+PSPROG="streamer-udp-grapes-static"
+PSPATH="/opt/peerstreamer/"
 LOGFILE="/dev/null"
 FILEPEERS="/var/run/pspeers.conf"
 LSOF="/usr/bin/lsof"
+CURL="/usr/bin/curl"
+PEERSTREAMERBIN="https://raw.githubusercontent.com/Clommunity/build-peerstreamer/master/bin/"
 DEBUG=0
 S='|' # Char Separator
 
@@ -17,6 +20,7 @@ doHelp(){
 	echo "	connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
 	echo "	connectudp <ip> <port> [IP UDP Server] [Port UDP Server] [Device]"
 	echo "	disconnect <port>"
+	echo "	install"
 	echo "	info [json]"
 	return
 }
@@ -39,9 +43,9 @@ checkPrograms() {
 			exit
 		}
 
-	[ ! -f $PSPATH ] &&
+	[ ! -f $PSPATH$PSPROG ] &&
 		{
-			echo "Need PeerStreamer in '"$PSPATH"'"
+			echo "Need PeerStreamer in '"$PSPATH$PSPROG"'"
 			echo "Install a PeerStreamer compatible version with your hardware"
 			exit
 		}
@@ -153,7 +157,7 @@ doPeerSource(){
 	pidvlc=$(eval $cmd)
 	doDebug "PID from VLC is $pidvlc."
 
-	cmd='su '$PSUSER' -c "{ '$PSPATH' -f null,chunkiser=udp,port0='$udpport',addr=127.0.0.1 -P '$port' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+	cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -f null,chunkiser=udp,port0='$udpport',addr=127.0.0.1 -P '$port' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 	doDebug "Execute: $cmd"
 	pidps=$(eval $cmd)
 	doDebug "PID from PeerStreamer is $pidps."
@@ -210,7 +214,7 @@ doPeer2UDPClient(){
 	[ -z "$udpport" ] && udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
-	cmd='su '$PSUSER' -c "{ '$PSPATH' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+	cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 	doDebug "Execute: $cmd"
 	pidps=$(eval $cmd)
 	doDebug "PID from PeerStreamer is $pidps."
@@ -239,7 +243,7 @@ doPeer2RTSPServer(){
 	[ -z "$udpport" ] && udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
-	cmd='su '$PSUSER' -c "{ '$PSPATH' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+	cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 	doDebug "Execute: $cmd"
 	pidps=$(eval $cmd)
 	doDebug "PID from PeerStreamer is $pidps."
@@ -255,7 +259,42 @@ doPeer2RTSPServer(){
 	return
 
 }
+# Install PeerStreamer from source
+doInstall() {
+	if isInstall
+	then
+		echo "PeerStreamer was install."
+		return
+	fi
 
+	[ ! -d $PSPATH ] && {
+		doDebug "Peer Streamer directory ($PSPATH) no exist."
+		mkdir -p $PSPATH
+	}
+	march=$(uname -m)
+
+	case $march in
+	"i686")
+		march="i386"
+		;;
+	"x86_64")
+		march="amd64"
+		;;
+	"armv6l")
+		march="arm"
+		;;
+	esac
+
+	$CURL ${PEERSTREAMERBIN}${march}/$PSPROG -o $PSPATH$PSPROG
+	chmod 0755 $PSPATH$PSPROG
+}
+
+# Check install
+isInstall(){
+	[ -f $PSPATH$PSPROG ] && return 0
+	doDebug "PeerStreamer does not install."
+	return 1
+}
 
 findRandFreePort() {
 	read lowerPort upperPort < /proc/sys/net/ipv4/ip_local_port_range
@@ -275,28 +314,35 @@ then
 	doHelp
 fi
 
-checkPrograms
-
 case $1 in
 	"publish")
+		checkPrograms
 		shift
 		doPeerSource $@
 		;;
 	"unpublish")
+		checkPrograms
 		shift
 		doStopPeerSource $@
 		;;
 	"connectrtsp")
+		checkPrograms
 		shift
 		doPeer2RTSPServer $@
 		;;
 	"connectudp")
+		checkPrograms
 		shift
 		doPeer2UDPClient $@
 		;;
 	"disconnect")
+		checkPrograms
 		shift
 		doStopPeerSource $@
+		;;
+	"install")
+		shift
+		doInstall $@
 		;;
 	"info")
 		shift
