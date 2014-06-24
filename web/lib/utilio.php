@@ -249,6 +249,13 @@ function avahi_publish($type, $description, $port, $txt){
 	return($cmd);
 }
 
+function avahi_unpublish($type, $port){
+	$cmd = '/usr/sbin/avahi-ps unpublish '.$type.' '.$port;
+	execute_program_detached($cmd);
+
+	return($cmd);	
+}
+
 function getCommunityDev(){
 	$cmd = '/usr/sbin/avahi-ps info communitydev';
 	$ret = execute_program($cmd);
