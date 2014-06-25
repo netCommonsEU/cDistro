@@ -21,7 +21,7 @@ $curlprogram="/usr/bin/curl";
 // Aquest paquest no existeix encarà i per tant pot donar algun problema.
 $pspackages="peer_web_gui";
 
-function index_get(){
+function index(){
 	global $paspath,$title;
 	global $staticFile;
 
