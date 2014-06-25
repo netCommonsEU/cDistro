@@ -188,7 +188,7 @@ doStopPeerSource(){
 		kill -9 $pidvlc
 	}
 	pidps=$(echo $datosPeer|cut -d "$S" -f 3)
-	[ $pidvlc -ne 0 ] && {
+	[ $pidps -ne 0 ] && {
 		doDebug "Kill PeerStreamer: $pidps"
 		kill -9 $pidps
 	}
