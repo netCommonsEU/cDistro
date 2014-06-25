@@ -50,13 +50,23 @@ function connect_get(){
 	global $paspath,$title;
 	global $staticFile;
 
+	if (isset($_GET['ip']))
+		$peerip = $_GET['ip'];
+	else 
+		$peerip = "";
+
+	if (isset($_GET['port']))
+		$peerport = $_GET['port'];
+	else
+		$peerport = "";
+
 	$page = hlc(t($title));
 	$page .= hlc(t('Connect to Peer'),2);
 	$page .= par(t("You can join a stream through Peer from network, or you can find channels in avahi menu option."));
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= t('Peer:');
-	$page .= addInput('ip',t('IP Address'));
-	$page .= addInput('port',t('Port Address'));
+	$page .= addInput('ip',t('IP Address'),$peerip);
+	$page .= addInput('port',t('Port Address'),$peerport);
 	$page .= t('You:');
 	$page .= addCheckbox('type', t('Server Type'), array('RTSP'=>t('Create RTSP Server'),'UDP'=>t('Send to UDP Server')));
 	$page .= addInput('myport',t('Port'));
@@ -162,7 +172,7 @@ function _psshell($ip,$port,$myport,$type)
 	if ($type == "UDP") {
 		$cmd = $psutils." connectudp $ip $port $ipclient $myport $device";
 		execute_program_detached($cmd);
-		_psviewer("udp://@".$ipclient.":".$myport);
+		$page .= _psviewer("udp://@".$ipclient.":".$myport);
 	} else {
 		$cmd = $psutils." connectrtsp $ip $port $myport $ipserver $device";
 		execute_program_detached($cmd);
@@ -248,6 +258,7 @@ function _listPSProcs(){
 		foreach($datos as $v){
 			switch ($v['type']) {
 				case 'PeerRTSPServer':
+				case 'PeerUDP':
 					$actions = addButton(array('label'=>t('View'),'href'=>$staticFile.'/peerstreamer/psviewer?u='.urlencode($v['other'])));
 					$actions .= addButton(array('label'=>t('Stop'),'href'=>$staticFile.'/peerstreamer/psstop?p='.$v['port']));
 					break;
