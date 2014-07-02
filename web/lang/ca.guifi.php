@@ -45,6 +45,11 @@ addS ("dnsservices_installation_successful","DNSServices s'ha instal·lat correc
 addS ("dnsservices_installation_details","Detalls del procés d'instal·lació:");
 addS ("dnsservices_postinstallation_result","Resultat del procés de post-instal·lació:");
 addS ("dnsservices_configuration_successful","La configuració s'ha aplicat correctament.");
+addS ("dnsservices_uninstallation_result","Resultat del procés de desinstal·lació:");
+addS ("dnsservices_uninstallation_successful","DNSServices s'ha desinstal·lat correctament");
+addS ("dnsservices_uninstallation_unsuccessful","DNSServices no s'ha desinstal·lat correctament. Feu un cop d'ull als detalls de sota per a més informació.");
+addS ("dnsservices_uninstallation_details","Detalls del procés de desinstal·lació:");
+addS ("dnsservices_uninstallation_started","DNSServices està en marxa. Atureu-lo abans de desinstal·lar-lo.");
 
 //addS ("","");
 

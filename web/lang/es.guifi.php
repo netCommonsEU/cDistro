@@ -18,7 +18,7 @@ addS ("The ID number of the service at Guifi.net website (e.g. http://guifi.net/
 
 
 //DNSServices
-addS ("dnsservices_shortdesc","Sistema de configuración automática de servidores DNS para nodes de Guifi.net");
+addS ("dnsservices_shortdesc","Sistema de configuración automática de servidores DNS para nodos de Guifi.net");
 addS ("dnsservices_desc","DNSServices es un sistema de configuración automática de servidores DNS para nodos de Guifi.net. Proporciona resolución de direcciones de nombres de dominios creados por los usuarios en la página web de Guifi.net (incluyendo resolución inversa) y de nombres de dominios de Internet.");
 addS ("dnsservices_status","Estado de DNSServices");
 addS ("dnsservices_not_installed","DNSServices no está instalado en esta máquina");
@@ -33,7 +33,7 @@ addS ("dnsservices_form_service_id_help","El identificador del servicio en la p�
 addS ("dnsservices_form_url_label","URL del DNSDataServer");
 addS ("dnsservices_form_url_help","La URL del servidor donde sincronitzarse con la base de datos de DNS (por defecte <strong>http://guifi.net</strong>). No añada la barra al final (/).");
 addS ("dnsservices_running","DNSServices está en marcha");
-addS ("dnsservices_not_running","DNSServices està parado");
+addS ("dnsservices_not_running","DNSServices está parado");
 addS ("dnsservices_button_start","Arrancar DNSServices");
 addS ("dnsservices_button_stop","Parar DNSServices");
 addS ("dnsservices_button_configure","Configurar DNSServices");
@@ -45,8 +45,11 @@ addS ("dnsservices_installation_successful","DNSServices se ha instalado correct
 addS ("dnsservices_installation_details","Detalles del proceso de instalción:");
 addS ("dnsservices_postinstallation_result","Resultado del proceso de post-instalación:");
 addS ("dnsservices_configuration_successful","La configuración se ha aplicado correctamente.");
-
-
+addS ("dnsservices_uninstallation_result","Resultado del proceso de desinstalación:");
+addS ("dnsservices_uninstallation_successful","DNSServices se ha desinstalado correctamente");
+addS ("dnsservices_uninstallation_unsuccessful","DNSServices no se ha desinstalado correctamente. Para más información eche un vistazo a los detalles a continuación.");
+addS ("dnsservices_uninstallation_details","Detalles del proceso de desinstalación:");
+addS ("dnsservices_uninstallation_started","DNSServices está en marcha. Párelo antes de desinstalarlo.");
 
 
 

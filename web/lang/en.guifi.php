@@ -45,6 +45,11 @@ addS ("dnsservices_installation_successful","DNSServices has been successfully i
 addS ("dnsservices_installation_details","Installation process details:");
 addS ("dnsservices_postinstallation_details","Post-installation process details:");
 addS ("dnsservices_configuration_successful","Configuration successfully applied.");
+addS ("dnsservices_uninstallation_result","Unistallation process result:");
+addS ("dnsservices_uninstallation_successful","DNSServices has been successfully uninstalled");
+addS ("dnsservices_uninstallation_unsuccessful","DNSServices has not been successfully uninstalled. Check the details below for more information.");
+addS ("dnsservices_uninstallation_details","Uninstallation process details:");
+addS ("dnsservices_uninstallation_started","DNSServices is running. Stop it before uninstalling it.");
 
 
 //addS ("","");

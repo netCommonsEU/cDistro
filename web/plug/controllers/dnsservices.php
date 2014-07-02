@@ -169,6 +169,40 @@ function dnsservices_form($file,$options){
 
 }
 
+function uninstall(){
+
+	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables;
+
+  $page = "";
+	$page .= hl($dnsservices_name);
+	$page .= hl(t("dnsservices_shortdesc"),4);
+
+	if (isPackageInstall($dnsservices_pkg) && !dnsservicesStarted()){
+		$pkgUninstall = ptxt(uninstallPackage($dnsservices_pkg));
+
+	$page .= txt(t("dnsservices_uninstallation_result"));
+
+	if (!isPackageInstall($dnsservices_pkg))
+		$page .= "<div class='alert alert-success text-center'>".t("dnsservices_uninstallation_successful")."</div>\n";
+	else
+	  $page .= "<div class='alert alert-error text-center'>".t("dnsservices_uninstallation_unsuccessful")."</div>\n";
+
+	$page .= txt(t("dnsservices_uninstallation_details"));
+	$page .= $pkgUninstall;
+
+	$page .= addButton(array('label'=>t('dnsservices_button_back'),'class'=>'btn', 'href'=>$staticFile.'/'.$dnsservices_pkg));
+
+	return(array('type' => 'render','page' => $page));
+	}
+	else if (!isPackageInstall($dnsservices_pkg)){
+	$page .= "<div class='alert alert-error text-center'>".t("dnsservices_not_installed")."</div>\n";
+
+	$page .= addButton(array('label'=>t('dnsservices_button_back'),'class'=>'btn', 'href'=>$staticFile.'/'.$dnsservices_pkg));
+
+	return(array('type' => 'render','page' => $page));}
+}
+
+
 
 function dnsservicesStarted(){
 
