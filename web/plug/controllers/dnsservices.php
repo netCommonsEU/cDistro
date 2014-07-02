@@ -109,7 +109,7 @@ function install_post(){
 		//Afegir fitxer de configuració
 		foreach ($datesToSave as $key => $value) {
 			if($dnsservices_variables[$key]['kdeb'] == 'string'){
-				$datesToSave[$key] = "'".$value."'";
+				$datesToSave[$key] = '"'.$value.'"';
 				}
 			}
 
@@ -128,7 +128,7 @@ function install_post(){
 		//Afegir fitxer de configuració
 		foreach ($datesToSave as $key => $value) {
 			if($dnsservices_variables[$key]['kdeb'] == 'string'){
-				$datesToSave[$key] = "'".$value."'";
+				$datesToSave[$key] = '"'.$value.'"';
 				}
 			}
 
@@ -151,6 +151,12 @@ function dnsservices_form($file,$options){
 	$buttons = "";
 
 	$variables = load_singlevalue($file,$options);
+
+	foreach ($variables as $key => $value) {
+		if ( substr($value,0,1) == '"' && substr($value,-1,1) == '"' )
+			$variables[$key] = substr($value, 1, -1);
+
+	}
 
 	if($debug) { echo "<pre>"; print_r($variables); echo "</pre>"; }
 
