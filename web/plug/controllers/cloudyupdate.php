@@ -1,7 +1,7 @@
 <?php
 // Update files
 $list_packages = array('cDistro'=>array('user'=>'Clommunity', 'repo'=>'cDistro','type'=>'manual','script'=>'https://github.com/Clommunity/lbmake/blob/master/hooks/cDistro.chroot'),
-					   'Avahi-ps'=>array('user'=>'Clommunity', 'repo'=>'avahi-ps','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot')
+					   'avahi-ps'=>array('user'=>'Clommunity', 'repo'=>'avahi-ps','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot')
 					   );
 $dir_configs="/etc/cloudy";
 
@@ -30,10 +30,10 @@ function getUpdateTable(){
 	global $list_packages,$staticFile;
 
 	$table = "";
-	$buttons = "";
 
 	$table = addTableHeader(array(t('Package'), t('Version') , t('Your version'),  t('Actions')));
 	foreach($list_packages as $pname => $package){
+		$buttons = "";
 		$your_version = getYourVersion($package['user'],$package['repo']);
 		$act_version = getGitMaster($package['user'],$package['repo']);
 		if ($your_version != $act_version) {
@@ -56,7 +56,7 @@ function getYourVersion($user, $repo){
 	if (!file_exists($configfile))
 		return (t('unknown'));
 	else 
-		return (file_get_contents($configfile));
+		return (str_replace("\n", "",str_replace("\r", "",file_get_contents($configfile))));
 
 }
 
@@ -69,12 +69,22 @@ function getGitMaster($user, $repo){
 }
 
 function debupdate() {
+	global $staticFile;
+
+	$page = "";
+
+	$page .= hl(t("Cloudy Update System"));
 	$cmd = "apt-get update 2>&1";
-	return (shell_exec($cmd));
+	$page .= ptxt(shell_exec($cmd));
+	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/cloudyupdate'));
+
+
+	return(array('type' => 'render','page' => $page));
+
 }
 
 function update(){
-	global $Parameters;
+	global $staticFile, $Parameters;
 
 	$page = "";
 
@@ -96,6 +106,7 @@ function update(){
 	else {
 		$page .= ptxt(t("Need parameters."));
 	}
+	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/cloudyupdate'));
 
 
 	return(array('type' => 'render','page' => $page));
