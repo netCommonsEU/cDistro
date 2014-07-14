@@ -1,3 +1,3 @@
 <?php
 
-addMenu(t('Update'),'cloudyupdate',t('Cloudy'),'left');
+addMenu(t('Update'),'cloudyupdate',t('System'),'left');

@@ -1,4 +1,4 @@
 <?php
 //auth.menu
 
-addMenu(t('Logout'),'logout',t('User'),'left');
+addMenu(t('Logout'),'logout',t('System'),'left');
