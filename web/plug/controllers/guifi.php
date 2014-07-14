@@ -4,42 +4,42 @@
 $guifi_proxy3_file="/etc/guifi-proxy3/config.sh";
 $guifi_proxy3_pkg="guifi-proxy3";
 $guifi_proxy3_variables = array(
-				'base_url'=> array('default'=>'http://www.guifi.net',
-									'desc'=>t('Server URL Base'),
-									'vdeb'=>'guifi-proxy3/baseurl',
-									'kdeb'=>'string'),
-				   'node' =>  array('default'=>'0',
-				   					'desc'=>t('Guifi Proxy node number'),
-				   					'vdeb'=>'guifi-proxy3/node',
-									'kdeb'=>'string'),
-				   'ldap_main' =>  array('default'=>'ldap.guifi.net',
-				   						'desc'=>t('Main Server Ldap'),
-				   						'vdeb'=>'guifi-proxy3/ldap_main',
-										'kdeb'=>'string'),
-				   'ldap_backup' =>  array('default'=>'ldap2.guifi.net',
-				   							'desc'=>t('Main Server Ldap2'),
-				   							'vdeb'=>'guifi-proxy3/ldap_backup',
-											'kdeb'=>'string'),
-				   'realm' =>  array('default'=>'Guifi-server Squid proxy-caching web server',
-				   					 'desc'=>t('Proxy Welcome Message'),
-				   					 'vdeb'=>'guifi-proxy3/proxy_name',
-									 'kdeb'=>'string'),
-				   'manager' =>  array('default'=>'webmaster',
-				   					'desc'=>t('Contact email proxy server'),
-				   					'vdeb'=>'guifi-proxy3/email',
-									'kdeb'=>'string'),
-				   'language' =>  array('default'=>'Catalan',
-				   						'desc'=>t('Choosemanager a language for error pages generated'),
-				   						'vdeb'=>'guifi-proxy3/language',
-										'kdeb'=>'string'),
-				   'cache_size' =>  array('default'=>'10240',
-				   						'desc'=>t('Disk cache space (MB)'),
-				   						'vdeb'=>'guifi-proxy3/hd',
-										'kdeb'=>'string'),
-				   'cache_mem' =>  array('default'=>'100',
-				   						'desc'=>t('Ram cache space (MB)'),
-				   						'vdeb'=>'guifi-proxy3/ram',
-										'kdeb'=>'string')
+	'base_url'=> array('default'=>'http://www.guifi.net',
+		'desc'=>t('Server URL Base'),
+		'vdeb'=>'guifi-proxy3/baseurl',
+		'kdeb'=>'string'),
+	'node' =>  array('default'=>'0',
+		'desc'=>t('Guifi Proxy node number'),
+		'vdeb'=>'guifi-proxy3/node',
+		'kdeb'=>'string'),
+	'ldap_main' =>  array('default'=>'ldap.guifi.net',
+		'desc'=>t('Main Server Ldap'),
+		'vdeb'=>'guifi-proxy3/ldap_main',
+		'kdeb'=>'string'),
+	'ldap_backup' =>  array('default'=>'ldap2.guifi.net',
+		'desc'=>t('Main Server Ldap2'),
+		'vdeb'=>'guifi-proxy3/ldap_backup',
+		'kdeb'=>'string'),
+	'realm' =>  array('default'=>'Guifi-server Squid proxy-caching web server',
+		'desc'=>t('Proxy Welcome Message'),
+		'vdeb'=>'guifi-proxy3/proxy_name',
+		'kdeb'=>'string'),
+	'manager' =>  array('default'=>'webmaster',
+		'desc'=>t('Contact email proxy server'),
+		'vdeb'=>'guifi-proxy3/email',
+		'kdeb'=>'string'),
+	'language' =>  array('default'=>'Catalan',
+		'desc'=>t('Choosemanager a language for error pages generated'),
+		'vdeb'=>'guifi-proxy3/language',
+		'kdeb'=>'string'),
+	'cache_size' =>  array('default'=>'10240',
+		'desc'=>t('Disk cache space (MB)'),
+		'vdeb'=>'guifi-proxy3/hd',
+		'kdeb'=>'string'),
+	'cache_mem' =>  array('default'=>'100',
+		'desc'=>t('Ram cache space (MB)'),
+		'vdeb'=>'guifi-proxy3/ram',
+	'kdeb'=>'string')
 				   );
 $guifi_proxy3_desc = t("This software provides a federated proxy service in the context of Guifi.net");
 
@@ -106,7 +106,7 @@ $snpservices_files="/etc/snpservices/config.php";
 $snpservices_pkg="snpservices";
 $snpservices_desc=t("This software provides graphing services in the context of Guifi.net");
 $snpservices_variables=array('SNPGraphServerId' => array('default' => '0',
-												'desc' => t('SNPService node id.:'),
+												'desc' => t('Service ID'),
 												'vdeb' => 'snpservices/SNPGraphServerId',
 												'kdeb' => 'string')
 					    );
@@ -125,9 +125,9 @@ function snpservices_form($file,$options){
 
 	$variables = load_singlevalue($file,$options);
 	$page .= hlc(t("Guifi SNPServices"));
-	$page .= hl(t("Monitorization and graphing tools for Guifi nodes"),4);
+	$page .= hl(t("Monitorization and graphing tools for Guifi.net nodes"),4);
 
-	$page .= par(t("SNPServices is a set of tools to capture the status of the Guifi network nodes in your area that are registered with this server.").' '.t("The server at Guifi.net tells your server which nodes to monitor and asks for the graphs via a web interface.").' '.t("These graphs are then visible on the Guifi.net website."));
+	$page .= par(t("SNPServices is a set of tools to capture the status of the Guifi.net network nodes in your area that are registered with this server.").' '.t("The web server at www.guifi.net tells your server which nodes to monitor and asks for the graphs via a web interface.").' '.t("These graphs are then visible on the Guifi.net website."));
 
 	$page .= par(t("Before setting up this service, you should have added it to your node at Guifi.net's website.").' '.t("You can check this wiki page for more information:").' '.'<a href="'.t("http://en.wiki.guifi.net/wiki/Graphs_server").'">'.t("http://en.wiki.guifi.net/wiki/Graphs_server").'</a>');
 
@@ -137,7 +137,7 @@ function snpservices_form($file,$options){
 	$page .= createForm(array('class'=>'form-horizontal'));
 
 	foreach($options as $op=>$val){
-		$page .= addInput($op,$val['desc'],$variables,'','',t("The node number of the service's page at Guifi.net website (e.g. http://guifi.net/node/<strong>123456</strong>)"));
+		$page .= addInput($op,$val['desc'],$variables,'','',t("The ID number of the service at Guifi.net website (e.g. http://guifi.net/node/<strong>123456</strong>)"));
 	}
 
 	$page .= addSubmit(array('label'=>t("Save and apply configuration"),'class'=>'btn btn-primary'));
@@ -214,7 +214,6 @@ function dnsservices_form($file,$options){
 
 	$page = "";
 
-
 	$variables = load_singlevalue($file,$options);
 	if($debug) { echo "<pre>"; print_r($variables); echo "</pre>"; }
 	$page .= hl(t("Guifi DNSServices"));
@@ -230,6 +229,8 @@ function dnsservices_form($file,$options){
 
 }
 function dnsservices_get(){
+
+
 
 	global $dnsservices_files, $dnsservices_pkg, $dnsservices_desc, $dnsservices_variables, $staticFile;
 
