@@ -29,7 +29,7 @@ function printMenu($menu){
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-			<a href="<?php echo $appURL; ?>" class="brand"><?php echo $appName; ?></a>      
+			<a href="<?php echo $appURL; ?>" class="brand"><img src=/images/clommunity-logo.png><?php echo $appName; ?></a>
 			<div class="nav-collapse">
 				<?php if (isset($menu['left'])) { ?>
 				<ul class="nav">
