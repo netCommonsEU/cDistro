@@ -4,6 +4,6 @@ global $appName, $projectURL;
 ?>
 <footer>
   <p>
-  <a href="<?php echo $projectURL; ?>"><?php echo $appName; ?></a>
+  <?php echo $appName." ".$appCopyright." - <small>Developed in the <a href=\"".$projectURL."\">CLOMMUNITY project</a>.</small>"; ?>
   </p>
 </footer>  

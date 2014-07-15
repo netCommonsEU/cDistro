@@ -8,9 +8,15 @@ $staticPath=dirname($staticFile);
 $documentPath=$_SERVER['DOCUMENT_ROOT'];
 
 // App configure
-$appName = 'cDistro';
-$appURL="http://".$_SERVER['HTTP_HOST'];
-$projectURL="http://guifi.net";
+$appCopyright = "&copy; 2014, GPLv2";
+$appHost = $_SERVER['HTTP_HOST'];
+$appHostname = gethostname();
+$appName = 'Cloudy';
+$appURL="http://".$appHost;
+$sysCPU=`cat /proc/cpuinfo | grep -m1 "model name" | awk -F: '{print $2}'`;
+$sysRAM=`free | grep Mem | awk '{print $2}'`;
+$communityURL="http://guifi.net";
+$projectURL="http://clommunity-project.eu";
 $LANG="en";
 
 // Dir webapp

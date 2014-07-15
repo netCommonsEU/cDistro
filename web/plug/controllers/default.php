@@ -2,13 +2,23 @@
 // Default file..
 
 function index(){
+        global $appHost, $appHostname, $sysCPU, $sysRAM;
 
-	$page = "";
+        $page = "";
 
-	$page .= hl(t('Welcome!'));
-	$page .= t('Configure your system!');
+        $page .= hl(t('Welcome!'));
+        $page .= "<br/>";
+        $page .= "<h3><strong>System info</strong></h3>";
+        $page .= "<small>";
+        $page .= "<strong>Address</strong>: ".$appHost."<br/>";
+        $page .= "<strong>Hostname</strong>: ".$appHostname."<br/>";
+        $page .= "<strong>CPU</strong>: ".$sysCPU."<br/>";
+        $page .= "<strong>RAM</strong>: ".$sysRAM." bytes<br/>";
+        $page .= "</small><br/>";
 
-	return(array('type'=>'render','page'=>$page));
+        $page .= t('Configure your system!');
+
+        return(array('type'=>'render','page'=>$page));
 } 
 
 function install(){
