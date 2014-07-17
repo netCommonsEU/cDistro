@@ -7,16 +7,15 @@ function index(){
         $page = "";
 
         $page .= hl(t('Welcome!'));
-        $page .= "<br/>";
-        $page .= "<h3><strong>System info</strong></h3>";
+        $page .= "<h3><strong>".t('System info')."</strong></h3>";
         $page .= "<small>";
-        $page .= "<strong>Address</strong>: ".$appHost."<br/>";
-        $page .= "<strong>Hostname</strong>: ".$appHostname."<br/>";
+        $page .= "<strong>".t('Address')."</strong>: ".$appHost."<br/>";
+        $page .= "<strong>".t('Hostname')."</strong>: ".$appHostname."<br/>";
         $page .= "<strong>CPU</strong>: ".$sysCPU."<br/>";
         $page .= "<strong>RAM</strong>: ".$sysRAM." bytes<br/>";
         $page .= "</small><br/>";
 
-        $page .= t('Configure your system!');
+        $page .= t("Let's configure your system!");
 
         return(array('type'=>'render','page'=>$page));
 } 

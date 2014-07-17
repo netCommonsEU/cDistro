@@ -6,11 +6,11 @@
 addS ('Catalan','Catalan');
 addS ('English','English');
 addS ('Spanish','Spanish');
-// plug/controller/defautl.php
-addS ('Welcome!','Welcome!');
-addS ('Define language to: ', 'Define language to: ');
-addS ('Configure your system!','Configure your system!');
-addS ('is already installed.','is already installed.');
+// plug/controller/default.php
+addS ("Welcome!","Welcome!");
+addS ("Define language to: ", "Define language to: ");
+addS ("Let's configure your system!","Let's configure your system!");
+addS ("is already installed.","is already installed.");
 addS ("isn't installed.","isn't installed.");
 addS ("Install","Install");
 addS ("Uninstall","Uninstall");
@@ -18,6 +18,9 @@ addS ("Installed","Installed");
 addS ("Uninstalled","Uninstalled");
 addS ("Home","Home");
 addS ("package, please wait!","package, please wait!");
+addS ("System info","System info");
+addS ("Address","Address");
+addS ("Hostname","Hostname");
 
 // plug/controllers/getinconf.php
 addS ('Getinconf Server URL','Getinconf Server URL');
