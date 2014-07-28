@@ -1,5 +1,5 @@
 <?php
 //menu/avahi.php
 
-addMenu(t('Search'),'avahi/search',t('avahi'));
-//addMenu(t('Check me'),'avahi/checkservices',t('avahi'));
+addMenu(t('Search'),'avahi/search',t('Avahi'));
+//addMenu(t('Check me'),'avahi/checkservices',t('Avahi'));

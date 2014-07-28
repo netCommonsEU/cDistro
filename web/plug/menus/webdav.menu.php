@@ -1,3 +1,3 @@
 <?php
 //webdav.menu.php
-addMenu('Webdav Server','webdav','clommunity');
+addMenu('Webdav Server','webdav','Clommunity');
