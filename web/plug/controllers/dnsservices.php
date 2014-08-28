@@ -31,7 +31,7 @@ function index(){
 	$page = "";
 	$buttons = "";
 
-	$page .= hl($dnsservices_name);
+	$page .= hlc($dnsservices_name);
 	$page .= hl(t("dnsservices_shortdesc"),4);
 	$page .= par(t("dnsservices_desc"));
 
