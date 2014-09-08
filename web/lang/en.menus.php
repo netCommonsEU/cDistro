@@ -3,7 +3,7 @@
 
 //Avahi
 
-addS ("menus_avahi_search","Search");
+addS ("menus_avahi_search","Look for services");
 addS ("menus_avahi_avahi","Avahi");
 
 
