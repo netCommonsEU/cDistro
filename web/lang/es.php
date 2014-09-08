@@ -11,7 +11,17 @@ addS ('Welcome!','Bienvenido !');
 addS ('Define language to: ', 'Idioma seleccionado: ');
 addS ('Configure your system!','Configura tu sistema!');
 
+// Cloudy update
+//
+// plug/controllers/cloudyupdatephp
+//
+include 'en.cloudyupdate.php';
+
+
+// Tahoe-LAFS
+//
 // plug/controllers/tahoe-lafs.php
+//
 include 'es.tahoe-lafs.php';
 
 // Guifi

@@ -35,6 +35,14 @@ addS ("Now, service is loading. Please come back","Now, service is loading. Plea
 addS ("previous page","previous page");
 addS ("You can return to the previous","You can return to the previous");
 
+
+// Cloudy update
+//
+// plug/controllers/cloudyupdatephp
+//
+include 'en.cloudyupdate.php';
+
+
 // Tahoe-LAFS
 //
 // plug/controllers/tahoe-lafs.php

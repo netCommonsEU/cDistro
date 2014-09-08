@@ -32,7 +32,18 @@ addS ("Now, service is loading. Please come back","Ara, el servei s'està activa
 addS ("previous page","pàgina anterior");
 addS ("You can return to the previous","Pots tornar a la pàgina anterior");
 
+
+// Cloudy update
+//
+// plug/controllers/cloudyupdatephp
+//
+include 'en.cloudyupdate.php';
+
+
+// Tahoe-LAFS
+//
 // plug/controllers/tahoe-lafs.php
+//
 include 'ca.tahoe-lafs.php';
 
 // Guifi

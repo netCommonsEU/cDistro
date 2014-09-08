@@ -37,9 +37,9 @@ function getUpdateTable(){
 		$installed_version = getYourVersion($package['user'],$package['repo']);
 		$last_version = getGitMaster($package['user'],$package['repo']);
 		if ($installed_version != $last_version) {
-			$buttons = addButton(array('label'=>t('cloudyupdate_installed_update'),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
+			$buttons = addButton(array('label'=>t('cloudyupdate_update'),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
 		}
-		$table .= addTableRow(array($pname, $installed_version, $last_version, $buttons));
+		$table .= addTableRow(array($pname, $installed_version, $buttons));
 	}
 	$table .= addTableFooter();
 
