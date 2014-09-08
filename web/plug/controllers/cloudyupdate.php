@@ -13,13 +13,13 @@ function index_get()
 	$page = "";
 
 	$page .= hl(t("Cloudy Update System"));
-	$page .= hl(t("Non Debian packages"),3);
-	$page .= ajaxStr('tPackages',t("Loading packages information.") );
+	$page .= hl(t("cloudyupdate_cloudy_packages"),3);
+	$page .= ajaxStr('tPackages',t("cloudyupdate_loading_packages") );
 	$page .= "<script>\n";
 	$page .= "$('#tPackages').load('".$staticFile."/cloudyupdate/getUpdateTable');\n";
 	$page .= "</script>\n";
-	$page .= hl(t("Debian packages"),3);
-	$page .= addButton(array('label'=>t('Update Debian packages'),'href'=>$staticFile.'/cloudyupdate/debupdate'));
+	$page .= hl(t("cloudyupdate_debian_packages"),3);
+	$page .= addButton(array('label'=>t('cloudyupdate_update_debian_packages'),'href'=>$staticFile.'/cloudyupdate/debupdate'));
 
 
 	return(array('type' => 'render','page' => $page));
@@ -31,15 +31,15 @@ function getUpdateTable(){
 
 	$table = "";
 
-	$table = addTableHeader(array(t('Package'), t('Version') , t('Your version'),  t('Actions')));
+	$table = addTableHeader(array(t('cloudyupdate_package'), t('cloudyupdate_installed_version') , t('cloudyupdate_last_version'),  t('cloudyupdate_actions')));
 	foreach($list_packages as $pname => $package){
 		$buttons = "";
-		$your_version = getYourVersion($package['user'],$package['repo']);
-		$act_version = getGitMaster($package['user'],$package['repo']);
-		if ($your_version != $act_version) {
-			$buttons = addButton(array('label'=>t('Update'),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
+		$installed_version = getYourVersion($package['user'],$package['repo']);
+		$last_version = getGitMaster($package['user'],$package['repo']);
+		if ($installed_version != $last_version) {
+			$buttons = addButton(array('label'=>t('cloudyupdate_installed_update'),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
 		}
-		$table .= addTableRow(array($pname, $act_version, $your_version, $buttons));
+		$table .= addTableRow(array($pname, $installed_version, $last_version, $buttons));
 	}
 	$table .= addTableFooter();
 
@@ -50,12 +50,12 @@ function getYourVersion($user, $repo){
 	global $dir_configs;
 
 	if (!is_dir($dir_configs)) {
-    	mkdir($dir_configs);         
+    	mkdir($dir_configs);
 	}
 	$configfile = $dir_configs."/".$user."-".$repo.".sha";
 	if (!file_exists($configfile))
 		return (t('unknown'));
-	else 
+	else
 		return (str_replace("\n", "",str_replace("\r", "",file_get_contents($configfile))));
 
 }
