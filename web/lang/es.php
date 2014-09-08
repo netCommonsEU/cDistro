@@ -11,9 +11,17 @@ addS ('Welcome!','Bienvenido !');
 addS ('Define language to: ', 'Idioma seleccionado: ');
 addS ('Configure your system!','Configura tu sistema!');
 
-// Cloudy update
+
+// Cloudy: menús
 //
-// plug/controllers/cloudyupdatephp
+// plug/menus/*.php
+//
+include 'es.menus.php';
+
+
+// Cloudy: actualizaciones
+//
+// plug/controllers/cloudyupdate.php
 //
 include 'es.cloudyupdate.php';
 

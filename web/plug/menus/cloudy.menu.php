@@ -1,5 +1,5 @@
 <?php
 
-addMenu(t('Add devels\' sshkeys'),'sshkeys',t('System'),'left');
-addMenu(t('Update'),'cloudyupdate',t('System'),'left');
-addMenu(t('Logout'),'logout',t('System'),'left');
+addMenu(t('menus_cloudy_updates'),'cloudyupdate',t('menus_cloudy_system'),'left');
+addMenu(t('menus_cloudy_sshkeys'),'sshkeys',t('menus_cloudy_system'),'left');
+addMenu(t('menus_cloudy_logout'),'logout',t('menus_cloudy_system'),'left');

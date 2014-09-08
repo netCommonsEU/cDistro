@@ -36,7 +36,14 @@ addS ("previous page","previous page");
 addS ("You can return to the previous","You can return to the previous");
 
 
-// Cloudy update
+// Cloudy: menus
+//
+// plug/menus/*.php
+//
+include 'en.menus.php';
+
+
+// Cloudy: updates
 //
 // plug/controllers/cloudyupdatephp
 //

@@ -33,9 +33,16 @@ addS ("previous page","pàgina anterior");
 addS ("You can return to the previous","Pots tornar a la pàgina anterior");
 
 
-// Cloudy update
+// Cloudy: menús
 //
-// plug/controllers/cloudyupdatephp
+// plug/menus/*.php
+//
+include 'ca.menus.php';
+
+
+// Cloudy: actualitzacions
+//
+// plug/controllers/cloudyupdate.php
 //
 include 'ca.cloudyupdate.php';
 

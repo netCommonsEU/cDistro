@@ -1,4 +1,4 @@
 <?php
 //tahoe-lafs.menu
 
-addMenu('Tahoe-LAFS','tahoe-lafs','Clommunity');
+addMenu(t('menus_tahoe_tahoe'),'tahoe-lafs',t('menus_tahoe_clommunity'));

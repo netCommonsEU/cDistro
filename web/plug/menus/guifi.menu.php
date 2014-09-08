@@ -1,7 +1,6 @@
 <?php
 //guifi.menu
 
-addMenu('Proxy3','guifi/proxy3','Guifi.net');
-addMenu('SNPServices','guifi/snpservices','Guifi.net');
-//addMenu('DNSServices','guifi/dnsservices','Guifi.net');
-addMenu('DNSServices','dnsservices','Guifi.net');
+addMenu(t('menus_guifi_proxy3'),'guifi/proxy3',t('menus_guifi_guifi'));
+addMenu(t('menus_guifi_snpservices'),'guifi/snpservices',t('menus_guifi_guifi'));
+addMenu(t('menus_guifi_dnsservices'),'dnsservices',t('menus_guifi_guifi'));
