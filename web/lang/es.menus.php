@@ -27,7 +27,7 @@ addS ("menus_guifi_dnsservices","DNSServices");
 
 
 //Language
-addS ("menus_lang_language","Language");
+addS ("menus_lang_language","Idioma");
 addS ("menus_lang_catalan","Catalán");
 addS ("menus_lang_english","Inglés");
 addS ("menus_lang_spanish","Castellano");
