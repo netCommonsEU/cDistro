@@ -39,7 +39,7 @@ function getUpdateTable(){
 		if ($installed_version != $last_version) {
 			$buttons = addButton(array('label'=>t('cloudyupdate_update'),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
 		}
-		$table .= addTableRow(array($pname, $installed_version, $buttons));
+		$table .= addTableRow(array($pname, $installed_version, $last_version, $buttons));
 	}
 	$table .= addTableFooter();
 
