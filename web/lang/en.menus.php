@@ -28,9 +28,9 @@ addS ("menus_guifi_dnsservices","DNSServices");
 
 //Language
 addS ("menus_lang_language","Language");
-addS ("menus_guifi_catalan","Catalan");
-addS ("menus_guifi_english","English");
-addS ("menus_guifi_spanish","Spanish");
+addS ("menus_lang_catalan","Catalan");
+addS ("menus_lang_english","English");
+addS ("menus_lang_spanish","Spanish");
 
 
 //Tahoe-LAFS
