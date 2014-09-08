@@ -15,7 +15,7 @@ addS ('Configure your system!','Configura tu sistema!');
 //
 // plug/controllers/cloudyupdatephp
 //
-include 'en.cloudyupdate.php';
+include 'es.cloudyupdate.php';
 
 
 // Tahoe-LAFS

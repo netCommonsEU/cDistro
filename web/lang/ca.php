@@ -37,7 +37,7 @@ addS ("You can return to the previous","Pots tornar a la pàgina anterior");
 //
 // plug/controllers/cloudyupdatephp
 //
-include 'en.cloudyupdate.php';
+include 'ca.cloudyupdate.php';
 
 
 // Tahoe-LAFS
