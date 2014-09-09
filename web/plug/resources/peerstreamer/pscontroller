@@ -294,7 +294,6 @@ doInstallVLC() {
 	if isInstalledVLC
 	then 
 		doDebug "Installing VLC..."
-		#Install VLC here without requesting any sudo privileges
 		apt-get install vlc-nox
 	fi
 }
