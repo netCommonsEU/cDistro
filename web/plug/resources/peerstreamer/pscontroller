@@ -289,6 +289,34 @@ doInstall() {
 	chmod 0755 $PSPATH$PSPROG
 }
 
+#Install VLC packages if not installed yet
+doInstallVLC() {
+	if isInstalledVLC
+	then 
+		doDebug "Installing VLC..."
+		apt-get install vlc-nox
+	fi
+}
+
+# Check whether vlc (no X) is installed or not. If 0, it needs to be installed
+isInstalledVLC() {
+	[ $(dpkg -s vlc-nox | grep Status | cut -d " " -f2) = "install" ] && return 0
+	return 1
+}
+
+doInstallVLCplugin() {
+	if isInstalledVLCplugin
+		doDebug "Installing VLC browser plugin..."
+		apt-get install browser-plugin-vlc
+	then
+	fi
+}
+
+isInstalledVLCplugin() {
+	[ $(dpkg -s browser-plugin-vlc | grep Status | cut -d " " -f2) = "install" ] && return 0
+	return 1
+}
+
 # Check install
 isInstall(){
 	[ -f $PSPATH$PSPROG ] && return 0
@@ -343,6 +371,14 @@ case $1 in
 	"install")
 		shift
 		doInstall $@
+		;;
+	"installVLC")
+		shift
+		doInstallVLC
+		;;
+	"installVLCplugin")
+		shift
+		doInstallVLCplugin
 		;;
 	"info")
 		shift
