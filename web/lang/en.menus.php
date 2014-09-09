@@ -10,7 +10,7 @@ addS ("menus_avahi_avahi","Avahi");
 //Cloudy
 addS ("menus_cloudy_system","System");
 addS ("menus_cloudy_updates","Updates");
-addS ("menus_cloudy_sshkeys","Add developers\' SSH keys");
+addS ("menus_cloudy_sshkeys","Add developers' SSH keys");
 addS ("menus_cloudy_logout","Log out");
 
 
