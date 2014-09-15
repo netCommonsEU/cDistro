@@ -9,7 +9,7 @@ FILEPEERS="/var/run/pspeers.conf"
 LSOF="/usr/bin/lsof"
 CURL="/usr/bin/curl"
 PEERSTREAMERBIN="https://raw.githubusercontent.com/Clommunity/build-peerstreamer/master/bin/"
-DEBUG=0
+DEBUG=1
 S='|' # Char Separator
 
 
@@ -293,28 +293,38 @@ doInstall() {
 doInstallVLC() {
 	if isInstalledVLC
 	then 
-		doDebug "Installing VLC..."
-		apt-get install vlc-nox
+		doDebug "Installing vlc-nox..."
+		apt-get install -y --force-yes vlc-nox
 	fi
 }
 
 # Check whether vlc (no X) is installed or not. If 0, it needs to be installed
 isInstalledVLC() {
-	[ $(dpkg -s vlc-nox | grep Status | cut -d " " -f2) = "install" ] && return 0
-	return 1
+	if [ $(dpkg-query -W -f='${Status} ${Version}\n' vlc-nox | cut -d " " -f1) = "install" ] 
+	then
+		doDebug "vlc-nox is already installed."
+		return 1
+	fi
+	doDebug "vlc-nox is not installed."
+	return 0
 }
 
 doInstallVLCplugin() {
 	if isInstalledVLCplugin
-		doDebug "Installing VLC browser plugin..."
-		apt-get install browser-plugin-vlc
 	then
+		doDebug "Installing VLC browser plugin..."
+		apt-get install -y --force-yes browser-plugin-vlc
 	fi
 }
 
 isInstalledVLCplugin() {
-	[ $(dpkg -s browser-plugin-vlc | grep Status | cut -d " " -f2) = "install" ] && return 0
-	return 1
+	if [ $(dpkg-query -W -f='${Status} ${Version}\n' browser-plugin-vlc | cut -d " " -f1) = "install" ]
+	then
+		doDebug "browser-plugin-vlc is already installed."
+		return 1
+	fi
+	doDebug "browser-plugin-vlc is not installed."
+	return 0
 }
 
 # Check install
@@ -374,11 +384,11 @@ case $1 in
 		;;
 	"installVLC")
 		shift
-		doInstallVLC
+		doInstallVLC $@
 		;;
 	"installVLCplugin")
 		shift
-		doInstallVLCplugin
+		doInstallVLCplugin $@
 		;;
 	"info")
 		shift
