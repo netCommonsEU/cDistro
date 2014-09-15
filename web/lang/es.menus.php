@@ -10,7 +10,7 @@ addS ("menus_avahi_avahi","Avahi");
 //Cloudy
 addS ("menus_cloudy_system","Sistema");
 addS ("menus_cloudy_updates","Actualizaciones");
-addS ("menus_cloudy_sshkeys","Añadir claves SSH desarrolladores");
+addS ("menus_cloudy_sshkeys","Añadir claves SSH de desarrolladores");
 addS ("menus_cloudy_logout","Salir");
 
 
