@@ -12,7 +12,7 @@ function index(){
         $page .= "<strong>".t('Address')."</strong>: ".$appHost."<br/>";
         $page .= "<strong>".t('Hostname')."</strong>: ".$appHostname."<br/>";
         $page .= "<strong>CPU</strong>: ".$sysCPU."<br/>";
-        $page .= "<strong>RAM</strong>: ".$sysRAM." bytes<br/>";
+        $page .= "<strong>RAM</strong>: ".$sysRAM."<br/>";
         $page .= "</small><br/>";
 
         $page .= t("Let's configure your system!");
