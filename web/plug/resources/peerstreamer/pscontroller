@@ -5,7 +5,8 @@ VLCPATH="/usr/bin/vlc"
 PSPROG="streamer-udp-grapes-static"
 PSPATH="/opt/peerstreamer/"
 LOGFILE="/dev/null"
-FILEPEERS="/var/run/pspeers.conf"
+FILEPEERS="/ivar/run/pspeers.conf"
+FILEDIR="/var/run/"
 LSOF="/usr/bin/lsof"
 CURL="/usr/bin/curl"
 PEERSTREAMERBIN="https://raw.githubusercontent.com/Clommunity/build-peerstreamer/master/bin/"
@@ -105,36 +106,50 @@ doInfo(){
 		ofs=$IFS
 		IFS=$S read -a data <<< "$auxline"
 		IFS=$ofs
-		if [ "$json" == "json" ]
+
+		# Checking if current PS instance is active. Otherwise we kill the depending processes.
+		if [ -z $(ps -A | grep ${data[2]}) ]
 		then
-			if $notFirst ; then  echo ','; fi
-			echo '{ "port" : '${data[0]}', "type": "'${data[4]}'", "vlcpid": '${data[1]}', "peerstreamerpid": '${data[2]}', "internalport": '${data[3]}', "other": "'${data[5]}'" }'
-			notFirst=true
+			kill -9 ${data[1]}
+			#Deleting current peerstreamer instance from the info file.
+			sed "/${data[2]}/d" "$FILEPEERS" >"$FILEDIR/tmp" && mv "$FILEDIR/tmp" $FILEPEERS
 		else
-			case ${data[4]} in
-				"Source")
-					echo "Source from '"${data[5]}"'"
-					echo "	In port ${data[0]}."
-					echo "	Internal publish UDP 127.0.0.1:${data[3]}."
-					echo "	VLC pid ${data[1]}."
-					echo "	PeerStreamer pid ${data[2]}."
-					;;
-				"PeerUDP")
-					echo "Peer in port ${data[0]}"
-					echo "	To UDP Server in ${data[5]}."
-					echo "	PeerStreamer pid ${data[2]}."
-					;;
-				"PeerRTSPServer")
-					echo "Peer in port ${data[0]}"
-					echo "	To RTSP Server in ${data[5]}."
-					echo "	Internal UDP Port ${data[3]}."
-					echo "	VLC pid ${data[1]}."
-					echo "	PeerStreamer pid ${data[2]}."
-					;;			
-			esac
+			if [ "$json" == "json" ]
+			then
+				if $notFirst ; then  echo ','; fi
+				echo '{ "port" : '${data[0]}', "type": "'${data[4]}'", "vlcpid": '${data[1]}', "peerstreamerpid": '${data[2]}', "internalport": '${data[3]}', "other": "'${data[5]}'" }'
+				notFirst=true
+			else
+				case ${data[4]} in
+					"Source")
+						echo "Source from '"${data[5]}"'"
+						echo "	In port ${data[0]}."
+						echo "	Internal publish UDP 127.0.0.1:${data[3]}."
+						echo "	VLC pid ${data[1]}."
+						echo "	PeerStreamer pid ${data[2]}."
+						;;
+					"PeerUDP")
+						echo "Peer in port ${data[0]}"
+						echo "	To UDP Server in ${data[5]}."
+						echo "	PeerStreamer pid ${data[2]}."
+						;;
+					"PeerRTSPServer")
+						echo "Peer in port ${data[0]}"
+						echo "	To RTSP Server in ${data[5]}."
+						echo "	Internal UDP Port ${data[3]}."
+						echo "	VLC pid ${data[1]}."
+						echo "	PeerStreamer pid ${data[2]}."
+						;;			
+				esac
+			fi
 		fi
 	done
 	[ "$json" == "json" ] && echo "]";
+}
+
+checkPIDs() {
+	
+	[ -z  ]
 }
 
 # Function peer-soucer
