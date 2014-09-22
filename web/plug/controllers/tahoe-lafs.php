@@ -663,6 +663,25 @@ function createNode_post(){
  			return(array('type' => 'render','page' => $page));
  	}
 
+ 	$validPost = true;
+
+	if ( empty($_POST['NODE_NICKNAME']) || preg_match("/[^-\w]/i", $_POST['NODE_NICKNAME']) || strlen($_POST['NODE_NICKNAME'] > 80) ) {
+		$validPost = false;
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid storage node name").': ' . htmlspecialchars(substr($_POST['NODE_NICKNAME'],0,70)) . "</div>\n";
+	}
+	if ( empty($_POST['NODE_INTRODUCER_FURL']) || !preg_match("((pb://)[-a-zA-Z0-9@:%_\+.~#?&//=]+)", $_POST['NODE_INTRODUCER_FURL']) ) {
+		$validPost = false;
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid introducer FURL").': ' . htmlspecialchars(substr($_POST['NODE_INTRODUCER_FURL'],0,70)) . "</div>\n";
+	}
+
+	if(!$validPost) {
+			$page .= "<div class='alert alert-warning text-center'>".t("A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the names")."</div>\n";
+			$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
+			$buttons .= addButton(array('label'=>t("Retry storage node creation"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/tahoe-lafs/createNode'));
+			$page .= $buttons;
+ 			return(array('type' => 'render','page' => $page));
+	}
+
 	$postCreate = array();
 	foreach (execute_program( $TAHOE_VARS['TAHOE_COMMAND'].' create-node '.$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['NODE_DIRNAME'])['output'] as $k => $v) { $postCreate[] = $v; }
 	execute_program_shell( 'sed -i "s/^nickname.*$/nickname = '.$_POST['NODE_NICKNAME'].'/ "'.$TAHOE_VARS['DAEMON_HOMEDIR'].'/'.$TAHOE_VARS['NODE_DIRNAME'].'/'.$TAHOE_VARS['TAHOE_CONFIG_FILE'] );
