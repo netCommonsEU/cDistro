@@ -278,12 +278,12 @@ doPeer2RTSPServer(){
 doInstall() {
 	if isInstall
 	then
-		echo "PeerStreamer was install."
+		echo "PeerStreamer is already installed."
 		return
 	fi
 
 	[ ! -d $PSPATH ] && {
-		doDebug "Peer Streamer directory ($PSPATH) no exist."
+		doDebug "Peer Streamer directory ($PSPATH) does not exist."
 		mkdir -p $PSPATH
 	}
 	march=$(uname -m)
@@ -302,12 +302,12 @@ doInstall() {
 
 	$CURL ${PEERSTREAMERBIN}${march}/$PSPROG -o $PSPATH$PSPROG
 	chmod 0755 $PSPATH$PSPROG
-}
 
-#Install VLC packages if not installed yet
-doInstallVLC() {
+	# VLC packages installation---
+	# Checking if VLC is already installed
 	if isInstalledVLC
-	then 
+	then
+		#If not, we install the vlc-nox
 		doDebug "Installing vlc-nox..."
 		apt-get install -y --force-yes vlc-nox
 	fi
@@ -345,7 +345,7 @@ isInstalledVLCplugin() {
 # Check install
 isInstall(){
 	[ -f $PSPATH$PSPROG ] && return 0
-	doDebug "PeerStreamer does not install."
+	doDebug "PeerStreamer is not installed. Installing now..."
 	return 1
 }
 
@@ -396,10 +396,6 @@ case $1 in
 	"install")
 		shift
 		doInstall $@
-		;;
-	"installVLC")
-		shift
-		doInstallVLC $@
 		;;
 	"installVLCplugin")
 		shift
