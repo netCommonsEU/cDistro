@@ -73,7 +73,6 @@ saveInfoPeer(){
 
 removeInfoPeer(){
 	local port=${1:-""}
-
 	[ -z "$port" ] && return
 
 	cat $FILEPEERS | grep -v ^${port}$S > ${FILEPEERS}.temp
@@ -229,16 +228,24 @@ doPeer2UDPClient(){
 	[ -z "$udpport" ] && udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
-	cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
-	doDebug "Execute: $cmd"
-	pidps=$(eval $cmd)
-	doDebug "PID from PeerStreamer is $pidps."
+	# Checking if already connected to this stream
+	if [ -z "$(cat $FILEPEERS | grep $port)" ]
+	then
+		doDebug "Port is free, creating stream."
+		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+		doDebug "Execute: $cmd"
+		pidps=$(eval $cmd)
+		doDebug "PID from PeerStreamer is $pidps."
 
-	doDebug "VLC is not necessary."
+		doDebug "VLC is not necessary."
 
-	saveInfoPeer "0" $pidps $port $udpport "PeerUDP" "udp://@$ipclient:$udpport"
+		saveInfoPeer "0" $pidps $port $udpport "PeerUDP" "udp://@$ipclient:$udpport"
 
-	return
+		return
+	else
+		doDebug "The port $port is already in use. Stream will not create."
+		return 1
+	fi
 
 }
 # Funciton peer-with-rtsp-server
