@@ -26,6 +26,7 @@ function index_get(){
 	} else {
 		$page .= "<div class='alert alert-error text-center'>".t("Service DOWN")."</div>\n";
 		$page .= addButton(array('label'=>'Start','class'=>'btn btn-success', 'href'=>'getinconf/upService'));
+		$page .= addButton(array('label'=>'Remove','class'=>'btn btn-danger', 'href'=>'getinconf/removeService'));
 	}
 
 	return(array('type' => 'render','page' => $page));
@@ -104,6 +105,11 @@ function nothing(){
 		$page .= "</div>";
 		return(array('type'=>'render', 'page'=> $page));
 
+}
+
+function removeService(){
+		execute_program_detached('getinconf-client uninstall');
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
 ?>
