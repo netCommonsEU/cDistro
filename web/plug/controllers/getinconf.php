@@ -69,6 +69,9 @@ function downService(){
 	global $staticFile;
 
 	$r = execute_program('getinconf-client uninstall');
+	// this getinconf-client must do it.
+	execute_program_detached('rm -r /var/run/getinconf-client.md5.*');
+
 	if ($r['return'] == 0) {
 		setFlash(t('Service DOWN').'!');
 	}
