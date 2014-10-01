@@ -229,8 +229,8 @@ doPeer2UDPClient(){
 	doDebug "Port to upd local: $udpport"
 
 	# Checking if already connected to this stream
-	check = 'cat '$FILEPEERS' | grep "^'$port'"' 
-	if [ -z '$(eval $check)' ] #If there is no line with first parameter equal to $port then proceed with:
+	check = $(cat $FILEPEERS | grep "^$port")
+	if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
 	then
 		doDebug "Port is free, creating stream."
 		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
