@@ -2,6 +2,7 @@
 $dirpath="/opt/syncthing";
 $binpath="$dirpath/syncthing";
 $cfgpath="$dirpath/config";
+$cfgpath_xml = "$cfgpath/config.xml";
 $repospath="$dirpath/repos";
 
 $user="www-data";
@@ -11,7 +12,7 @@ $avahi_type="syncthing";
 $urlpath="$staticFile/syncthing";
 
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.9.17";
+$version="0.9.19";
 
 function nameForArch($arch){
 	global $version;
@@ -76,10 +77,8 @@ function index(){
 		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/cfgprogram"));
 		return(array('type'=>'render','page'=>$page));
 	} else {
-		//setFlash((string)getPid());
 		$page .= "<div class='alert alert-success text-center'>".t("$title installed")."</div>\n";
-		//$page .= addButton(array('label'=>t('Connect to Node'),'href'=>"$urlpath/connect"));
-		//$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>"$urlpath/publish"));
+		$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>"$urlpath/publish"));
 		return(array('type' => 'render','page' => $page));
 	}
 } 
@@ -114,7 +113,6 @@ function connect_get(){
 	$page .= addInput('myport',t('Port'));
 	$page .= addSubmit(array('label'=>t('Connect'),'class'=>'btn btn-primary'));
 	$page .= addButton(array('label'=>t('Cancel'),'href'=>$urlpath));
-
 
 	return(array('type' => 'render','page' => $page));
 }
@@ -173,7 +171,7 @@ function getprogram(){
 }
 
 function cfgprogram(){
-	global $user, $dirpath, $cfgpath, $repospath, $binpath, $urlpath;
+	global $user, $dirpath, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
@@ -181,6 +179,16 @@ function cfgprogram(){
 	} else {
 		execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
 		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
+		while (!file_exists($cfgpath_xml)) sleep(1);
+		$config = simplexml_load_file($cfgpath_xml);
+		unset($config->repository);
+		$config->gui->attributes()->enabled="true";
+		$config->gui->attributes()->tls="true";
+		$config->gui->address="0.0.0.0:8080";
+		$config->gui->user="syncthing";
+		$config->gui->password='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
+		$config->options->globalAnnounceEnabled=false;
+		$config->asXml($cfgpath_xml);
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
 } 
