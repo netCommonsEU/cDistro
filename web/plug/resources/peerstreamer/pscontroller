@@ -229,9 +229,9 @@ doPeer2UDPClient(){
 	doDebug "Port to upd local: $udpport"
 
 	# Checking if already connected to this stream
-	check = $(cat $FILEPEERS | grep "^$port")
-	if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
-	then
+	# check=$(cat $FILEPEERS | grep -e "^$port")
+	# if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
+	[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && ( 
 		doDebug "Port is free, creating stream."
 		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 		doDebug "Execute: $cmd"
@@ -243,10 +243,11 @@ doPeer2UDPClient(){
 		saveInfoPeer "0" $pidps $port $udpport "PeerUDP" "udp://@$ipclient:$udpport"
 
 		return
-	else
-		doDebug "The port $port is already in use. Stream will not create."
-		return 1
-	fi
+    )	
+	#else
+	#	doDebug "The port $port is already in use. Stream will not create."
+	#	return 1
+	#fi
 
 }
 # Funciton peer-with-rtsp-server
@@ -262,24 +263,28 @@ doPeer2RTSPServer(){
 	[ -z "$ippeersource" -o -z "$port" ] && {
 		echo "Use connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
 		return
-	} 
-	[ -z "$udpport" ] && udpport=$(findRandFreePort)
-	doDebug "Port to upd local: $udpport"
+	}
 
-	cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
-	doDebug "Execute: $cmd"
-	pidps=$(eval $cmd)
-	doDebug "PID from PeerStreamer is $pidps."
+	# Checking if exists a previous PS instance with same port (source)
+	[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
+		[ -z "$udpport" ] && udpport=$(findRandFreePort)
+		doDebug "Port to upd local: $udpport"
 
-	cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy udp://@127.0.0.1:'$udpport' --sout=\"#rtp{sdp=rtsp://'$ipserver':'$udpport'/} --sout-keep\" > '$LOGFILE' 2>&1 & }; echo \$!"'
-	doDebug "Execute: $cmd"
-	pidvlc=$(eval $cmd)
-	doDebug "PID from VLC is $pidvlc."
+		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+		doDebug "Execute: $cmd"
+		pidps=$(eval $cmd)
+		doDebug "PID from PeerStreamer is $pidps."
+
+		cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy udp://@127.0.0.1:'$udpport' --sout=\"#rtp{sdp=rtsp://'$ipserver':'$udpport'/} --sout-keep\" > '$LOGFILE' 2>&1 & }; echo \$!"'
+		doDebug "Execute: $cmd"
+		pidvlc=$(eval $cmd)
+		doDebug "PID from VLC is $pidvlc."
 
 
-	saveInfoPeer $pidvlc $pidps $port $udpport "PeerRTSPServer" "rtsp://$ipserver:$udpport/"
+		saveInfoPeer $pidvlc $pidps $port $udpport "PeerRTSPServer" "rtsp://$ipserver:$udpport/"
 
-	return
+		return
+	)
 
 }
 # Install PeerStreamer from source
