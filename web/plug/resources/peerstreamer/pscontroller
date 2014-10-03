@@ -114,6 +114,7 @@ doInfo(){
 			identifier=${data[1]}"|"${data[2]}
 			echo $identifier
 			sed "/$identifier/d" "$FILEPEERS" >"$FILEDIR/tmp" && mv "$FILEDIR/tmp" $FILEPEERS
+			[[ ! -s $FILEPEERS ]] && rm $FILEPEERS # Deleting filepeers if empty
 		else
 			if [ "$json" == "json" ]
 			then
