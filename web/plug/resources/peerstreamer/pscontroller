@@ -107,11 +107,13 @@ doInfo(){
 		IFS=$ofs
 
 		# Checking if current PS instance is active. Otherwise we kill the depending processes.
-		if [ -z $(ps -A | grep ${data[2]}) ]
+		if [ -z "$(ps -A | grep ${data[2]})" ] # If process is not running:
 		then
-			kill -9 ${data[1]}
+			kill -9 ${data[1]} # Killing vlc process
 			#Deleting current peerstreamer instance from the info file.
-			sed "/${data[2]}/d" "$FILEPEERS" >"$FILEDIR/tmp" && mv "$FILEDIR/tmp" $FILEPEERS
+			identifier=${data[1]}"|"${data[2]}
+			echo $identifier
+			sed "/$identifier/d" "$FILEPEERS" >"$FILEDIR/tmp" && mv "$FILEDIR/tmp" $FILEPEERS
 		else
 			if [ "$json" == "json" ]
 			then
