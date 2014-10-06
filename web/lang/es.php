@@ -26,6 +26,13 @@ include 'es.menus.php';
 include 'es.cloudyupdate.php';
 
 
+// Clommunity: GeTinConf
+//
+// plug/controllers/getinconf.php
+//
+include 'es.getinconf.php';
+
+
 // Tahoe-LAFS
 //
 // plug/controllers/tahoe-lafs.php
