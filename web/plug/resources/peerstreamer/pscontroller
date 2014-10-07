@@ -60,6 +60,7 @@ saveInfoPeer(){
 	local udpport=${4:-""}
 	local kind=${5:-""}
 	local others=${6:-""}
+	local description=${7:-"NoDescription"} # required only if kind=Source
 
 	[ -z "$pidvlc" -o -z "$pidps" -o -z "$port" -o -z "$udpport" -o -z "$kind" ] && return
 	doDebug "saveInfoPeer: $@"
@@ -67,7 +68,15 @@ saveInfoPeer(){
 		doDebug "$FILEPEERS don't exist, now is creating."
 		touch $FILEPEERS
 	}
-	echo "$port$S$pidvlc$S$pidps$S$udpport$S$kind$S$others" >> $FILEPEERS
+
+	# Writing Description only if kind=source, though in a future we may write it anyways
+	[ $kind=="Source" ]&& (
+		echo "Writing description..."
+		echo "$port$S$pidvlc$S$pidps$S$udpport$S$kind$S$others$S$description" >> $FILEPEERS
+	) ||(
+		echo "No escric because yes :D:D"
+		echo "$port$S$pidvlc$S$pidps$S$udpport$S$kind$S$others" >> $FILEPEERS
+	)
 
 }
 
@@ -121,6 +130,10 @@ doInfo(){
 				if $notFirst ; then  echo ','; fi
 				echo '{ "port" : '${data[0]}', "type": "'${data[4]}'", "vlcpid": '${data[1]}', "peerstreamerpid": '${data[2]}', "internalport": '${data[3]}', "other": "'${data[5]}'" }'
 				notFirst=true
+			elif [ "$json" = "avahi" ]
+			then
+				# Must return a string with required info for avahi
+				echo "${data[6]} peerstreamer ${data[0]}"
 			else
 				case ${data[4]} in
 					"Source")
@@ -179,7 +192,7 @@ doPeerSource(){
 	pidps=$(eval $cmd)
 	doDebug "PID from PeerStreamer is $pidps."
 
-	saveInfoPeer $pidvlc $pidps $port $udpport "Source" "$urlstream"
+	saveInfoPeer $pidvlc $pidps $port $udpport "Source" "$urlstream" "$description"
 
 	return
 }
