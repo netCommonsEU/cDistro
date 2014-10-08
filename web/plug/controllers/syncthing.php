@@ -60,7 +60,7 @@ function index(){
 	global $title, $urlpath;
 
 	$page=hlc(t($title));
-	$page .= hl(t("A cloud P2P File Sharing system"),4);
+	$page .= hl(t("A cloud peer-to-peer file synchronization system"),4);
 
 	if (!isInstalled()) {
 		$page .= "<div class='alert alert-error text-center'>".t("$title is not installed")."</div>\n";
