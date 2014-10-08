@@ -44,7 +44,7 @@ addS ("menus_webdav_clommunity", "Clommunity");
 
 
 //Syncthing
-addS ("menus_syncthing_server", "Syncthing server");
+addS ("menus_syncthing_server", "Syncthing");
 addS ("menus_syncthing_clommunity", "Clommunity");
 
 ?>
