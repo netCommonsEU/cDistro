@@ -49,15 +49,11 @@ function isInstalled(){
 
 function getPid(){
 	global $binpath;
-	$pids_str = execute_program_shell("pidof $binpath")['output'];
-	if ($pids_str == NULL or $pids_str == "") {
+	$pid_str = execute_program_shell("pidof $binpath | tr -s ' ' '\\n' | sort -n | sed 1q")['output'];
+	if ($pid_str == NULL or $pid_str == "") {
 		return -1;
 	}
-	$pids = explode(" ", $pids_str);
-	if (count($pids) > 1) {
-		return (int)$pids[0];
-	}
-	return -1;
+	return (int)$pid_str;
 }
 
 function index(){
@@ -170,15 +166,24 @@ function getprogram(){
 	return(array('type'=>'redirect','url'=>"$urlpath/cfgprogram"));
 }
 
+function restartprogram(){
+	global $user, $cfgpath, $repospath, $binpath;
+	$pid = getPid();
+	if ($pid != -1) {
+		execute_program_detached_user("kill $pid", $user);
+	}
+	execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
+}
+
 function cfgprogram(){
-	global $user, $dirpath, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath;
+	global $user, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	} else {
 		execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
-		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
+		restartprogram(); // Start it to generate the default config
 		while (!file_exists($cfgpath_xml)) sleep(1);
 		$config = simplexml_load_file($cfgpath_xml);
 		unset($config->repository);
@@ -189,6 +194,7 @@ function cfgprogram(){
 		$config->gui->password='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
 		$config->options->globalAnnounceEnabled=false;
 		$config->asXml($cfgpath_xml);
+		restartprogram(); // Reload config
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
 } 
