@@ -6,32 +6,41 @@ $getinconf_file="/etc/getinconf-client.conf";
 function index_get(){
 
 	global $getinconf_file;
+    $disabled = '';
 
-	$page = "";
+    $page = "";
+	$buttons = "";
+	$submitButtons = "";
 
 	$variables = load_conffile($getinconf_file);
 	$page .= hlc(t("getinconf_title"));
 	$page .= hl(t("getinconf_subtitle"),4);
     $page .= par(t("getinconf_description"));
 
-	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('GTC_SERVER_URL',t('getinconf_form_server_url'),$variables,'','',t('getinconf_form_server_url_help'));
-	$page .= addInput('NETWORK_NAME',t('getinconf_form_microcloud_network'),$variables,'','',t('getinconf_form_microcloud_network_help'));
-	$page .= addInput('NETWORK_KEY',t('getinconf_form_network_password'),$variables,array('type'=>'password'),'',t('getinconf_form_network_password_help'));
-	$page .= addInput('INTERNAL_DEV',t('getinconf_form_community_network_interface'),$variables,'','',t('getinconf_form_community_network_interface_help'));
-	$page .= addSubmit(array('label'=>t('Execute')));
+    if (isUp($variables['NETWORK_NAME']))
+        $disabled = "disabled";
 
-	$page .= "<br/>";
+    $page .= txt(t('getinconf_settings'));
+	$page .= createForm(array('class'=>'form-horizontal'));
+	$page .= addInput('GTC_SERVER_URL',t('getinconf_form_server_url'),$variables,array('type'=>'url', 'required'=>''),$disabled,t('getinconf_form_server_url_help'));
+	$page .= addInput('NETWORK_NAME',t('getinconf_form_microcloud_network'),$variables,array('type'=>'text', 'required'=>''),$disabled,t('getinconf_form_microcloud_network_help'));
+	$page .= addInput('NETWORK_KEY',t('getinconf_form_network_password'),$variables,array('type'=>'password', 'required'=>''),$disabled,t('getinconf_form_network_password_help'));
+	$page .= addInput('INTERNAL_DEV',t('getinconf_form_community_network_device'),$variables,array('type'=>'text', 'required'=>''),$disabled,t('getinconf_form_community_network_device_help'));
+	if (!isUp($variables['NETWORK_NAME']))
+	   $submitButtons .= addSubmit(array('label'=>t('getinconf_button_save')));
+
+    $page .= txt(t('getinconf_tinc_status'));
 	if (isUp($variables['NETWORK_NAME'])){
 		$page .= "<div class='alert alert-success text-center'>".t('getinconf_tinc_status_running')."</div>\n";
-		$page .= addButton(array('label'=>'Stop','class'=>'btn btn-danger','href'=>'getinconf/downService'));
-		$page .= addButton(array('label'=>'View device', 'href' => 'getinconf/viewDevice/'.$variables['NETWORK_NAME']));
+		$buttons .= addButton(array('label'=>t('getinconf_button_stop'),'class'=>'btn btn-danger','href'=>'getinconf/stop'));
+		$buttons .= addButton(array('label'=>t('getinconf_button_interface'), 'href' => 'getinconf/interfaceStatus/'.$variables['NETWORK_NAME']));
 	} else {
 		$page .= "<div class='alert alert-error text-center'>".t('getinconf_tinc_status_stopped')."</div>\n";
-		$page .= addButton(array('label'=>'Start','class'=>'btn btn-success', 'href'=>'getinconf/upService'));
-		$page .= addButton(array('label'=>'Remove','class'=>'btn btn-danger', 'href'=>'getinconf/removeService'));
+		$buttons .= addButton(array('label'=>t('getinconf_button_start'),'class'=>'btn btn-success', 'href'=>'getinconf/start'));
+		$buttons .= addButton(array('label'=>t('getinconf_button_uninstall'),'class'=>'btn btn-danger', 'href'=>'getinconf/uninstall'));
 	}
 
+    $page .= $buttons . $submitButtons;
 	return(array('type' => 'render','page' => $page));
 }
 
@@ -50,52 +59,62 @@ function index_post(){
 	}
 	write_conffile($getinconf_file,$datesToSave,$pre,$post);
 
-	setFlash(t("Save it")."!","success");
+	setFlash(t('getinconf_alert_saved'),"success");
+	setFlash(t('getinconf_alert_saved'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
-function upService(){
+function start(){
 	global $staticFile;
-/*
-	No se per què el server es pensa que la pàgina encarà no s'ha acabat de carregar. :-?
-	Revisar, per la parada si que funciona.
-	Potser l'script a de fer un fork que no depengui del pare.
-*/
+
 	execute_bg_shell('getinconf-client install');
 	$page = "";
-	$page .= "<div class='alert alert-warning'>".t("Now, service is loading. Please come back")." <a href='".$staticFile.'/'.'getinconf'."'>".t("previous page")."</a>.</div>";
+
+	$page .= hlc(t("getinconf_title"));
+	$page .= hl(t("getinconf_subtitle"),4);
+
+
+	$page .= "<div class='alert alert-warning'>".t('getinconf_alert_starting');
+    $page .= "</div>";
+	$page .= txt(t('getinconf_click_button_back'));
+	$page .= addButton(array('label'=>t('getinconf_button_back'),'class'=>'btn btn-default', 'href'=>$staticFile.'/getinconf'));
 	return(array('type'=>'render', 'page'=> $page));
 	exit();
 }
 
-function downService(){
+function stop(){
 	global $staticFile;
 
 	$r = execute_program('getinconf-client uninstall');
 	// this getinconf-client must do it.
 	execute_program_detached('rm -r /var/run/getinconf-client.md5.*');
 
-	if ($r['return'] == 0) {
-		setFlash(t('Service DOWN').'!');
-	}
+	if ($r['return'] == 0)
+		setFlash(t('getinconf_alert_stopping'), "warning");
 
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
-function viewDevice(){
+function interfaceStatus(){
 	global $Parameters,$staticFile;
 
+    $page = "";
+	$page .= hlc(t("getinconf_title"));
+	$page .= hl(t("getinconf_subtitle_interface_status"),4);
+
 	if (isset($Parameters) && isset($Parameters[0])){
+	    $page .= txt(t('getinconf_interface_command_output_pre')."<strong>ip addr show dev ".$Parameters[0]."</strong>".t('getinconf_interface_command_output_post'));
 		$r = execute_program_shell('ip addr show dev '.$Parameters[0]);
-		$page = "";
+
 		$page .= "<div class='alert alert-warning'>";
 		$page .= "<pre>";
 		$page .= $r['output'];
-		$page .= "</pre>";
-		$page .= t("You can return to the previous")." <a href='".$staticFile.'/'.'getinconf'."'>page</a>.</div>";
+		$page .= "</pre></div>";
+		$page .= addButton(array('label'=>t('getinconf_button_back'),'class'=>'btn btn-default', 'href'=>$staticFile.'/getinconf'));
 		return(array('type'=>'render', 'page'=> $page));
 	}
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
+
+    return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
 function isUp($dev){
@@ -104,18 +123,21 @@ function isUp($dev){
 }
 
 function nothing(){
-
-		$page = "";
-		$page .= "<div class='alert alert-warning'>";
-		$page .= t("Nothing to do.");
-		$page .= "</div>";
-		return(array('type'=>'render', 'page'=> $page));
-
+	$page = "";
+	$page .= "<div class='alert alert-warning'>";
+	$page .= t("Nothing to do.");
+    $page .= "</div>";
+    return(array('type'=>'render', 'page'=> $page));
 }
 
-function removeService(){
-		execute_program_detached('getinconf-client uninstall');
-		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
+function uninstall(){
+	global $staticFile;
+    execute_program_detached('getinconf-client uninstall');
+
+   	if ($r['return'] == 0)
+    	setFlash(t('getinconf_alert_uninstall'), "info");
+
+    return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'getinconf'));
 }
 
 ?>
