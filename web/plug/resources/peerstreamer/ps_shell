@@ -1,29 +1,12 @@
 #!/bin/bash
 # This script simplifies the avahi-ps check process
 
-# @TODO: Look for inactive PS instances
-# @TODO: Unpublish inactive instances
-
-#: Look for inactive PS instances
-# @TODO: Unpublish inactive instances
-
 FILEPEERS=pspeers.conf
 FILEDIR=/var/run/
 PSSCRIPT=/var/local/cDistro/plug/resources/peerstreamer/pscontroller
 AVAHIPROG=/usr/sbin/avahi-ps	# Need this to unpublish malfunctioning PS instances
 TYPE="peerstreamer"
 DEBUG=1
-# GETINCONF_FILE=/etc/getinconf-client.conf
-# 
-# # Calculate Variables.
-# if [[ -f $GETINCONF_FILE ]]
-# then
-# 	. $GETINCONF_FILE
-# 	DEVICE_NAME="${NETWORK_NAME}"
-# 	PUBLIC_DEVICE="${INTERNAL_DEV}"
-# fi
-# 
-# PUBLIC_IP=$(ip addr show dev $PUBLIC_DEVICE|grep "global $PUBLIC_DEVICE\$"|awk '{print $2}'|awk -F "/" {'print $1'})
 PUBLIC_IP=$($AVAHIPROG info ip)
 
 check() {
