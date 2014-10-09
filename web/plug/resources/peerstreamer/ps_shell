@@ -1,0 +1,56 @@
+#!/bin/bash
+# This script simplifies the avahi-ps check process
+
+# @TODO: Look for inactive PS instances
+# @TODO: Unpublish inactive instances
+
+#: Look for inactive PS instances
+# @TODO: Unpublish inactive instances
+
+FILEPEERS=pspeers.conf
+FILEDIR=/var/run/
+PSSCRIPT=/var/local/cDistro/plug/resources/peerstreamer/pscontroller
+AVAHIPROG=/usr/sbin/avahi-ps	# Need this to unpublish malfunctioning PS instances
+TYPE="peerstreamer"
+DEBUG=1
+# GETINCONF_FILE=/etc/getinconf-client.conf
+# 
+# # Calculate Variables.
+# if [[ -f $GETINCONF_FILE ]]
+# then
+# 	. $GETINCONF_FILE
+# 	DEVICE_NAME="${NETWORK_NAME}"
+# 	PUBLIC_DEVICE="${INTERNAL_DEV}"
+# fi
+# 
+# PUBLIC_IP=$(ip addr show dev $PUBLIC_DEVICE|grep "global $PUBLIC_DEVICE\$"|awk '{print $2}'|awk -F "/" {'print $1'})
+PUBLIC_IP=$($AVAHIPROG info ip)
+
+check() {
+	cp $FILEDIR/$FILEPEERS $FILEDIR/_$FILEPEERS
+	
+	$PSSCRIPT info		# Killing zombie processes and deleting lines from file
+	
+	diff $FILEDIR/$FILEPEERS $FILEDIR/_$FILEPEERS | sed '1d' | while read line
+	do
+		# Unpublishing services
+		[ $DEBUG ] && echo "[DEBUG] Unpublishing services..."
+		$AVAHIPROG unpublish $TYPE $(echo $line | cut -d ' ' -f2 | cut -d '|' -f1) $PUBLIC_IP
+
+		[ $DEBUG ] && echo "[DEBUG] $AVAHIPROG unpublish $TYPE $(echo $line | cut -d ' ' -f2 | cut -d '|' -f1) $PUBLIC_IP"
+	done
+
+	# Removing temporal file
+	rm $FILEDIR/_$FILEPEERS
+}
+
+case $1 in			# Using "case" in case we need other functions in the future
+	"check")
+		shift
+		check $@
+		;;
+	*)
+		echo "Invalid input."
+		exit 1
+		;;
+esac
