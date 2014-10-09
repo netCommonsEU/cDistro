@@ -12,7 +12,7 @@ PUBLIC_IP=$($AVAHIPROG info ip)
 check() {
 	cp $FILEDIR/$FILEPEERS $FILEDIR/_$FILEPEERS
 	
-	$PSSCRIPT info		# Killing zombie processes and deleting lines from file
+	$PSSCRIPT info &> /dev/null		# Killing zombie processes and deleting lines from file
 	
 	diff $FILEDIR/$FILEPEERS $FILEDIR/_$FILEPEERS | sed '1d' | while read line
 	do
