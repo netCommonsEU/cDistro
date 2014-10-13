@@ -31,7 +31,7 @@ function index(){
 	$page .= txt(t("PeerStreamer status:"));
 
 	if ( ! isPSInstalled() ) {
-		$page .= "<div class='alert alert-error text-center'>".t("PeerStreamer is not install")."</div>\n";
+		$page .= "<div class='alert alert-error text-center'>".t("PeerStreamer is not installed")."</div>\n";
 		$page .= par(t("Click on the button to install PeerStreamer and view share videos from users."));
 		$buttons .= addButton(array('label'=>t("Install PeerStreamer"),'class'=>'btn btn-success', 'href'=>$staticFile.'/peerstreamer/getprogram'));
 		$page .= $buttons;
@@ -61,8 +61,8 @@ function connect_get(){
 		$peerport = "";
 
 	$page = hlc(t($title));
-	$page .= hlc(t('Connect to Peer'),2);
-	$page .= par(t("You can join a stream through Peer from network, or you can find channels in avahi menu option."));
+	$page .= hlc(t('Connect to a Peer'),2);
+	$page .= par(t("You can join a stream through a Peer in the network, or you can find channels in the avahi menu option."));
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= t('Peer:');
 	$page .= addInput('ip',t('IP Address'),$peerip);
@@ -94,7 +94,7 @@ function publish_get(){
 	global $staticFile;
 
 	$page = hlc(t($title));
-	$page .= hlc(t('Publish video stream'),2);
+	$page .= hlc(t('Publish a video stream'),2);
 	$page .= par(t("Please write a stream source"));
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('url',t('URL Source'),'',array('class'=>'input-xxlarge'));
