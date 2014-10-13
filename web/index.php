@@ -22,7 +22,7 @@ $js_end = array('main');
 
 
 if (isset($user)) {
-	// Default 
+	// Default
 	$controller = "default";
 	$action="index";
 	$method=strtolower($_SERVER['REQUEST_METHOD']);
@@ -43,16 +43,16 @@ if (isset($user)) {
 
 	if (!is_array($Parameters)){
 		$Parameters=array();
-	} 
+	}
 
 	// Add method type to action
 	if(function_exists($action."_".$method)){
 		$action=$action."_".$method;
 	}
 
-	if (!function_exists($action)) {	
+	if (!function_exists($action)) {
 		array_unshift($Parameters, $action);
-		array_unshift($Parameters, $controller);	
+		array_unshift($Parameters, $controller);
 		$controller = "default";
 		$action="notFunctionExist";
 	}
@@ -85,7 +85,7 @@ case 'ajax':
 
 default:
 	callbackReturnUnknow($cb['type']);
-	break;	
+	break;
 
 }
 

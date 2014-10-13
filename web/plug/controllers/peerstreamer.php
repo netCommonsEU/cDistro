@@ -44,7 +44,7 @@ function index(){
 
 		return(array('type' => 'render','page' => $page));
 	}
-} 
+}
 
 function connect_get(){
 	global $paspath,$title;
@@ -52,7 +52,7 @@ function connect_get(){
 
 	if (isset($_GET['ip']))
 		$peerip = $_GET['ip'];
-	else 
+	else
 		$peerip = "";
 
 	if (isset($_GET['port']))
@@ -85,7 +85,7 @@ function connect_post(){
 	$tipo = $_POST['type'];
 
 	if ( 0 == 0 ){  // validar
-		return(array('type' => 'render','page' => _psshell($ip,$port,$myport,$tipo))); 
+		return(array('type' => 'render','page' => _psshell($ip,$port,$myport,$tipo)));
 	}
 }
 
@@ -94,7 +94,7 @@ function publish_get(){
 	global $staticFile;
 
 	$page = hlc(t($title));
-	$page .= hlc(t('Publish video stream'),2); 
+	$page .= hlc(t('Publish video stream'),2);
 	$page .= par(t("Please write a stream source"));
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('url',t('URL Source'),'',array('class'=>'input-xxlarge'));
@@ -144,7 +144,7 @@ function vlcobject($url){
 }
 
 // Utils
-function _psshell($ip,$port,$myport,$type) 
+function _psshell($ip,$port,$myport,$type)
 {
 	global $pspath,$psprogram,$vlcpath,$vlcprogram,$vlcuser,$psutils;
 
@@ -186,7 +186,7 @@ function _psviewer($url){
 	global $title;
 
 	$page = hlc(t($title));
-	$page .= par(t("PeerStreamer s'està executant en segon pla, si tens el connector de vlc podràs veure el video al teu navegador.")); 
+	$page .= par(t("PeerStreamer s'està executant en segon pla, si tens el connector de vlc podràs veure el video al teu navegador."));
 	$page .= vlcobject($url);
 	$page .= par(t("Alternativament pots accedir al video usant el següent enllaç al teu player preferit."));
 	$page .= ptxt($url );
@@ -211,7 +211,7 @@ function _pssource($url,$ip,$port,$description){
 
 	$page = "";
 	$device = getCommunityDev()['output'][0];
-	
+
 	if ($description == "") $description = $type;
 
 /*
@@ -248,7 +248,7 @@ function _listPSProcs(){
 
 	global $psutils,$staticFile;
 	// Fer un llistat del PS actius!
-	$ret = execute_program($psutils." info json");	
+	$ret = execute_program($psutils." info json");
 	$datos = json_decode(implode("\n",$ret['output']),true);
 
 	if (count($datos) > 0) {
@@ -278,7 +278,7 @@ function _listPSProcs(){
 
 	return ($page);
 
-} 
+}
 function psstop(){
 
 	global $psutils,$staticFile,$avahi_type;
@@ -322,18 +322,18 @@ function getprogram(){
 			$machine_path = "arm";
 			break;
 	}
-	
+
 	$geturlfile=$ghpath.$machine_path."/".$psprogram;
 	$savefile=$pspath.$psprogram;
 
 	$output=execute_program($curlprogram." '".$geturlfile."' -o ".$savefile);
 
 	$ret = ptxt(implode("\n", $output['output']));
-	chmod($savefile, 755); 
+	chmod($savefile, 755);
 
 	*/
 
-	$ret = execute_program($psutils." install");	
+	$ret = execute_program($psutils." install");
 	$output = ptxt(implode("\n",$ret['output']));
 
 	setFlash($output);

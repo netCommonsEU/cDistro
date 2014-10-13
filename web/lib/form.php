@@ -81,7 +81,7 @@ function addCheckbox($name=null, $label= null, $value = null, $options = null, $
 	$str .= ">\n";
 
 	foreach ($value as $k => $v) {
-		$str .= "<option value='".$k."'>".$v."</option>";	
+		$str .= "<option value='".$k."'>".$v."</option>";
 	}
 
 	$str .= "</select>";

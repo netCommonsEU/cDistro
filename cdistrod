@@ -14,7 +14,7 @@ function restart {
 
 function end_program {
 	echo "End program"
-	rm -f $pipe	
+	rm -f $pipe
 	exit
 }
 
@@ -27,8 +27,8 @@ chmod go-rw $pipe
 
 while true
 do
-	while read line 
-	do 
+	while read line
+	do
 		cmd="$line &> /dev/null &"
 		echo Execute:$cmd
 #	    nohup $cmd &> /dev/null &

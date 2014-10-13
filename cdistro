@@ -2,8 +2,8 @@
 #
 ### BEGIN INIT INFO
 # Provides:          cDistro
-# Required-Start:    $local_fs $remote_fs $network $syslog $named 
-# Required-Stop:     $local_fs $remote_fs $network $syslog $named 
+# Required-Start:    $local_fs $remote_fs $network $syslog $named
+# Required-Stop:     $local_fs $remote_fs $network $syslog $named
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # X-Interactive:     true
@@ -20,7 +20,7 @@ test -f $CONFFILE && . $CONFFILE || exit 0
 
 start() {
   $SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &
-  echo $! > $PIDFILE  
+  echo $! > $PIDFILE
   $DAEMON >/dev/null 2>&1 &
   echo $! > $PIDDAEMON
 }

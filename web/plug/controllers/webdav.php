@@ -45,7 +45,7 @@ function index_get()
 		$page .= "</script>\n";
 		$page .= "</div>";
 
-		if (isPackageInstall($webdav_pkg)){ 	
+		if (isPackageInstall($webdav_pkg)){ 
 			$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$webdav_pkg));
 		}
 	}
@@ -160,7 +160,7 @@ function changeUserPassword_post(){
 
 	if (!isset($Parameters[0]) ) {
 		setFlash(t("User not defined."),"error");
-		return(array('type'=>'redirect','url'=>'/webdav'));		
+		return(array('type'=>'redirect','url'=>'/webdav'));
 	}
 	$user = $Parameters[0];
 	$password = $_POST['password'];
@@ -174,10 +174,10 @@ function changeUserPassword_post(){
 	if ( execute_shell('/usr/bin/htpasswd -D '.$htpasswd.' '.$user)['return'] == 0 ){
 		if ( execute_shell('/usr/bin/htpasswd -b '.$htpasswd.' '.$user.' '.$password)['return'] == 0 ){
 			setFlash(t("<i>$user</i>'s password has been Changed."),"success");
-		} 
+		}
 	} else {
 			setFlash(t("Can not change password from user ('".$user."')"),"error");
-	} 
+	}
 	return(array('type'=>'redirect','url'=>$staticFile.'/webdav'));
 
 }
@@ -213,9 +213,9 @@ function removeUserConfirmed(){
 			setFlash(t("Remove user."),"success");
 		} else {
 			setFlash(t("Can not remove user ('".$Parameters[0]."')"),"error");
-		} 
+		}
 	}
-	
+
 	return(array('type'=>'redirect','url'=>$staticFile.'/webdav'));
 }
 
@@ -241,7 +241,7 @@ function listUsers(){
 			}
 		}
 		$page .= addTableFooter();
-		
+
 	}
 
 	$page .= "<div><a class='btn' href='".$staticFile."/webdav/addUser'>".t("Add User")."</a></div>";
@@ -302,7 +302,7 @@ function viewMount(){
 
 	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/webdav'));
 	return(array('type'=>'render','page'=>$page));
-	
+
 }
 
 function removeMount(){
@@ -337,7 +337,7 @@ function removeMountConfirmed(){
 			setFlash(t("Removed mountpoint file."),"success");
 		} else {
 			setFlash(t("Can not remove file ('".$name."')"),"error");
-		} 
+		}
 		_restartApache();
 	}
 
@@ -351,7 +351,7 @@ function addMount_form($values=null){
 				array('name'=>'alias','type'=>'text','desc'=>t("Alias Mount")),
 				array('name'=>'mountpoint','type'=>'text','desc'=>t("Mount Point")),
 				array('name'=>'uri','type'=>'text','desc'=>t("URI")),
-				//array('name'=>'type','type'=>'text','desc'=>t("Type")),				
+				//array('name'=>'type','type'=>'text','desc'=>t("Type")),
 			);
 
 	$page = hlc($title);
@@ -368,7 +368,7 @@ function addMount_form($values=null){
 	$page .= addSubmit(array('label'=>t('Executar')));
 	$page .= addButton(array('label'=>t('Cancel'),'href'=>$staticFile.'/webdav'));
 
-	return ($page);	
+	return ($page);
 }
 function addMount_get(){
 
@@ -396,21 +396,21 @@ function addMount_post(){
 		$flash .= par(t("Created configfile."));
 	} else {
 		$flash .= par(t("Error when create configfile."));
-		$flash_type = "error";		
+		$flash_type = "error";
 	}
 
 	if (_checkDAVApacheModule()) {
 		$flash .= par(t("DAV Module is active."));
 	} else {
 		$flash .= par(t("Error when active DAV Module."));
-		$flash_type = "error";			
+		$flash_type = "error";
 	}
 
 	if (_restartApache()) {
 		$flash .= par(t("Reloaded apache2."));
 	} else {
 		$flash .= par(t("Error when reload apache2."));
-		$flash_type = "error";	
+		$flash_type = "error";
 	}
 
 	if (!is_dir($mountpoint)){
@@ -418,7 +418,7 @@ function addMount_post(){
 			$flash .= par(t("Created Mountpoint."));
 		} else {
 			$flash .= par(t("Error when create mountpoint."));
-			$flash_type = "error";	
+			$flash_type = "error";
 		}
 	}
 
@@ -426,21 +426,21 @@ function addMount_post(){
 		$flash .= par(t("Changed user."));
 	} else {
 		$flash .= par(t("Error when change user."));
-		$flash_type = "error";	
+		$flash_type = "error";
 	}
 
 	if (chgrp($mountpoint,$webgroup)) {
 		$flash .= par(t("Changed group."));
 	} else {
 		$flash .= par(t("Error when change group."));
-		$flash_type = "error";	
+		$flash_type = "error";
 	}
 
 	if (chmod($mountpoint,$mpmod)) {
 		$flash .= par(t("Changed file mode."));
 	} else {
 		$flash .= par(t("Error when change file mode."));
-		$flash_type = "error";	
+		$flash_type = "error";
 	}
 
 	setFlash($flash,$flash_type);
@@ -467,10 +467,10 @@ function _makeWebdabFile($name,$mp){
 }
 
 function _checkDAVApacheModule(){
-	global $folders, $file_module, $module; 
+	global $folders, $file_module, $module;
 
 	if (!file_exists($folders.$file_module)){
-		return( execute_shell("/usr/sbin/a2enmod ".$module)['return'] == 0); 
+		return( execute_shell("/usr/sbin/a2enmod ".$module)['return'] == 0);
 	}
 
 	return(true);

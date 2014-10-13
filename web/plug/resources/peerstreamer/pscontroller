@@ -32,13 +32,13 @@ doDebug(){
 }
 
 checkPrograms() {
-	[ ! -f $LSOF ] && 
+	[ ! -f $LSOF ] &&
 		{
 			echo "Need lsof in '"$LSOF"'"
 			echo "Maybe you need execute 'apt-get install lsof'"
 			exit
 		}
-	[ ! -f $VLCPATH ] && 
+	[ ! -f $VLCPATH ] &&
 		{
 			echo "Need vlc in '"$VLCPATH"'"
 			echo "Maybe you need execute 'apt-get install vlc'"
@@ -111,7 +111,7 @@ doInfo(){
 	notFirst=false
 	[ "$json" == "json" ] && echo "[";
 	for auxline in ${procesos[@]};
-	do  
+	do
 		ofs=$IFS
 		IFS=$S read -a data <<< "$auxline"
 		IFS=$ofs
@@ -157,7 +157,7 @@ doInfo(){
 						echo "	Internal UDP Port ${data[3]}."
 						echo "	VLC pid ${data[1]}."
 						echo "	PeerStreamer pid ${data[2]}."
-						;;			
+						;;
 				esac
 			fi
 		fi
@@ -166,13 +166,13 @@ doInfo(){
 }
 
 checkPIDs() {
-	
+
 	[ -z  ]
 }
 
 # Function peer-soucer
 doPeerSource(){
-	# Source  
+	# Source
 	local urlstream=${1:-""}
 	local port=${2:-""}
 	local device=${3:-"eth0"}
@@ -181,7 +181,7 @@ doPeerSource(){
 	[ -z "$urlstream" -o -z "$port" ] && {
 		echo "Use publish <urlstream> <port> [Device] [Description]"
 		return
-	} 
+	}
 	udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
@@ -207,14 +207,14 @@ doStopPeerSource(){
 	[ -z "$port" ] && {
 		echo "Use unpublish <port>"
 		return
-	} 
+	}
 
 	datosPeer=$(getInfoPeer $port)
 	doDebug "Get information: '"$datosPeer"'"
 	[ -z "$datosPeer" ] && {
 		echo "This port ($port) doesn't exist in $FILEPEERS."
 		return
-	} 
+	}
 	pidvlc=$(echo $datosPeer|cut -d "$S" -f 2)
 	[ $pidvlc -ne 0 ] && {
 		doDebug "Kill VLC: $pidvlc"
@@ -236,21 +236,21 @@ doPeer2UDPClient(){
 	local ippeersource=${1:-""}
 	local port=${2:-""}
 	local ipclient=${3:-"127.0.0.1"}
-	local udpport=${4:-""}	
+	local udpport=${4:-""}
 	local device=${5:-"eth0"}
 
 
 	[ -z "$ippeersource" -o -z "$port" ] && {
 		echo "Use connectudp <ip> <port> [IP UDP Server] [Port UDP Server] [Device]"
 		return
-	} 
+	}
 	[ -z "$udpport" ] && udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
 	# Checking if already connected to this stream
 	# check=$(cat $FILEPEERS | grep -e "^$port")
 	# if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
-	[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && ( 
+	[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
 		doDebug "Port is free, creating stream."
 		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 		doDebug "Execute: $cmd"
@@ -265,7 +265,7 @@ doPeer2UDPClient(){
 		$SHELL "start" $port "Republishing"
 
 		return
-    )	
+    )
 	#else
 	#	doDebug "The port $port is already in use. Stream will not create."
 	#	return 1
@@ -277,7 +277,7 @@ doPeer2RTSPServer(){
 	# Server RTSP
 	local ippeersource=${1:-""}
 	local port=${2:-""}
-	local udpport=${3:-""}	
+	local udpport=${3:-""}
 	local ipserver=${4:-""}
 	local device=${5:-"eth0"}
 
@@ -353,7 +353,7 @@ doInstall() {
 
 # Check whether vlc (no X) is installed or not. If 0, it needs to be installed
 isInstalledVLC() {
-	if [ $(dpkg-query -W -f='${Status} ${Version}\n' vlc-nox | cut -d " " -f1) = "install" ] 
+	if [ $(dpkg-query -W -f='${Status} ${Version}\n' vlc-nox | cut -d " " -f1) = "install" ]
 	then
 		doDebug "vlc-nox is already installed."
 		return 1
@@ -389,10 +389,10 @@ isInstall(){
 
 findRandFreePort() {
 	read lowerPort upperPort < /proc/sys/net/ipv4/ip_local_port_range
-	rannum=$(( RANDOM % $(( $upperPort - $lowerPort))  ))  
+	rannum=$(( RANDOM % $(( $upperPort - $lowerPort))  ))
 	for (( contador = lowerPort ; contador <= upperPort ; contador++ )); do
 	      port=$(( $contador + $rannum ))
-	      [ $port -gt $upperPort ] && port=$(( $port - $upperPort + $lowerPort )) 	
+	      [ $port -gt $upperPort ] && port=$(( $port - $upperPort + $lowerPort )) 
 	      $LSOF -i -n|awk '{print $9}'|cut -d "-" -f 1|grep -q ":${port}"
 	      [ $? -eq 1 ] && { lp=$port; break; }
 	done

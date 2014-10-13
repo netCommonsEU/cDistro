@@ -18,7 +18,7 @@ function index(){
         $page .= t("Let's configure your system!");
 
         return(array('type'=>'render','page'=>$page));
-} 
+}
 
 function install(){
 	return(_genericInstallUninstall('Install'));
@@ -62,7 +62,7 @@ function realInstall(){
 	}
 	$page .= "<a class='btn btn-primar' href='".$staticFile."'>Home</a>";
 
-	return(array('type'=>'ajax','page'=>$page));	
+	return(array('type'=>'ajax','page'=>$page));
 
 }
 
@@ -87,10 +87,10 @@ function realUninstall(){
 		$page .= $ret;
 		$page .= "</pre>";
 	}
-	
+
 	$page .= "<a class='btn btn-primar' href='".$staticFile."'>".t("Home")."</a>";
 
-	return(array('type'=>'ajax','page'=>$page));	
+	return(array('type'=>'ajax','page'=>$page));
 
 }
 
@@ -106,7 +106,7 @@ function _genericInstallUninstall($strFunction){
 		$page .= "$('#console').load('".$staticFile."/default/real".$strFunction."/".$pkg."');\n";
 		$page .= "</script>\n";
 
-		return(array('type'=>'render','page'=>$page));	
+		return(array('type'=>'render','page'=>$page));
 	} else {
 		return(array('type'=>'redirect','url' => $staticFile.'/'));
 	}

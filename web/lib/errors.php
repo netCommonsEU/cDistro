@@ -3,7 +3,7 @@
 function notFunctionExist(){
 
 	global $Parameters;
-	
+
 	$c = array_shift($Parameters);
 	$a = array_shift($Parameters);
 
@@ -54,7 +54,7 @@ function ErrorPage($knum, $kstr, $explain){
 		<h1>Error</h1>
 		<h2><?php echo $kstr."(".$knum.")" ?></h2>
 		<p><?php echo $explain;?></p>
-	</div> 
+	</div>
 <?php
 	require "templates/endcontent.php";
 	require "templates/footer.php";

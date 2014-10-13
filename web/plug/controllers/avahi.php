@@ -10,7 +10,7 @@ function search()
 	$page .= ajaxStr('tableAvahi',t("Searching for published services, please wait a moment...") );
 	$page .= "<script>\n";
 	$page .= "$('#tableAvahi').load('".$staticFile."/avahi/ajaxsearch',function(){\n";
-	$page .= "	$('#tags').tab();\n";	
+	$page .= "	$('#tags').tab();\n";
 	$page .= "});\n";
 	$page .= "</script>\n";
 
@@ -47,9 +47,9 @@ function ajaxsearch()
 	}
 	$page .= "</ul>\n";
 	$page .= "<div id='my-tab-content' class='tab-content'>\n";
-	foreach($nServices as $k => $v){	
+	foreach($nServices as $k => $v){
 		$page .= "	<div class='tab-pane";
-		if($active == $k) $page .= " active";		
+		if($active == $k) $page .= " active";
 		$page .= "' id='".$k."'>";
 
 		$page .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('Action')), array('class'=>'table table-striped'));
@@ -89,7 +89,7 @@ function checkservices()
 	}
 
 
-	return(array('type'=>'render','page'=>$page));	
+	return(array('type'=>'render','page'=>$page));
 }
 
 function ajaxcheckservice()

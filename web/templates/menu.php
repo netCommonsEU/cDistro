@@ -33,18 +33,18 @@ function printMenu($menu){
 			<div class="nav-collapse">
 				<?php if (isset($menu['left'])) { ?>
 				<ul class="nav">
-					<?php 
+					<?php
 						printMenu($menu['left']);
 					?>
-				</ul>	
+				</ul>
 				<?php } ?>
 				<?php if (isset($menu['right'])) { ?>
 				<ul class="nav pull-right">
-					<?php 
+					<?php
 						printMenu($menu['right']);
 					?>
 				</ul>
-				<?php } ?>				   
+				<?php } ?>
 			</div>
 		</div>
 	</div>

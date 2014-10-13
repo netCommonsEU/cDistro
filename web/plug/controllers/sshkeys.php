@@ -1,5 +1,5 @@
 <?php
-// Add ssh keys 
+// Add ssh keys
 $file_keys=dirname(__FILE__)."/../resources/sshkey/sshkeys.txt";
 $ssh_path="/root/.ssh";
 $root_key_path=$ssh_path."/authorized_keys";
@@ -15,7 +15,7 @@ function _getArrayKeys($file_keys){
 	    }
 	//} else {
 	    // Maybe file doesn't exist.
-	} 
+	}
 	fclose($handle);
 	return $aRet;
 }
@@ -24,7 +24,7 @@ function _checkkey($Keys){
 	global $ssh_path,$root_key_path;
 
 	if (!is_dir($ssh_path)) {
-    	mkdir($ssh_path, 0700);         
+    	mkdir($ssh_path, 0700);
 	}
 
 	if (!file_exists($root_key_path)){
@@ -38,13 +38,13 @@ function _checkkey($Keys){
 	    	$line = rtrim($line);
 	    	foreach($Keys as $k){
 	    		if (strcmp($line,$k) == 0) {
-	    			$exist++; 
+	    			$exist++;
 	    		}
 	    	}
 	    }
 	//} else {
 	    // Maybe file doesn't exist.
-	} 
+	}
 	fclose($h);
 
 	return ($exist);
@@ -79,14 +79,14 @@ function rmkey(){
 	    	$exist = false;
 	    	foreach($Keys as $k){
 	    		if (strcmp($line, $k) == 0) {
-	    			$exist = true; 
+	    			$exist = true;
 	    		}
 	    	}
 	    	if (!$exist) {
-	    		$content .= $line."\n"; 
+	    		$content .= $line."\n";
 	    	}
 	    }
-	} 
+	}
 	fclose($h);
 	file_put_contents($root_key_path, $content);
 	return(array('type'=>'redirect','url'=>$staticFile.'/sshkeys'));

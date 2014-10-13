@@ -7,7 +7,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8">  
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title><?php echo $appName." - ".$appHostname." (".$appHost.")" ?></title>
   <meta name="description" content="">
@@ -15,7 +15,7 @@
 <?php
 	if (is_array($css)){
 		foreach($css as $c){
-			echo '<link rel="stylesheet" href="'.$staticPath.'css/'.$c.'.css">'; 	
+			echo '<link rel="stylesheet" href="'.$staticPath.'css/'.$c.'.css">'; 
 		}
 	}
   if (is_array($js)){
