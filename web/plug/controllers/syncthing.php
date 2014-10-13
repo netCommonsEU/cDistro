@@ -90,7 +90,8 @@ function getprogram() {
 		"tar -xf $name.tar.gz && " .
 		"mv $name/syncthing syncthing && " .
 		"rm -rf $name.tar.gz $name && " .
-		"chown -R www-data $dirpath && chmod 0755 $binpath");
+		"chown -R www-data $dirpath && " .
+		"chmod 0755 $binpath");
 	return(array('type'=>'redirect','url'=>"$urlpath/cfgprogram"));
 }
 
@@ -127,9 +128,8 @@ function cfgprogram() {
 		$config->gui->address="0.0.0.0:8080";
 		$config->gui->user="syncthing";
 		$config->gui->password='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
-		$config->options->globalAnnounceEnabled=false;
-		$configstr = $config->asXml();
-		file_put_contents($cfgpath_xml, $configstr);
+		$config->options->globalAnnounceEnabled="false";
+		$configstr = $config->asXml($cfgpath_xml);
 		startprogram(); // Make it load the new config
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
