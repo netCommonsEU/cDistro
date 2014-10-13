@@ -12,9 +12,9 @@ $avahi_type="syncthing";
 $urlpath="$staticFile/syncthing";
 
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.9.19";
+$version="0.10.1";
 
-function nameForArch($arch){
+function nameForArch($arch) {
 	global $version;
 	switch ($arch) {
 	case "amd64":
@@ -37,17 +37,17 @@ function nameForArch($arch){
 	return("syncthing-linux-$urlarch-v$version");
 }
 
-function downloadUrl($name){
+function downloadUrl($name) {
 	global $releases_url,$version;
 	return("$releases_url/v$version/$name.tar.gz");
 }
 
-function isInstalled(){
+function isInstalled() {
 	global $binpath;
 	return(is_executable($binpath));
 }
 
-function getPid(){
+function getPid() {
 	global $binpath;
 	$pid_str = execute_program_shell("pidof $binpath | tr -s ' ' '\\n' | sort -n | sed 1q")['output'];
 	if ($pid_str == NULL or $pid_str == "") {
@@ -56,7 +56,7 @@ function getPid(){
 	return (int)$pid_str;
 }
 
-function index(){
+function index() {
 	global $title, $urlpath;
 
 	$page=hlc(t($title));
@@ -74,117 +74,52 @@ function index(){
 		return(array('type'=>'render','page'=>$page));
 	} else {
 		$page .= "<div class='alert alert-success text-center'>".t("$title installed")."</div>\n";
-		$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>"$urlpath/publish"));
+		$page .= addButton(array('label'=>t('Create a repository'),'href'=>"$urlpath/newrepo"));
 		return(array('type' => 'render','page' => $page));
 	}
 } 
 
-function connect_get(){
-	global $title, $urlpath;
-
-	if (isset($_GET['ip']))
-		$peerip = $_GET['ip'];
-	else 
-		$peerip = "";
-
-	if (isset($_GET['port']))
-		$peerport = $_GET['port'];
-	else
-		$peerport = "";
-
-	if (isset($_GET['id']))
-		$peerid = $_GET['id'];
-	else
-		$peerid = "";
-
-	$page = hlc(t($title));
-	$page .= hlc(t('Connect to Node'),2);
-	$page .= par(t("You can connect to a Node to share repositories with it."));
-	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= t('Node:');
-	$page .= addInput('ip',t('IP Address'),$peerip);
-	$page .= addInput('port',t('Port'),$peerport);
-	$page .= addInput('id',t('ID'),$peerid);
-	$page .= t('You:');
-	$page .= addInput('myport',t('Port'));
-	$page .= addSubmit(array('label'=>t('Connect'),'class'=>'btn btn-primary'));
-	$page .= addButton(array('label'=>t('Cancel'),'href'=>$urlpath));
-
-	return(array('type' => 'render','page' => $page));
-}
-
-function connect_post(){
-	//Validar dades
-	$ip = $_POST['ip'];
-	$port = $_POST['port'];
-	$port = $_POST['id'];
-	$myport = $_POST['myport'];
-	$tipo = $_POST['type'];
-
-	return(array('type' => 'render','page' => _scshell($ip,$port,$myport,$tipo))); 
-}
-
-function publish_get(){
-	global $title,$urlpath;
-
-	$page = hlc(t($title));
-	$page .= hlc(t('Publish video stream'),2); 
-	$page .= par(t("Please write a stream source"));
-	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('url',t('URL Source'),'',array('class'=>'input-xxlarge'));
-	$page .= addInput('port',t('Port Address'));
-	$page .= addInput('description',t('Describe this channel'));
-	$page .= addSubmit(array('label'=>t('Publish'),'class'=>'btn btn-primary'));
-	$page .= addButton(array('label'=>t('Cancel'),'href'=>$urlpath));
-
-	return(array('type' => 'render','page' => $page));
-}
-
-function publish_post(){
-	$url = $_POST['url'];
-	$port = $_POST['port'];
-	$description = $_POST['description'];
-	$ip = "";
-
-	//$page = "<pre>";
-	//$page .= _pssource($url,$ip,$port,$description);
-	//foreach ($_POST as $k => $v) {
-	//	$page .= "$k:$v\n";
-	//}
-	//$page .= "Datos....description:".$description;
-	//$page .= "</pre>";
-
-	return(array('type' => 'render','page' => $page));
-
-}
-
-function getprogram(){
+function getprogram() {
 	global $dirpath, $cfgpath, $repospath, $binpath, $urlpath;
 	$name = nameForArch(php_uname("m"));
 	$url = downloadUrl($name);
-	$array = execute_program_shell("mkdir -p $dirpath $cfgpath $repospath && cd $dirpath && curl -L -s $url -o $name.tar.gz && tar -xf $name.tar.gz && mv $name/syncthing syncthing && rm -rf $name.tar.gz $name && chown -R www-data $dirpath && chmod 0755 $binpath");
+	$array = execute_program_shell(
+		"mkdir -p $dirpath $cfgpath $repospath && " .
+		"cd $dirpath && " .
+		"curl -L -s $url -o $name.tar.gz && " .
+		"tar -xf $name.tar.gz && " .
+		"mv $name/syncthing syncthing && " .
+		"rm -rf $name.tar.gz $name && " .
+		"chown -R www-data $dirpath && chmod 0755 $binpath");
 	return(array('type'=>'redirect','url'=>"$urlpath/cfgprogram"));
 }
 
-function restartprogram(){
-	global $user, $cfgpath, $repospath, $binpath;
-	$pid = getPid();
-	if ($pid != -1) {
-		execute_program_detached_user("kill $pid", $user);
+function stopprogram() {
+	global $user, $binpath;
+	while (getPid() != -1) {
+		exec_user("killall $binpath", $user);
+		sleep(1);
 	}
-	execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
 }
 
-function cfgprogram(){
-	global $user, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath;
+function startprogram() {
+	global $user, $cfgpath, $repospath, $binpath;
+	if (getPid() == -1) {
+		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
+	}
+}
+
+function cfgprogram() {
+	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	} else {
 		execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
-		restartprogram(); // Start it to generate the default config
+		startprogram(); // Start it to generate the default config
 		while (!file_exists($cfgpath_xml)) sleep(1);
+		stopprogram(); // Make sure the config file is ours
 		$config = simplexml_load_file($cfgpath_xml);
 		unset($config->repository);
 		$config->gui->attributes()->enabled="true";
@@ -193,8 +128,9 @@ function cfgprogram(){
 		$config->gui->user="syncthing";
 		$config->gui->password='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
 		$config->options->globalAnnounceEnabled=false;
-		$config->asXml($cfgpath_xml);
-		restartprogram(); // Reload config
+		$configstr = $config->asXml();
+		file_put_contents($cfgpath_xml, $configstr);
+		startprogram(); // Make it load the new config
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
 } 
