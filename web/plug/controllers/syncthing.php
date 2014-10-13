@@ -7,6 +7,10 @@ $repospath="$dirpath/repos";
 
 $user="www-data";
 $title="Syncthing";
+$webui_port="8080";
+$webui_user="syncthing";
+$webui_pass="syncthing";
+$webui_pass_bc='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
 
 $avahi_type="syncthing";
 $urlpath="$staticFile/syncthing";
@@ -57,7 +61,7 @@ function getPid() {
 }
 
 function index() {
-	global $title, $urlpath;
+	global $title, $urlpath, $webui_user, $webui_pass, $webui_port;
 
 	$page=hlc(t($title));
 	$page .= hl(t("A cloud peer-to-peer file synchronization system"),4);
@@ -74,10 +78,20 @@ function index() {
 		return(array('type'=>'render','page'=>$page));
 	} else {
 		$page .= "<div class='alert alert-success text-center'>".t("$title installed")."</div>\n";
-		$page .= addButton(array('label'=>t('Create a repository'),'href'=>"$urlpath/newrepo"));
+		if (!passwordChanged()) {
+			$page .= "<div class='alert alert-error text-center'>"
+				.t("$title's public web interface password hasn't been changed yet, please change it.")
+				."\n"
+				.t("Default user: $webui_user. Default password: $webui_pass")
+				."</div>\n";
+		}
+		$scurl = "https://" . $_SERVER['REMOTE_ADDR'] . ":$webui_port";
+		$page .= addButton(array('label'=>t('Go to the web interface'),'href'=>$scurl));
+
+		//$page .= addButton(array('label'=>t('Create a repository'),'href'=>"$urlpath/newrepo"));
 		return(array('type' => 'render','page' => $page));
 	}
-} 
+}
 
 function getprogram() {
 	global $dirpath, $cfgpath, $repospath, $binpath, $urlpath;
@@ -111,7 +125,7 @@ function startprogram() {
 }
 
 function cfgprogram() {
-	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath;
+	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath, $webui_port, $webui_user, $webui_pass_bc;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
@@ -125,12 +139,19 @@ function cfgprogram() {
 		unset($config->repository);
 		$config->gui->attributes()->enabled="true";
 		$config->gui->attributes()->tls="true";
-		$config->gui->address="0.0.0.0:8080";
-		$config->gui->user="syncthing";
-		$config->gui->password='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
+		$config->gui->address="0.0.0.0:$webui_port";
+		$config->gui->user=$webui_user;
+		$config->gui->password=$webui_pass_bc;
 		$config->options->globalAnnounceEnabled="false";
 		$configstr = $config->asXml($cfgpath_xml);
 		startprogram(); // Make it load the new config
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
-} 
+}
+
+function passwordChanged() {
+	global $cfgpath_xml, $webui_pass_bc;
+
+	$config = simplexml_load_file($cfgpath_xml);
+	return ($config->gui->password != $webui_pass_bc);
+}
