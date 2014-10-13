@@ -83,6 +83,16 @@ function write_merge_conffile($file,$dates){
 	if ($debug) { echo "</pre>";}
 }
 
+function exec_user($cmd,$user){
+	$cmd = "/bin/su ".$user." -c '" . addslashes($cmd) . "'";
+	return (exec($cmd));
+}
+
+function shell_exec_user($cmd,$user){
+	$cmd = "/bin/su ".$user." -c '" . addslashes($cmd) . "'";
+	return (shell_exec($cmd));
+}
+
 function isPackageInstall($pkg){
 	$cmd = "dpkg -l ".$pkg." > /dev/null 2>&1; echo $?";
 	return (shell_exec($cmd) == 0);
