@@ -12,7 +12,7 @@ PUBLIC_IP=$($AVAHIPROG info ip)
 check() {
 	cp $FILEDIR/$FILEPEERS $FILEDIR/_$FILEPEERS
 	
-	$PSSCRIPT info &> /dev/null		# Killing zombie processes and deleting lines from file
+	$PSSCRIPT info --no-stop &> /dev/null		# Killing zombie processes and deleting lines from file
 	
 	diff $FILEDIR/$FILEPEERS $FILEDIR/_$FILEPEERS | sed '1d' | while read line
 	do
@@ -27,10 +27,31 @@ check() {
 	rm $FILEDIR/_$FILEPEERS
 }
 
+_stop() {
+	port=$1
+
+	$AVAHIPROG unpublish $TYPE $port $PUBLIC_IP
+}
+
+_start() {
+	port=$1
+	description=$2
+
+	$AVAHIPROG publish $description $TYPE $port $PUBLIC_IP
+}
+
 case $1 in			# Using "case" in case we need other functions in the future
 	"check")
 		shift
 		check $@
+		;;
+	"stop")
+		shift
+		_stop $@
+		;;
+	"start")
+		shift
+		_start $@
 		;;
 	*)
 		echo "Invalid input."

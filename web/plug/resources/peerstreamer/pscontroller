@@ -6,6 +6,7 @@ PSPROG="streamer-udp-grapes-static"
 PSPATH="/opt/peerstreamer/"
 LOGFILE="/dev/null"
 FILEPEERS="/var/run/pspeers.conf"
+SHELL=/var/local/cDistro/plug/resources/peerstreamer/ps_shell
 FILEDIR="/var/run/"
 LSOF="/usr/bin/lsof"
 CURL="/usr/bin/curl"
@@ -119,10 +120,12 @@ doInfo(){
 		if [ -z "$(ps -A | grep ${data[2]})" ] # If process is not running:
 		then
 			kill -9 ${data[1]} # Killing vlc process
+			#Stopping avahi service for current instance
+			[ "$json" != "--no-stop"  ] && $SHELL 'stop' ${data[0]}
 			#Deleting current peerstreamer instance from the info file.
 			identifier=${data[1]}"|"${data[2]}
 			echo $identifier
-			sed "/$identifier/d" "$FILEPEERS" >"$FILEDIR/tmp" && mv "$FILEDIR/tmp" $FILEPEERS
+			sed "/$identifier/d" "$FILEPEERS" > "$FILEDIR/tmp" && mv "$FILEDIR/tmp" $FILEPEERS
 			[[ ! -s $FILEPEERS ]] && rm $FILEPEERS # Deleting filepeers if empty
 		else
 			if [ "$json" == "json" ]
@@ -258,6 +261,9 @@ doPeer2UDPClient(){
 
 		saveInfoPeer "0" $pidps $port $udpport "PeerUDP" "udp://@$ipclient:$udpport"
 
+		#Publishing service in avahi network
+		$SHELL "start" $port "Republishing"
+
 		return
     )	
 	#else
@@ -298,6 +304,9 @@ doPeer2RTSPServer(){
 
 
 		saveInfoPeer $pidvlc $pidps $port $udpport "PeerRTSPServer" "rtsp://$ipserver:$udpport/"
+
+		#Publishing service in avahi network
+		$SHELL "start" $port "Republishing"
 
 		return
 	)
