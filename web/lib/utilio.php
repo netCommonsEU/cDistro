@@ -1,5 +1,9 @@
 <?php
 	//utils I/O utilio.php
+
+define('S_IFMT',0170000);
+define('S_IFIFO',0010000);
+
 function load_conffile($file,$default = null){
 	$variables = "";
 
@@ -184,15 +188,13 @@ function execute_proc($cmd){
 }
 
 function execute_program_detached($c){
-	define('S_IFMT',0170000);
-	define('S_IFIFO',0010000);	
 
 	$fdpipe="/tmp/cDistrod";
 
 	$s = stat($fdpipe);
 	$mode = $s['mode'];
-	if (S_IFIFO != ($mode & S_IFMT)) {  
-		setFlash('<i>'.$fdpipe.'</i> '.t('is not file type FIFO, maybe daemon is not running.'),"error"); 
+	if (S_IFIFO != ($mode & S_IFMT)) {
+		setFlash('<i>'.$fdpipe.'</i> '.t('is not file type FIFO, maybe daemon is not running.'),"error");
 	} else {
 	    $fh = fopen($fdpipe, "a");
 	    if($fh==false)
@@ -202,8 +204,8 @@ function execute_program_detached($c){
 	    fclose ($fh);
 	}
 }
-function execute_program_detached_user($cmd,$user){
 
+function execute_program_detached_user($cmd,$user){
 	$cmd = "/bin/su ".$user." -c '" . addslashes($cmd) . "'";
 	execute_program_detached($cmd);
 }
@@ -239,7 +241,7 @@ function active_services(){
 /*	echo "<pre>";
 	print_r($aServices);
 	echo "</pre>";*/
-	return ($aServices);	
+	return ($aServices);
 }
 
 function avahi_publish($type, $description, $port, $txt){
@@ -253,7 +255,7 @@ function avahi_unpublish($type, $port){
 	$cmd = '/usr/sbin/avahi-ps unpublish '.$type.' '.$port;
 	execute_program_detached($cmd);
 
-	return($cmd);	
+	return($cmd);
 }
 
 function getCommunityDev(){
