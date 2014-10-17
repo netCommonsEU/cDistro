@@ -85,7 +85,9 @@ function index() {
 				.t("Default user: $webui_user. Default password: $webui_pass")
 				."</div>\n";
 		}
-		$scurl = "https://" . $_SERVER['SERVER_ADDR'] . ":$webui_port";
+		$host = explode(':', $_SERVER['HTTP_HOST'])[0];
+		$scurl = "https://$host:$webui_port";
+
 		$page .= addButton(array('label'=>t('Go to the web interface'),'href'=>$scurl));
 
 		//$page .= addButton(array('label'=>t('Create a repository'),'href'=>"$urlpath/newrepo"));
