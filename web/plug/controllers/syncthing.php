@@ -14,6 +14,7 @@ $webui_pass="syncthing";
 $webui_pass_bc='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
 
 $avahi_type="syncthing";
+$avahi_desc="Syncthing instance running";
 $urlpath="$staticFile/syncthing";
 
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
@@ -73,12 +74,12 @@ function index() {
 		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/getprogram"));
 		return(array('type'=>'render','page'=>$page));
 	} elseif (getPid() == -1) {
-		$page .= "<div class='alert alert-error text-center'>".t("$title is not running")."</div>\n";
+		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet running")."</div>\n";
 		$page .= par(t("Click on the button to start $title."));
 		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/cfgprogram"));
 		return(array('type'=>'render','page'=>$page));
 	} else {
-		$page .= "<div class='alert alert-success text-center'>".t("$title installed")."</div>\n";
+		$page .= "<div class='alert alert-success text-center'>".t("$title is installed and running")."</div>\n";
 		if (!passwordChanged()) {
 			$page .= "<div class='alert alert-error text-center'>"
 				.t("$title's public web interface password hasn't been changed yet, please change it.")
@@ -121,10 +122,12 @@ function stopprogram() {
 }
 
 function startprogram() {
-	global $user, $cfgpath, $repospath, $binpath;
+	global $user, $cfgpath, $repospath, $binpath, $avahi_type, $avahi_desc, $sc_port;
 	if (getPid() == -1) {
 		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
 	}
+	$sc_id = getDeviceID();
+	avahi_publish($avahi_type, $avahi_desc, $sc_port, $sc_id);
 }
 
 function cfgprogram() {
@@ -158,4 +161,11 @@ function passwordChanged() {
 
 	$config = simplexml_load_file($cfgpath_xml);
 	return ($config->gui->password != $webui_pass_bc);
+}
+
+function getDeviceID() {
+	global $cfgpath_xml;
+
+	$config = simplexml_load_file($cfgpath_xml);
+	return ($config->device[0]->attributes()->id);
 }
