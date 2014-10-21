@@ -7,6 +7,7 @@ $repospath="$dirpath/repos";
 
 $user="www-data";
 $title="Syncthing";
+$sc_port="22000";
 $webui_port="8080";
 $webui_user="syncthing";
 $webui_pass="syncthing";
@@ -144,6 +145,7 @@ function cfgprogram() {
 		$config->gui->address="0.0.0.0:$webui_port";
 		$config->gui->user=$webui_user;
 		$config->gui->password=$webui_pass_bc;
+		$config->options->listenAddress="0.0.0.0:$sc_port";
 		$config->options->globalAnnounceEnabled="false";
 		$configstr = $config->asXml($cfgpath_xml);
 		startprogram(); // Make it load the new config
