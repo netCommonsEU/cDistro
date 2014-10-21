@@ -139,7 +139,7 @@ function cfgprogram() {
 		while (!file_exists($cfgpath_xml)) sleep(1);
 		stopprogram(); // Make sure the config file is ours
 		$config = simplexml_load_file($cfgpath_xml);
-		unset($config->repository);
+		unset($config->folder);
 		$config->gui->attributes()->enabled="true";
 		$config->gui->attributes()->tls="true";
 		$config->gui->address="0.0.0.0:$webui_port";
