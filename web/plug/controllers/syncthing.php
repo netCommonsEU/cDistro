@@ -18,7 +18,7 @@ $avahi_desc="Syncthing instance running";
 $urlpath="$staticFile/syncthing";
 
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.10.2";
+$version="0.10.4";
 
 function nameForArch($arch) {
 	global $version;
