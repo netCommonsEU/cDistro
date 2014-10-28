@@ -1,6 +1,7 @@
 <?php
 $dirpath="/opt/syncthing";
-$binpath="$dirpath/syncthing";
+$binname="syncthing";
+$binpath="$dirpath/$binname";
 $cfgpath="$dirpath/config";
 $cfgpath_xml = "$cfgpath/config.xml";
 $repospath="$dirpath/repos";
@@ -114,9 +115,9 @@ function getprogram() {
 }
 
 function stopprogram() {
-	global $user, $binpath;
+	global $user, $binname;
 	while (getPid() != -1) {
-		exec_user("killall $binpath", $user);
+		exec_user("killall $binname", $user);
 		sleep(1);
 	}
 }
