@@ -132,7 +132,8 @@ function startprogram() {
 }
 
 function cfgprogram() {
-	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath, $webui_port, $webui_user, $webui_pass_bc;
+	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath,
+		$webui_port, $webui_user, $webui_pass_bc, $sc_port;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
