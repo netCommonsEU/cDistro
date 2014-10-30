@@ -5,6 +5,7 @@ $binpath="$dirpath/$binname";
 $cfgpath="$dirpath/config";
 $cfgpath_xml = "$cfgpath/config.xml";
 $repospath="$dirpath/repos";
+$nodeidpath="$dirpath/node_id";
 
 $user="www-data";
 $title="Syncthing";
@@ -127,13 +128,13 @@ function startprogram() {
 	if (getPid() == -1) {
 		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
 	}
-	$sc_id = getDeviceID();
-	avahi_publish($avahi_type, $avahi_desc, $sc_port, $sc_id);
+	$sc_id = getNodeID();
+	avahi_publish($avahi_type, $avahi_desc, $sc_port, "node_id=$sc_id");
 }
 
 function cfgprogram() {
 	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath,
-		$webui_port, $webui_user, $webui_pass_bc, $sc_port;
+		$webui_port, $webui_user, $webui_pass_bc, $sc_port, $nodeidpath;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
@@ -153,6 +154,7 @@ function cfgprogram() {
 		$config->options->listenAddress="0.0.0.0:$sc_port";
 		$config->options->globalAnnounceEnabled="false";
 		$configstr = $config->asXml($cfgpath_xml);
+		file_put_contents($nodeidpath, getNodeIDFromConfig($config));
 		startprogram(); // Make it load the new config
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
@@ -165,9 +167,13 @@ function passwordChanged() {
 	return ($config->gui->password != $webui_pass_bc);
 }
 
-function getDeviceID() {
+function getNodeID() {
 	global $cfgpath_xml;
 
 	$config = simplexml_load_file($cfgpath_xml);
+	return getNodeIDFromConfig($config);
+}
+
+function getNodeIDFromConfig($config) {
 	return ($config->device[0]->attributes()->id);
 }
