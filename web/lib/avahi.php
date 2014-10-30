@@ -28,5 +28,3 @@ function checkAvahi($name_server,$server_array){
 
 	return ($ret);
 }
-
-addAvahiFiles($documentPath.$plugs_avahi);

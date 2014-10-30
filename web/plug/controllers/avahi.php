@@ -1,6 +1,8 @@
 <?php
 // controllers/avahi.php
 
+addAvahiFiles($documentPath.$plugs_avahi);
+
 function search()
 {
 	global $staticFile,$staticPath;
