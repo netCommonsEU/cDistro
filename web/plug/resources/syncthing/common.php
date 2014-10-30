@@ -43,3 +43,21 @@ function passwordChanged($config) {
 function getNodeID($config) {
     return ($config->device[0]->attributes()->id);
 }
+
+function isInstalled() {
+	global $binpath;
+	return(is_executable($binpath));
+}
+
+function getPid() {
+	global $binpath;
+	$pid_str = execute_program_shell("pidof $binpath | tr -s ' ' '\\n' | sort -n | sed 1q")['output'];
+	if ($pid_str == NULL or $pid_str == "") {
+		return -1;
+	}
+	return (int)$pid_str;
+}
+
+function isRunning() {
+	return (getPid() != -1);
+}

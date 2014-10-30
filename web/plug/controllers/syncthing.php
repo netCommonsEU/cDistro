@@ -32,20 +32,6 @@ function downloadUrl($name) {
 	return("$releases_url/v$version/$name.tar.gz");
 }
 
-function isInstalled() {
-	global $binpath;
-	return(is_executable($binpath));
-}
-
-function getPid() {
-	global $binpath;
-	$pid_str = execute_program_shell("pidof $binpath | tr -s ' ' '\\n' | sort -n | sed 1q")['output'];
-	if ($pid_str == NULL or $pid_str == "") {
-		return -1;
-	}
-	return (int)$pid_str;
-}
-
 function index() {
 	global $title, $urlpath, $webui_user, $webui_pass, $webui_port;
 
@@ -57,7 +43,7 @@ function index() {
 		$page .= par(t("Click on the button to install $title."));
 		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/getprogram"));
 		return(array('type'=>'render','page'=>$page));
-	} elseif (!hasConfig() || getPid() == -1) {
+	} elseif (!hasConfig() || !isRunning()) {
 		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet running")."</div>\n";
 		$page .= par(t("Click on the button to start $title."));
 		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/cfgprogram"));
@@ -109,7 +95,7 @@ function getprogram() {
 
 function stopprogram() {
 	global $user, $binname;
-	while (getPid() != -1) {
+	while (isRunning()) {
 		exec_user("killall $binname", $user);
 		sleep(1);
 	}
@@ -117,7 +103,7 @@ function stopprogram() {
 
 function startprogram() {
 	global $user, $cfgpath, $repospath, $binpath, $avahi_type, $avahi_desc, $sc_port;
-	if (getPid() == -1) {
+	if (!isRunning()) {
 		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
 	}
 	$config = readConfig();
