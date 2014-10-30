@@ -1,26 +1,8 @@
 <?php
-$dirpath="/opt/syncthing";
-$binname="syncthing";
-$binpath="$dirpath/$binname";
-$cfgpath="$dirpath/config";
-$cfgpath_xml = "$cfgpath/config.xml";
-$repospath="$dirpath/repos";
-$nodeidpath="$dirpath/node_id";
 
-$user="www-data";
-$title="Syncthing";
-$sc_port="22000";
-$webui_port="8080";
-$webui_user="syncthing";
-$webui_pass="syncthing";
-$webui_pass_bc='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
+require realpath(__DIR__ . "/../resources/syncthing/common.php");
 
-$avahi_type="syncthing";
-$avahi_desc="Syncthing instance running";
 $urlpath="$staticFile/syncthing";
-
-$releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.10.4";
 
 function nameForArch($arch) {
 	global $version;
@@ -75,14 +57,15 @@ function index() {
 		$page .= par(t("Click on the button to install $title."));
 		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/getprogram"));
 		return(array('type'=>'render','page'=>$page));
-	} elseif (getPid() == -1) {
+	} elseif (!hasConfig() || getPid() == -1) {
 		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet running")."</div>\n";
 		$page .= par(t("Click on the button to start $title."));
 		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/cfgprogram"));
 		return(array('type'=>'render','page'=>$page));
 	} else {
+		$config = readConfig();
 		$page .= "<div class='alert alert-success text-center'>".t("$title is installed and running")."</div>\n";
-		if (!passwordChanged()) {
+		if (!passwordChanged($config)) {
 			$page .= "<div class='alert alert-error text-center'>"
 				.t("$title's public web interface password hasn't been changed yet, please change it.")
 				."\n"
@@ -97,6 +80,15 @@ function index() {
 		//$page .= addButton(array('label'=>t('Create a repository'),'href'=>"$urlpath/newrepo"));
 		return(array('type' => 'render','page' => $page));
 	}
+}
+
+function connect() {
+	stopprogram(); // Make sure the config file is ours
+	$config = readConfig();
+	unset($config->folder);
+	writeConfig($config);
+	startprogram(); // Make it load the new config
+	setFlash("Properly connected with $foo");
 }
 
 function getprogram() {
@@ -128,7 +120,8 @@ function startprogram() {
 	if (getPid() == -1) {
 		execute_program_detached_user("HOME=$repospath $binpath -no-browser -home=$cfgpath", $user);
 	}
-	$sc_id = getNodeID();
+	$config = readConfig();
+	$sc_id = getNodeID($config);
 	avahi_publish($avahi_type, $avahi_desc, $sc_port, "node_id=$sc_id");
 }
 
@@ -142,9 +135,9 @@ function cfgprogram() {
 	} else {
 		execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
 		startprogram(); // Start it to generate the default config
-		while (!file_exists($cfgpath_xml)) sleep(1);
+		while (!hasConfig()) sleep(1);
 		stopprogram(); // Make sure the config file is ours
-		$config = simplexml_load_file($cfgpath_xml);
+		$config = readConfig();
 		unset($config->folder);
 		$config->gui->attributes()->enabled="true";
 		$config->gui->attributes()->tls="true";
@@ -153,27 +146,9 @@ function cfgprogram() {
 		$config->gui->password=$webui_pass_bc;
 		$config->options->listenAddress="0.0.0.0:$sc_port";
 		$config->options->globalAnnounceEnabled="false";
-		$configstr = $config->asXml($cfgpath_xml);
-		file_put_contents($nodeidpath, getNodeIDFromConfig($config));
+		writeConfig($config);
+		file_put_contents($nodeidpath, getNodeID($config));
 		startprogram(); // Make it load the new config
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
-}
-
-function passwordChanged() {
-	global $cfgpath_xml, $webui_pass_bc;
-
-	$config = simplexml_load_file($cfgpath_xml);
-	return ($config->gui->password != $webui_pass_bc);
-}
-
-function getNodeID() {
-	global $cfgpath_xml;
-
-	$config = simplexml_load_file($cfgpath_xml);
-	return getNodeIDFromConfig($config);
-}
-
-function getNodeIDFromConfig($config) {
-	return ($config->device[0]->attributes()->id);
 }
