@@ -32,6 +32,18 @@ function ajaxsearch()
 		if(!isset($nServices[$type])){ $nServices[$type] = array(); }
 		$serv['action'] = checkAvahi($serv['type'],array($serv));
 		unset($serv['txt']);
+
+		// Replace ascii codes by chars, such as "\032" by a space.
+		$newdesc = "";
+		$parts = explode("\\", $serv['description']);
+		foreach($parts as $n => $part) {
+			if ($n != 0) {
+				$newdesc .= chr(substr($part, 0, 3));
+			}
+			$newdesc .= substr($part, 3);
+		}
+		$serv['description'] = $newdesc;
+
 		$nServices[$type][] = $serv;
 	}
 
