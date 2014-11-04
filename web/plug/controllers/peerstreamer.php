@@ -248,6 +248,7 @@ function _listPSProcs(){
 
 	global $psutils,$staticFile;
 	// Fer un llistat del PS actius!
+	$page="";
 	$ret = execute_program($psutils." info json");
 	$datos = json_decode(implode("\n",$ret['output']),true);
 

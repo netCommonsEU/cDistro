@@ -119,7 +119,7 @@ doInfo(){
 		# Checking if current PS instance is active. Otherwise we kill the depending processes.
 		if [ -z "$(ps -A | grep ${data[2]})" ] # If process is not running:
 		then
-			kill -9 ${data[1]} # Killing vlc process
+			[ ${data[1]} != 0 ] && kill -9 ${data[1]} # Killing vlc process
 			#Stopping avahi service for current instance
 			[ "$json" != "--no-stop"  ] && $SHELL 'stop' ${data[0]}
 			#Deleting current peerstreamer instance from the info file.
