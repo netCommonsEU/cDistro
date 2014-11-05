@@ -221,7 +221,7 @@ function execute_program_detached_user($cmd,$user){
 }
 
 function avahi_search(){
-	$ret = execute_program("/usr/sbin/avahi-ps search");
+	$ret = execute_program("SEARCH_ONLY=avahi /usr/sbin/avahi-ps search");
 	$services = $ret['output'];
 	$aServices = array();
 	foreach($services as $service)
@@ -238,7 +238,13 @@ function avahi_search(){
 	print_r($aServices);
 	echo "</pre>";*/
 	return ($aServices);
+
 }
+function etcd_search(){
+	$ret = execute_program("SEARCH_ONLY=etcd /usr/sbin/avahi-ps search");
+	return($ret['output']);
+}
+
 function active_services(){
 	$ret = execute_program("/usr/sbin/avahi-service isActive");
 	$services = $ret['output'];
