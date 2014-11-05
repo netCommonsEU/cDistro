@@ -9,6 +9,7 @@ $etcdinit="/etc/init.d/etcd";
 $avahips_config="/etc/avahi-ps.conf";
 $avahipsetc_config="/etc/avahi-ps-etcd.conf";
 $urlpath='/etcd';
+$etcdgeturl='https://raw.githubusercontent.com/agustim/package-etcd/master/getgithub'
 
 function search()
 {
@@ -177,7 +178,6 @@ function index_post(){
 
 function _isInstalled(){
 	global $etcdpath;
-
 	return(is_executable($etcdpath));
 }
 
@@ -188,10 +188,21 @@ function _existEtcdConf(){
 }
 
 function getprogram(){
+        global $etcdproc,$staticFile,$etcdgeturl;
 
+        $cmd="cd /tmp && curl ".$etcdgeturl."| sh -";
+        execute_program_detached($cmd);
+
+        return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
 }
-function removeprograma(){
 
+function removeprogram(){
+
+        global $dirpath,$staticFile;
+
+        $cmd="rm -rf ".$dirpath;
+        execute_program_detached($cmd);
+        return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
 }
 
 function _isRun(){
