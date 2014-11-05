@@ -91,6 +91,9 @@ function index()
 	$is_installed=_isInstalled();
 
 	$page=hlc(t($title));
+	if (!_existAvahiConf()) {
+		createDefaultAvahiFile();
+	}
 	$var_avahi = load_conffile($avahips_config);
 	$page .= hl(t("A highly-available key value store for shared configuration and service discovery"),4);
 
@@ -179,6 +182,18 @@ function index_post(){
 function _isInstalled(){
 	global $etcdpath;
 	return(is_executable($etcdpath));
+}
+
+function _existAvahiConf(){
+	global $avahips_config;
+
+	return(file_exists($avahips_config));
+}
+
+function createDefaultAvahiFile(){
+	global $avahips_config;
+
+	write_conffile($avahips_config,array('ERRORS_PLUG'=> "errors",'EXECUTE_IN'=>"memory",'SAVE_SERVICE'=>"none",'DATABASE'=>"none"),"","",'"');
 }
 
 function _existEtcdConf(){
