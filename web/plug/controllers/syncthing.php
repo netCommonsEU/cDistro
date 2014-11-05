@@ -94,11 +94,12 @@ function getprogram() {
 }
 
 function stopprogram() {
-	global $user, $binname;
+	global $user, $binname, $avahi_type, $sc_port;
 	while (isRunning()) {
 		exec_user("killall $binname", $user);
 		sleep(1);
 	}
+	avahi_unpublish($avahi_type, $sc_port);
 }
 
 function startprogram() {
