@@ -21,7 +21,7 @@ $avahi_type="syncthing";
 $avahi_desc="Syncthing instance running";
 
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.10.4";
+$version="0.10.5";
 
 function readConfig() {
     return simplexml_load_file(cfgpath_xml);
