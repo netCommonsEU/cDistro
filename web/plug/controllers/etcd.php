@@ -9,7 +9,7 @@ $etcdinit="/etc/init.d/etcd";
 $avahips_config="/etc/avahi-ps.conf";
 $avahipsetc_config="/etc/avahi-ps-etcd.conf";
 $urlpath='/etcd';
-$etcdgeturl='https://raw.githubusercontent.com/agustim/package-etcd/master/getgithub'
+$etcdgeturl='https://raw.githubusercontent.com/agustim/package-etcd/master/getgithub';
 
 function search()
 {
