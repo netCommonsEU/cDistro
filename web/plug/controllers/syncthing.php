@@ -151,8 +151,12 @@ function stopprogram() {
 
 function startprogram() {
 	global $user, $cfgpath, $repospath, $binpath, $avahi_type, $avahi_desc, $sc_port;
-	if (!isRunning()) {
-		execute_program_detached_user("HOME=$repospath; $binpath -no-browser -home=$cfgpath", $user);
+	if (isRunning()) {
+		return;
+	}
+	execute_program_detached_user("HOME=$repospath; $binpath -no-browser -home=$cfgpath", $user);
+	while (!isRunning()) {
+		sleep(1);
 	}
 	$config = readConfig();
 	$sc_id = getNodeID($config);
