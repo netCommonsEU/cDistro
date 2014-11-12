@@ -1,0 +1,3 @@
+<?php
+
+addMenu(t('etcd_lookfor'),'etcd/search',t('Etcd'));

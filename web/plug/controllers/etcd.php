@@ -10,6 +10,7 @@ $avahips_config="/etc/avahi-ps.conf";
 $avahipsetc_config="/etc/avahi-ps-etcd.conf";
 $urlpath='/etcd';
 $etcdgeturl='https://raw.githubusercontent.com/agustim/package-etcd/master/getgithub';
+$etcdmenu=dirname(__FILE__)."/../menus/etcd.lookfor.menu.php";
 
 function search()
 {
@@ -32,7 +33,6 @@ function ajaxsearch()
 {
 	$aServices = etcd_search(); // This function is in lib/utilio.php
 
-	// Reorganizar dades
 	$gService = json_decode($aServices[0]);
 	$nServices = array();
 
@@ -54,7 +54,6 @@ function ajaxsearch()
 			$nServices[$type][] = $serv_new;
 		}
 	}
-	// Sort
 	ksort($nServices);
 
 	$page = "";
@@ -68,19 +67,24 @@ function ajaxsearch()
 	}
 	$page .= "</ul>\n";
 	$page .= "<div id='my-tab-content' class='tab-content'>\n";
+	$services = "";
 	foreach($nServices as $k => $v){	
-		$page .= "	<div class='tab-pane";
-		if($active == $k) $page .= " active";		
-		$page .= "' id='".$k."'>";
+		$services .= "	<div class='tab-pane";
+		if($active == $k) $services .= " active";		
+		$services .= "' id='".$k."'>";
 
-		$page .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped'));
+		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped'));
 		foreach($v as $serv){
 			unset($serv['type']);
-			$page .= addTableRow($serv);
+			$services .= addTableRow($serv);
 		}
-		$page .= addTableFooter();
-		$page .= " 	</div>";
+		$services .= addTableFooter();
+		$services .= " 	</div>";
 	}
+	if ($services == "") {
+		$services .=t("No services.");
+	}
+	$page .= $services;
 	$page .= "</div>";
 	return(array('type'=>'ajax','page'=>$page));
 }
@@ -96,10 +100,6 @@ function index()
 	}
 	$var_avahi = load_conffile($avahips_config);
 	$page .= hl(t("A highly-available key value store for shared configuration and service discovery"),4);
-
-	$page .= '<p>';	
-	$page .= addButton(array('label'=>t("Look for services in etcd"),'class'=>'btn', 'href'=>"$urlpath/search"));
-	$page .= '</p>';
 
 	$page .= '<p>';
 	if (!$is_installed) {
@@ -138,7 +138,7 @@ function index()
 		$page .= addButton(array('label'=>t("Select $title"),'class'=>'btn', 'href'=>"$urlpath/selectetcd", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
 	} else {
-		$page .= "<div class='alert alert-success'>".t("</i>etcd</i> is selected!")."\n";
+		$page .= "<div class='alert alert-success'>".t("</i>etcd</i> is selected")."\n";
 		$page .= addButton(array('label'=>t("Deselect $title"),'class'=>'btn', 'href'=>"$urlpath/removeetcd", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
 
@@ -201,14 +201,26 @@ function _existEtcdConf(){
 
 	return(file_exists($avahipsetc_config));
 }
+function _install_menu(){
+	global $etcdmenu;
+	rename($etcdmenu.".disable",$etcdmenu);
+}
+function _uninstall_menu(){
+	global $etcdmenu;
+	rename($etcdmenu, $etcdmenu.".disable");
+}
 
 function getprogram(){
-        global $etcdproc,$staticFile,$etcdgeturl;
+        global $etcdproc,$staticFile,$etcdgeturl,$urlpath;
 
-        $cmd="cd /tmp && curl ".$etcdgeturl."| sh -";
-        execute_program_detached($cmd);
+	$page = "";
+        $cmd = "cd /tmp && curl ".$etcdgeturl."| sh -";
+        $ret = execute_shell($cmd);
 
-        return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+	setFlash(t('etcd_was_install'),"success");
+	_install_menu();
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+	
 }
 
 function removeprogram(){
@@ -216,7 +228,9 @@ function removeprogram(){
         global $dirpath,$staticFile;
 
         $cmd="rm -rf ".$dirpath;
-        execute_program_detached($cmd);
+        execute_shell($cmd);
+	setFlash(t('etcd_was_uninstall'),"success");
+	_uninstall_menu();
         return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
 }
 
@@ -225,6 +239,7 @@ function _isRun(){
 	$ret = execute_shell("pidof -s $etcdproc");
 	return($ret['return'] !=  0 );
 }
+
 function runprogram(){
 	global $etcdinit, $staticFile;
 
@@ -235,6 +250,7 @@ function runprogram(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
 	
 }
+
 function stopprogram(){
 	global $etcdinit, $staticFile;
 
