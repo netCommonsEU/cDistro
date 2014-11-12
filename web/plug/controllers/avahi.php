@@ -41,6 +41,9 @@ function avahi_fix_asciicodes($string) {
 
 // Replace unnecessary quoting from strings
 function avahi_remove_quoting($string) {
+	if (strlen($string) < 2) {
+		return $string;
+	}
 	if ($string[0] != '"') {
 		return $string;
 	}
