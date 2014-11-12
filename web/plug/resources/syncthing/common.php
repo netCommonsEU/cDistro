@@ -24,24 +24,24 @@ $releases_url="https://github.com/syncthing/syncthing/releases/download";
 $version="0.10.5";
 
 function readConfig() {
-    return simplexml_load_file(cfgpath_xml);
+	return simplexml_load_file(cfgpath_xml);
 }
 
 function hasConfig() {
-    return file_exists(cfgpath_xml);
+	return file_exists(cfgpath_xml);
 }
 
 function writeConfig($config) {
-    $config->asXml(cfgpath_xml);
+	$config->asXml(cfgpath_xml);
 }
 
 function passwordChanged($config) {
-    global $webui_pass_bc;
-    return ($config->gui->password != $webui_pass_bc);
+	global $webui_pass_bc;
+	return ($config->gui->password != $webui_pass_bc);
 }
 
 function getNodeID($config) {
-    return ($config->device[0]->attributes()->id);
+	return ($config->device[0]->attributes()->id);
 }
 
 function isInstalled() {
@@ -63,31 +63,42 @@ function isRunning() {
 }
 
 function sxml_append(SimpleXMLElement $to, SimpleXMLElement $from) {
-    $to_dom = dom_import_simplexml($to);
-    $from_dom = dom_import_simplexml($from);
-    $to_dom->appendChild($to_dom->ownerDocument->importNode($from_dom, true));
+	$to_dom = dom_import_simplexml($to);
+	$from_dom = dom_import_simplexml($from);
+	$to_dom->appendChild($to_dom->ownerDocument->importNode($from_dom, true));
 }
 
 function sxml_remove(SimpleXMLElement $element) {
-    $dom = dom_import_simplexml($element);
+	$dom = dom_import_simplexml($element);
 	$dom->parentNode->removeChild($dom);
 }
 
-function isConnectedTo($config, $ip, $port) {
+function isNode($device, $ip, $port, $node_id) {
+	return (
+		$device->attributes()->id == $node_id ||
+		$device->address == "$ip:$port");
+}
+
+function isSelf($config, $ip, $port, $node_id) {
+	$devices = $config->device;
+	// Assuming that we are the first device
+	return isNode($devices[0], $ip, $port, $node_id);
+}
+
+function isConnectedTo($config, $ip, $port, $node_id) {
 	$devices = $config->device;
 	foreach ($devices as $device) {
-		if ($device->address == "$ip:$port") {
+		if (isNode($device, $ip, $port, $node_id)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-
 function connectTo($config, $ip, $port, $name, $node_id) {
 	$device = new SimpleXMLElement("
 <device id=\"$node_id\" name=\"$name\" compression=\"true\" introducer=\"false\">
-    <address>$ip:$port</address>
+	<address>$ip:$port</address>
 </device>
 	");
 	sxml_append($config, $device);
