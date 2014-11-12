@@ -41,12 +41,16 @@ function index() {
 	if (!isInstalled()) {
 		$page .= "<div class='alert alert-error text-center'>".t("$title is not installed")."</div>\n";
 		$page .= par(t("Click on the button to install $title."));
-		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/getprogram"));
+		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/download"));
 		return(array('type'=>'render','page'=>$page));
-	} elseif (!hasConfig() || !isRunning()) {
+	} elseif (!hasConfig()) {
+		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet configured")."</div>\n";
+		$page .= addButton(array('label'=>t("Configure $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/configure"));
+		return(array('type'=>'render','page'=>$page));
+	} elseif (!isRunning()) {
 		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet running")."</div>\n";
 		$page .= par(t("Click on the button to start $title."));
-		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/cfgprogram"));
+		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
 		return(array('type'=>'render','page'=>$page));
 	} else {
 		$config = readConfig();
@@ -60,10 +64,11 @@ function index() {
 		}
 		$host = explode(':', $_SERVER['HTTP_HOST'])[0];
 		$scurl = "https://$host:$webui_port";
+		$page .= par(t("If you wish to add new repositories and share them, use the web interface."));
 
-		$page .= addButton(array('label'=>t('Go to the web interface'),'href'=>$scurl));
+		$page .= addButton(array('label'=>t('Web interface'),'href'=>$scurl));
+		$page .= addButton(array('label'=>t("Stop $title"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
-		//$page .= addButton(array('label'=>t('Create a repository'),'href'=>"$urlpath/newrepo"));
 		return(array('type' => 'render','page' => $page));
 	}
 }
@@ -119,20 +124,20 @@ function disconnect() {
 	return(array('type'=>'redirect','url'=>"$urlpath"));
 }
 
-function getprogram() {
+function download_get() {
 	global $dirpath, $cfgpath, $repospath, $binpath, $urlpath;
 	$name = nameForArch(php_uname("m"));
 	$url = downloadUrl($name);
-	$array = execute_program_shell(
+	execute_program_shell(
 		"mkdir -p $dirpath $cfgpath $repospath && " .
 		"cd $dirpath && " .
 		"curl -L -s $url -o $name.tar.gz && " .
 		"tar -xf $name.tar.gz && " .
 		"mv $name/syncthing syncthing && " .
 		"rm -rf $name.tar.gz $name && " .
-		"chown -R www-data $dirpath && " .
+		"chown -R www-data:www-data $dirpath && " .
 		"chmod 0755 $binpath");
-	return(array('type'=>'redirect','url'=>"$urlpath/cfgprogram"));
+	return(array('type'=>'redirect','url'=>"$urlpath/configure"));
 }
 
 function stopprogram() {
@@ -154,30 +159,52 @@ function startprogram() {
 	avahi_publish($avahi_type, $avahi_desc, $sc_port, "node_id=$sc_id");
 }
 
-function cfgprogram() {
-	global $user, $title, $cfgpath, $cfgpath_xml, $repospath, $binpath, $urlpath,
-		$webui_port, $webui_user, $webui_pass_bc, $sc_port, $nodeidpath;
+function configure_get() {
+	global $user, $title, $cfgpath, $binpath, $urlpath, $webui_port, $webui_user,
+		$webui_pass_bc, $sc_port, $nodeidpath, $dirpath;
 
 	if (!isInstalled()) {
 		setFlash("$title did not install properly!");
 		return(array('type'=>'redirect','url'=>"$urlpath"));
-	} else {
-		execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
-		startprogram(); // Start it to generate the default config
-		while (!hasConfig()) sleep(1);
-		stopprogram(); // Make sure the config file is ours
-		$config = readConfig();
-		unset($config->folder);
-		$config->gui->attributes()->enabled="true";
-		$config->gui->attributes()->tls="true";
-		$config->gui->address="0.0.0.0:$webui_port";
-		$config->gui->user=$webui_user;
-		$config->gui->password=$webui_pass_bc;
-		$config->options->listenAddress="0.0.0.0:$sc_port";
-		$config->options->globalAnnounceEnabled="false";
-		writeConfig($config);
-		file_put_contents($nodeidpath, getNodeID($config));
-		startprogram(); // Make it load the new config
+	}
+	execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
+	startprogram(); // Start it to generate the default config
+	while (!hasConfig()) sleep(1);
+	stopprogram(); // Make sure the config file is ours
+	$config = readConfig();
+	unset($config->folder);
+	$config->gui->attributes()->enabled="true";
+	$config->gui->attributes()->tls="true";
+	$config->gui->address="0.0.0.0:$webui_port";
+	$config->gui->user=$webui_user;
+	$config->gui->password=$webui_pass_bc;
+	$config->options->listenAddress="0.0.0.0:$sc_port";
+	$config->options->globalAnnounceEnabled="false";
+	writeConfig($config);
+	file_put_contents($nodeidpath, getNodeID($config));
+	execute_program_shell("chown -R www-data:www-data $dirpath");
+	startprogram(); // Make it load the new config
+	return(array('type'=>'redirect','url'=>"$urlpath"));
+}
+
+function start_get() {
+	global $title, $urlpath;
+
+	if (!isInstalled()) {
+		setFlash("$title did not install properly!");
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
+	if (!hasConfig()) {
+		setFlash("$title was not configured properly!");
+		return(array('type'=>'redirect','url'=>"$urlpath/configure"));
+	}
+	startprogram();
+	return(array('type'=>'redirect','url'=>"$urlpath"));
+}
+
+function stop_get() {
+	global $urlpath;
+
+	stopprogram();
+	return(array('type'=>'redirect','url'=>"$urlpath"));
 }
