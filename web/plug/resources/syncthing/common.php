@@ -61,3 +61,44 @@ function getPid() {
 function isRunning() {
 	return (getPid() != -1);
 }
+
+function sxml_append(SimpleXMLElement $to, SimpleXMLElement $from) {
+    $to_dom = dom_import_simplexml($to);
+    $from_dom = dom_import_simplexml($from);
+    $to_dom->appendChild($to_dom->ownerDocument->importNode($from_dom, true));
+}
+
+function sxml_remove(SimpleXMLElement $element) {
+    $dom = dom_import_simplexml($element);
+	$dom->parentNode->removeChild($dom);
+}
+
+function isConnectedTo($config, $ip, $port) {
+	$devices = $config->device;
+	foreach ($devices as $device) {
+		if ($device->address == "$ip:$port") {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+function connectTo($config, $ip, $port, $name, $node_id) {
+	$device = new SimpleXMLElement("
+<device id=\"$node_id\" name=\"$name\" compression=\"true\" introducer=\"false\">
+    <address>$ip:$port</address>
+</device>
+	");
+	sxml_append($config, $device);
+}
+
+function disconnectFrom($config, $ip, $port) {
+	$devices = $config->device;
+	foreach ($devices as $device) {
+		if ($device->address == "$ip:$port") {
+			sxml_remove($device);
+			break;
+		}
+	}
+}
