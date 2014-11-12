@@ -20,6 +20,25 @@ function search()
 	return(array('type'=>'render','page'=>$page));
 }
 
+// Replace ascii codes by chars, such as "\032" by a space.
+function avahi_fix_asciicodes($string) {
+	$result = "";
+	$parts = explode("\\", $string);
+	$first = true;
+	foreach($parts as $n => $part) {
+		if ($n != 0) {
+			$result .= chr(substr($part, 0, 3));
+		}
+		if ($first) {
+			$result .= $part;
+			$first = false;
+		} else {
+			$result .= substr($part, 3);
+		}
+	}
+	return $result;
+}
+
 function ajaxsearch()
 {
 	$aServices = avahi_search(); // This function is in lib/utilio.php
@@ -33,22 +52,7 @@ function ajaxsearch()
 		$serv['action'] = checkAvahi($serv['type'],array($serv));
 		unset($serv['txt']);
 
-		// Replace ascii codes by chars, such as "\032" by a space.
-		$newdesc = "";
-		$parts = explode("\\", $serv['description']);
-		$first = true;
-		foreach($parts as $n => $part) {
-			if ($n != 0) {
-				$newdesc .= chr(substr($part, 0, 3));
-			}
-			if ($first) {
-				$newdesc .= $part;
-				$first = false;
-			} else {
-				$newdesc .= substr($part, 3);
-			}
-		}
-		$serv['description'] = $newdesc;
+		$serv['description'] = avahi_fix_asciicodes($serv['description']);
 
 		$nServices[$type][] = $serv;
 	}
