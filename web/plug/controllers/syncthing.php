@@ -76,27 +76,17 @@ function index() {
 function connect() {
 	global $urlpath;
 
-	if (isset($_GET['ip']))
-		$ip = $_GET['ip'];
-	else
-		$ip = "";
-
-	if (isset($_GET['port']))
-		$port = $_GET['port'];
-	else
-		$port = "";
-
-	if (isset($_GET['node_id']))
-		$node_id = $_GET['node_id'];
-	else
-		$node_id = "";
+	$ip = $_GET['ip'];
+	$port = $_GET['port'];
+	$host = $_GET['host'];
+	$node_id = $_GET['node_id'];
 
 	stopprogram(); // Make sure the config file is ours
 	$config = readConfig();
-	connectTo($config, $ip, $port, "TODO name", $node_id);
+	connectTo($config, $ip, $port, $host, $node_id);
 	writeConfig($config);
 	startprogram(); // Make it load the new config
-	setFlash("Properly connected with $foo");
+	setFlash("Properly connected with $host");
 
 	return(array('type'=>'redirect','url'=>"$urlpath"));
 }
@@ -104,22 +94,17 @@ function connect() {
 function disconnect() {
 	global $urlpath;
 
-	if (isset($_GET['ip']))
-		$ip = $_GET['ip'];
-	else
-		$ip = "";
-
-	if (isset($_GET['port']))
-		$port = $_GET['port'];
-	else
-		$port = "";
+	$ip = $_GET['ip'];
+	$port = $_GET['port'];
+	$host = $_GET['host'];
+	$node_id = $_GET['node_id'];
 
 	stopprogram(); // Make sure the config file is ours
 	$config = readConfig();
 	disconnectFrom($config, $ip, $port);
 	writeConfig($config);
 	startprogram(); // Make it load the new config
-	setFlash("Properly disconnected from $foo");
+	setFlash("Properly disconnected from $host");
 
 	return(array('type'=>'redirect','url'=>"$urlpath"));
 }

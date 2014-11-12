@@ -95,9 +95,9 @@ function isConnectedTo($config, $ip, $port, $node_id) {
 	return false;
 }
 
-function connectTo($config, $ip, $port, $name, $node_id) {
+function connectTo($config, $ip, $port, $host, $node_id) {
 	$device = new SimpleXMLElement("
-<device id=\"$node_id\" name=\"$name\" compression=\"true\" introducer=\"false\">
+<device id=\"$node_id\" name=\"$host\" compression=\"true\" introducer=\"false\">
 	<address>$ip:$port</address>
 </device>
 	");

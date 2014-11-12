@@ -10,8 +10,9 @@ function fsyncthing($data){
 	$config = readConfig(); // TODO: don't read it again for each entry
 	$ip = $data['ip'];
 	$port = $data['port'];
+	$host = $data['host'];
 	$node_id = "";
-	$extras = "";
+	$args = "ip=$ip&port=$port&host=$host";
 
 	if (isset($data['txt'])) {
 		$extras = $data['txt'];
@@ -27,7 +28,7 @@ function fsyncthing($data){
 		}
 
 		if (strlen($extras) > 0) {
-			$extras = "&$extras";
+			$args .= "&$extras";
 		}
 	}
 
@@ -36,8 +37,8 @@ function fsyncthing($data){
 	}
 
 	if (isConnectedTo($config, $ip, $port, $node_id)) {
-		return ("<a class='btn' href=$staticFile/syncthing/disconnect?ip=$ip&port=$port>Disconnect from Node</a>");
+		return ("<a class='btn btn-danger' href=$staticFile/syncthing/disconnect?$args>Disconnect from Node</a>");
 	}
 
-	return ("<a class='btn' href=$staticFile/syncthing/connect?ip=$ip&port=$port$extras>Connect to Node</a>");
+	return ("<a class='btn btn-success' href=$staticFile/syncthing/connect?$args>Connect to Node</a>");
 }
