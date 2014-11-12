@@ -39,6 +39,14 @@ function avahi_fix_asciicodes($string) {
 	return $result;
 }
 
+// Replace unnecessary quoting from strings
+function avahi_remove_quoting($string) {
+	if ($string[0] != '"') {
+		return $string;
+	}
+	return substr($string, 1, -1);
+}
+
 function ajaxsearch()
 {
 	$aServices = avahi_search(); // This function is in lib/utilio.php
@@ -49,6 +57,7 @@ function ajaxsearch()
 	foreach($aServices as $serv){
 		$type = $serv['type'];
 		if(!isset($nServices[$type])){ $nServices[$type] = array(); }
+		$serv['txt'] = avahi_remove_quoting($serv['txt']);
 		$serv['action'] = checkAvahi($serv['type'],array($serv));
 		unset($serv['txt']);
 
