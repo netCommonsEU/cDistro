@@ -11,6 +11,12 @@ $avahipsetc_config="/etc/avahi-ps-etcd.conf";
 $urlpath='/etcd';
 $etcdgeturl='https://raw.githubusercontent.com/agustim/package-etcd/master/getgithub';
 $etcdmenu=dirname(__FILE__)."/../menus/etcd.lookfor.menu.php";
+$avahipsetc_data=array(
+					'SERVER_ETCD_BASE'=> array('default'=>'127.0.0.1:4001'),
+					'ETCD_CONNECT'=> array('default'=>'10.139.40.82:7001'),
+				  'ETCD_PEER_PORT'=> array('default'=>'7001'),
+				  'ETCD_PORT'=> array('default'=>'4001'),
+ );
 
 function search()
 {
@@ -91,7 +97,7 @@ function ajaxsearch()
 
 function index()
 {
-	global $title, $urlpath, $avahips_config, $avahipsetc_config;
+	global $title, $urlpath, $avahips_config, $avahipsetc_config,$avahipsetc_data;
 	$is_installed=_isInstalled();
 
 	$page=hlc(t($title));
@@ -146,12 +152,7 @@ function index()
 	$page .= '</p>';
 
 	$page .= hl(t('Parameters'),3);
-	$variable = load_conffile($avahipsetc_config, array(
-					'SERVER_ETCD_BASE'=> array('default'=>'127.0.0.1:4001'),
-					'ETCD_CONNECT'=> array('default'=>'10.139.40.82:7001'),
-				  'ETCD_PEER_PORT'=> array('default'=>'7001'),
-				  'ETCD_PORT'=> array('default'=>'4001'),
- ));
+	$variable = load_conffile($avahipsetc_config, $avahipsetc_data);
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('SERVER_ETCD_BASE',t('etcd server'),$variable,array('type'=>'text', 'required'=>''),"",t('etcd_server_help'));
 	$page .= addInput('ETCD_CONNECT',t('etcd connect to'),$variable,array('type'=>'text', 'required'=>''),"",t('etcd_connect_help'));
@@ -189,13 +190,25 @@ function _existAvahiConf(){
 
 	return(file_exists($avahips_config));
 }
+function _existAvahiConfEtc(){
+	global $avahipsetc_config;
 
+	return(file_exists($avahipsetc_config));	 
+}
 function createDefaultAvahiFile(){
 	global $avahips_config;
 
 	write_conffile($avahips_config,array('ERRORS_PLUG'=> "errors",'EXECUTE_IN'=>"memory",'SAVE_SERVICE'=>"none",'DATABASE'=>"none"),"","",'"');
 }
+function createDefaultAvahiEtcFile(){
+	global $avahipsetc_data,$avahipsetc_config;
 
+	$tmparray=array();
+	foreach($avahipsetc_data as $k=>$v){
+		$tmparray[$k] = $v['default'];
+	}
+	write_conffile($avahipsetc_config,$tmparray,"","",'"');	 
+}
 function _existEtcdConf(){
 	global $avahipsetc_config;
 
@@ -219,6 +232,9 @@ function getprogram(){
 
 	setFlash(t('etcd_was_install'),"success");
 	_install_menu();
+	if (!_existAvahiConfEtc()) {
+		createDefaultAvahiEtcFile();
+	}
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
 	
 }
