@@ -7,11 +7,13 @@ clean:
 	@echo "clean"
 
 install:
-	@echo "Make directory"
-	mkdir -p $(INSTALLDIR)/var/local/cDistro
+	@echo "Creating directories"
+	mkdir -p $(INSTALLDIR)/var/local/cDistro/
 	mkdir -p $(INSTALLDIR)/etc/init.d/
-	@echo "Install files"
+	@echo "Installing files"
 	install -m 0755 cdistro $(INSTALLDIR)/etc/init.d/
 	install -m 0644 cdistro.conf $(INSTALLDIR)/etc/
 	install -m 0700 cdistrod $(INSTALLDIR)/usr/sbin/
 	cp -dR web/* $(INSTALLDIR)/var/local/cDistro/
+
+.PHONY: all clean install
