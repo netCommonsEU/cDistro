@@ -166,7 +166,7 @@ function index()
 
 function index_post(){
 	
-	global $staticFile,$staticPath;
+	global $staticFile, $staticPath, $urlpath;
 	global $avahipsetc_config;
 
 	$datesToSave = array();
@@ -176,7 +176,7 @@ function index_post(){
 	write_conffile($avahipsetc_config,$datesToSave,"","",'"');
 
 	setFlash(t('avahipsetcd_alert_saved'),"success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 
 }
 
@@ -224,7 +224,7 @@ function _uninstall_menu(){
 }
 
 function getprogram(){
-        global $etcdproc,$staticFile,$etcdgeturl,$urlpath;
+        global $etcdproc, $staticFile, $etcdgeturl, $urlpath;
 
 	$page = "";
         $cmd = "cd /tmp && curl ".$etcdgeturl."| sh -";
@@ -235,19 +235,19 @@ function getprogram(){
 	if (!_existAvahiConfEtc()) {
 		createDefaultAvahiEtcFile();
 	}
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 	
 }
 
 function removeprogram(){
 
-        global $dirpath,$staticFile;
+        global $dirpath, $staticFile, $urlpath;
 
         $cmd="rm -rf ".$dirpath;
         execute_shell($cmd);
 	setFlash(t('etcd_was_uninstall'),"success");
 	_uninstall_menu();
-        return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+        return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
 
 function _isRun(){
@@ -257,24 +257,24 @@ function _isRun(){
 }
 
 function runprogram(){
-	global $etcdinit, $staticFile;
+	global $etcdinit, $staticFile, $urlpath;
 
 	$cmd = $etcdinit." start";
 	execute_program_detached($cmd);
 
 	setFlash(t('etcdinit_start'),"success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 	
 }
 
 function stopprogram(){
-	global $etcdinit, $staticFile;
+	global $etcdinit, $staticFile, $urlpath;
 
 	$cmd = $etcdinit." stop";
 	execute_program_detached($cmd);
 
 	setFlash(t('etcdinit_stop'),"success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'etcd'));
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 	
 }
 
