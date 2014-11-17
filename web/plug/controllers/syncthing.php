@@ -24,34 +24,34 @@ function nameForArch($arch) {
 		$urlarch = "armv7";
 		break;
 	}
-	return("syncthing-linux-$urlarch-v$version");
+	return "syncthing-linux-$urlarch-v$version";
 }
 
 function downloadUrl($name) {
 	global $releases_url,$version;
-	return("$releases_url/v$version/$name.tar.gz");
+	return "$releases_url/v$version/$name.tar.gz";
 }
 
 function index() {
 	global $title, $urlpath, $webui_user, $webui_pass, $webui_port;
 
-	$page=hlc(t("syncthing_title"));
-	$page .= hl(t("syncthing_desc"),4);
+	$page = hlc(t("syncthing_title"));
+	$page .= hl(t("syncthing_desc"), 4);
 
 	if (!isInstalled()) {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_installed")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/download"));
-		return(array('type'=>'render','page'=>$page));
+		return array('type'=>'render','page'=>$page);
 	} elseif (!hasConfig()) {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_configured")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_configure"),'class'=>'btn btn-success', 'href'=>"$urlpath/configure"));
 		$page .= addButton(array('label'=>t("syncthing_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/remove"));
-		return(array('type'=>'render','page'=>$page));
+		return array('type'=>'render','page'=>$page);
 	} elseif (!isRunning()) {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_running")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
 		$page .= addButton(array('label'=>t("syncthing_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/remove"));
-		return(array('type'=>'render','page'=>$page));
+		return array('type'=>'render','page'=>$page);
 	} else {
 		$config = readConfig();
 		$page .= "<div class='alert alert-success text-center'>".t("syncthing_running")."</div>\n";
@@ -70,7 +70,7 @@ function index() {
 		$page .= addButton(array('label'=>t('syncthing_web_interface'),'href'=>"https://$host:$webui_port"));
 		$page .= addButton(array('label'=>t("syncthing_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
-		return(array('type' => 'render','page' => $page));
+		return array('type' => 'render','page' => $page);
 	}
 }
 
@@ -89,7 +89,7 @@ function connect() {
 	startprogram(); // Make it load the new config
 	setFlash(t("syncthing_connected_node"));
 
-	return(array('type'=>'redirect','url'=>"$urlpath"));
+	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function disconnect() {
@@ -107,7 +107,7 @@ function disconnect() {
 	startprogram(); // Make it load the new config
 	setFlash(t("syncthing_disconnected_node"));
 
-	return(array('type'=>'redirect','url'=>"$urlpath"));
+	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function download_get() {
@@ -124,26 +124,26 @@ function download_get() {
 		"chown -R www-data:www-data $dirpath && " .
 		"chmod 0755 $binpath");
 	if (isConfigured()) {
-		return(array('type'=>'redirect','url'=>"$urlpath/start"));
+		return array('type'=>'redirect','url'=>"$urlpath/start");
 	}
-	return(array('type'=>'redirect','url'=>"$urlpath/configure"));
+	return array('type'=>'redirect','url'=>"$urlpath/configure");
 }
 
 function remove_get() {
 	global $binpath, $initpath, $urlpath;
 	if (!isInstalled()) {
 		setFlash(t("syncthing_remove_not_installed"));
-		return(array('type'=>'redirect','url'=>"$urlpath"));
+		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	if (isRunning()) {
 		setFlash(t("syncthing_remove_running"));
-		return(array('type'=>'redirect','url'=>"$urlpath"));
+		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	while (isInstalled()) {
 		execute_program_shell("rm -f $binpath $initpath");
 		sleep(1);
 	}
-	return(array('type'=>'redirect','url'=>"$urlpath"));
+	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function stopprogram() {
@@ -175,7 +175,7 @@ function configure_get() {
 
 	if (!isInstalled()) {
 		setFlash(t("syncthing_install_failed"));
-		return(array('type'=>'redirect','url'=>"$urlpath"));
+		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
 	startprogram(); // Start it to generate the default config
@@ -194,7 +194,7 @@ function configure_get() {
 	file_put_contents($nodeidpath, getNodeID($config));
 	execute_program_shell("chown -R www-data:www-data $dirpath");
 	startprogram(); // Make it load the new config
-	return(array('type'=>'redirect','url'=>"$urlpath"));
+	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function start_get() {
@@ -202,19 +202,19 @@ function start_get() {
 
 	if (!isInstalled()) {
 		setFlash(t("syncthing_install_failed"));
-		return(array('type'=>'redirect','url'=>"$urlpath"));
+		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	if (!hasConfig()) {
 		setFlash(t("syncthing_configure_failed"));
-		return(array('type'=>'redirect','url'=>"$urlpath"));
+		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	startprogram();
-	return(array('type'=>'redirect','url'=>"$urlpath"));
+	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function stop_get() {
 	global $urlpath;
 
 	stopprogram();
-	return(array('type'=>'redirect','url'=>"$urlpath"));
+	return array('type'=>'redirect','url'=>"$urlpath");
 }
