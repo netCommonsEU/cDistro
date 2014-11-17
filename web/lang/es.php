@@ -11,36 +11,4 @@ addS ('Welcome!','Bienvenido !');
 addS ('Define language to: ', 'Idioma seleccionado: ');
 addS ('Configure your system!','Configura tu sistema!');
 
-
-// Cloudy: menús
-//
-// plug/menus/*.php
-//
-include 'es.menus.php';
-
-
-// Cloudy: actualizaciones
-//
-// plug/controllers/cloudyupdate.php
-//
-include 'es.cloudyupdate.php';
-
-
-// Clommunity: GeTinConf
-//
-// plug/controllers/getinconf.php
-//
-include 'es.getinconf.php';
-
-
-// Tahoe-LAFS
-//
-// plug/controllers/tahoe-lafs.php
-//
-include 'es.tahoe-lafs.php';
-
-// Guifi
-//
-// plug/controllers/guifi.php
-//
-include 'es.guifi.php';
+addLangFiles($documentPath . $lang_dir, "es");

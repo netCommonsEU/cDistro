@@ -32,39 +32,7 @@ addS ("Now, service is loading. Please come back","Ara, el servei s'està activa
 addS ("previous page","pàgina anterior");
 addS ("You can return to the previous","Pots tornar a la pàgina anterior");
 
-
-// Cloudy: menús
-//
-// plug/menus/*.php
-//
-include 'ca.menus.php';
-
-
-// Cloudy: actualitzacions
-//
-// plug/controllers/cloudyupdate.php
-//
-include 'ca.cloudyupdate.php';
-
-
-// Clommunity: GeTinConf
-//
-// plug/controllers/getinconf.php
-//
-include 'ca.getinconf.php';
-
-
-// Tahoe-LAFS
-//
-// plug/controllers/tahoe-lafs.php
-//
-include 'ca.tahoe-lafs.php';
-
-// Guifi
-//
-// plug/controllers/guifi.php
-//
-include 'ca.guifi.php';
+addLangFiles($documentPath . $lang_dir, "ca");
 
 //Guifi
 addS ('Server URL Base','URL del Servidor');

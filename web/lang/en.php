@@ -35,40 +35,7 @@ addS ("Now, service is loading. Please come back","Now, service is loading. Plea
 addS ("previous page","previous page");
 addS ("You can return to the previous","You can return to the previous");
 
-
-// Cloudy: menus
-//
-// plug/menus/*.php
-//
-include 'en.menus.php';
-
-
-// Cloudy: updates
-//
-// plug/controllers/cloudyupdatephp
-//
-include 'en.cloudyupdate.php';
-
-
-// Clommunity: GeTinConf
-//
-// plug/controllers/getinconf.php
-//
-include 'en.getinconf.php';
-
-
-// Clommunity: Tahoe-LAFS
-//
-// plug/controllers/tahoe-lafs.php
-//
-include 'en.tahoe-lafs.php';
-
-
-// Guifi
-//
-// plug/controllers/guifi.php
-//
-include 'en.guifi.php';
+addLangFiles($documentPath . $lang_dir, "en");
 
 addS ('Server URL Base','Server URL Base');
 addS ('Guifi Proxy node number','Guifi Proxy node number');
