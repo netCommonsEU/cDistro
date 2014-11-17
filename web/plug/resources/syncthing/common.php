@@ -5,7 +5,6 @@ $binname="syncthing";
 $initpath="/etc/init.d/syncthing";
 $binpath="$dirpath/$binname";
 $repospath="$dirpath/repos";
-$nodeidpath="$dirpath/node_id";
 
 $cfgpath="$dirpath/config";
 define("cfgpath_xml", "$cfgpath/config.xml");

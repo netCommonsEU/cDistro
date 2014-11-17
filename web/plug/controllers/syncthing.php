@@ -171,7 +171,7 @@ function startprogram() {
 
 function configure_get() {
 	global $user, $title, $cfgpath, $binpath, $urlpath, $webui_port, $webui_user,
-		$webui_pass_bc, $sc_port, $nodeidpath, $dirpath;
+		$webui_pass_bc, $sc_port, $dirpath;
 
 	if (!isInstalled()) {
 		setFlash(t("syncthing_install_failed"));
@@ -191,7 +191,6 @@ function configure_get() {
 	$config->options->listenAddress="0.0.0.0:$sc_port";
 	$config->options->globalAnnounceEnabled="false";
 	writeConfig($config);
-	file_put_contents($nodeidpath, getNodeID($config));
 	execute_program_shell("chown -R www-data:www-data $dirpath");
 	startprogram(); // Make it load the new config
 	return array('type'=>'redirect','url'=>"$urlpath");
