@@ -12,10 +12,10 @@ addS("syncthing_not_running", "Syncthing is installed but not yet running");
 addS("syncthing_start", "Start Syncthing");
 addS("syncthing_running", "Syncthing is installed and running");
 addS("syncthing_stop", "Stop Syncthing");
-addS("syncthing_repos_web", "If you wish to add new repositories and share them, use the web interface");
+addS("syncthing_repos_web", "If you wish to add, remove or share repositories, use the web interface");
 addS("syncthing_web_interface", "Web interface");
 
-addS("syncthing_pass_unchanged", "Syncthing's public web interface password hasn't been changed yet, please change it");
+addS("syncthing_pass_unchanged", "Syncthing's public web interface password hasn't been changed yet, head to the web interface and change it:");
 addS("syncthing_def_user", "Default user");
 addS("syncthing_def_pass", "Default password");
 

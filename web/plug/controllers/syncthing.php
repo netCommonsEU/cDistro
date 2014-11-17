@@ -58,9 +58,9 @@ function index() {
 		if (!passwordChanged($config)) {
 			$page .= "<div class='alert alert-error text-center'>"
 				.t("syncthing_pass_unchanged")
-				."\n"
+				."<br/>\n"
 				.t("syncthing_def_user").": $webui_user"
-				."\n"
+				."<br/>\n"
 				.t("syncthing_def_pass").": $webui_pass"
 				."</div>\n";
 		}
