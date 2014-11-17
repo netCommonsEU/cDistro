@@ -224,7 +224,7 @@ function _uninstall_menu(){
 }
 
 function getprogram(){
-        global $etcdproc, $staticFile, $etcdgeturl, $urlpath;
+	global $etcdproc, $staticFile, $etcdgeturl, $urlpath;
 
 	$page = "";
         $cmd = "cd /tmp && curl ".$etcdgeturl."| sh -";
@@ -241,10 +241,10 @@ function getprogram(){
 
 function removeprogram(){
 
-        global $dirpath, $staticFile, $urlpath;
+	global $dirpath, $staticFile, $urlpath;
 
-        $cmd="rm -rf ".$dirpath;
-        execute_shell($cmd);
+	$cmd="rm -rf ".$dirpath;
+	execute_shell($cmd);
 	setFlash(t('etcd_was_uninstall'),"success");
 	_uninstall_menu();
         return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
