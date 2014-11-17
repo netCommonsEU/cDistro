@@ -45,10 +45,12 @@ function index() {
 	} elseif (!hasConfig()) {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_configured")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_configure"),'class'=>'btn btn-success', 'href'=>"$urlpath/configure"));
+		$page .= addButton(array('label'=>t("syncthing_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/remove"));
 		return(array('type'=>'render','page'=>$page));
 	} elseif (!isRunning()) {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_running")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
+		$page .= addButton(array('label'=>t("syncthing_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/remove"));
 		return(array('type'=>'render','page'=>$page));
 	} else {
 		$config = readConfig();
@@ -121,7 +123,27 @@ function download_get() {
 		"rm -rf $name.tar.gz $name && " .
 		"chown -R www-data:www-data $dirpath && " .
 		"chmod 0755 $binpath");
+	if (isConfigured()) {
+		return(array('type'=>'redirect','url'=>"$urlpath/start"));
+	}
 	return(array('type'=>'redirect','url'=>"$urlpath/configure"));
+}
+
+function remove_get() {
+	global $binpath, $initpath, $urlpath;
+	if (!isInstalled()) {
+		setFlash(t("syncthing_remove_not_installed"));
+		return(array('type'=>'redirect','url'=>"$urlpath"));
+	}
+	if (isRunning()) {
+		setFlash(t("syncthing_remove_running"));
+		return(array('type'=>'redirect','url'=>"$urlpath"));
+	}
+	while (isInstalled()) {
+		execute_program_shell("rm -f $binpath $initpath");
+		sleep(1);
+	}
+	return(array('type'=>'redirect','url'=>"$urlpath"));
 }
 
 function stopprogram() {

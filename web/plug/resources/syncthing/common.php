@@ -2,6 +2,7 @@
 
 $dirpath="/opt/syncthing";
 $binname="syncthing";
+$initpath="/etc/init.d/syncthing";
 $binpath="$dirpath/$binname";
 $repospath="$dirpath/repos";
 $nodeidpath="$dirpath/node_id";
@@ -41,12 +42,16 @@ function passwordChanged($config) {
 }
 
 function getNodeID($config) {
-	return ($config->device[0]->attributes()->id);
+	return $config->device[0]->attributes()->id;
 }
 
 function isInstalled() {
 	global $binpath;
-	return(is_executable($binpath));
+	return is_executable($binpath);
+}
+
+function isConfigured() {
+	return file_exists(cfgpath_xml);
 }
 
 function getPid() {
