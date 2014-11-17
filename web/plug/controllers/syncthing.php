@@ -35,39 +35,38 @@ function downloadUrl($name) {
 function index() {
 	global $title, $urlpath, $webui_user, $webui_pass, $webui_port;
 
-	$page=hlc(t($title));
-	$page .= hl(t("A cloud peer-to-peer file synchronization system"),4);
+	$page=hlc(t("syncthing_title"));
+	$page .= hl(t("syncthing_desc"),4);
 
 	if (!isInstalled()) {
-		$page .= "<div class='alert alert-error text-center'>".t("$title is not installed")."</div>\n";
-		$page .= par(t("Click on the button to install $title."));
-		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/download"));
+		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_installed")."</div>\n";
+		$page .= addButton(array('label'=>t("syncthing_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/download"));
 		return(array('type'=>'render','page'=>$page));
 	} elseif (!hasConfig()) {
-		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet configured")."</div>\n";
-		$page .= addButton(array('label'=>t("Configure $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/configure"));
+		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_configured")."</div>\n";
+		$page .= addButton(array('label'=>t("syncthing_configure"),'class'=>'btn btn-success', 'href'=>"$urlpath/configure"));
 		return(array('type'=>'render','page'=>$page));
 	} elseif (!isRunning()) {
-		$page .= "<div class='alert alert-error text-center'>".t("$title is installed but not yet running")."</div>\n";
-		$page .= par(t("Click on the button to start $title."));
-		$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
+		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_running")."</div>\n";
+		$page .= addButton(array('label'=>t("syncthing_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
 		return(array('type'=>'render','page'=>$page));
 	} else {
 		$config = readConfig();
-		$page .= "<div class='alert alert-success text-center'>".t("$title is installed and running")."</div>\n";
+		$page .= "<div class='alert alert-success text-center'>".t("syncthing_running")."</div>\n";
 		if (!passwordChanged($config)) {
 			$page .= "<div class='alert alert-error text-center'>"
-				.t("$title's public web interface password hasn't been changed yet, please change it.")
+				.t("syncthing_pass_unchanged")
 				."\n"
-				.t("Default user: $webui_user. Default password: $webui_pass")
+				.t("syncthing_def_user").": $webui_user"
+				."\n"
+				.t("syncthing_def_pass").": $webui_pass"
 				."</div>\n";
 		}
 		$host = explode(':', $_SERVER['HTTP_HOST'])[0];
-		$scurl = "https://$host:$webui_port";
-		$page .= par(t("If you wish to add new repositories and share them, use the web interface."));
+		$page .= par(t("syncthing_repos_web"));
 
-		$page .= addButton(array('label'=>t('Web interface'),'href'=>$scurl));
-		$page .= addButton(array('label'=>t("Stop $title"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
+		$page .= addButton(array('label'=>t('syncthing_web_interface'),'href'=>"https://$host:$webui_port"));
+		$page .= addButton(array('label'=>t("syncthing_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
 		return(array('type' => 'render','page' => $page));
 	}
@@ -86,7 +85,7 @@ function connect() {
 	connectTo($config, $ip, $port, $host, $node_id);
 	writeConfig($config);
 	startprogram(); // Make it load the new config
-	setFlash("Properly connected with $host");
+	setFlash(t("syncthing_connected_node"));
 
 	return(array('type'=>'redirect','url'=>"$urlpath"));
 }
@@ -104,7 +103,7 @@ function disconnect() {
 	disconnectFrom($config, $ip, $port);
 	writeConfig($config);
 	startprogram(); // Make it load the new config
-	setFlash("Properly disconnected from $host");
+	setFlash(t("syncthing_disconnected_node"));
 
 	return(array('type'=>'redirect','url'=>"$urlpath"));
 }
@@ -153,7 +152,7 @@ function configure_get() {
 		$webui_pass_bc, $sc_port, $nodeidpath, $dirpath;
 
 	if (!isInstalled()) {
-		setFlash("$title did not install properly!");
+		setFlash(t("syncthing_install_failed"));
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
 	execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
@@ -180,12 +179,12 @@ function start_get() {
 	global $title, $urlpath;
 
 	if (!isInstalled()) {
-		setFlash("$title did not install properly!");
+		setFlash(t("syncthing_install_failed"));
 		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
 	if (!hasConfig()) {
-		setFlash("$title was not configured properly!");
-		return(array('type'=>'redirect','url'=>"$urlpath/configure"));
+		setFlash(t("syncthing_configure_failed"));
+		return(array('type'=>'redirect','url'=>"$urlpath"));
 	}
 	startprogram();
 	return(array('type'=>'redirect','url'=>"$urlpath"));
