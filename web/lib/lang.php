@@ -25,7 +25,6 @@ function addS($str,$str_trans){
 }
 
 function addLangFiles($lang_dir, $lang) {
-	error_log($lang_dir . $lang . ".*.php");
 	$matches = glob($lang_dir . $lang . ".*.php");
 	if (is_array($matches)) {
 		foreach ($matches as $filename) {
