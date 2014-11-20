@@ -18,6 +18,8 @@ $avahipsetc_data=array(
 				  'ETCD_PORT'=> array('default'=>'4001'),
  );
 
+addAvahiFiles($documentPath.$plugs_avahi);
+
 function search()
 {
 	global $staticFile,$staticPath;
