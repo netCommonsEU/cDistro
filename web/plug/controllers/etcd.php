@@ -9,7 +9,7 @@ $etcdinit="/etc/init.d/etcd";
 $avahips_config="/etc/avahi-ps.conf";
 $avahipsetc_config="/etc/avahi-ps-etcd.conf";
 $urlpath='/etcd';
-$etcdgeturl='https://raw.githubusercontent.com/agustim/package-etcd/master/getgithub';
+$etcdgeturl='https://raw.githubusercontent.com/Clommunity/package-etcd/master/getgithub';
 $etcdmenu=dirname(__FILE__)."/../menus/etcd.lookfor.menu.php";
 $avahipsetc_data=array(
 					'SERVER_ETCD_BASE'=> array('default'=>'127.0.0.1:4001'),
