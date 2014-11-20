@@ -8,6 +8,12 @@ addAvahi('syncthing','fsyncthing');
 function fsyncthing($data){
 	global $staticFile;
 	$config = readConfig(); // TODO: don't read it again for each entry
+
+	// We don't have syncthing installed and configured
+	if ($config === false) {
+		return ("<a class='btn btn-primary' href=$staticFile/syncthing>Install Syncthing first</a>");
+	}
+
 	$ip = $data['ip'];
 	$port = $data['port'];
 	$host = $data['host'];

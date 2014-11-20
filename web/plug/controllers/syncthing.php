@@ -42,7 +42,7 @@ function index() {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_installed")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/download"));
 		return array('type'=>'render','page'=>$page);
-	} elseif (!hasConfig()) {
+	} elseif (!isConfigured()) {
 		$page .= "<div class='alert alert-error text-center'>".t("syncthing_not_configured")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_configure"),'class'=>'btn btn-success', 'href'=>"$urlpath/configure"));
 		$page .= addButton(array('label'=>t("syncthing_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/remove"));
@@ -204,7 +204,7 @@ function start_get() {
 		setFlash(t("syncthing_install_failed"));
 		return array('type'=>'redirect','url'=>"$urlpath");
 	}
-	if (!hasConfig()) {
+	if (!isConfigured()) {
 		setFlash(t("syncthing_configure_failed"));
 		return array('type'=>'redirect','url'=>"$urlpath");
 	}

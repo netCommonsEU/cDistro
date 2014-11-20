@@ -24,25 +24,8 @@ $avahi_desc="Syncthing instance running";
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
 $version="0.10.5";
 
-function readConfig() {
-	return simplexml_load_file(cfgpath_xml);
-}
-
 function hasConfig() {
 	return file_exists(cfgpath_xml);
-}
-
-function writeConfig($config) {
-	$config->asXml(cfgpath_xml);
-}
-
-function passwordChanged($config) {
-	global $webui_pass_bc;
-	return ($config->gui->password != $webui_pass_bc);
-}
-
-function getNodeID($config) {
-	return $config->device[0]->attributes()->id;
 }
 
 function isInstalled() {
@@ -51,7 +34,29 @@ function isInstalled() {
 }
 
 function isConfigured() {
-	return file_exists(cfgpath_xml);
+	return isInstalled() && hasConfig();
+}
+
+function readConfig() {
+	if (!isConfigured()) {
+		return false;
+	}
+	return simplexml_load_file(cfgpath_xml);
+}
+
+function writeConfig($config) {
+	$config->asXml(cfgpath_xml);
+}
+
+function passwordChanged($config) {
+	if ($config === false) return false;
+	global $webui_pass_bc;
+	return ($config->gui->password != $webui_pass_bc);
+}
+
+function getNodeID($config) {
+	if ($config === false) return null;
+	return $config->device[0]->attributes()->id;
 }
 
 function getPid() {
@@ -85,12 +90,14 @@ function isNode($device, $ip, $port, $node_id) {
 }
 
 function isSelf($config, $ip, $port, $node_id) {
+	if ($config === false) return false;
 	$devices = $config->device;
 	// Assuming that we are the first device
 	return isNode($devices[0], $ip, $port, $node_id);
 }
 
 function isConnectedTo($config, $ip, $port, $node_id) {
+	if ($config === false) return false;
 	$devices = $config->device;
 	foreach ($devices as $device) {
 		if (isNode($device, $ip, $port, $node_id)) {
