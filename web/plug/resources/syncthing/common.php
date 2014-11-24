@@ -22,7 +22,7 @@ $avahi_type="syncthing";
 $avahi_desc="Syncthing instance running";
 
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.10.5";
+$version="0.10.7";
 
 function hasConfig() {
 	return file_exists(cfgpath_xml);
