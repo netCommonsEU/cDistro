@@ -24,6 +24,34 @@ $avahi_desc="Syncthing instance running";
 $releases_url="https://github.com/syncthing/syncthing/releases/download";
 $version="0.10.7";
 
+function nameForArch($arch) {
+	global $version;
+	switch ($arch) {
+	case "amd64":
+	case "x86_64":
+	case "ia64":
+		$urlarch = "amd64";
+		break;
+	case "x86":
+	case "i386":
+	case "i686":
+		$urlarch = "386";
+		break;
+	case "armv6l":
+		$urlarch = "armv6";
+		break;
+	case "armv7l":
+		$urlarch = "armv7";
+		break;
+	}
+	return "syncthing-linux-$urlarch-v$version";
+}
+
+function downloadUrl($name) {
+	global $releases_url,$version;
+	return "$releases_url/v$version/$name.tar.gz";
+}
+
 function hasConfig() {
 	return file_exists(cfgpath_xml);
 }
