@@ -47,4 +47,15 @@ addS ("menus_webdav_clommunity", "Clommunity");
 addS ("menus_syncthing_server", "Syncthing");
 addS ("menus_syncthing_clommunity", "Clommunity");
 
+
+
+//Etcd
+addS ("menu_etcd", "Etcd");
+addS ("etcd_setup", "Setup Etcd");
+addS ("etcd_lookfor", "Look for Services with Etcd");
+
+//Serf
+addS ("menu_serf", "Serf");
+addS ("serf_setup", "Setup Serf");
+addS ("serf_lookfor", "Look for Services with Serf");
 ?>
