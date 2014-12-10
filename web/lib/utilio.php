@@ -240,10 +240,6 @@ function avahi_search(){
 	return ($aServices);
 
 }
-function etcd_search(){
-	$ret = execute_program("SEARCH_ONLY=etcd /usr/sbin/avahi-ps search");
-	return($ret['output']);
-}
 
 function active_services(){
 	$ret = execute_program("/usr/sbin/avahi-service isActive");

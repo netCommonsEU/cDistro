@@ -20,6 +20,11 @@ $avahipsetc_data=array(
 
 addAvahiFiles($documentPath.$plugs_avahi);
 
+function etcd_search(){
+	$ret = execute_program("SEARCH_ONLY=etcd /usr/sbin/avahi-ps search");
+	return($ret['output']);
+}
+
 function search()
 {
 	global $staticFile,$staticPath;
