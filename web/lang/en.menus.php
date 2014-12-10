@@ -3,8 +3,8 @@
 
 //Avahi
 
-addS ("menus_avahi_search","Look for services");
-addS ("menus_avahi_avahi","Avahi");
+addS ("menus_avahi_search","Look for services in &mu;cloud");
+addS ("menus_avahi_avahi","Search");
 
 
 //Cloudy
@@ -50,12 +50,12 @@ addS ("menus_syncthing_clommunity", "Clommunity");
 
 
 //Etcd
-addS ("menu_etcd", "Etcd");
+addS ("menu_etcd", "Search");
 addS ("etcd_setup", "Setup Etcd");
 addS ("etcd_lookfor", "Look for Services with Etcd");
 
 //Serf
-addS ("menu_serf", "Serf");
+addS ("menu_serf", "Search");
 addS ("serf_setup", "Setup Serf");
 addS ("serf_lookfor", "Look for Services with Serf");
 ?>
