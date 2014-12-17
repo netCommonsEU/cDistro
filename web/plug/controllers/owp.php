@@ -1,7 +1,6 @@
 <?php
 // controllers/owp.php
-$title="OpenVZ Web Panel";
-$webpage="https://code.google.com/p/ovz-web-panel/";
+$webpage="https://github.com/sibprogrammer/owp";
 $urlpath='/owp';
 $dirpath="/opt/ovz-web-panel";
 $owpinit="/etc/init.d/owp";
@@ -61,50 +60,34 @@ function stopprogram(){
 
 function index()
 {
-	global $title, $webpage, $urlpath;
+	global $urlpath;
+	
+	$page = "";
+	$buttons = "";
+	
+	$page .= hlc(t("openvzwp_title"));
+	$page .= hl(t("openvzwp_subtitle"),4);
+   $page .= par(t("openvzwp_description"));
 
-	$page=hlc(t($title));
-
-	$page .= hl(t("<a href='" . $webpage. "'>OpenVZ Web Panel</a> is a GUI web-based frontend for controlling of the hardware and virtual servers with the OpenVZ virtualization technology."),4);
-
-	$page .= '<p>';
 	if (!_installed_OWP()) {
-		$page .= "<div class='alert alert-error'>".t("$title is not installed")."\n";
-		$page .= "<br/>";
-		$page .= t("La instal·lació de OpenVZ Web Panel ha de descarregar el programari, instal·lar-lo i tornar a iniciar l'ordinador. Durant l'instal·lació podeu anar a fer un café.");
-		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn', 'href'=>"$urlpath/getprogram", 'divOptions'=>array('class'=>'pull-right')));
-		$page .="</div>";
-
-	} else {
-		$page .= "<div class='alert alert-success'>".t("$title is installed")."\n";
-		$page .= addButton(array('label'=>t("Uninstall $title"),'class'=>'btn', 'href'=>"$urlpath/removeprogram", 'divOptions'=>array('class'=>'pull-right')));
-		$page .="</div>";
-		
+		$page .= "<div class='alert alert-error text-center'>".t("openvzwp_not_installed")."</div>\n";
+   	$page .= par(t("openvzwp_installation_explanation"));
+		$buttons .= addButton(array('label'=>t("openvzwp_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/getprogram"));
 	}
-	$page .= '</p>';
-
-	if (_installed_OWP()){
-		$page .= '<p>';
+	else {
 		if (!_run_OWP()) {
-			$page .= "<div class='alert alert-error'>".t("$title is not running")."\n";
-			$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn', 'href'=>"$urlpath/runprogram", 'divOptions'=>array('class'=>'pull-right')));
-			$page .="</div>";
-
-		} else {
-			$page .= "<div class='alert alert-success'>".t("$title is running")."\n";
-			$page .= addButton(array('label'=>t("Stop $title"),'class'=>'btn', 'href'=>"$urlpath/stopprogram", 'divOptions'=>array('class'=>'pull-right')));
-			$page .="</div>";
-		
+			$page .= "<div class='alert alert-warning text-center'>".t("openvzwp_not_running")."</div>\n";
+			$buttons .= addButton(array('label'=>t("openvzwp_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/runprogram"));
+			$buttons .= addButton(array('label'=>t("openvzwp_button_uninstall"),'class'=>'btn btn-danger', 'href'=>"$urlpath/removeprogram"));
 		}
-		$page .= '</p>';
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("openvzwp_running")."</div>\n";
+			$host = explode(':', $_SERVER['HTTP_HOST'])[0];
+			$buttons .= addButton(array('label'=>t("openvzwp_button_go_to"),'class'=>'btn btn-primary', 'href'=>"http://".$host.":3000"));
+			$buttons .= addButton(array('label'=>t("openvzwp_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stopprogram"));
+		}
 	}
-
-	if (_run_OWP()) {
-		$host = explode(':', $_SERVER['HTTP_HOST'])[0];
-		$page .= "<p>";
-		$page .= t("Go to ")."<a href='http://".$host.":3000'>".t("Web Panel")."</a>";
-		$page .= "</p>";
-	}
-
+ 	
+ 	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 }
