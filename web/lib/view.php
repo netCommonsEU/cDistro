@@ -81,8 +81,12 @@ function addTableHeader($values, $options=array()){
     return($page);
 }
 
-function addTableRow($values){
-	$page = "<tr>";
+function addTableRow($values, $tr_options=array(), $td_options=array()){
+	$page = "<tr";
+	foreach($tr_options as $k=>$v){
+		$page .= " $k='$v'";
+	}
+	$page .=">";
 	foreach($values as $v){
     	$page .= "<td>".$v."</td>\n";
   	}
