@@ -1,6 +1,7 @@
 body {
   padding-top: 40px;
   background-image: url('/images/cloudy-background.jpg');
+	background-position: 0px -100px;
   background-size: 100%;
   opacity: 0.95;
 }
