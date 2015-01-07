@@ -35,9 +35,20 @@ function search()
 	$page .= "	$('#tags').tab();\n";	
 	$page .= "});\n";
 	$page .= "</script>\n";
+	$page .=  addButton(array('label'=>t("Scan quality of services"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
 
 
 	return(array('type'=>'render','page'=>$page));
+}
+
+function ajaxquality()
+{
+	global $serfpath;
+
+	$cmd = "$serfpath reachability -json";
+	$ret = execute_program_shell($cmd);
+
+	return(array('type'=>'ajax','page'=>$ret['output']));
 }
 
 function ajaxsearch()
@@ -45,6 +56,7 @@ function ajaxsearch()
 	$aServices = serf_search(); 
 
 	$gService = json_decode($aServices[0]);
+
 	$nServices = array();
 
 	foreach($gService as $dates_machine){
@@ -55,6 +67,7 @@ function ajaxsearch()
 		$serv_new['port'] = $dates_machine->p;
 		$serv_new['microcloud'] = $dates_machine->e;
 		$serv_new['txt'] = $dates_machine->t;
+		$serv_new['node_id']= $dates_machine->node_id;
 		$serv_new['action'] = checkAvahi($serv_new['type'],array($serv_new));
 		unset($serv_new['txt']);
 		$type=$serv_new['type'];
@@ -85,7 +98,9 @@ function ajaxsearch()
 		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped'));
 		foreach($v as $serv){
 			unset($serv['type']);
-			$services .= addTableRow($serv);
+			$node_id=$serv['node_id'];
+			unset($serv['node_id']);
+			$services .= addTableRow($serv,array('class'=>"node-".$node_id));
 		}
 		$services .= addTableFooter();
 		$services .= " 	</div>";
