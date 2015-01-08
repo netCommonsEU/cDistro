@@ -5,7 +5,7 @@ $psprogram="streamer-udp-grapes-static";
 $title="Peer Streamer";
 
 //VLC
-$vlcpath="/usr/bin";
+$vlcpath="/usr/bin/";
 $vlcprogram="cvlc";
 $vlcuser="nobody";
 
@@ -83,6 +83,11 @@ function connect_post(){
 	$port = $_POST['port'];
 	$myport = $_POST['myport'];
 	$tipo = $_POST['type'];
+
+	if (! softwareinstalled()) {
+		$error = "Requiered software is not installed";
+		return (array('type' => 'render','page' => pserror($error)));
+	}
 
 	if ( 0 == 0 ){  // validar
 		return(array('type' => 'render','page' => _psshell($ip,$port,$myport,$tipo)));
@@ -168,7 +173,15 @@ function _psshell($ip,$port,$myport,$type)
 
 	execute_program_detached_user($cmd,$vlcuser);
 	$page .= par(t('Please open your Video Player with <b>'). 'rtsp://' . $ipserver . ":" . $port . '/</b>');
+	 
+	
+	//Checking requiered software
+	if(!softwareInstalled) {
+		$error = "Requiered software is not installed.";
+		return(pserror($error));
+	}
 	*/
+
 	if ($type == "UDP") {
 		$cmd = $psutils." connectudp $ip $port $ipclient $myport $device";
 		execute_program_detached($cmd);
@@ -179,6 +192,13 @@ function _psshell($ip,$port,$myport,$type)
 		$page .= _psviewer("rtsp://".$ipserver.":".$myport."/");
 	}
 	return($page);
+}
+
+function softwareinstalled() {
+	
+	global $pspath,$psprogram,$vlcpath,$vlcprogram;
+
+	return( file_exists($pspath . $psprogram) && file_exists($vlcpath . $vlcprogram) );
 }
 
 function _psviewer($url){
@@ -203,6 +223,16 @@ function psviewer(){
 	$p = _psviewer($url);
 	$p .=  addButton(array('label'=>t('List'),'href'=>$staticFile.'/peerstreamer'));
 	return(array('type' => 'render','page' => $p));
+}
+
+function pserror($error) {
+
+	global $title;
+
+	$page = hlc(t("Oooops!"));
+	$page .= par(t("An error occurred while executing Peerstreamer: " . $error));
+
+	return($page);
 }
 
 function _pssource($url,$ip,$port,$description){
