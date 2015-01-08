@@ -239,38 +239,42 @@ doPeer2UDPClient(){
 	local udpport=${4:-""}
 	local device=${5:-"eth0"}
 
+	#Checking software
+	if isInstall
+	then
+		[ -z "$ippeersource" -o -z "$port" ] && {
+			echo "Use connectudp <ip> <port> [IP UDP Server] [Port UDP Server] [Device]"
+			return
+		}
+		[ -z "$udpport" ] && udpport=$(findRandFreePort)
+		doDebug "Port to upd local: $udpport"
 
-	[ -z "$ippeersource" -o -z "$port" ] && {
-		echo "Use connectudp <ip> <port> [IP UDP Server] [Port UDP Server] [Device]"
-		return
-	}
-	[ -z "$udpport" ] && udpport=$(findRandFreePort)
-	doDebug "Port to upd local: $udpport"
+		# Checking if already connected to this stream
+		# check=$(cat $FILEPEERS | grep -e "^$port")
+		# if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
+		[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
+			doDebug "Port is free, creating stream."
+			cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+			doDebug "Execute: $cmd"
+			pidps=$(eval $cmd)
+			doDebug "PID from PeerStreamer is $pidps."
 
-	# Checking if already connected to this stream
-	# check=$(cat $FILEPEERS | grep -e "^$port")
-	# if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
-	[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
-		doDebug "Port is free, creating stream."
-		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
-		doDebug "Execute: $cmd"
-		pidps=$(eval $cmd)
-		doDebug "PID from PeerStreamer is $pidps."
+			doDebug "VLC is not necessary."
 
-		doDebug "VLC is not necessary."
+			saveInfoPeer "0" $pidps $port $udpport "PeerUDP" "udp://@$ipclient:$udpport"
 
-		saveInfoPeer "0" $pidps $port $udpport "PeerUDP" "udp://@$ipclient:$udpport"
+			#Publishing service in avahi network
+			$SHELL "start" $port "Republishing"
 
-		#Publishing service in avahi network
-		$SHELL "start" $port "Republishing"
-
-		return
-    )
-	#else
-	#	doDebug "The port $port is already in use. Stream will not create."
-	#	return 1
-	#fi
-
+			return
+    	)
+		#else
+		#	doDebug "The port $port is already in use. Stream will not create."
+		#	return 1
+		#fi
+	fi
+	#If this point is reached, requiered software is not installed
+	doDebug "Peerstreamer is not installed, aborting connection."
 }
 # Funciton peer-with-rtsp-server
 doPeer2RTSPServer(){
@@ -281,35 +285,39 @@ doPeer2RTSPServer(){
 	local ipserver=${4:-""}
 	local device=${5:-"eth0"}
 
+	if isInstall && isInstalledVLC
+	then
+		[ -z "$ippeersource" -o -z "$port" ] && {
+			echo "Use connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
+			return
+		}
 
-	[ -z "$ippeersource" -o -z "$port" ] && {
-		echo "Use connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
-		return
-	}
+		# Checking if exists a previous PS instance with same port (source)
+		[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
+			[ -z "$udpport" ] && udpport=$(findRandFreePort)
+			doDebug "Port to upd local: $udpport"
 
-	# Checking if exists a previous PS instance with same port (source)
-	[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
-		[ -z "$udpport" ] && udpport=$(findRandFreePort)
-		doDebug "Port to upd local: $udpport"
+			cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+			doDebug "Execute: $cmd"
+			pidps=$(eval $cmd)
+			doDebug "PID from PeerStreamer is $pidps."
 
-		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
-		doDebug "Execute: $cmd"
-		pidps=$(eval $cmd)
-		doDebug "PID from PeerStreamer is $pidps."
-
-		cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy udp://@127.0.0.1:'$udpport' --sout=\"#rtp{sdp=rtsp://'$ipserver':'$udpport'/} --sout-keep\" > '$LOGFILE' 2>&1 & }; echo \$!"'
-		doDebug "Execute: $cmd"
-		pidvlc=$(eval $cmd)
-		doDebug "PID from VLC is $pidvlc."
+			cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy udp://@127.0.0.1:'$udpport' --sout=\"#rtp{sdp=rtsp://'$ipserver':'$udpport'/} --sout-keep\" > '$LOGFILE' 2>&1 & }; echo \$!"'
+			doDebug "Execute: $cmd"
+			pidvlc=$(eval $cmd)
+			doDebug "PID from VLC is $pidvlc."
 
 
-		saveInfoPeer $pidvlc $pidps $port $udpport "PeerRTSPServer" "rtsp://$ipserver:$udpport/"
+			saveInfoPeer $pidvlc $pidps $port $udpport "PeerRTSPServer" "rtsp://$ipserver:$udpport/"
 
-		#Publishing service in avahi network
-		$SHELL "start" $port "Republishing"
+			#Publishing service in avahi network
+			$SHELL "start" $port "Republishing"
 
-		return
-	)
+			return
+		)
+	fi
+	#If this point is reached, requiered software is not installed
+	doDebug "Requiered software (Peerstreamer, VLC) are not installed, aborting connection."
 
 }
 # Install PeerStreamer from source
