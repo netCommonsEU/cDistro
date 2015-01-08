@@ -1,8 +1,8 @@
 body {
-  padding-top: 40px;
-  background-image: url('/images/cloudy-background.jpg');
-  background-size: 100%;
-  opacity: 0.85;
+  padding-top: 60px;
+  background-image: url('/images/cloudy-background.png');
+  background-size: 100% auto;
+  opacity: 0.95;
 }
 
 .brand img {
@@ -15,3 +15,8 @@ body {
   margin: 0 auto;
 }
 
+footer a {
+	color: #333;
+	text-decoration: underline;
+
+}
