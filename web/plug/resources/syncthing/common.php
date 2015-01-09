@@ -1,31 +1,38 @@
 <?php
 
-$dirpath="/opt/syncthing";
-$binname="syncthing";
-$initpath="/etc/init.d/syncthing";
-$binpath="$dirpath/$binname";
-$repospath="$dirpath/repos";
-$nodeidpath="$dirpath/node_id";
+global $sc_dirpath, $sc_binname, $sc_initpath, $sc_binpath, $sc_repospath, $sc_nodeidpath;
+$sc_dirpath="/opt/syncthing";
+$sc_binname="syncthing";
+$sc_initpath="/etc/init.d/syncthing";
+$sc_binpath="$sc_dirpath/$sc_binname";
+$sc_repospath="$sc_dirpath/repos";
+$sc_nodeidpath="$sc_dirpath/node_id";
 
-$cfgpath="$dirpath/config";
-define("cfgpath_xml", "$cfgpath/config.xml");
+global $sc_cfgpath;
+$sc_cfgpath="$sc_dirpath/config";
+define("sc_cfgpath_xml", "$sc_cfgpath/config.xml");
 
-$user="www-data";
-$title="Syncthing";
+global $sc_user, $sc_title, $sc_port;
+$sc_user="www-data";
+$sc_title="Syncthing";
 $sc_port="22000";
-$webui_port="8080";
-$webui_user="syncthing";
-$webui_pass="syncthing";
-$webui_pass_bc='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
 
-$avahi_type="syncthing";
-$avahi_desc="Syncthing instance running";
+global $sc_webui_port, $sc_webui_user, $sc_webui_pass, $sc_webui_pass_bc;
+$sc_webui_port="8080";
+$sc_webui_user="syncthing";
+$sc_webui_pass="syncthing";
+$sc_webui_pass_bc='$2a$10$COoGrWYTpPxwGWqUPlOv7eEpw5EzbxhGZpsXIsCXZRjE0cn4sr7D6'; // bcrypt for "syncthing"
 
-$releases_url="https://github.com/syncthing/syncthing/releases/download";
-$version="0.10.7";
+global $sc_avahi_type, $sc_avahi_desc;
+$sc_avahi_type="syncthing";
+$sc_avahi_desc="Syncthing instance running";
+
+global $sc_releases_url, $sc_version;
+$sc_releases_url="https://github.com/syncthing/syncthing/releases/download";
+$sc_version="0.10.7";
 
 function nameForArch($arch) {
-	global $version;
+	global $sc_version;
 	switch ($arch) {
 	case "amd64":
 	case "x86_64":
@@ -44,21 +51,21 @@ function nameForArch($arch) {
 		$urlarch = "armv7";
 		break;
 	}
-	return "syncthing-linux-$urlarch-v$version";
+	return "syncthing-linux-$urlarch-v$sc_version";
 }
 
 function downloadUrl($name) {
-	global $releases_url,$version;
-	return "$releases_url/v$version/$name.tar.gz";
+	global $sc_releases_url, $sc_version;
+	return "$sc_releases_url/v$sc_version/$name.tar.gz";
 }
 
 function hasConfig() {
-	return file_exists(cfgpath_xml);
+	return file_exists(sc_cfgpath_xml);
 }
 
 function isInstalled() {
-	global $binpath;
-	return is_executable($binpath);
+	global $sc_binpath;
+	return is_executable($sc_binpath);
 }
 
 function isConfigured() {
@@ -69,11 +76,11 @@ function readConfig() {
 	if (!isConfigured()) {
 		return false;
 	}
-	return simplexml_load_file(cfgpath_xml);
+	return simplexml_load_file(sc_cfgpath_xml);
 }
 
 function writeConfig($config) {
-	$config->asXml(cfgpath_xml);
+	$config->asXml(sc_cfgpath_xml);
 }
 
 function passwordChanged($config) {
@@ -88,8 +95,8 @@ function getNodeID($config) {
 }
 
 function getPid() {
-	global $binpath;
-	$pid_str = execute_program_shell("pidof $binpath | tr -s ' ' '\\n' | sort -n | sed 1q")['output'];
+	global $sc_binpath;
+	$pid_str = execute_program_shell("pidof $sc_binpath | tr -s ' ' '\\n' | sort -n | sed 1q")['output'];
 	if ($pid_str == NULL or $pid_str == "") {
 		return -1;
 	}

@@ -5,7 +5,7 @@ require realpath(__DIR__ . "/../resources/syncthing/common.php");
 $urlpath="$staticFile/syncthing";
 
 function index() {
-	global $title, $urlpath, $webui_user, $webui_pass, $webui_port;
+	global $title, $urlpath, $sc_webui_user, $sc_webui_pass, $sc_webui_port;
 
 	$page = hlc(t("syncthing_title"));
 	$page .= hl(t("syncthing_desc"), 4);
@@ -31,15 +31,15 @@ function index() {
 			$page .= "<div class='alert alert-error text-center'>"
 				.t("syncthing_pass_unchanged")
 				."<br/>\n"
-				.t("syncthing_def_user").": $webui_user"
+				.t("syncthing_def_user").": $sc_webui_user"
 				."<br/>\n"
-				.t("syncthing_def_pass").": $webui_pass"
+				.t("syncthing_def_pass").": $sc_webui_pass"
 				."</div>\n";
 		}
 		$host = explode(':', $_SERVER['HTTP_HOST'])[0];
 		$page .= par(t("syncthing_repos_web"));
 
-		$page .= addButton(array('label'=>t('syncthing_web_interface'),'href'=>"https://$host:$webui_port"));
+		$page .= addButton(array('label'=>t('syncthing_web_interface'),'href'=>"https://$host:$sc_webui_port"));
 		$page .= addButton(array('label'=>t("syncthing_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
 		return array('type' => 'render','page' => $page);
@@ -83,18 +83,18 @@ function disconnect() {
 }
 
 function download_get() {
-	global $dirpath, $cfgpath, $repospath, $binpath, $urlpath;
+	global $sc_dirpath, $sc_cfgpath, $sc_repospath, $sc_binpath, $urlpath;
 	$name = nameForArch(php_uname("m"));
 	$url = downloadUrl($name);
 	execute_program_shell(
-		"mkdir -p $dirpath $cfgpath $repospath && " .
-		"cd $dirpath && " .
+		"mkdir -p $sc_dirpath $sc_cfgpath $sc_repospath && " .
+		"cd $sc_dirpath && " .
 		"curl -L -s $url -o $name.tar.gz && " .
 		"tar -xf $name.tar.gz && " .
 		"mv $name/syncthing syncthing && " .
 		"rm -rf $name.tar.gz $name && " .
-		"chown -R www-data:www-data $dirpath && " .
-		"chmod 0755 $binpath");
+		"chown -R www-data:www-data $sc_dirpath && " .
+		"chmod 0755 $sc_binpath");
 	if (isConfigured()) {
 		return array('type'=>'redirect','url'=>"$urlpath/start");
 	}
@@ -102,7 +102,7 @@ function download_get() {
 }
 
 function remove_get() {
-	global $binpath, $initpath, $urlpath;
+	global $sc_binpath, $initpath, $urlpath;
 	if (!isInstalled()) {
 		setFlash(t("syncthing_remove_not_installed"));
 		return array('type'=>'redirect','url'=>"$urlpath");
@@ -112,27 +112,27 @@ function remove_get() {
 		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	while (isInstalled()) {
-		execute_program_shell("rm -f $binpath $initpath");
+		execute_program_shell("rm -f $sc_binpath $initpath");
 		sleep(1);
 	}
 	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function stopprogram() {
-	global $user, $binname, $avahi_type, $sc_port;
+	global $sc_user, $binname, $avahi_type, $sc_port;
 	while (isRunning()) {
-		exec_user("killall $binname", $user);
+		exec_user("killall $binname", $sc_user);
 		sleep(1);
 	}
 	avahi_unpublish($avahi_type, $sc_port);
 }
 
 function startprogram() {
-	global $user, $cfgpath, $repospath, $binpath, $avahi_type, $avahi_desc, $sc_port;
+	global $sc_user, $sc_cfgpath, $sc_repospath, $sc_binpath, $avahi_type, $avahi_desc, $sc_port;
 	if (isRunning()) {
 		return;
 	}
-	execute_program_detached_user("HOME=$repospath; $binpath -no-browser -home=$cfgpath", $user);
+	execute_program_detached_user("HOME=$sc_repospath; $sc_binpath -no-browser -home=$sc_cfgpath", $sc_user);
 	while (!isRunning()) {
 		sleep(1);
 	}
@@ -142,14 +142,14 @@ function startprogram() {
 }
 
 function configure_get() {
-	global $user, $title, $cfgpath, $binpath, $urlpath, $webui_port, $webui_user,
-		$webui_pass_bc, $sc_port, $nodeidpath, $dirpath;
+	global $sc_user, $title, $sc_cfgpath, $sc_binpath, $urlpath, $sc_webui_port, $sc_webui_user,
+		$sc_webui_pass_bc, $sc_port, $sc_nodeidpath, $sc_dirpath;
 
 	if (!isInstalled()) {
 		setFlash(t("syncthing_install_failed"));
 		return array('type'=>'redirect','url'=>"$urlpath");
 	}
-	execute_program_shell("/bin/su $user -c '$binpath -generate=$cfgpath'");
+	execute_program_shell("/bin/su $sc_user -c '$sc_binpath -generate=$sc_cfgpath'");
 	startprogram(); // Start it to generate the default config
 	while (!hasConfig()) sleep(1);
 	stopprogram(); // Make sure the config file is ours
@@ -157,14 +157,14 @@ function configure_get() {
 	unset($config->folder);
 	$config->gui->attributes()->enabled="true";
 	$config->gui->attributes()->tls="true";
-	$config->gui->address="0.0.0.0:$webui_port";
-	$config->gui->user=$webui_user;
-	$config->gui->password=$webui_pass_bc;
+	$config->gui->address="0.0.0.0:$sc_webui_port";
+	$config->gui->user=$sc_webui_user;
+	$config->gui->password=$sc_webui_pass_bc;
 	$config->options->listenAddress="0.0.0.0:$sc_port";
 	$config->options->globalAnnounceEnabled="false";
 	writeConfig($config);
-	file_put_contents($nodeidpath, getNodeID($config));
-	execute_program_shell("chown -R www-data:www-data $dirpath");
+	file_put_contents($sc_nodeidpath, getNodeID($config));
+	execute_program_shell("chown -R www-data:www-data $sc_dirpath");
 	startprogram(); // Make it load the new config
 	return array('type'=>'redirect','url'=>"$urlpath");
 }
