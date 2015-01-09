@@ -39,7 +39,7 @@ function index() {
 		$host = explode(':', $_SERVER['HTTP_HOST'])[0];
 		$page .= par(t("syncthing_repos_web"));
 
-		$page .= addButton(array('label'=>t('syncthing_web_interface'),'href'=>"https://$host:$sc_webui_port"));
+		$page .= addButton(array('label'=>t('syncthing_web_interface'),'href'=>"https://$host:$sc_webui_port",'target'=>'_blank'));
 		$page .= addButton(array('label'=>t("syncthing_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
 		return array('type' => 'render','page' => $page);
