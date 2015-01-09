@@ -119,16 +119,16 @@ function remove_get() {
 }
 
 function stopprogram() {
-	global $sc_user, $binname, $avahi_type, $sc_port;
+	global $sc_user, $sc_binname, $sc_avahi_type, $sc_port;
 	while (isRunning()) {
-		exec_user("killall $binname", $sc_user);
+		exec_user("killall $sc_binname", $sc_user);
 		sleep(1);
 	}
-	avahi_unpublish($avahi_type, $sc_port);
+	avahi_unpublish($sc_avahi_type, $sc_port);
 }
 
 function startprogram() {
-	global $sc_user, $sc_cfgpath, $sc_repospath, $sc_binpath, $avahi_type, $avahi_desc, $sc_port;
+	global $sc_user, $sc_cfgpath, $sc_repospath, $sc_binpath, $sc_avahi_type, $sc_avahi_desc, $sc_port;
 	if (isRunning()) {
 		return;
 	}
@@ -138,7 +138,7 @@ function startprogram() {
 	}
 	$config = readConfig();
 	$sc_id = getNodeID($config);
-	avahi_publish($avahi_type, $avahi_desc, $sc_port, "node_id=$sc_id");
+	avahi_publish($sc_avahi_type, $sc_avahi_desc, $sc_port, "node_id=$sc_id");
 }
 
 function configure_get() {
