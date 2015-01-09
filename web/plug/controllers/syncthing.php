@@ -162,6 +162,7 @@ function configure_get() {
 	$config->gui->password=$sc_webui_pass_bc;
 	$config->options->listenAddress="0.0.0.0:$sc_port";
 	$config->options->globalAnnounceEnabled="false";
+	$config->options->autoUpgradeIntervalH="0";
 	writeConfig($config);
 	file_put_contents($sc_nodeidpath, getNodeID($config));
 	execute_program_shell("chown -R www-data:www-data $sc_dirpath");
