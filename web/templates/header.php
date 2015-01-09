@@ -15,7 +15,7 @@
 <?php
 	if (is_array($css)){
 		foreach($css as $c){
-			echo '<link rel="stylesheet" href="'.$staticPath.'css/'.$c.'.css">'; 
+			echo '<link rel="stylesheet" href="'.$staticPath.'css/'.$c.'.css">';
 		}
 	}
   if (is_array($js)){

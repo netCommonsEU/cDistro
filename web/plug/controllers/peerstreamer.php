@@ -173,8 +173,8 @@ function _psshell($ip,$port,$myport,$type)
 
 	execute_program_detached_user($cmd,$vlcuser);
 	$page .= par(t('Please open your Video Player with <b>'). 'rtsp://' . $ipserver . ":" . $port . '/</b>');
-	 
-	
+
+
 	//Checking requiered software
 	if(!softwareInstalled) {
 		$error = "Requiered software is not installed.";
@@ -195,7 +195,7 @@ function _psshell($ip,$port,$myport,$type)
 }
 
 function softwareinstalled() {
-	
+
 	global $pspath,$psprogram,$vlcpath,$vlcprogram;
 
 	return( file_exists($pspath . $psprogram) && file_exists($vlcpath . $vlcprogram) );

@@ -45,7 +45,7 @@ function index_get()
 		$page .= "</script>\n";
 		$page .= "</div>";
 
-		if (isPackageInstall($webdav_pkg)){ 
+		if (isPackageInstall($webdav_pkg)){
 			$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$webdav_pkg));
 		}
 	}

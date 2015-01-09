@@ -34,7 +34,7 @@ function search()
 	$page .= ajaxStr('tableEtcd',t("Searching for published services, please wait a moment...") );
 	$page .= "<script>\n";
 	$page .= "$('#tableEtcd').load('".$staticFile."/etcd/ajaxsearch',function(){\n";
-	$page .= "	$('#tags').tab();\n";	
+	$page .= "	$('#tags').tab();\n";
 	$page .= "});\n";
 	$page .= "</script>\n";
 
@@ -81,9 +81,9 @@ function ajaxsearch()
 	$page .= "</ul>\n";
 	$page .= "<div id='my-tab-content' class='tab-content'>\n";
 	$services = "";
-	foreach($nServices as $k => $v){	
+	foreach($nServices as $k => $v){
 		$services .= "	<div class='tab-pane";
-		if($active == $k) $services .= " active";		
+		if($active == $k) $services .= " active";
 		$services .= "' id='".$k."'>";
 
 		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped'));
@@ -124,7 +124,7 @@ function index()
 		$page .= "<div class='alert alert-success'>".t("$title is installed")."\n";
 		$page .= addButton(array('label'=>t("Uninstall $title"),'class'=>'btn', 'href'=>"$urlpath/removeprogram", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
-		
+
 	}
 	$page .= '</p>';
 
@@ -139,12 +139,12 @@ function index()
 			$page .= "<div class='alert alert-success'>".t("$title is running")."\n";
 			$page .= addButton(array('label'=>t("Stop $title"),'class'=>'btn', 'href'=>"$urlpath/stopprogram", 'divOptions'=>array('class'=>'pull-right')));
 			$page .="</div>";
-		
+
 		}
 		$page .= '</p>';
 	}
 
-	
+
 	$page .= '<p>';
 	if ($var_avahi['DATABASE'] != 'etcd') {
 		$page .= "<div class='alert alert-error'>".t("<i>etcd</i> is not selected")." (" . $var_avahi['DATABASE'] . ")\n";
@@ -172,7 +172,7 @@ function index()
 }
 
 function index_post(){
-	
+
 	global $staticFile, $staticPath, $urlpath;
 	global $avahipsetc_config;
 
@@ -200,7 +200,7 @@ function _existAvahiConf(){
 function _existAvahiConfEtc(){
 	global $avahipsetc_config;
 
-	return(file_exists($avahipsetc_config));	 
+	return(file_exists($avahipsetc_config));
 }
 function createDefaultAvahiFile(){
 	global $avahips_config;
@@ -214,7 +214,7 @@ function createDefaultAvahiEtcFile(){
 	foreach($avahipsetc_data as $k=>$v){
 		$tmparray[$k] = $v['default'];
 	}
-	write_conffile($avahipsetc_config,$tmparray,"","",'"');	 
+	write_conffile($avahipsetc_config,$tmparray,"","",'"');
 }
 function _existEtcdConf(){
 	global $avahipsetc_config;
@@ -243,7 +243,7 @@ function getprogram(){
 		createDefaultAvahiEtcFile();
 	}
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
-	
+
 }
 
 function removeprogram(){
@@ -271,7 +271,7 @@ function runprogram(){
 
 	setFlash(t('etcdinit_start'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
-	
+
 }
 
 function stopprogram(){
@@ -282,7 +282,7 @@ function stopprogram(){
 
 	setFlash(t('etcdinit_stop'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
-	
+
 }
 
 function removeetcd(){
@@ -293,7 +293,7 @@ function removeetcd(){
 	write_conffile($avahips_config,$var_avahi,"","",'"');
 
 	return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
-		
+
 }
 
 function selectetcd(){

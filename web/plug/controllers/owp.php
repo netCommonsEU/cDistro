@@ -16,7 +16,7 @@ function _installed_OWP(){
 function _run_OWP(){
 	$cmd = 'netstat -an|grep LISTEN|grep -q ":3000"';
 	$ret = execute_shell($cmd);
-	return($ret['return'] ==  0 );	
+	return($ret['return'] ==  0 );
 }
 
 function getprogram(){
@@ -27,7 +27,7 @@ function getprogram(){
 
 	//setFlash(t('OpenVZWebPanel_was_installed'),"success");
 	setFlash($cmd,"success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));	
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
 
 function removeprogram(){
@@ -61,10 +61,10 @@ function stopprogram(){
 function index()
 {
 	global $urlpath;
-	
+
 	$page = "";
 	$buttons = "";
-	
+
 	$page .= hlc(t("openvzwp_title"));
 	$page .= hl(t("openvzwp_subtitle"),4);
    $page .= par(t("openvzwp_description"));
@@ -87,7 +87,7 @@ function index()
 			$buttons .= addButton(array('label'=>t("openvzwp_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stopprogram"));
 		}
 	}
- 	
+
  	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 }

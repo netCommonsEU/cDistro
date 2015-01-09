@@ -293,12 +293,12 @@ function port_listen($port){
 }
 
 function check_arch($list_arch = null){
-	
+
 	if ( ! is_array($list_arch) ) { return true; }
 	$cmd = 'arch';
 	$ret = execute_program_shell($cmd);
 	$myarch = rtrim($ret['output']);
-	return (in_array($myarch,$list_arch));	
+	return (in_array($myarch,$list_arch));
 
 }
 ?>
