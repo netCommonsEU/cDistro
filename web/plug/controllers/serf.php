@@ -35,7 +35,7 @@ function search()
 	$page .= "	$('#tags').tab();\n";
 	$page .= "});\n";
 	$page .= "</script>\n";
-	$page .=  addButton(array('label'=>t("Scan quality of services"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
+	$page .=  addButton(array('label'=>t("scan_quality_of_services"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
 
 
 	return(array('type'=>'render','page'=>$page));
@@ -54,11 +54,13 @@ function ajaxquality()
 function ajaxsearch()
 {
 	$aServices = serf_search();
+	print_r($aService);
 
 	$gService = json_decode($aServices[0]);
 
 	$nServices = array();
 
+	print_r($gService);
 	foreach($gService as $dates_machine){
 		$serv_new['type'] = $dates_machine->s;
 		$serv_new['description'] = $dates_machine->d;
@@ -123,17 +125,17 @@ function index()
 		createDefaultAvahiFile();
 	}
 	$var_avahi = load_conffile($avahips_config);
-	$page .= hl(t("<a href='https://serfdom.io/' target='_blank'>Serf</a> is a decentralized solution for cluster membership, failure detection, and orchestration. Lightweight and highly available."),4);
+	$page .= hl(t("serf_description"),4);
 
 	$page .= '<p>';
 	if (!$is_installed) {
-		$page .= "<div class='alert alert-error'>".t("$title is not installed")."\n";
-		$page .= addButton(array('label'=>t("Install $title"),'class'=>'btn', 'href'=>"$urlpath/getprogram", 'divOptions'=>array('class'=>'pull-right')));
+		$page .= "<div class='alert alert-error'>".t($title."_is_not_installed")."\n";
+		$page .= addButton(array('label'=>t("install_".$title),'class'=>'btn', 'href'=>"$urlpath/getprogram", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
 
 	} else {
-		$page .= "<div class='alert alert-success'>".t("$title is installed")."\n";
-		$page .= addButton(array('label'=>t("Uninstall $title"),'class'=>'btn', 'href'=>"$urlpath/removeprogram", 'divOptions'=>array('class'=>'pull-right')));
+		$page .= "<div class='alert alert-success'>".t($title."_is_installed")."\n";
+		$page .= addButton(array('label'=>t("uninstall_".$title),'class'=>'btn', 'href'=>"$urlpath/removeprogram", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
 
 	}
@@ -142,13 +144,13 @@ function index()
 	if ($is_installed){
 		$page .= '<p>';
 		if (_isRun()) {
-			$page .= "<div class='alert alert-error'>".t("$title is not running")."\n";
-			$page .= addButton(array('label'=>t("Start $title"),'class'=>'btn', 'href'=>"$urlpath/runprogram", 'divOptions'=>array('class'=>'pull-right')));
+			$page .= "<div class='alert alert-error'>".t($title."_is_not_running")."\n";
+			$page .= addButton(array('label'=>t("start_".$title),'class'=>'btn', 'href'=>"$urlpath/runprogram", 'divOptions'=>array('class'=>'pull-right')));
 			$page .="</div>";
 
 		} else {
-			$page .= "<div class='alert alert-success'>".t("$title is running")."\n";
-			$page .= addButton(array('label'=>t("Stop $title"),'class'=>'btn', 'href'=>"$urlpath/stopprogram", 'divOptions'=>array('class'=>'pull-right')));
+			$page .= "<div class='alert alert-success'>".t($title."_is_running")."\n";
+			$page .= addButton(array('label'=>t("stop_".$title),'class'=>'btn', 'href'=>"$urlpath/stopprogram", 'divOptions'=>array('class'=>'pull-right')));
 			$page .="</div>";
 
 		}
@@ -158,12 +160,12 @@ function index()
 
 	$page .= '<p>';
 	if ($var_avahi['DATABASE'] != 'serf') {
-		$page .= "<div class='alert alert-error'>".t("<i>serf</i> is not selected")." (" . $var_avahi['DATABASE'] . ")\n";
-		$page .= addButton(array('label'=>t("Select $title"),'class'=>'btn', 'href'=>"$urlpath/selectserf", 'divOptions'=>array('class'=>'pull-right')));
+		$page .= "<div class='alert alert-error'>".t($title."_is_not_selected")."\n";
+		$page .= addButton(array('label'=>t("select_".$title),'class'=>'btn', 'href'=>"$urlpath/selectserf", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
 	} else {
-		$page .= "<div class='alert alert-success'>".t("</i>serf</i> is selected")."\n";
-		$page .= addButton(array('label'=>t("Deselect $title"),'class'=>'btn', 'href'=>"$urlpath/removeserf", 'divOptions'=>array('class'=>'pull-right')));
+		$page .= "<div class='alert alert-success'>".t($title."_is_selected")."\n";
+		$page .= addButton(array('label'=>t("deselect_".$title),'class'=>'btn', 'href'=>"$urlpath/removeserf", 'divOptions'=>array('class'=>'pull-right')));
 		$page .="</div>";
 
 	}
@@ -172,9 +174,9 @@ function index()
 	$page .= hl(t('Parameters'),3);
 	$variable = load_conffile($avahipsetc_config, $avahipsetc_data);
 	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('SERF_RPC_ADDR',t('serf rpc address'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_rpc_addr_help'));
-	$page .= addInput('SERF_BIND',t('serf bind port'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_bind_help'));
-	$page .= addInput('SERF_JOIN',t('serf peer join'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_join_help'));
+	$page .= addInput('SERF_RPC_ADDR',t('serf_rpc_address_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_rpc_addr_help'));
+	$page .= addInput('SERF_BIND',t('serf_bind_port_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_bind_help'));
+	$page .= addInput('SERF_JOIN',t('serf_peer_join_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_join_help'));
 
 	$page .= addSubmit(array('label'=>t('serf_parameters_button')));
 
