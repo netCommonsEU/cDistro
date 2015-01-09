@@ -54,13 +54,11 @@ function ajaxquality()
 function ajaxsearch()
 {
 	$aServices = serf_search();
-	print_r($aService);
 
 	$gService = json_decode($aServices[0]);
 
 	$nServices = array();
 
-	print_r($gService);
 	foreach($gService as $dates_machine){
 		$serv_new['type'] = $dates_machine->s;
 		$serv_new['description'] = $dates_machine->d;
