@@ -1,14 +1,14 @@
 #!/bin/sh
 #
-# Simple pre-commit hook to check that there are no errors in the fdroid
-# metadata files.
+# Simple pre-commit hook to check that there are no errors in the cdistro
+# source files.
 
 # Redirect output to stderr.
 exec 1>&2
 
-SH_FILES="cdistro"
+SH_FILES="cdistro hooks/pre-commit"
 BASH_FILES="cdistrod"
-PHP_FILES="web/*.php web/*/*.php web/*/*/*.php"
+PHP_FILES="$(find web -name '*.php' -type f)"
 
 err() {
 	echo ERROR: "$@"
