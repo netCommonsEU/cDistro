@@ -350,7 +350,7 @@ function addMount_form($values=null){
 	$datos = array(
 				array('name'=>'alias','type'=>'text','desc'=>t("Alias Mount")),
 				array('name'=>'mountpoint','type'=>'text','desc'=>t("Mount Point")),
-				array('name'=>'uri','type'=>'text','desc'=>t("URI")),
+				//array('name'=>'uri','type'=>'text','desc'=>t("URI")),
 				//array('name'=>'type','type'=>'text','desc'=>t("Type")),
 			);
 
