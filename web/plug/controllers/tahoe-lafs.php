@@ -669,9 +669,9 @@ function createNode_post(){
 		$validPost = false;
 		$page .= "<div class='alert alert-error text-center'>".t("Invalid storage node name").': ' . htmlspecialchars(substr($_POST['NODE_NICKNAME'],0,70)) . "</div>\n";
 	}
-	if ( empty($_POST['NODE_INTRODUCER_FURL']) || !preg_match("((pb://)[-a-zA-Z0-9@:%_\+.~#?&//=]+)", $_POST['NODE_INTRODUCER_FURL']) ) {
+	  if ( empty($_POST['NODE_INTRODUCER_FURL']) || !preg_match("^((pb:\/\/)([a-zA-Z0-9]{16,256})(@)([a-zA-Z0-9@:%_\+,.~#\?&\/=]{5,256})(:)([0-9]+)(\/)([a-zA-Z0-9\._-]{1,81}))", $_POST['NODE_INTRODUCER_FURL']) ) {
 		$validPost = false;
-		$page .= "<div class='alert alert-error text-center'>".t("Invalid introducer FURL").': ' . htmlspecialchars(substr($_POST['NODE_INTRODUCER_FURL'],0,70)) . "</div>\n";
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid introducer FURL").': ' . htmlspecialchars(substr($_POST['NODE_INTRODUCER_FURL'],0,100)) . "</div>\n";
 	}
 
 	if(!$validPost) {
