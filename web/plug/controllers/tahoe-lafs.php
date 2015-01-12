@@ -665,17 +665,34 @@ function createNode_post(){
 
  	$validPost = true;
 
-	if ( empty($_POST['NODE_NICKNAME']) || preg_match("/[^-\w]/i", $_POST['NODE_NICKNAME']) || strlen($_POST['NODE_NICKNAME'] > 80) ) {
+	if ( empty($_POST['NODE_NICKNAME']) ) {
 		$validPost = false;
-		$page .= "<div class='alert alert-error text-center'>".t("Invalid storage node name").': ' . htmlspecialchars(substr($_POST['NODE_NICKNAME'],0,70)) . "</div>\n";
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid storage node name").': ' . '(empty)'. "</div>\n";
 	}
-	  if ( empty($_POST['NODE_INTRODUCER_FURL']) || !preg_match("^((pb:\/\/)([a-zA-Z0-9]{16,256})(@)([a-zA-Z0-9@:%_\+,.~#\?&\/=]{5,256})(:)([0-9]+)(\/)([a-zA-Z0-9\._-]{1,81}))", $_POST['NODE_INTRODUCER_FURL']) ) {
+	elseif(preg_match('/[^a-z_\-0-9]/i', $_POST['NODE_NICKNAME'] )) {
+		$validPost = false;
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid storage node name").': ' . htmlspecialchars(substr($_POST['NODE_NICKNAME'],0,90)) . "</div>\n";
+		$page .= "<div class='alert alert-warning text-center'>".t("A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the names")."</div>\n";
+	}
+	elseif( strlen($_POST['NODE_NICKNAME']) > 80)  {
+		$validPost = false;
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid storage node name").': ' . htmlspecialchars(substr($_POST['NODE_NICKNAME'],0,90)) . "</div>\n";
+		$page .= "<div class='alert alert-warning text-center'>".t("A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the names")."</div>\n";
+	}
+
+	//if ( empty($_POST['NODE_INTRODUCER_FURL']) || !preg_match("((pb://)[-a-zA-Z0-9@:%_\+.~#?&//=]+)", $_POST['NODE_INTRODUCER_FURL']) ) {
+	if ( empty($_POST['NODE_INTRODUCER_FURL']) ) {
+		$validPost = false;
+		$page .= "<div class='alert alert-error text-center'>".t("Invalid introducer FURL").': ' . '(empty)'. "</div>\n";
+	}
+	elseif( !preg_match('/'.'^((pb:\/\/)([a-zA-Z0-9]{16,256})(@)([a-zA-Z0-9@:%_\+,.~#\?&\/=]{5,256})(:)([0-9]+)(\/)([a-zA-Z0-9\._-]{1,81}))'.'/', $_POST['NODE_INTRODUCER_FURL']) ) {
 		$validPost = false;
 		$page .= "<div class='alert alert-error text-center'>".t("Invalid introducer FURL").': ' . htmlspecialchars(substr($_POST['NODE_INTRODUCER_FURL'],0,100)) . "</div>\n";
 	}
 
+
 	if(!$validPost) {
-			$page .= "<div class='alert alert-warning text-center'>".t("A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the names")."</div>\n";
+
 			$buttons .= addButton(array('label'=>t("Back to Tahoe-LAFS"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
 			$buttons .= addButton(array('label'=>t("Retry storage node creation"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/tahoe-lafs/createNode'));
 			$page .= $buttons;
