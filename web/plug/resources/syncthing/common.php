@@ -85,8 +85,8 @@ function writeConfig($config) {
 
 function passwordChanged($config) {
 	if ($config === false) return false;
-	global $webui_pass_bc;
-	return ($config->gui->password != $webui_pass_bc);
+	global $sc_webui_pass_bc;
+	return ($config->gui->password != $sc_webui_pass_bc);
 }
 
 function getNodeID($config) {
