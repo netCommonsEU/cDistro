@@ -171,6 +171,10 @@ function index()
 
 	$page .= hl(t('Parameters'),3);
 	$variable = load_conffile($avahipsetc_config, $avahipsetc_data);
+
+	if (isset($_GET['join']))
+		$variable['SERF_JOIN'] = $_GET['join'];
+
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('SERF_RPC_ADDR',t('serf_rpc_address_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_rpc_addr_help'));
 	$page .= addInput('SERF_BIND',t('serf_bind_port_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_bind_help'));
