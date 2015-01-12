@@ -8,9 +8,11 @@ $sc_binpath="$sc_dirpath/$sc_binname";
 $sc_repospath="$sc_dirpath/repos";
 $sc_nodeidpath="$sc_dirpath/node_id";
 
-global $sc_cfgpath;
+global $sc_cfgpath, $sc_initd, $sc_initd_orig;
 $sc_cfgpath="$sc_dirpath/config";
 define("sc_cfgpath_xml", "$sc_cfgpath/config.xml");
+$sc_initd_orig="/var/local/cDistro/plug/resources/syncthing/syncthing.init.d";
+$sc_initd="/etc/init.d/syncthing";
 
 global $sc_user, $sc_title, $sc_port;
 $sc_user="www-data";
