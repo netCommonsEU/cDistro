@@ -81,13 +81,38 @@ function readConfig() {
 	return simplexml_load_file(sc_cfgpath_xml);
 }
 
+function rest_get($path) {
+	global $sc_webui_port;
+	return file_get_contents("https://127.0.0.1:$sc_webui_port/rest/$path");
+}
+
+function rest_get_auth($config, $path) {
+	global $sc_webui_port;
+	$apikey = $config->gui->apikey;
+	$opts = array(
+		'http'=>array(
+			'method'=>"GET",
+			'header'=>"X-API-Key: $apikey\r\n"
+		)
+	);
+	$ctx = stream_context_create($opts);
+	return file_get_contents("https://127.0.0.1:$sc_webui_port/rest/$path", false, $ctx);
+}
+
+function get_own_id($config) {
+	$json = rest_get_auth($config, 'system');
+	$array = json_decode($json);
+	if ($array == null) return "";
+	return $array->myID;
+}
+
 function writeConfig($config) {
 	$config->asXml(sc_cfgpath_xml);
 }
 
 function passwordChanged($config) {
-	if ($config === false) return false;
 	global $sc_webui_pass_bc;
+	if ($config === false) return false;
 	return ($config->gui->password != $sc_webui_pass_bc);
 }
 
@@ -126,11 +151,8 @@ function isNode($device, $ip, $port, $node_id) {
 		$device->address == "$ip:$port");
 }
 
-function isSelf($config, $ip, $port, $node_id) {
-	if ($config === false) return false;
-	$devices = $config->device;
-	// Assuming that we are the first device
-	return isNode($devices[0], $ip, $port, $node_id);
+function isSelf($config, $node_id) {
+	return get_own_id($config) == $node_id;
 }
 
 function isConnectedTo($config, $ip, $port, $node_id) {

@@ -38,7 +38,7 @@ function fsyncthing($data){
 		}
 	}
 
-	if (isSelf($config, $ip, $port, $node_id)) {
+	if (isSelf($config, $node_id)) {
 		return ("<a class='btn disabled'>This is you</a>");
 	}
 
