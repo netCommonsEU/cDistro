@@ -58,7 +58,6 @@ if (isset($user) && !$post_login) {
 	}
 	$cb = call_user_func_array($action,$Parameters);
 }
-//print_r($cb);
 
 switch ( $cb['type'] ){
 
