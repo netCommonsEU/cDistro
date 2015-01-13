@@ -74,7 +74,7 @@ function debupdate() {
 	$page = "";
 
 	$page .= hl(t("Cloudy Update System"));
-	$cmd = "apt-get update 2>&1";
+	$cmd = "apt-get update 2>&1 && apt-get -yy upgrade 2>&1";
 	$page .= ptxt(shell_exec($cmd));
 	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/cloudyupdate'));
 
