@@ -16,6 +16,9 @@ $avahipsetc_data=array(
 					'SERF_BIND'=> array('default'=>'5000'),
 				  'SERF_JOIN'=> array('default'=>'10.139.40.82:5000')
  );
+$serf_deps = "jq";
+$serf_deps_desc = t('lightweight and flexible command-line JSON processor');
+
 
 addAvahiFiles($documentPath.$plugs_avahi);
 
@@ -245,11 +248,14 @@ function _uninstall_menu(){
 }
 
 function getprogram(){
-	global $serfproc, $staticFile, $serfgeturl, $urlpath;
+	global $serfproc, $staticFile, $serfgeturl, $urlpath,$serf_deps, $serf_deps_desc;
 
-	$page = "";
-        $cmd = "cd /tmp && curl ".$serfgeturl."| sh -";
-        $ret = execute_shell($cmd);
+	if (!isPackageInstall($serf_deps)){
+		$page = package_not_install($serf_deps,$serf_deps_desc);
+		return(array('type'=>'render','page'=> $page ) ) ;
+	}
+  $cmd = "cd /tmp && curl ".$serfgeturl."| sh -";
+  $ret = execute_shell($cmd);
 
 	setFlash(t('serf_was_install'),"success");
 	_install_menu();
