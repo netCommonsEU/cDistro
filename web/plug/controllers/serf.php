@@ -3,7 +3,7 @@
 $title="serf";
 $dirpath="/opt/serf";
 $serfproc="serf";
-$serfpath=$dirpath."/".$serfproc;
+define('SERFPATH',$dirpath."/".$serfproc);
 $serf_files_path="$dirpath/machine";
 $serfinit="/etc/init.d/serf";
 $avahips_config="/etc/avahi-ps.conf";
@@ -19,8 +19,7 @@ $avahipsetc_data=array(
 $serf_deps = "jq";
 $serf_deps_desc = t('lightweight and flexible command-line JSON processor');
 
-
-addAvahiFiles($documentPath.$plugs_avahi);
+if (isset($plugs_avahi)) addAvahiFiles($documentPath.$plugs_avahi);
 
 function serf_search(){
 	$ret = execute_program("SEARCH_ONLY=serf /usr/sbin/avahi-ps search");
@@ -46,9 +45,8 @@ function search()
 
 function ajaxquality()
 {
-	global $serfpath;
 
-	$cmd = "$serfpath reachability -json";
+	$cmd = SERFPATH." reachability -json";
 	$ret = execute_program_shell($cmd);
 
 	return(array('type'=>'ajax','page'=>$ret['output']));
@@ -205,8 +203,7 @@ function index_post(){
 }
 
 function _isInstalled(){
-	global $serfpath;
-	return(is_executable($serfpath));
+	return(is_executable(SERFPATH));
 }
 
 function _existAvahiConf(){
