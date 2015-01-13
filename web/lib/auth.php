@@ -2,6 +2,7 @@
 
 // lib/auth.php
 $auth_file = "/etc/cdistro.conf";
+$post_login = false;
 
 function checkUser($login,$pass){
 	global $auth_file;
@@ -76,6 +77,8 @@ if (!isSesionValue("user")) {
 		if (checkUser($_POST['user'],$_POST['password'])) {
 			$user = array('user'=>$_POST['user']);
 			setSessionValue('user',serialize($user));
+			$post_login = true;
+			$cb = array('type'=>'redirect', 'url' => $staticFile);
 		} else {
 			setFlash(t('Username or password is not correct.'),'error');
 			$cb = array('type'=>'render', 'page'=>login_form(array('user'=>$_POST['user'])));

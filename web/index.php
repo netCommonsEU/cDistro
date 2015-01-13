@@ -21,7 +21,7 @@ $js = array('jquery-1.11.0.min','bootstrap.min');
 $js_end = array('main');
 
 
-if (isset($user)) {
+if (isset($user) && !$post_login) {
 	// Default
 	$controller = "default";
 	$action="index";
