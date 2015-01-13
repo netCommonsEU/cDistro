@@ -83,7 +83,7 @@ function disconnect() {
 }
 
 function download_get() {
-	global $sc_dirpath, $sc_cfgpath, $sc_repospath, $sc_binpath, $urlpath;
+	global $sc_dirpath, $sc_cfgpath, $sc_repospath, $sc_binpath, $urlpath, $sc_initd, $sc_initd_orig;
 	$name = nameForArch(php_uname("m"));
 	$url = downloadUrl($name);
 	execute_program_shell(
@@ -93,8 +93,10 @@ function download_get() {
 		"tar -xf $name.tar.gz && " .
 		"mv $name/syncthing syncthing && " .
 		"rm -rf $name.tar.gz $name && " .
+		"cp $sc_initd_orig $sc_initd && " .
 		"chown -R www-data:www-data $sc_dirpath && " .
-		"chmod 0755 $sc_binpath");
+		"chmod 0755 $sc_binpath $sc_initd && " .
+		"update-rc.d syncthing defaults");
 	if (isConfigured()) {
 		return array('type'=>'redirect','url'=>"$urlpath/start");
 	}
@@ -102,7 +104,7 @@ function download_get() {
 }
 
 function remove_get() {
-	global $sc_binpath, $initpath, $urlpath;
+	global $sc_binpath, $initpath, $urlpath, $sc_initd;
 	if (!isInstalled()) {
 		setFlash(t("syncthing_remove_not_installed"));
 		return array('type'=>'redirect','url'=>"$urlpath");
@@ -112,27 +114,29 @@ function remove_get() {
 		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	while (isInstalled()) {
-		execute_program_shell("rm -f $sc_binpath $initpath");
+		execute_program_shell(
+			"update-rc.d -f syncthing remove && " .
+			"rm -f $sc_binpath $initpath $sc_initd");
 		sleep(1);
 	}
 	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
 function stopprogram() {
-	global $sc_user, $sc_binname, $sc_avahi_type, $sc_port;
+	global $sc_initd, $sc_user, $sc_avahi_type, $sc_port;
+	avahi_unpublish($sc_avahi_type, $sc_port);
 	while (isRunning()) {
-		exec_user("killall $sc_binname", $sc_user);
+		exec("$sc_initd stop", $sc_user);
 		sleep(1);
 	}
-	avahi_unpublish($sc_avahi_type, $sc_port);
 }
 
 function startprogram() {
-	global $sc_user, $sc_cfgpath, $sc_repospath, $sc_binpath, $sc_avahi_type, $sc_avahi_desc, $sc_port;
+	global $sc_initd, $sc_avahi_type, $sc_avahi_desc, $sc_port, $sc_user;
 	if (isRunning()) {
 		return;
 	}
-	execute_program_detached_user("HOME=$sc_repospath; $sc_binpath -no-browser -home=$sc_cfgpath", $sc_user);
+	execute_program_detached("$sc_initd start", $sc_user);
 	while (!isRunning()) {
 		sleep(1);
 	}

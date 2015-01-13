@@ -6,7 +6,7 @@
 # Redirect output to stderr.
 exec 1>&2
 
-SH_FILES="cdistro hooks/pre-commit"
+SH_FILES="cdistro hooks/pre-commit web/plug/resources/*/*.init.d"
 BASH_FILES="cdistrod"
 PHP_FILES="$(find web -name '*.php' -type f)"
 
