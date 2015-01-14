@@ -99,7 +99,7 @@ function ajaxsearch()
 		if($active == $k) $services .= " active";
 		$services .= "' id='".$k."'>";
 
-		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped'));
+		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped table-data'));
 		foreach($v as $serv){
 			unset($serv['type']);
 			$node_id=$serv['node_id'];
