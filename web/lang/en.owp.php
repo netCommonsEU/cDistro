@@ -14,7 +14,7 @@ addS("owp_button_stop", "Stop OpenVZ Web Panel");
 addS("owp_button_go_to", "Go to OpenVZ Web Panel interface");
 addS("owp_start", "Starting OpenVZ Web Panel...");
 addS("owp_stop", "Stopping OpenVZ Web Panel...");
-addS("owp_warning", "The installation process of OpenVZ Web Panel downloads and installs a new kernel, replacing the current one. To uninstall it, a minimum of terminal and packages management skills are needed.</br></br>Cloudy does not provide an automated method for uninstalling this software and manual intervention will be required to remove it from the system.");
+addS("owp_warning", "The installation process of OpenVZ Web Panel downloads and installs a new Linux kernel, replacing the current one. To uninstall it, a minimum of terminal and packages management skills are needed.</br></br>Cloudy does not provide an automated method for uninstalling this software and manual intervention will be required to remove it from the system.");
 addS("owp_understand_warning", "Please, only proceed with the installation if you understand this warning and feel confident about its requirements.");
 addS("owp_default_login", "The default login credentials are:</br>user: admin</br>password: admin</br>Please, change the default password as soon as possible.");
 addS("owp_button_back", "Back to OpenVZ Web Panel");
