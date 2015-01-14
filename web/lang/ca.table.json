@@ -1,0 +1,23 @@
+{
+	"sEmptyTable":   	"No hi ha dades",
+	"sInfo":         	"Registres totals: _TOTAL_",
+	"sInfoEmpty":    	"Cap",
+	"sInfoFiltered": 	"(Filtrats _MAX_ registres)",
+	"sInfoPostFix":  	"",
+	"sInfoThousands":  	".",
+	"sLengthMenu":   	"Mostrar _MENU_",
+	"sLoadingRecords": 	"Carregant...",
+	"sProcessing":   	"Processant...",
+	"sSearch":       	"Cerca",
+	"sZeroRecords":  	"Cap registre",
+	"oPaginate": {
+		"sFirst":    	"Primer",
+		"sPrevious": 	"Previ",
+		"sNext":     	"Següent",
+		"sLast":     	"Últim"
+	},
+	"oAria": {
+		"sSortAscending":  ": ascendent",
+		"sSortDescending": ": descendent"
+	}
+}

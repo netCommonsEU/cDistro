@@ -1,0 +1,23 @@
+{
+	"sEmptyTable":   	"Empty Table",
+	"sInfo":         	"_TOTAL_ records",
+	"sInfoEmpty":    	"Empty",
+	"sInfoFiltered": 	"(Filtered _MAX_ records)",
+	"sInfoPostFix":  	"",
+	"sInfoThousands":  	".",
+	"sLengthMenu":   	"Showed _MENU_",
+	"sLoadingRecords": 	"Loading...",
+	"sProcessing":   	"Processing...",
+	"sSearch":       	"Search",
+	"sZeroRecords":  	"Zero Records.",
+	"oPaginate": {
+		"sFirst":    	"First",
+		"sPrevious": 	"Previous",
+		"sNext":     	"Next",
+		"sLast":     	"Last"
+	},
+	"oAria": {
+		"sSortAscending":  ": Ascending",
+		"sSortDescending": ": Descending"
+	}
+}

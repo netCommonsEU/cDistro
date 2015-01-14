@@ -34,4 +34,6 @@
     padding-bottom: 40px;
   }
   </style>
-
+	<script>
+		LANG="<?php echo $LANG; ?>";
+	</script>

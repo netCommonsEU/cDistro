@@ -16,8 +16,8 @@ if (isset($user)) {
 	require "lib/avahi.php";
 }
 
-$css = array('bootstrap.min','bootstrap-responsive.min', 'main');
-$js = array('jquery-1.11.0.min','bootstrap.min');
+$css = array('bootstrap.min','bootstrap-responsive.min', 'jquery.dataTables','main');
+$js = array('jquery-1.11.0.min','jquery.dataTables.min','bootstrap.min');
 $js_end = array('main');
 
 
