@@ -1,9 +1,8 @@
 <?php
 // Update files
 $list_packages = array('cDistro'=>array('user'=>'Clommunity', 'repo'=>'cDistro','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot'),
-             'serf'=>array('user'=>'Clommunity', 'repo'=>'package-serf','type'=>'preinstall','controller'=>'serf', 'function-check'=>'_isInstalled', 'script'=>'https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub'),
 					   'avahi-ps'=>array('user'=>'Clommunity', 'repo'=>'avahi-ps','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot'),
-
+             'serf'=>array('user'=>'Clommunity', 'repo'=>'package-serf','type'=>'preinstall','controller'=>'serf', 'function-check'=>'_isInstalled', 'script'=>'https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub')
 					   );
 $dir_configs="/etc/cloudy";
 
