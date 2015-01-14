@@ -81,6 +81,7 @@ function index()
 		}
 		else {
 			$page .= "<div class='alert alert-success text-center'>".t("owp_running")."</div>\n";
+			$page .= "<div class='alert alert-warning text-center'>".t("owp_default_login")."</div>\n";
 			$host = explode(':', $_SERVER['HTTP_HOST'])[0];
 			$buttons .= addButton(array('label'=>t("owp_button_go_to"),'class'=>'btn btn-primary', 'href'=>"http://".$host.":3000"));
 			$buttons .= addButton(array('label'=>t("owp_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stopprogram"));
