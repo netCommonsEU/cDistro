@@ -1,18 +1,57 @@
 <?php
 // plug/controllers/tahoe-lafs.php
+
+//alerts
+addS ("otahoe-lafs_running","Tahoe-LAFS storage node running");
+
+
+
+
+
+//buttons
+addS ("otahoe-lafs_button_install","Install Tahoe-LAFS");
+
+
+
+
+
+
+//flash
+addS ("otahoe-lafs_flash_starting_introducer","Starting Tahoe-LAFS introducer...");
+addS ("otahoe-lafs_flash_stopping_introducer","Stopping Tahoe-LAFS introducer...");
+addS ("otahoe-lafs_flash_restarting_introducer","Restarting Tahoe-LAFS introducer...");
+addS ("otahoe-lafs_flash_starting_storage","Starting Tahoe-LAFS storage node...");
+addS ("otahoe-lafs_flash_stopping_storage","Stopping Tahoe-LAFS storage node...");
+addS ("otahoe-lafs_flash_restarting_storage","Restarting Tahoe-LAFS storage node...");
+addS ("otahoe-lafs_flash_publishing_introducer","Publishing Tahoe-LAFS introducer...");
+addS ("otahoe-lafs_flash_unpublishing_introducer","Unpublishing Tahoe-LAFS introducer...");
+
+
+
+
+
+
+
+
+
 //index
-addS ("Tahoe-LAFS","Tahoe-LAFS");
-addS ("A cloud storage system that distributes your data across multiple servers","A cloud storage system that distributes your data across multiple servers");
-addS ("Tahoe-LAFS is a free and open cloud storage system.","Tahoe-LAFS is a free and open cloud storage system.");
-addS ("It distributes your data across multiple servers.","It distributes your data across multiple servers.");
-addS ("Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.","Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.");
-addS ("Tahoe-LAFS status:","Tahoe-LAFS status:");
-addS ("Tahoe-LAFS storage node is running","Tahoe-LAFS storage node running");
-addS ("Tahoe-LAFS is not installed on this machine","Tahoe-LAFS is not installed on this machine");
-addS ("To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed by the network.","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed by the network.");
-addS ("Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.","Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.");
-addS ("Install Tahoe-LAFS","Install Tahoe-LAFS");
-addS ("Tahoe-LAFS is installed on this machine but has not been configured yet","Tahoe-LAFS is installed on this machine but has not been configured yet");
+addS ("otahoe-lafs_title","Tahoe-LAFS");
+addS ("otahoe-lafs_subtitle","A cloud storage system that distributes your data across multiple servers");
+addS ("otahoe-lafs_description1","Tahoe-LAFS is a free and open cloud storage system.");
+addS ("otahoe-lafs_description2","It distributes your data across multiple servers.");
+addS ("otahoe-lafs_description3","Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.");
+addS ("otahoe-lafs_status:","Tahoe-LAFS status:");
+addS ("otahoe-lafs_not_installed","Tahoe-LAFS is not installed on this machine");
+addS ("otahoe-lafs_instructions_1","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed by the network.");
+addS ("otahoe-lafs_instructions_3","Click on the buttons to start creating a storage grid or to join an existing one.");
+addS ("otahoe-lafs_instructions_2","Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.");
+
+
+
+
+
+
+addS ("otahoe-lafs_installed_not_configured","Tahoe-LAFS is installed on this machine but has not been configured yet");
 addS ("Create an introducer and start a storage grid","Create an introducer and start a storage grid");
 addS ("Create a storage node to join a storage grid","Create a storage node to join a storage grid");
 addS ("Uninstall Tahoe-LAFS","Uninstall Tahoe-LAFS");
@@ -23,31 +62,31 @@ addS ("Tahoe-LAFS storage node is stopped","Tahoe-LAFS storage node is stopped")
 addS ("Manage introducer","Manage introducer");
 addS ("Manage storage node","Manage storage node");
 addS ("Create a storage node","Create a storage node");
-addS ("Click on the buttons to start creating a storage grid or to join an existing one.","Click on the buttons to start creating a storage grid or to join an existing one.");
+
 //install
-addS ("Installation","Installation");
-addS ("Installation process result:","Installation process result:");
-addS ("Tahoe-LAFS is already installed","Tahoe-LAFS is already installed");
-addS ("Tahoe-LAFS installation information:","Tahoe-LAFS installation information:");
-addS ("Back to Tahoe-LAFS","Back to Tahoe-LAFS");
-addS ("Tahoe-LAFS has been successfully installed","Tahoe-LAFS has been successfully installed");
-addS ("Installation process details:","Installation process details:");
+addS ("otahoe-lafs_installation","Installation");
+addS ("otahoe-lafs_installation_details:","Installation process result:");
+addS ("otahoe-lafs_installation_already","Tahoe-LAFS is already installed");
+addS ("otahoe-lafs_installation_information","Tahoe-LAFS installation information:");
+addS ("otahoe-lafs_button_back","Back to Tahoe-LAFS");
+addS ("otahoe-lafs_installation_successful","Tahoe-LAFS has been successfully installed");
+addS ("otahoe-lafs_installation_details","Installation process details:");
 addS ("Post-installation process details:","Post-installation process details:");
 addS ("Tahoe-LAFS installation failed","Tahoe-LAFS installation failed");
 addS ("Retry installation","Retry installation");
 //uninstall
-addS ("Uninstallation","Uninstallation");
-addS ("Uninstallation process result:","Uninstallation process result:");
-addS ("Uninstallation process details:","Uninstallation process details:");
-addS ("Tahoe-LAFS is currently uninstalled","Tahoe-LAFS is currently uninstalled");
-addS ("A Tahoe-LAFS introducer is currently configured.","A Tahoe-LAFS introducer is currently configured.");
-addS ("Stop it and remove it before uninstalling Tahoe-LAFS.","Stop it and remove it before uninstalling Tahoe-LAFS.");
+addS ("otahoe-lafs_uninstallation","Uninstallation");
+addS ("otahoe-lafs_uninstallation_result","Uninstallation process result:");
+addS ("otahoe-lafs_uninstallation_details","Uninstallation process details:");
+addS ("otahoe-lafs_alert_currently_uninstalled","Tahoe-LAFS is currently uninstalled");
+addS ("otahoe-lafs_uninstallation_introducer","A Tahoe-LAFS introducer is currently configured.");
+addS ("otahoe-lafs_alert_stop_uninstall","Stop it and remove it before uninstalling Tahoe-LAFS.");
 addS ("Manage Tahoe-LAFS introducer","Manage Tahoe-LAFS introducer");
 addS ("A Tahoe-LAFS node is currently configured.","A Tahoe-LAFS node is currently configured.");
 addS ("Tahoe-LAFS uninstallation failed","Tahoe-LAFS uninstallation failed");
-addS ("Retry uninstallation","Retry uninstallation");
-addS ("Tahoe-LAFS has been successfully uninstalled","Tahoe-LAFS has been successfully uninstalled");
-addS ("Post-uninstallation process details:","Post-uninstallation process details:");
+addS ("otahoe-lafs_uninstallation_button_retry","Retry uninstallation");
+addS ("otahoe-lafs_uninstallation_uninstallation","Tahoe-LAFS has been successfully uninstalled");
+addS ("otahoe-lafs_uninstallation_post","Post-uninstallation process details:");
 //introducer
 addS ("Introducer","Introducer");
 addS ("Tahoe-LAFS introducer is currently not created","Tahoe-LAFS introducer is currently not created");
@@ -148,15 +187,7 @@ addS ("Tahoe-LAFS introducer successfully deleted","Tahoe-LAFS introducer succes
 addS ("Storage node deletion","Storage node deletion");
 addS ("Storage deletion process result:","Storage deletion process result:");
 addS ("Tahoe-LAFS storage node successfully deleted","Tahoe-LAFS storage node successfully deleted");
-//flash
-addS ("Starting Tahoe-LAFS introducer...","Starting Tahoe-LAFS introducer...");
-addS ("Stopping Tahoe-LAFS introducer...","Stopping Tahoe-LAFS introducer...");
-addS ("Restarting Tahoe-LAFS introducer...","Restarting Tahoe-LAFS introducer...");
-addS ("Starting Tahoe-LAFS storage node...","Starting Tahoe-LAFS storage node...");
-addS ("Stopping Tahoe-LAFS storage node...","Stopping Tahoe-LAFS storage node...");
-addS ("Restarting Tahoe-LAFS storage node...","Restarting Tahoe-LAFS storage node...");
-addS ("Publishing Tahoe-LAFS introducer...","Publishing Tahoe-LAFS introducer...");
-addS ("Unpublishing Tahoe-LAFS introducer...","Unpublishing Tahoe-LAFS introducer...");
+
 
 
 ?>
