@@ -1,8 +1,9 @@
 <?php
 // Update files
 $list_packages = array('cDistro'=>array('user'=>'Clommunity', 'repo'=>'cDistro','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot'),
+             'serf'=>array('user'=>'Clommunity', 'repo'=>'package-serf','type'=>'preinstall','controller'=>'serf', 'function-check'=>'_isInstalled', 'script'=>'https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub'),
 					   'avahi-ps'=>array('user'=>'Clommunity', 'repo'=>'avahi-ps','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot'),
-             'serf'=>array('user'=>'Clommunity', 'repo'=>'package-serf','type'=>'preinstall','controller'=>'serf','script'=>'https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub')
+
 					   );
 $dir_configs="/etc/cloudy";
 
@@ -28,15 +29,15 @@ function index_get()
 
 function getUpdateTable(){
 
-	global $list_packages,$staticFile;
+	global $list_packages,$staticFile,$documentPath,$plugs_controllers;
 
 	$table = "";
 
 	$table = addTableHeader(array(t('cloudyupdate_package'), t('cloudyupdate_installed_version') , t('cloudyupdate_last_version'),  t('cloudyupdate_actions')));
 	foreach($list_packages as $pname => $package){
 		if ($package['type'] == 'preinstall') {
-			require $documentPath.$plugs_controllers.$controller.".php";
-			if (! _isInstalled()) {
+			require $documentPath.$plugs_controllers.$package['controller'].".php";
+			if (! $package['function-check']()) {
 				// Is not installed
 				continue;
 			}
