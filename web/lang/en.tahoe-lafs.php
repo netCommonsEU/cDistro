@@ -2,15 +2,42 @@
 // plug/controllers/tahoe-lafs.php
 
 //alerts
-addS ("otahoe-lafs_running","Tahoe-LAFS storage node running");
+addS ("tahoe-lafs_alert_create_storage","Create a storage node");
+addS ("tahoe-lafs_alert_installed_already","Tahoe-LAFS is already installed");
+addS ("tahoe-lafs_alert_installed_failed","Tahoe-LAFS installation has failed");
+addS ("tahoe-lafs_alert_installed_empty","Tahoe-LAFS is installed but no introducer or storage node has been created yet");
+addS ("tahoe-lafs_alert_installed_successful","Tahoe-LAFS has been successfully installed");
+addS ("tahoe-lafs_alert_introducer_configured","A Tahoe-LAFS introducer is currently configured.");
+addS ("tahoe-lafs_alert_introducer_running","Tahoe-LAFS introducer is running");
+addS ("tahoe-lafs_alert_introducer_stopped","Tahoe-LAFS introducer is stopped");
+addS ("tahoe-lafs_alert_introducer_stop_uninstall","Stop it and remove it before uninstalling Tahoe-LAFS.");
+addS ("tahoe-lafs_alert_storage_configured","A Tahoe-LAFS storage node is currently configured.");
+addS ("tahoe-lafs_alert_storage_running","Tahoe-LAFS storage node is running");
+addS ("tahoe-lafs_alert_storage_stopped","Tahoe-LAFS storage node is stopped");
+addS ("tahoe-lafs_alert_storage_stop_uninstall","Stop it and remove it before uninstalling Tahoe-LAFS.");
+addS ("tahoe-lafs_alert_not_installed","Tahoe-LAFS is not installed");
+addS ("tahoe-lafs_alert_uninstalled_already","Tahoe-LAFS is already uninstalled");
+addS ("tahoe-lafs_alert_uninstalled_failed","Tahoe-LAFS uninstallation has failed");
+addS ("tahoe-lafs_alert_uninstalled_successful","Tahoe-LAFS has been successfully uninstalled");
+
+
+
 
 
 
 
 
 //buttons
-addS ("otahoe-lafs_button_install","Install Tahoe-LAFS");
-
+addS ("tahoe-lafs_button_back","Back to Tahoe-LAFS");
+addS ("tahoe-lafs_button_create_introducer_start_grid","Create an introducer and start a storage grid");
+addS ("tahoe-lafs_button_create_storage","Create a storage node");
+addS ("tahoe-lafs_button_create_storage_join_grid","Create a storage node to join a storage grid");
+addS ("tahoe-lafs_button_install","Install Tahoe-LAFS");
+addS ("tahoe-lafs_button_manage_introducer","Manage introducer");
+addS ("tahoe-lafs_button_manage_storage","Manage storage node");
+addS ("tahoe-lafs_button_retry_install","Retry installation");
+addS ("tahoe-lafs_button_retry_uninstall","Retry uninstallation");
+addS ("tahoe-lafs_button_uninstall","Uninstall Tahoe-LAFS");
 
 
 
@@ -30,63 +57,62 @@ addS ("otahoe-lafs_flash_unpublishing_introducer","Unpublishing Tahoe-LAFS intro
 
 
 
-
+//common
+addS ("tahoe-lafs_common_status:","Tahoe-LAFS status:");
+addS ("otahoe-lafs_common_title","Tahoe-LAFS");
 
 
 
 //index
-addS ("otahoe-lafs_title","Tahoe-LAFS");
-addS ("otahoe-lafs_subtitle","A cloud storage system that distributes your data across multiple servers");
-addS ("otahoe-lafs_description1","Tahoe-LAFS is a free and open cloud storage system.");
-addS ("otahoe-lafs_description2","It distributes your data across multiple servers.");
-addS ("otahoe-lafs_description3","Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.");
-addS ("otahoe-lafs_status:","Tahoe-LAFS status:");
-addS ("otahoe-lafs_not_installed","Tahoe-LAFS is not installed on this machine");
-addS ("otahoe-lafs_instructions_1","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed by the network.");
-addS ("otahoe-lafs_instructions_3","Click on the buttons to start creating a storage grid or to join an existing one.");
-addS ("otahoe-lafs_instructions_2","Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.");
+addS ("tahoe-lafs_index_subtitle","A cloud storage system that distributes your data across multiple servers");
+addS ("tahoe-lafs_index_description1","Tahoe-LAFS is a free and open cloud storage system.");
+addS ("tahoe-lafs_index_description2","It distributes your data across multiple servers.");
+addS ("tahoe-lafs_index_description3","Even if some of the servers fail or are taken over by an attacker, the entire filesystem continues to function correctly, preserving your privacy and security.");
+addS ("tahoe-lafs_index_instructions_1","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed by the network.");
+addS ("tahoe-lafs_index_instructions_2","Click on the button to install Tahoe-LAFS and start creating a storage grid or to join an existing one.");
+addS ("tahoe-lafs_index_instructions_3","Click on the buttons to start creating a storage grid or to join an existing one.");
 
 
-
-
-
-
-addS ("otahoe-lafs_installed_not_configured","Tahoe-LAFS is installed on this machine but has not been configured yet");
-addS ("Create an introducer and start a storage grid","Create an introducer and start a storage grid");
-addS ("Create a storage node to join a storage grid","Create a storage node to join a storage grid");
-addS ("Uninstall Tahoe-LAFS","Uninstall Tahoe-LAFS");
-addS ("Tahoe-LAFS introducer is running","Tahoe-LAFS introducer is running");
-addS ("Tahoe-LAFS introducer is stopped","Tahoe-LAFS introducer is stopped");
-addS ("Tahoe-LAFS storage node is running","Tahoe-LAFS storage node is running");
-addS ("Tahoe-LAFS storage node is stopped","Tahoe-LAFS storage node is stopped");
-addS ("Manage introducer","Manage introducer");
-addS ("Manage storage node","Manage storage node");
-addS ("Create a storage node","Create a storage node");
 
 //install
-addS ("otahoe-lafs_installation","Installation");
-addS ("otahoe-lafs_installation_details:","Installation process result:");
-addS ("otahoe-lafs_installation_already","Tahoe-LAFS is already installed");
-addS ("otahoe-lafs_installation_information","Tahoe-LAFS installation information:");
-addS ("otahoe-lafs_button_back","Back to Tahoe-LAFS");
-addS ("otahoe-lafs_installation_successful","Tahoe-LAFS has been successfully installed");
-addS ("otahoe-lafs_installation_details","Installation process details:");
-addS ("Post-installation process details:","Post-installation process details:");
-addS ("Tahoe-LAFS installation failed","Tahoe-LAFS installation failed");
-addS ("Retry installation","Retry installation");
+addS ("tahoe-lafs_install_subtitle","Installation");
+addS ("tahoe-lafs_install_result","Installation process result:");
+addS ("tahoe-lafs_install_details","Installation process details:");
+addS ("tahoe-lafs_install_post","Post-installation process details:");
+
+
+
+
 //uninstall
-addS ("otahoe-lafs_uninstallation","Uninstallation");
-addS ("otahoe-lafs_uninstallation_result","Uninstallation process result:");
-addS ("otahoe-lafs_uninstallation_details","Uninstallation process details:");
-addS ("otahoe-lafs_alert_currently_uninstalled","Tahoe-LAFS is currently uninstalled");
-addS ("otahoe-lafs_uninstallation_introducer","A Tahoe-LAFS introducer is currently configured.");
-addS ("otahoe-lafs_alert_stop_uninstall","Stop it and remove it before uninstalling Tahoe-LAFS.");
-addS ("Manage Tahoe-LAFS introducer","Manage Tahoe-LAFS introducer");
-addS ("A Tahoe-LAFS node is currently configured.","A Tahoe-LAFS node is currently configured.");
-addS ("Tahoe-LAFS uninstallation failed","Tahoe-LAFS uninstallation failed");
-addS ("otahoe-lafs_uninstallation_button_retry","Retry uninstallation");
-addS ("otahoe-lafs_uninstallation_uninstallation","Tahoe-LAFS has been successfully uninstalled");
-addS ("otahoe-lafs_uninstallation_post","Post-uninstallation process details:");
+addS ("tahoe-lafs_uninstall_subtitle","Uninstallation");
+addS ("tahoe-lafs_uninstall_result","Uninstallation process result:");
+addS ("tahoe-lafs_uninstall_details","Uninstallation process details:");
+addS ("tahoe-lafs_uninstall_post","Post-uninstallation process details:");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //introducer
 addS ("Introducer","Introducer");
 addS ("Tahoe-LAFS introducer is currently not created","Tahoe-LAFS introducer is currently not created");
