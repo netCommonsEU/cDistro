@@ -3,6 +3,7 @@
 
 //alerts
 addS ("tahoe-lafs_alert_checking_introducer","Checking Tahoe-LAFS introducer status");
+addS ("tahoe-lafs_alert_checking_storage","Checking Tahoe-LAFS storage node status");
 addS ("tahoe-lafs_alert_installed_already","Tahoe-LAFS is already installed");
 addS ("tahoe-lafs_alert_installed_failed","Tahoe-LAFS installation has failed");
 addS ("tahoe-lafs_alert_installed_empty","Tahoe-LAFS is installed but no introducer or storage node has been created yet");
@@ -20,23 +21,29 @@ addS ("tahoe-lafs_alert_introducer_start_fail","Tahoe-LAFS introducer start has 
 addS ("tahoe-lafs_alert_introducer_stopped","Tahoe-LAFS introducer is stopped");
 addS ("tahoe-lafs_alert_introducer_stop_uninstall","Stop it and remove it before uninstalling Tahoe-LAFS");
 addS ("tahoe-lafs_alert_introducer_successful","Tahoe-LAFS introducer has been successfully created");
+addS ("tahoe-lafs_alert_introducer_deletion_successful","Tahoe-LAFS introducer has been successfully deleted");
+addS ("tahoe-lafs_alert_introducer_deletion_failed","Tahoe-LAFS introducer deletion has failed");
 
 
 addS ("tahoe-lafs_alert_request_incorrect","Incorrect request parameters received");
 addS ("tahoe-lafs_alert_storage_configured","A Tahoe-LAFS storage node is currently configured");
+addS ("tahoe-lafs_alert_storage_invalid_name","Invalid storage node name");
+addS ("tahoe-lafs_alert_storage_invalid_FURL","Invalid storage node name");
+addS ("tahoe-lafs_alert_storage_maximum","A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the name");
+addS ("tahoe-lafs_alert_storage_not_created","The Tahoe-LAFS storage node is currently not created");
 addS ("tahoe-lafs_alert_storage_running","Tahoe-LAFS storage node is running");
+addS ("tahoe-lafs_alert_storage_started","Tahoe-LAFS storage node has been successfully started");
+addS ("tahoe-lafs_alert_storage_start_fail","Tahoe-LAFS storage node start has failed");
 addS ("tahoe-lafs_alert_storage_stopped","Tahoe-LAFS storage node is stopped");
 addS ("tahoe-lafs_alert_storage_stop_uninstall","Stop it and remove it before uninstalling Tahoe-LAFS");
 addS ("tahoe-lafs_alert_not_installed","Tahoe-LAFS is not installed");
 addS ("tahoe-lafs_alert_uninstalled_already","Tahoe-LAFS is already uninstalled");
 addS ("tahoe-lafs_alert_uninstalled_failed","Tahoe-LAFS uninstallation has failed");
 addS ("tahoe-lafs_alert_uninstalled_successful","Tahoe-LAFS has been successfully uninstalled");
-
-
-
-
-
-
+addS ("tahoe-lafs_alert_storage_failed","Tahoe-LAFS storage node creation has failed");
+addS ("tahoe-lafs_alert_storage_successful","Tahoe-LAFS storage node has been successfully created");
+addS ("tahoe-lafs_alert_storage_deletion_successful","Tahoe-LAFS storage node has been successfully deleted");
+addS ("tahoe-lafs_alert_storage_deletion_failed","Tahoe-LAFS storage node deletion has failed");
 
 
 //buttons
@@ -47,12 +54,16 @@ addS ("tahoe-lafs_button_create_storage","Create a storage node");
 addS ("tahoe-lafs_button_create_storage_join_grid","Create a storage node to join a storage grid");
 addS ("tahoe-lafs_button_install","Install Tahoe-LAFS");
 addS ("tahoe-lafs_button_delete_introducer","Delete introducer");
+addS ("tahoe-lafs_button_delete_storage","Delete storage node");
 addS ("tahoe-lafs_button_introducer_private","Make introducer private");
 addS ("tahoe-lafs_button_introducer_public","Make introducer public");
 addS ("tahoe-lafs_button_introducer_retry","Retry introducer creation");
 addS ("tahoe-lafs_button_manage_introducer","Manage introducer");
 addS ("tahoe-lafs_button_start_introducer","Start introducer");
+addS ("tahoe-lafs_button_start_storage","Start storage node");
 addS ("tahoe-lafs_button_stop_introducer","Stop introducer");
+addS ("tahoe-lafs_button_stop_storage","Stop storage node");
+addS ("tahoe-lafs_button_storage_retry","Retry storage node creation");
 addS ("tahoe-lafs_button_manage_storage","Manage storage node");
 addS ("tahoe-lafs_button_retry_install","Retry installation");
 addS ("tahoe-lafs_button_retry_uninstall","Retry uninstallation");
@@ -63,14 +74,14 @@ addS ("tahoe-lafs_button_uninstall","Uninstall Tahoe-LAFS");
 
 
 //flash
-addS ("otahoe-lafs_flash_starting_introducer","Starting Tahoe-LAFS introducer...");
-addS ("otahoe-lafs_flash_stopping_introducer","Stopping Tahoe-LAFS introducer...");
-addS ("otahoe-lafs_flash_restarting_introducer","Restarting Tahoe-LAFS introducer...");
-addS ("otahoe-lafs_flash_starting_storage","Starting Tahoe-LAFS storage node...");
-addS ("otahoe-lafs_flash_stopping_storage","Stopping Tahoe-LAFS storage node...");
-addS ("otahoe-lafs_flash_restarting_storage","Restarting Tahoe-LAFS storage node...");
-addS ("otahoe-lafs_flash_publishing_introducer","Publishing Tahoe-LAFS introducer...");
-addS ("otahoe-lafs_flash_unpublishing_introducer","Unpublishing Tahoe-LAFS introducer...");
+addS ("tahoe-lafs_flash_starting_introducer","Starting Tahoe-LAFS introducer...");
+addS ("tahoe-lafs_flash_stopping_introducer","Stopping Tahoe-LAFS introducer...");
+addS ("tahoe-lafs_flash_restarting_introducer","Restarting Tahoe-LAFS introducer...");
+addS ("tahoe-lafs_flash_starting_storage","Starting Tahoe-LAFS storage node...");
+addS ("tahoe-lafs_flash_stopping_storage","Stopping Tahoe-LAFS storage node...");
+addS ("tahoe-lafs_flash_restarting_storage","Restarting Tahoe-LAFS storage node...");
+addS ("tahoe-lafs_flash_publishing_introducer","Publishing Tahoe-LAFS introducer...");
+addS ("tahoe-lafs_flash_unpublishing_introducer","Unpublishing Tahoe-LAFS introducer...");
 
 
 
@@ -79,6 +90,7 @@ addS ("otahoe-lafs_flash_unpublishing_introducer","Unpublishing Tahoe-LAFS intro
 //common
 addS ("tahoe-lafs_common_status:","Tahoe-LAFS status:");
 addS ("otahoe-lafs_common_title","Tahoe-LAFS");
+addS ("tahoe-lafs_common_empty","empty");
 
 
 
@@ -133,13 +145,7 @@ addS ("tahoe-lafs_createintroducer_public_tooltip","Announce the introducer serv
 addS ("tahoe-lafs_createintroducer_result","Introducer creation process result:");
 addS ("tahoe-lafs_createintroducer_starting","Starting Tahoe-LAFS introducer:");
 
-addS ("Invalid introducer web port number number","Invalid introducer web port number number");
-addS ("A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the names","A maximum of 80 alphanumeric characters, dashes and underscores are allowed in the names");
-addS ("Tahoe-LAFS introducer successfully created","Tahoe-LAFS introducer successfully created");
-addS ("Tahoe-LAFS introducer creation failed","Tahoe-LAFS introducer creation failed");
 
-addS ("Tahoe-LAFS introducer successfully started","Tahoe-LAFS introducer successfully started");
-addS ("Tahoe-LAFS introducer start failed","Tahoe-LAFS introducer start failed");
 
 
 
@@ -164,76 +170,48 @@ addS ("tahoe-lafs_uninstall_post","Post-uninstallation process details:");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //node
-addS ("Storage node","Storage node");
-addS ("Tahoe-LAFS storage node is currently not created","Tahoe-LAFS storage node is currently not created");
-addS ("Click on the button to set up a storage node on this machine and join a storage grid.","Click on the button to set up a storage node on this machine and join a storage grid.");
-addS ("Checking Tahoe-LAFS storage node status...","Checking Tahoe-LAFS storage node status...");
-addS ("Tahoe-LAFS storage node status:","Tahoe-LAFS storage node status:");
-addS ("Tahoe-LAFS storage node is running","Tahoe-LAFS storage node is running");
-addS ("Stop Tahoe-LAFS storage node","Stop Tahoe-LAFS storage node");
-addS ("Tahoe-LAFS storage node is stopped","Tahoe-LAFS storage node is stopped");
-addS ("Start Tahoe-LAFS storage node","Start Tahoe-LAFS storage node");
-addS ("Delete Tahoe-LAFS storage node","Delete Tahoe-LAFS storage node");
-addS ("Tahoe-LAFS storage node web page (only accessible from localhost):","Tahoe-LAFS storage node web page (only accessible from localhost):");
-//createNode_get
-addS ("Use this page to set up a storage node and join a storage grid.","Use this page to set up a storage node and join a storage grid.");
-addS ("Storage node name","Storage node name");
-addS ("A short nickname to identify the storage node in the grid.","A short nickname to identify the storage node in the grid.");
-addS ("Introducer FURL","Introducer FURL");
-addS ("The introducer's FURL of the storage grid you want to join.","The introducer's FURL of the storage grid you want to join.");
-addS ("This value has been obtained from the information published by the introducer via Avahi.","This value has been obtained from the information published by the introducer via Avahi.");
-addS ("If you want to modify this field, please go back to the main Tahoe-LAFS page and manually create a storage node.","If you want to modify this field, please go back to the main Tahoe-LAFS page and manually create a storage node.");
-addS ("The default value has been obtained from the introducer running on this host.","The default value has been obtained from the introducer running on this host.");
-addS ("If you want to join another introducer, please modify this field accordingly.","If you want to join another introducer, please modify this field accordingly.");
-addS ("Folder","Folder");
-addS ("The installation path for the storage node.","The installation path for the storage node.");
-addS ("Create storage node","Create storage node");
-addS ("Storage node name:","Storage node name:");
-addS ("Tahoe-LAFS storage node is already created","Tahoe-LAFS storage node is already created");
-addS ("Tahoe-LAFS storage node is running","Tahoe-LAFS storage node is running");
-addS ("Tahoe-LAFS storage node is stopped","Tahoe-LAFS storage node is stopped");
-addS ("Storage node creation","Storage node creation");
-//createNode_post
-addS ("Node creation process result:","Node creation process result:");
-addS ("Tahoe-LAFS node successfully created","Tahoe-LAFS node successfully created");
-addS ("Tahoe-LAFS node creation failed","Tahoe-LAFS node creation failed");
-addS ("Starting Tahoe-LAFS node:","Starting Tahoe-LAFS node:");
-addS ("Tahoe-LAFS node successfully started","Tahoe-LAFS node successfully started");
-addS ("Tahoe-LAFS node start failed","Tahoe-LAFS node start failed");
-addS ("Start storage node","Start storage node");
-//deleteIntroducer
-addS ("Introducer deletion","Introducer deletion");
-addS ("Tahoe-LAFS introducer is not created","Tahoe-LAFS introducer is not created");
-addS ("Tahoe-LAFS introducer is not stopped","Tahoe-LAFS introducer is not stopped");
-addS ("Introducer deletion process result:","Introducer deletion process result:");
-addS ("Tahoe-LAFS introducer deletion failed","Tahoe-LAFS introducer deletion failed");
-addS ("Tahoe-LAFS introducer successfully deleted","Tahoe-LAFS introducer successfully deleted");
-//deleteNode
-addS ("Storage node deletion","Storage node deletion");
-addS ("Storage deletion process result:","Storage deletion process result:");
-addS ("Tahoe-LAFS storage node successfully deleted","Tahoe-LAFS storage node successfully deleted");
+addS ("tahoe-lafs_node_subtitle","Storage node");
+addS ("tahoe-lafs_node_instructions_1","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed in the network.");
+addS ("tahoe-lafs_node_instructions_2","Click on the button to set up a storage node on this machine and join a storage grid.");
+addS ("tahoe-lafs_node_status","Tahoe-LAFS storage node status:");
+addS ("tahoe-lafs_node_FURL","Introducer FURL:");
+addS ("tahoe-lafs_node_web","Tahoe-LAFS storage node web page (only accessible from localhost):");
 
+//createNode_get
+addS ("tahoe-lafs_createnode_subtitle","Storage node creation");
+addS ("tahoe-lafs_createnode_instructions_1","To deploy a storage grid with Tahoe-LAFS you need one <strong>introducer</strong> and multiple <strong>storage nodes</strong> distributed in the network.");
+addS ("tahoe-lafs_createnode_instructions_2","Use this page to set up a storage node and join a storage grid.");
+addS ("tahoe-lafs_createintroducer_name","Storage node name");
+addS ("tahoe-lafs_createintroducer_name_example","MyStorageNode");
+addS ("tahoe-lafs_createintroducer_name_tooltip","A short nickname to identify the storage node in the grid.");
+addS ("tahoe-lafs_createintroducer_FURL","Introducer FURL");
+addS ("tahoe-lafs_createintroducer_FURL_tooltip_1","The introducer's FURL of the storage grid you want to join.");
+addS ("tahoe-lafs_createintroducer_FURL_tooltip_2","This value has been obtained from the information published by the introducer via Avahi.");
+addS ("tahoe-lafs_createintroducer_FURL_tooltip_3","If you want to modify this field, please go back to the main Tahoe-LAFS page and manually create a storage node.");
+addS ("tahoe-lafs_createintroducer_FURL_tooltip_4","The default value has been obtained from the introducer running on this host.");
+addS ("tahoe-lafs_createintroducer_FURL_tooltip_5","If you want to join another introducer, please modify this field accordingly.");
+addS ("tahoe-lafs_createintroducer_folder","Folder");
+addS ("tahoe-lafs_createintroducer_folder_tooltip","The installation path for the storage node.");
+
+//createNode_post
+addS ("tahoe-lafs_createnode_result","Introducer creation process result:");
+addS ("tahoe-lafs_createnode_starting","Starting Tahoe-LAFS introducer:");
+
+
+
+
+
+
+
+//deleteIntroducer
+addS ("tahoe-lafs_deleteintroducer_subtitle","Introducer deletion");
+addS ("tahoe-lafs_deleteintroducer_result","Introducer deletion process result:");
+
+
+//deleteNode
+addS ("tahoe-lafs_deletenode_subtitle","Storage node deletion");
+addS ("tahoe-lafs_deletenode_result","Storage deletion process result:");
 
 
 ?>
