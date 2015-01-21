@@ -3,6 +3,23 @@
 
 //Serf
 
+//alerts
+addS ("serf_alert_not_installed","Serf no està instal·lat");
+
+//buttons
+addS ("serf_button_install","Instal·la Serf");
+
+//common
+addS ("serf_common_title","Serf");
+addS ("serf_common_subtitle","Una eina d'Anunci i Descoberta de Serveis Distribuïda (DADS)");
+
+//index
+addS ("serf_index_description_1","<a href='https://serfdom.io/' target='_blank'>Serf</a> és una solució descentralitzada, lleugera i d'alta disponibilitat per gestionar la pertanyença a clústers, la detecció de fallades i l'orquestració de serveis. Utilitza un protocol eficient i lleuger de <i>gossip</i> (xafardeig) per a la comunicació entre nodes. Com que Serf no depèn de nodes mestres (<i>master</i>) no té punts únics de fallada.");
+addS ("serf_index_description_2","El sistema d'Anunci i Descoberta de Serveis Distribuït (en anglès, <i>DADS</i>) inclòs a Cloudy utilitza Serf per intercanviar informació entre nodes.");
+addS ("serf_index_status","Estat de Serf:");
+
+
+
 addS ("serfinit_start","SERF en funcionament");
 addS ("serfinit_stop","SERF Parat");
 addS ("scan_quality_of_services","Test de qualitat dels serveis");
