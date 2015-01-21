@@ -107,7 +107,7 @@ addS ("tahoe-lafs_createnode_name_example","MyStorageNode");
 addS ("tahoe-lafs_createnode_name","Storage node name");
 addS ("tahoe-lafs_createnode_name_tooltip","A short nickname to identify the storage node in the grid.");
 addS ("tahoe-lafs_createnode_result","Introducer creation process result:");
-addS ("tahoe-lafs_createnode_starting","Starting Tahoe-LAFS introducer:");
+addS ("tahoe-lafs_createnode_starting","Starting Tahoe-LAFS storage node:");
 addS ("tahoe-lafs_createnode_subtitle","Storage node creation");
 
 //deleteIntroducer
@@ -151,7 +151,7 @@ addS ("tahoe-lafs_introducer_instructions_1","To deploy a storage grid with Taho
 addS ("tahoe-lafs_introducer_instructions_2","Click on the button to set up an introducer on this machine.");
 addS ("tahoe-lafs_introducer_instructions_3","After that, storage nodes will be able to join the introducer to deploy the storage grid.");
 addS ("tahoe-lafs_introducer_private","The storage grid is private");
-addS ("tahoe-lafs_introducer_public","The storage grid is public and is being announced via Avahi");
+addS ("tahoe-lafs_introducer_public","The storage grid is public and is being announced to the community");
 addS ("tahoe-lafs_introducer_status","Tahoe-LAFS introducer status:");
 addS ("tahoe-lafs_introducer_subtitle","Introducer");
 addS ("tahoe-lafs_introducer_web","Introducer web interface:");
