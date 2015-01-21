@@ -8,7 +8,8 @@ $staticPath=dirname($staticFile);
 $documentPath=$_SERVER['DOCUMENT_ROOT'];
 
 // App configure
-$appCopyright = "&copy; 2014, GPLv2";
+$appCurrentYear = date('Y');
+$appCopyright = "&copy; ".$appCurrentYear.", GPLv2";
 $appHost = $_SERVER['HTTP_HOST'];
 $appHostname = gethostname();
 $appName = 'Cloudy';
