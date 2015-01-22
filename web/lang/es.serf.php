@@ -4,46 +4,52 @@
 //Serf
 
 //alerts
+addS ("serf_alert_installed","Serf está instalado");
 addS ("serf_alert_not_installed","Serf no está instalado");
+addS ("serf_alert_not_publishing","Serf no está publicando los servicios locales");
+addS ("serf_alert_publishing","Serf está publicando los servicios locales");
+addS ("serf_alert_running","Serf está ejecutándose");
+addS ("serf_alert_stopped","Serf está parado");
+addS ("serf_alert_will_publish","Serf publicará los servicios locales");
+addS ("serf_alert_wont_publish","Serf no publicará los servicios locales");
 
 //buttons
 addS ("serf_button_install","Instalar Serf");
+addS ("serf_button_publish","Activar la publicación de servicios vía Serf");
+addS ("serf_button_unpublish","Desactivar la publicación de servicios vía Serf");
+addS ("serf_button_save","Guardar la configuración");
+addS ("serf_button_start","Iniciar Serf");
+addS ("serf_button_stop","Parar Serf");
+addS ("serf_button_uninstall","Desinstalar Serf");
 
 //common
 addS ("serf_common_title","Serf");
-addS ("serf_common_subtitle","Una herramienta de Anuncio y Descubrimiento de Servicios Distribuida (DADS)");
+addS ("serf_common_subtitle","Una herramiente de Anuncio y Descubrimiento de Servicios Distribuida (DADS)");
+
+//flash
+addS ("serf_flash_installed","Serf ha sido instalado");
+addS ("serf_flash_publishing","Activando la publicación de servicios vía Serf...");
+addS ("serf_flash_saving","Guardando la configuración de Serf...");
+addS ("serf_flash_starting","Iniciando Serf...");
+addS ("serf_flash_stopping","Parando Serf...");
+addS ("serf_flash_uninstalled","Serf ha sido desinstalado");
+addS ("serf_flash_unpublishing","Desactivando la publicación de servicios vía Serf...");
 
 //index
-addS ("serf_index_description_1","<a href='https://serfdom.io/' target='_blank'>Serf</a> es una solución descentralizada, ligera y de alta disponibilidad para gestionar la pertenencia a clústers, la detección de fallos y la orquestación de servicios. Utiliza un protocolo eficiente y ligero de <i>gossip</i> (cotilleo) para la comunicación entre nodos. Como Serf no depende de nodos maestros (<i>master</i>) no tiene puntos únicos de fallo.");
-addS ("serf_index_description_2","El sistema de Anuncio y Descubrimiento de Servicios Distribuido (en inglés, <i>DADS</i>) inlcuido en Cloudy usa Serf para intercambiar información entre nodos.");
+addS ("serf_index_change_configuration","Utilice este formulario para modificar la configuración de Serf:");
+addS ("serf_index_current_configuration","Esta es la configuración actual de Serf. Para cambiarla, pare Serf primero.");
+addS ("serf_index_description_1","<a href='https://serfdom.io/' target='_blank'>Serf</a> es una solución descentralizada, ligera y de alta disponibilidad para gestionar la pertenencia a clústeres, la detección de fallos y la orquestación de servicios. Utiliza un protocolo eficiente y ligero de <i>gossip</i> (cotilleo) para la comunicación entre nodos. Como Serf no depende de nodes maestros (<i>master</i>) no tiene puntos únicos de fallo.");
+addS ("serf_index_description_2","El sistema de Anuncio y Descubrimiento de Servicios Distribuido (en inglés, <i>DADS</i>) incluido en Cloudy utiliza Serf para intercambiar información entre nodes. Si la publicación de servicios está activada, los servicios locales serán anunciados a la red y otros usuarios podrán verlos y usarlos.");
+addS ("serf_index_form_bootstrap","Nodo de arranque");
+addS ("serf_index_form_bootstrap_tooltip","Dirección IP y puerto de un node que esté corriendo Serf. Se utilizará para arrancar el servicio. Valor por defecto: 10.139.40.82:5000");
+addS ("serf_index_form_rpc","Adreça RPC");
+addS ("serf_index_form_rpc_tooltip","Dirección IP y puerto para las llamadas a procedimiento remoto (en inglés, <i>RPC</i>. Valor por defecto: 127.0.0.1:7373");
+addS ("serf_index_form_bind","Puerto de escucha");
+addS ("serf_index_form_bind_tooltip","El puerto por el que Serf escuchará los mensajes que reciba de otros nodos. Valor por defecto: 5000");
+addS ("serf_index_subtitle_configuration","Configuración");
+addS ("serf_index_publication","Publicación de servicios:");
 addS ("serf_index_status","Estado de Serf:");
 
-addS ("serfinit_start","SERF en funcionamiento");
-addS ("serfinit_stop","SERF Parado");
-addS ("scan_quality_of_services","Test de qualidad de los servicios");
-addS ("serf_description","<a href='https://serfdom.io/' target='_blank'>Serf</a> es una solución descentralizada para la pertenencia al clúster, la detección de fallos, y la orquestación. Ligero y de alta disponibilidad.");
-addS ("serf_is_not_installed","SERF no esta instalado");
-addS ("serf_is_installed","SERF esta instalado");
-addS ("serf_is_not_running","SERF parado");
-addS ("serf_is_running","SERF en funcionamiento");
-addS ("serf_is_not_selected","SERF no selecionado");
-addS ("serf_is_selected","SERF seleccionado");
-addS ("serf_rpc_addr_help","IP:Port de llamadas externas");
-addS ("serf_rpc_address_desc","Direccion de RPC");
-addS ("serf_bind_port_desc","Puerto de escucha ");
-addS ("serf_bind_help","Puerto de SERF");
-addS ("serf_peer_join_desc","IP:Port del servidor de union");
-addS ("serf_join_help","Servidor de conexión");
-addS ("serf_parameters_button","Guardar");
-addS ("avahipsserf_alert_saved","Avahi-ps-serf esta guardat");
-addS ("serf_was_install","SERF instalado");
-addS ("serf_was_uninstall","SERF desinstalado");
-
-addS ("install_serf","Instalar SERF");
-addS ("uninstall_serf","Desinstalar SERF");
-addS ("start_serf","Arrancar SERF");
-addS ("stop_serf","Parar SERF");
-addS ("select_serf","Activar la publicación de servicios por SERF");
-addS ("deselect_serf","Desactivar la publicación de servicios por SERF");
-
+//search
+addS ("serf_search_quality","Escanear la calidad de los servicios");
 ?>

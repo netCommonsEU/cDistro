@@ -4,50 +4,52 @@
 //Serf
 
 //alerts
+addS ("serf_alert_installed","Serf està instal·lat");
 addS ("serf_alert_not_installed","Serf no està instal·lat");
+addS ("serf_alert_not_publishing","Serf no està publicant els serveis locals");
+addS ("serf_alert_publishing","Serf està publicant els serveis locals");
+addS ("serf_alert_running","Serf està en marxa");
+addS ("serf_alert_stopped","Serf està aturat");
+addS ("serf_alert_will_publish","Serf publicarà els serveis locals");
+addS ("serf_alert_wont_publish","Serf no publicarà els serveis locals");
 
 //buttons
 addS ("serf_button_install","Instal·la Serf");
+addS ("serf_button_publish","Activa la publicació de serveis via Serf");
+addS ("serf_button_unpublish","Desactiva la publicació de serveis via Serf");
+addS ("serf_button_save","Desa la configuració");
+addS ("serf_button_start","Arrenca Serf");
+addS ("serf_button_stop","Atura Serf");
+addS ("serf_button_uninstall","Desinstal·la Serf");
 
 //common
 addS ("serf_common_title","Serf");
 addS ("serf_common_subtitle","Una eina d'Anunci i Descoberta de Serveis Distribuïda (DADS)");
 
+//flash
+addS ("serf_flash_installed","S'ha instal·lat Serf");
+addS ("serf_flash_publishing","S'està activant la publicació de serveis via Serf...");
+addS ("serf_flash_saving","S'està desant la configuració de Serf...");
+addS ("serf_flash_starting","S'està arrencant Serf...");
+addS ("serf_flash_stopping","S'està aturant Serf...");
+addS ("serf_flash_uninstalled","S'ha desinstal·lat Serf");
+addS ("serf_flash_unpublishing","S'està desactivant la publicació de serveis via Serf...");
+
 //index
+addS ("serf_index_change_configuration","Feu servir aquest formulari per modificar la configuració de Serf:");
+addS ("serf_index_current_configuration","Aquesta és la configuració actual de Serf. Per canviar-la, primer atureu Serf.");
 addS ("serf_index_description_1","<a href='https://serfdom.io/' target='_blank'>Serf</a> és una solució descentralitzada, lleugera i d'alta disponibilitat per gestionar la pertanyença a clústers, la detecció de fallades i l'orquestració de serveis. Utilitza un protocol eficient i lleuger de <i>gossip</i> (xafardeig) per a la comunicació entre nodes. Com que Serf no depèn de nodes mestres (<i>master</i>) no té punts únics de fallada.");
-addS ("serf_index_description_2","El sistema d'Anunci i Descoberta de Serveis Distribuït (en anglès, <i>DADS</i>) inclòs a Cloudy utilitza Serf per intercanviar informació entre nodes.");
+addS ("serf_index_description_2","El sistema d'Anunci i Descoberta de Serveis Distribuït (en anglès, <i>DADS</i>) inclòs a Cloudy utilitza Serf per intercanviar informació entre nodes. Si la publicació de serveis està activada, els serveis locals seran anunciats a la xarxa i altres usuaris podran veure'ls i usar-los.");
+addS ("serf_index_form_bootstrap","Node d'arrencada");
+addS ("serf_index_form_bootstrap_tooltip","L'adreça IP i el port d'un node que estigui executant Serf. S'utilitzarà per arrencar el servei. Valor per defecte: 10.139.40.82:5000");
+addS ("serf_index_form_rpc","Adreça RPC");
+addS ("serf_index_form_rpc_tooltip","L'adreça IP i el port per les crides a procediment remot (en anglès, <i>RPC</i>. Valor per defecte: 127.0.0.1:7373");
+addS ("serf_index_form_bind","Port d'escolta");
+addS ("serf_index_form_bind_tooltip","El port pel qual Serf escoltarà els missatges que rebi d'altres nodes. Valor per defecte: 5000");
+addS ("serf_index_subtitle_configuration","Configuració");
+addS ("serf_index_publication","Publicació de serveis:");
 addS ("serf_index_status","Estat de Serf:");
 
-
-
-addS ("serfinit_start","SERF en funcionament");
-addS ("serfinit_stop","SERF Parat");
-addS ("scan_quality_of_services","Test de qualitat dels serveis");
-addS ("serf_description","<a href='https://serfdom.io/' target='_blank'>Serf</a> és una solució descentralitzada per a la pertinença al clúster, la detecció de fallades, i l'orquestració. Lleuger i d'alta disponibilitat.");
-addS ("serf_is_not_installed","SERF no està instal·lat");
-addS ("serf_is_installed","SERF està instal·lat");
-addS ("serf_is_not_running","SERF aturat");
-addS ("serf_is_running","SERF en funcionament");
-addS ("serf_is_not_selected","SERF no sel·leccionat");
-addS ("serf_is_selected","SERF sel·leccionat");
-addS ("serf_rpc_addr_help","IP:Port per les crides externes");
-addS ("serf_rpc_address_desc","Adreça de RPC");
-addS ("serf_bind_port_desc","Port d'escolta del SERF ");
-addS ("serf_bind_help","SERF Port");
-addS ("serf_peer_join_desc","IP:Port del servidor a ajuntar-se");
-addS ("serf_join_help","Servidor a connectar-se");
-addS ("serf_parameters_button","Guardar");
-addS ("avahipsserf_alert_saved","Avahi-ps-serf està guardat");
-addS ("serf_was_install","SERF s'ha instal·lat");
-addS ("serf_was_uninstall","SERF s'ha desinstal·lat");
-
-addS ("install_serf","Instal·lar SERF");
-addS ("uninstall_serf","Desinstal.lar SERF");
-addS ("start_serf","Posar en funcionament SERF");
-addS ("stop_serf","Aturar SERF");
-addS ("select_serf","Activar la publicació de serveis per SERF");
-addS ("deselect_serf","Desactivar la publicació de serveis per SERF");
-
-
-
+//search
+addS ("serf_search_quality","Escaneja la qualitat dels serveis");
 ?>

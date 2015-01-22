@@ -1,6 +1,5 @@
 <?php
 // controllers/serf.php
-$title="serf";
 $dirpath="/opt/serf";
 $serfproc="serf";
 define('SERFPATH',$dirpath."/".$serfproc);
@@ -41,7 +40,7 @@ function search()
 	$page .= "	);";
 	$page .= "});\n";
 	$page .= "</script>\n";
-	$page .=  addButton(array('label'=>t("scan_quality_of_services"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
+	$page .=  addButton(array('label'=>t("serf_search_quality"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
 
 
 	return(array('type'=>'render','page'=>$page));
@@ -120,83 +119,83 @@ function ajaxsearch()
 
 function index()
 {
-	global $title, $urlpath, $avahips_config, $avahipsetc_config,$avahipsetc_data;
+	global $urlpath, $avahips_config, $avahipsetc_config,$avahipsetc_data;
 	$is_installed=_isInstalled();
-	
+
 	$page = "";
 	$buttons = "";
 
 	$page .= hlc(t("serf_common_title"));
 	$page .= hl(t("serf_common_subtitle"),4);
-	
+
 	if (!_existAvahiConf()) {
 		createDefaultAvahiFile();
 	}
 	$var_avahi = load_conffile($avahips_config);
-	
+
 	$page .= par(t("serf_index_description_1"));
 	$page .= par(t("serf_index_description_2"));
-	
+
 	$page .= txt(t("serf_index_status"));
 
-
 	if (!$is_installed) {
-		$page .= "<div class='alert alert-error text-center'>".t("serf_alert_not_installed")."</div>\n";
+		$page .= "<div class='alert alert-error text-center'>".t("serf_alert_not_installed")."</div>";
 		$buttons .= addButton(array('label'=>t("serf_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/getprogram", 'divOptions'=>array('class'=>'btn-group')));
-	} else {
-		$page .= "<div class='alert alert-success'>".t("serf_alert_not_installed")."</div>";
-		$buttons .= addButton(array('label'=>t("serf_button_uninstall"),'class'=>'btn btn-danger', 'href'=>"$urlpath/removeprogram", 'divOptions'=>array('class'=>'btn-group')));
 	}
-	$page .= '</p>';
 
-	if ($is_installed){
-		$page .= '<p>';
+	else {
 		if (_isRun()) {
-			$page .= "<div class='alert alert-error'>".t($title."_is_not_running")."\n";
-			$page .= addButton(array('label'=>t("start_".$title),'class'=>'btn', 'href'=>"$urlpath/runprogram", 'divOptions'=>array('class'=>'pull-right')));
-			$page .="</div>";
+			$page .= "<div class='alert alert-error text-center'>".t("serf_alert_stopped")."</div>";
+			$buttons .= addButton(array('label'=>t("serf_button_uninstall"),'class'=>'btn btn-danger', 'href'=>"$urlpath/removeprogram", 'divOptions'=>array('class'=>'btn-group')));
+			$buttons .= addButton(array('label'=>t("serf_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/runprogram", 'divOptions'=>array('class'=>'btn-group')));
+		} else {
+			$page .= "<div class='alert alert-success text-center'>".t("serf_alert_running")."</div>\n";
+			$buttons .= addButton(array('label'=>t("serf_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stopprogram", 'divOptions'=>array('class'=>'btn-group')));
+		}
+
+		$page .= txt(t("serf_index_publication"));
+		if ($var_avahi['DATABASE'] != 'serf') {
+			if (_isRun())
+				$page .= "<div class='alert alert-warning text-center'>".t("serf_alert_wont_publish")."</div>";
+			else
+				$page .= "<div class='alert alert-warning text-center'>".t("serf_alert_not_publishing")."</div>";
+			$buttons .= addButton(array('label'=>t("serf_button_publish"),'class'=>'btn btn-warning', 'href'=>"$urlpath/selectserf", 'divOptions'=>array('class'=>'btn-group')));
 
 		} else {
-			$page .= "<div class='alert alert-success'>".t($title."_is_running")."\n";
-			$page .= addButton(array('label'=>t("stop_".$title),'class'=>'btn', 'href'=>"$urlpath/stopprogram", 'divOptions'=>array('class'=>'pull-right')));
+			if (_isRun())
+				$page .= "<div class='alert alert-info text-center'>".t("serf_alert_will_publish")."</div>";
+			else
+				$page .= "<div class='alert alert-success text-center'>".t("serf_alert_publishing")."</div>";
+			$buttons .= addButton(array('label'=>t("serf_button_unpublish"),'class'=>'btn btn-warning', 'href'=>"$urlpath/removeserf", 'divOptions'=>array('class'=>'btn-group')));
 			$page .="</div>";
-
 		}
-		$page .= '</p>';
-		
-		$page .= '<p>';
-	if ($var_avahi['DATABASE'] != 'serf') {
-		$page .= "<div class='alert alert-error'>".t($title."_is_not_selected")."\n";
-		$page .= addButton(array('label'=>t("select_".$title),'class'=>'btn', 'href'=>"$urlpath/selectserf", 'divOptions'=>array('class'=>'pull-right')));
-		$page .="</div>";
-	} else {
-		$page .= "<div class='alert alert-success'>".t($title."_is_selected")."\n";
-		$page .= addButton(array('label'=>t("deselect_".$title),'class'=>'btn', 'href'=>"$urlpath/removeserf", 'divOptions'=>array('class'=>'pull-right')));
-		$page .="</div>";
 
+		$page .= hlc(t("serf_index_subtitle_configuration"),3);
+
+		if (_isRun()) {
+			$page .= par(t("serf_index_change_configuration"));
+			$readonly = "";
+		} else {
+			$page .= par(t("serf_index_current_configuration"));
+			$readonly = "readonly";
+		}
+
+		$variable = load_conffile($avahipsetc_config, $avahipsetc_data);
+
+		if (isset($_GET['join']))
+			$variable['SERF_JOIN'] = $_GET['join'];
+
+
+		$page .= createForm(array('class'=>'form-horizontal'));
+		$page .= addInput('SERF_RPC_ADDR',t('serf_index_form_rpc'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}','required'=>''),$readonly,t('serf_index_form_rpc_tooltip'));
+		$page .= addInput('SERF_BIND',t('serf_index_form_bind'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),$readonly,t('serf_index_form_bind_tooltip'));
+		$page .= addInput('SERF_JOIN',t('serf_index_form_bootstrap'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}', 'required'=>''),$readonly,t('serf_index_form_bootstrap_tooltip'));
+
+		if (_isRun())
+			$buttons .= addSubmit(array('label'=>t("serf_button_save"),'class'=>'btn btn-default','divOptions'=>array('class'=>'btn-group')));
 	}
-	$page .= '</p>';
-
-$page .= hl(t('Parameters'),3);
-	$variable = load_conffile($avahipsetc_config, $avahipsetc_data);
-
-	if (isset($_GET['join']))
-		$variable['SERF_JOIN'] = $_GET['join'];
-
-	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('SERF_RPC_ADDR',t('serf_rpc_address_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_rpc_addr_help'));
-	$page .= addInput('SERF_BIND',t('serf_bind_port_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_bind_help'));
-	$page .= addInput('SERF_JOIN',t('serf_peer_join_desc'),$variable,array('type'=>'text', 'required'=>''),"",t('serf_join_help'));
-
-	$page .= addSubmit(array('label'=>t('serf_parameters_button')));	
-	
-	}
-
-
-	
 
 	$page .= $buttons;
-
 	return(array('type' => 'render','page' => $page));
 }
 
@@ -211,9 +210,8 @@ function index_post(){
 	}
 	write_conffile($avahipsetc_config,$datesToSave,"","",'"');
 
-	setFlash(t('avahipsserf_alert_saved'),"success");
+	setFlash(t('serf_flash_saving'),"info");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
-
 }
 
 function _isInstalled(){
@@ -268,7 +266,7 @@ function getprogram(){
   $cmd = "cd /tmp && curl ".$serfgeturl."| sh -";
   $ret = execute_shell($cmd);
 
-	setFlash(t('serf_was_install'),"success");
+	setFlash(t("serf_flash_installed"),"success");
 	_install_menu();
 	if (!_existAvahiConfEtc()) {
 		createDefaultAvahiEtcFile();
@@ -283,7 +281,7 @@ function removeprogram(){
 
 	$cmd="rm -rf ".$dirpath;
 	execute_shell($cmd);
-	setFlash(t('serf_was_uninstall'),"success");
+	setFlash(t('serf_flash_uninstalled'),"info");
 	_uninstall_menu();
         return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
@@ -300,7 +298,7 @@ function runprogram(){
 	$cmd = $serfinit." start";
 	execute_program_detached($cmd);
 
-	setFlash(t('serfinit_start'),"success");
+	setFlash(t('serf_flash_starting'),"warning");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 
 }
@@ -311,7 +309,7 @@ function stopprogram(){
 	$cmd = $serfinit." stop";
 	execute_program_detached($cmd);
 
-	setFlash(t('serfinit_stop'),"success");
+	setFlash(t('serf_flash_stopping'),"warning");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 
 }
@@ -323,6 +321,7 @@ function removeserf(){
 	$var_avahi['DATABASE'] = 'none';
 	write_conffile($avahips_config,$var_avahi,"","",'"');
 
+	setFlash(t('serf_flash_unpublishing'),"info");
 	return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 
 }
@@ -335,6 +334,7 @@ function selectserf(){
 	$var_avahi['DATABASE'] = 'serf';
 	write_conffile($avahips_config,$var_avahi,"","",'"');
 
+	setFlash(t('serf_flash_publishing'),"info");
 	return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 
 }
