@@ -8,31 +8,48 @@ $dir_configs="/etc/cloudy";
 
 function index_get()
 {
-
 	global $list_packages,$staticFile;
 
 	$page = "";
+	$buttons = "";
 
-	$page .= hl(t("Cloudy Update System"));
-	$page .= hl(t("cloudyupdate_cloudy_packages"),3);
-	$page .= ajaxStr('tPackages',t("cloudyupdate_loading_packages") );
+	$page .= hlc(t("cloudyupdate_common_title"));
+	$page .= hl(t("cloudyupdate_index_subtitle"),4);
+
+	$page .= par(t("cloudyupdate_index_description1") . ' ' . t("cloudyupdate_index_description2"));
+
+	$page .= hlc(t("cloudyupdate_index_cloudy_packages"),3);
+	$page .= ajaxStr('tPackages',t("cloudyupdate_flash_loading_cloudy") );
 	$page .= "<script>\n";
-	$page .= "$('#tPackages').load('".$staticFile."/cloudyupdate/getUpdateTable');\n";
+	$page .= "$('#tPackages').load('".$staticFile."/cloudyupdate/getCloudyUpdateTable');\n";
 	$page .= "</script>\n";
-	$page .= hl(t("cloudyupdate_debian_packages"),3);
-	$page .= addButton(array('label'=>t('cloudyupdate_update_debian_packages'),'href'=>$staticFile.'/cloudyupdate/debupdate'));
+
+	$page .= "</br>";
+
+	$page .= hlc(t("cloudyupdate_index_debian_packages"),3);
+
+	if ($_GET["debupdate"]) {
+		$page .= ajaxStr('dPackages',t("cloudyupdate_flash_loading_debian") );
+		$page .= "<script>\n";
+		$page .= "$('#dPackages').load('".$staticFile."/cloudyupdate/getDebianUpdateTable');\n";
+		$page .= "</script>\n";
+	} else {
+		$page .= par(t("cloudyupdate_index_debian_description1"));
+		$buttons .= addButton(array('label'=>t('cloudyupdate_button_update_debian'),'href'=>$staticFile.'/cloudyupdate/debupdate','divOptions'=>array('class'=>'btn-group')));
+	}
 
 
+	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 }
 
-function getUpdateTable(){
+function getCloudyUpdateTable(){
 
 	global $list_packages,$staticFile,$documentPath,$plugs_controllers;
 
 	$table = "";
 
-	$table = addTableHeader(array(t('cloudyupdate_package'), t('cloudyupdate_installed_version') , t('cloudyupdate_last_version'),  t('cloudyupdate_actions')));
+	$table .= addTableHeader(array(t('cloudyupdate_package'), t('cloudyupdate_installed_version') , t('cloudyupdate_last_version'),  t('cloudyupdate_actions')));
 	foreach($list_packages as $pname => $package){
 		if ($package['type'] == 'preinstall') {
 			require $documentPath.$plugs_controllers.$package['controller'].".php";
@@ -52,6 +69,40 @@ function getUpdateTable(){
 	$table .= addTableFooter();
 
 		return(array('type'=>'ajax','page'=>$table));
+}
+
+function getDebianUpdateTable(){
+
+	global $staticFile;
+	$table = "";
+
+	$cmd = "apt-get -s dist-upgrade | awk '/^Inst/'";
+	$cmdresult = shell_exec($cmd);
+
+	if ( $cmdresult == "") {
+		$table .= txt(t("cloudyupdate_getDebianUpdateTable_status"));
+		$table .= "<div class='alert alert-success text-center'>".t("cloudyupdate_getDebianUpdateTable_no_updates")."</div>";
+		}
+	else {
+		//$table .= "<div class='alert alert-warning text-center'>".t("cloudyupdate_getDebianUpdateTable_updates")."</div>";
+
+		$results = explode("\n", $cmdresult);
+		$table .= addTableHeader(array(t("cloudyupdate_getDebianUpdateTable_package"), t("cloudyupdate_getDebianUpdateTable_version") , t("cloudyupdate_getDebianUpdateTable_new"),  t("cloudyupdate_getDebianUpdateTable_action")));
+
+		foreach($results as $pname) {
+			if (explode(" ",$pname)[1] != "") {
+				$action = addButton(array('label'=>t('cloudyupdate_button_upgrade'),'href'=>$staticFile.'/cloudyupdate/debpkgupgradesim/?package='.explode(" ",$pname)[1]));
+				$table .= addTableRow( array( explode(" ",$pname)[1], substr(explode(" ",$pname)[2], 1, -1), substr(explode(" ",$pname)[3], 1), $action));
+			} else {
+				$action = addButton(array('label'=>t('cloudyupdate_button_upgrade_all'),'href'=>$staticFile.'/cloudyupdate/debupgradesim'));
+				$table .= addTableRow( array( "", "", "", $action));
+			}
+		}
+	}
+
+
+
+	return(array('type'=>'ajax','page'=>$table));
 }
 
 function getYourVersion($user, $repo){
@@ -80,13 +131,130 @@ function debupdate() {
 	global $staticFile;
 
 	$page = "";
+	$buttons = "";
 
-	$page .= hl(t("Cloudy Update System"));
-	$cmd = "apt-get update 2>&1 && apt-get -yy upgrade 2>&1";
+	$page .= hlc(t("cloudyupdate_common_title"));
+	$page .= hl(t("cloudyupdate_debupdate_subtitle"),4);
+
+	$page .= txt(t("cloudyupdate_debupdate_result"));
+
+	$cmd = "ls -la /";
+	//$cmd = "apt-get update"";
 	$page .= ptxt(shell_exec($cmd));
-	$page .= addButton(array('label'=>t('Back'),'href'=>$staticFile.'/cloudyupdate'));
 
+	$buttons .= addButton(array('label'=>t("cloudyupdate_button_continue"), 'href'=>$staticFile.'/cloudyupdate?debupdate=true', 'class'=>'btn btn-primary', 'method' => 'post', 'action' => $staticFile, 'name'=>"cucamonga",'value'=>'123aaa'));
 
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+
+}
+
+function debupgrade() {
+	global $staticFile;
+
+	$page = "";
+	$buttons = "";
+	$nopackage = false;
+
+	$page .= hlc(t("cloudyupdate_common_title"));
+	$page .= hl(t("cloudyupdate_debupgrade_subtitle"),4);
+
+	$page .= txt(t("cloudyupdate_debupgrade_result"))	;
+	$cmd = "apt-get -yy upgrade " . $_GET["package"] .  "2>&1";
+	$page .= ptxt(shell_exec($cmd));
+
+	$buttons .= addButton(array('label'=>t('cloudyupdate_button_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+}
+
+function debupgradesim() {
+	global $staticFile;
+
+	$page = "";
+	$buttons = "";
+	$nopackage = false;
+
+	$page .= hlc(t("cloudyupdate_common_title"));
+	$page .= hl(t("cloudyupdate_debupgrade_subtitle"),4);
+
+	$page .= par(t("cloudyupdate_debupgrade_simulation"));
+	$page .= txt(t("cloudyupdate_debupgrade_simresult"))	;
+	$cmd = "apt-get -s -yy upgrade " . $_GET["package"] .  "2>&1";
+	$page .= ptxt(shell_exec($cmd));
+
+	$page .= txt(t("cloudyupdate_debupgrade_question"));
+	$buttons .= addButton(array('label'=>t('cloudyupdate_button_no_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
+	$buttons .= addButton(array('label'=>t("cloudyupdate_button_yes_upgrade_all"), 'class'=>'btn btn-success', 'href'=>$staticFile.'/cloudyupdate/debupgrade'));
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+}
+
+function debpkgupgrade() {
+	global $staticFile;
+
+	$page = "";
+	$buttons = "";
+	$nopackage = false;
+
+	if ($_GET["package"]=="")
+		$nopackage = true;
+
+	$page .= hlc(t("cloudyupdate_common_title"));
+	if ($nopackage) {
+		$page .= hl(t("cloudyupdate_debpkgupgrade_subtitle"),4);
+		$page .= txt(t("cloudyupdate_debpkgupgrade_result"))	;
+		$page .= "<div class='alert alert-error text-center'>".t("cloudyupdate_alert_unspecified")."</div>";
+		$buttons .= addButton(array('label'=>t('cloudyupdate_button_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
+	}
+
+	else {
+		$page .= hl(t("cloudyupdate_debpkgupgrade_subtitle_pre") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_subtitle_post"),4);
+		$page .= txt(t("cloudyupdate_debpkgupgrade_result"))	;
+		$cmd = "apt-get -yy upgrade " . $_GET["package"] .  "2>&1";
+		$page .= ptxt(shell_exec($cmd));
+
+		$buttons .= addButton(array('label'=>t('cloudyupdate_button_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
+	}
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+
+}
+
+function debpkgupgradesim() {
+	global $staticFile;
+
+	$page = "";
+	$buttons = "";
+	$nopackage = false;
+
+	if ($_GET["package"]=="")
+		$nopackage = true;
+
+	$page .= hlc(t("cloudyupdate_common_title"));
+	if ($nopackage) {
+		$page .= hl(t("cloudyupdate_debpkgupgrade_subtitle"),4);
+		$page .= txt(t("cloudyupdate_debpkgupgrade_result"))	;
+		$page .= "<div class='alert alert-error text-center'>".t("cloudyupdate_alert_unspecified")."</div>";
+		$buttons .= addButton(array('label'=>t('cloudyupdate_button_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
+	}
+
+	else {
+		$page .= hl(t("cloudyupdate_debpkgupgrade_subtitle_pre") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_subtitle_post"),4);
+		$page .= par(t("cloudyupdate_debpkgupgrade_simulation_1") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_simulation_2"));
+		$page .= txt(t("cloudyupdate_debpkgupgrade_simresult"))	;
+		$cmd = "apt-get -s -yy upgrade " . $_GET["package"] .  "2>&1";
+		$page .= ptxt(shell_exec($cmd));
+
+		$page .= txt(t("cloudyupdate_debpkgupgrade_question_1") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_question_2"));
+		$buttons .= addButton(array('label'=>t('cloudyupdate_button_no_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
+		$buttons .= addButton(array('label'=>t('cloudyupdate_button_yes_upgrade_1') . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_button_yes_upgrade_2"), 'class'=>'btn btn-success', 'href'=>$staticFile.'/cloudyupdate/debpkgupgrade/?package='.$_GET["package"]));
+	}
+
+	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 
 }
