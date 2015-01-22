@@ -1,8 +1,6 @@
 <?php
 // plug/controllers/cloudyupdate.php
 
-//Updates
-
 //alerts
 addS ("cloudyupdate_alert_unspecified","No package was specified for upgrade");
 
@@ -42,7 +40,6 @@ addS ("cloudyupdate_debupgrade_simresult","Debian packages upgrade simulation re
 addS ("cloudyupdate_debupgrade_simulation","Before upgrading all Debian packages, the whole process has been simulated. If the result looks good to you, proceed with the actual upgrade. Otherwise, you can upgrade the packages manually.");
 addS ("cloudyupdate_debupgrade_subtitle","Debian packages upgrade");
 
-
 //flash
 addS ("cloudyupdate_flash_loading_cloudy", "Loading Cloudy packages information");
 addS ("cloudyupdate_flash_loading_debian", "Loading Debian packages information");
@@ -53,7 +50,13 @@ addS ("cloudyupdate_index_debian_packages","Debian packages");
 addS ("cloudyupdate_index_debian_description1","The list of Debian packages needs to be updated to check for upgrades. Click on the button below to update it.");
 addS ("cloudyupdate_index_description1","The Cloudy updates manager allows you to keep your node up-to-date. It checks for updates on both Cloudy packages and Debian packages and automates the upgrade process.");
 addS ("cloudyupdate_index_description2","An Internet connection is required to check and obtain the updates.");
-addS ("cloudyupdate_index_subtitle","A tool for updating your Cloudy system");
+addS ("cloudyupdate_index_subtitle","A tool for updating your Cloudy device");
+
+//getCloudyUpdateTable
+addS ("cloudyupdate_getCloudyUpdateTable_action", "Action");
+addS ("cloudyupdate_getCloudyUpdateTable_new", "Last version");
+addS ("cloudyupdate_getCloudyUpdateTable_package", "Package");
+addS ("cloudyupdate_getCloudyUpdateTable_version", "Installed version");
 
 //getDebianUpdateTable
 addS ("cloudyupdate_getDebianUpdateTable_action", "Action");
@@ -63,19 +66,5 @@ addS ("cloudyupdate_getDebianUpdateTable_package", "Package");
 addS ("cloudyupdate_getDebianUpdateTable_status", "Debian packages status:");
 addS ("cloudyupdate_getDebianUpdateTable_version", "Installed version");
 addS ("cloudyupdate_getDebianUpdateTable_updates", "There are Debian packages updates available");
-
-
-
-
-
-addS ("cloudyupdate_cloudy_packages","Cloudy packages (non-Debian)");
-addS ("cloudyupdate_debian_packages","Debian packages");
-addS ("cloudyupdate_update_debian_packages","Update Debian packages");
-addS ("cloudyupdate_loading_packages","Loading packages information...");
-addS ("cloudyupdate_package","Package");
-addS ("cloudyupdate_installed_version","Installed version");
-addS ("cloudyupdate_last_version","Last version");
-addS ("cloudyupdate_actions","Actions");
-addS ("cloudyupdate_update","Update");
 
 ?>

@@ -49,7 +49,7 @@ function getCloudyUpdateTable(){
 
 	$table = "";
 
-	$table .= addTableHeader(array(t('cloudyupdate_package'), t('cloudyupdate_installed_version') , t('cloudyupdate_last_version'),  t('cloudyupdate_actions')));
+	$table .= addTableHeader(array(t('cloudyupdate_getCloudyUpdateTable_package'), t('cloudyupdate_getCloudyUpdateTable_version') , t('cloudyupdate_getCloudyUpdateTable_new'),  t('cloudyupdate_getCloudyUpdateTable_action')));
 	foreach($list_packages as $pname => $package){
 		if ($package['type'] == 'preinstall') {
 			require $documentPath.$plugs_controllers.$package['controller'].".php";
@@ -62,7 +62,7 @@ function getCloudyUpdateTable(){
 		$installed_version = getYourVersion($package['user'],$package['repo']);
 		$last_version = getGitMaster($package['user'],$package['repo']);
 		if ($installed_version != $last_version) {
-			$buttons = addButton(array('label'=>t('cloudyupdate_update'),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
+			$buttons = addButton(array('label'=>t("cloudyupdate_button_upgrade"),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
 		}
 		$table .= addTableRow(array($pname, $installed_version, $last_version, $buttons));
 	}
@@ -138,8 +138,7 @@ function debupdate() {
 
 	$page .= txt(t("cloudyupdate_debupdate_result"));
 
-	$cmd = "ls -la /";
-	//$cmd = "apt-get update"";
+	$cmd = "apt-get update";
 	$page .= ptxt(shell_exec($cmd));
 
 	$buttons .= addButton(array('label'=>t("cloudyupdate_button_continue"), 'href'=>$staticFile.'/cloudyupdate?debupdate=true', 'class'=>'btn btn-primary', 'method' => 'post', 'action' => $staticFile, 'name'=>"cucamonga",'value'=>'123aaa'));
