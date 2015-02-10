@@ -43,7 +43,7 @@ function search()
 	$page .= "	);";
 	$page .= "});\n";
 	$page .= "</script>\n";
-	$page .=  addButton(array('label'=>t("scan_quality_of_services"), 'class'=>'btn', 'onclick'=>'SQoS("'.$staticFile.'/serf/ajaxquality")'));
+	$page .=  addButton(array('label'=>t("serf_search_quality"), 'class'=>'btn', 'onclick'=>'SQoS("'.$staticFile.'/serf/ajaxquality")'));
 
 
 	return(array('type'=>'render','page'=>$page));
