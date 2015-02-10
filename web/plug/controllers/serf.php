@@ -102,12 +102,13 @@ function ajaxsearch()
 		if($active == $k) $services .= " active";
 		$services .= "' id='".$k."'>";
 
-		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped table-data'));
+		$services .= addTableHeader(array(t('%'),t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped table-data'));
 		foreach($v as $serv){
 			unset($serv['type']);
 			$node_id=$serv['node_id'];
 			unset($serv['node_id']);
-			$services .= addTableRow($serv,array('class'=>"node-".$node_id));
+			$servarray=array(0 => '', 1 => $serv['description'], 2 => $serv['host'], 3 => $serv['ip'], 4 => $serv['port'], 5 => $serv['microcloud'], 6 => $serv['action'] );
+			$services .= addTableRow($servarray,array('class'=>"node-".$node_id), array( 0 => array('class'=>'scan')));
 		}
 		$services .= addTableFooter();
 		$services .= " 	</div>";
