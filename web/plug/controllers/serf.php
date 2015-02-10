@@ -31,16 +31,19 @@ function search()
 
 	$page = "";
 
-	$page .= ajaxStr('tableSerf',t("Searching for published services, please wait a moment...") );
+	$page .= ajaxStr('tableSerfAjax',t("Searching for published services, please wait a moment...") );
+	$page .= "<div id='tableSerf' style='display:none'></div>";
 	$page .= "<script>\n";
 	$page .= "$('#tableSerf').load('".$staticFile."/serf/ajaxsearch',function(){\n";
+	$page .= "	$('#tableSerfAjax').hide();";
+	$page .= "	$('#tableSerf').css({'display':'block'});";
 	$page .= "	$('#tags').tab();\n";
-	$page .= "  $('.table-data').DataTable( ";
+	$page .= "  tservice = $('.table-data').DataTable( ";
 	$page .= '		{ "language": { "url": "/lang/"+LANG+".table.json"} }';
 	$page .= "	);";
 	$page .= "});\n";
 	$page .= "</script>\n";
-	$page .=  addButton(array('label'=>t("serf_search_quality"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
+	$page .=  addButton(array('label'=>t("scan_quality_of_services"), 'class'=>'btn', 'onclick'=>'SQoS("'.$staticFile.'/serf/ajaxquality")'));
 
 
 	return(array('type'=>'render','page'=>$page));
