@@ -1,6 +1,7 @@
 #!/bin/bash
 VLCUSER=${VLCUSER:-"nobody"}
 PSUSER=${PSUSER:-$VLCUSER}
+FFMPEGUSER=${PSUSER:-$VLCUSER}
 VLCPATH="/usr/bin/vlc"
 PSPROG="streamer-udp-grapes-static"
 PSPATH="/opt/peerstreamer/"
@@ -72,10 +73,9 @@ saveInfoPeer(){
 
 	# Writing Description only if kind=source, though in a future we may write it anyways
 	[ $kind=="Source" ]&& (
-		echo "Writing description..."
+		doDebug "Writing description..."
 		echo "$port$S$pidvlc$S$pidps$S$udpport$S$kind$S$others$S$description" >> $FILEPEERS
 	) ||(
-		echo "No escric because yes :D:D"
 		echo "$port$S$pidvlc$S$pidps$S$udpport$S$kind$S$others" >> $FILEPEERS
 	)
 
@@ -177,6 +177,7 @@ doPeerSource(){
 	local port=${2:-""}
 	local device=${3:-"eth0"}
 	local description=${4:-"NoDescription"}
+	local stream_type=$(echo $urlstream | cut -d":" -f1)
 
 	[ -z "$urlstream" -o -z "$port" ] && {
 		echo "Use publish <urlstream> <port> [Device] [Description]"
@@ -185,19 +186,39 @@ doPeerSource(){
 	udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
-	cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy \"'$urlstream'\" --sout=\"#standard{access=udp,mux=ts,dst=127.0.0.1:'$udpport'}\" > '$LOGFILE' 2>&1 & }; echo \$!"'
-	doDebug "Execute: $cmd"
-	pidvlc=$(eval $cmd)
-	doDebug "PID from VLC is $pidvlc."
+	if [ $stream_type == "rtmp" ]
+	then
+		# Calling rtmp
+		# For the time being, this is a very VERY harcoding: @FIXME
+		ffmpeg -i "rtmp://tv.guifi.net/live/guifitv app=live/guifitv swfUrl=http://tv.guifi.net/player.swf pageUrl=http://tv.guifi.net/ playpath=guifitv live=1" -vcodec copy -acodec copy -vbsf h264_mp4toannexb -f mpegts udp://127.0.0.1:$udpport &
+		pidffmpeg=$!
+		doDebug "PID from ffmpeg is $pidffmpeg"
 
-	cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -f null,chunkiser=udp,port0='$udpport',addr=127.0.0.1 -P '$port' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
-	doDebug "Execute: $cmd"
-	pidps=$(eval $cmd)
-	doDebug "PID from PeerStreamer is $pidps."
+		$PSPATH$PSPROG -f null,chunkiser=udp,port0=$udpport,addr=127.0.0.1 -P $port -I $device > $LOGFILE 2>&1 &
+		pidps=$!
+		doDebug "PID from peerstreamer is $pidps"
 
-	saveInfoPeer $pidvlc $pidps $port $udpport "Source" "$urlstream" "$description"
+		# doDebug "Execute: $cmd"
+		# pidps=$(eval $cmd)
+		# doDebug "PID from PeerStreamer is $pidps."
+		
+		saveInfoPeer $pidffmpeg $pidps $port $udpport "Source" "$urlstream" "$description"
 
-	return
+		return
+	else
+		cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy \"'$urlstream'\" --sout=\"#standard{access=udp,mux=ts,dst=127.0.0.1:'$udpport'}\" > '$LOGFILE' 2>&1 & }; echo \$!"'
+		doDebug "Execute: $cmd"
+		pidvlc=$(eval $cmd)
+		doDebug "PID from VLC is $pidvlc."
+
+		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -f null,chunkiser=udp,port0='$udpport',addr=127.0.0.1 -P '$port' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+		doDebug "Execute: $cmd"
+		pidps=$(eval $cmd)
+		doDebug "PID from PeerStreamer is $pidps."
+
+		saveInfoPeer $pidvlc $pidps $port $udpport "Source" "$urlstream" "$description"
+		return
+	fi
 }
 
 # Stop peers
