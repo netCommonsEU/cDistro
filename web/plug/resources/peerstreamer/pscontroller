@@ -5,6 +5,7 @@ FFMPEGUSER=${PSUSER:-$VLCUSER}
 VLCPATH="/usr/bin/vlc"
 PSPROG="streamer-udp-grapes-static"
 PSPATH="/opt/peerstreamer/"
+AVCONV="/usr/bin/avconv"
 LOGFILE="/dev/null"
 FILEPEERS="/var/run/pspeers.conf"
 SHELL=/var/local/cDistro/plug/resources/peerstreamer/ps_shell
@@ -194,7 +195,7 @@ doPeerSource(){
 		# Calling rtmp
 		# For the time being, this is a very VERY harcoding: @FIXME
 		doDebug 'avconv -i "'$urlstream'" -vcodec copy -acodec copy -bsf h264_mp4toannexb -f mpegts udp://127.0.0.1:'$udpport' &'
-		avconv -i "$urlstream" -vcodec copy -acodec copy -bsf h264_mp4toannexb -f mpegts udp://127.0.0.1:$udpport &
+		$AVCONV -i "$urlstream" -vcodec copy -acodec copy -bsf h264_mp4toannexb -f mpegts udp://127.0.0.1:$udpport &
 		pidavconv=$!
 		doDebug "PID from ffmpeg is $pidavconv"
 
