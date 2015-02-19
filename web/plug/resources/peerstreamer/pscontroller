@@ -173,7 +173,7 @@ checkPIDs() {
 # Function peer-soucer
 doPeerSource(){
 	# Source
-	local urlstream=${1:-""}
+	local urlstream="${1:-""}"
 	local port=${2:-""}
 	local device=${3:-"eth0"}
 	local description=${4:-"NoDescription"}
@@ -186,13 +186,17 @@ doPeerSource(){
 	udpport=$(findRandFreePort)
 	doDebug "Port to upd local: $udpport"
 
+	# Parsing URL
+	urlstream="$(echo "$urlstream" | sed 's/\,/ /g')"
+
 	if [ $stream_type == "rtmp" ]
 	then
 		# Calling rtmp
 		# For the time being, this is a very VERY harcoding: @FIXME
-		ffmpeg -i "rtmp://tv.guifi.net/live/guifitv app=live/guifitv swfUrl=http://tv.guifi.net/player.swf pageUrl=http://tv.guifi.net/ playpath=guifitv live=1" -vcodec copy -acodec copy -vbsf h264_mp4toannexb -f mpegts udp://127.0.0.1:$udpport &
-		pidffmpeg=$!
-		doDebug "PID from ffmpeg is $pidffmpeg"
+		doDebug 'avconv -i "'$urlstream'" -vcodec copy -acodec copy -bsf h264_mp4toannexb -f mpegts udp://127.0.0.1:'$udpport' &'
+		avconv -i "$urlstream" -vcodec copy -acodec copy -bsf h264_mp4toannexb -f mpegts udp://127.0.0.1:$udpport &
+		pidavconv=$!
+		doDebug "PID from ffmpeg is $pidavconv"
 
 		$PSPATH$PSPROG -f null,chunkiser=udp,port0=$udpport,addr=127.0.0.1 -P $port -I $device > $LOGFILE 2>&1 &
 		pidps=$!
@@ -201,8 +205,11 @@ doPeerSource(){
 		# doDebug "Execute: $cmd"
 		# pidps=$(eval $cmd)
 		# doDebug "PID from PeerStreamer is $pidps."
+
+		# Reencoding URL
+		urlstream="$(echo "$urlstream" | sed 's/\ /,/g')"
 		
-		saveInfoPeer $pidffmpeg $pidps $port $udpport "Source" "$urlstream" "$description"
+		saveInfoPeer $pidavconv $pidps $port $udpport "Source" "$urlstream" "$description"
 
 		return
 	else
@@ -438,7 +445,7 @@ case $1 in
 	"publish")
 		checkPrograms
 		shift
-		doPeerSource $@
+		doPeerSource "$@"
 		;;
 	"unpublish")
 		checkPrograms
