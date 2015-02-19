@@ -314,7 +314,7 @@ doPeer2RTSPServer(){
 	local ipserver=${4:-""}
 	local device=${5:-"eth0"}
 
-	if isInstall && isInstalledVLC
+	if [[ isInstall && isInstalledVLC ]]
 	then
 		[ -z "$ippeersource" -o -z "$port" ] && {
 			echo "Use connectrtsp <ip> <port> [Port RTSP Server] [IP RTSP Server] [Device]"
@@ -344,9 +344,9 @@ doPeer2RTSPServer(){
 
 			return
 		)
+	else
+		doDebug "Requiered software (Peerstreamer, VLC) are not installed, aborting connection."
 	fi
-	#If this point is reached, requiered software is not installed
-	doDebug "Requiered software (Peerstreamer, VLC) are not installed, aborting connection."
 
 }
 # Install PeerStreamer from source
