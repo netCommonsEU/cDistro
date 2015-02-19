@@ -58,4 +58,13 @@ addS ("etcd_lookfor", "Look for Services with Etcd");
 addS ("menu_serf", "Search");
 addS ("serf_setup", "Setup Serf");
 addS ("serf_lookfor", "Look for Services with Serf");
+
+//Caracal
+addS ("menu_caracal", "Clommunity");
+addS ("caracal_manage", "CaracalDB");
+
+//Caracal API
+addS ("menu_caracalapi", "Clommunity");
+addS ("caracalapi_manage", "Caracal REST API");
+
 ?>
