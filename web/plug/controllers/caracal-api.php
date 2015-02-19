@@ -17,10 +17,10 @@ function index_get(){
 	global $urlpath, $appHost;
     //$disabled = '';
 
-	$appAddress = substr($appHost, 0, 15);
+	$appAddress = explode(":",$appHost)[0];
 
 
-    $page = "";
+	$page = "";
 	$buttons = "";
 	$submitButtons = "";
 	$stati = "";
