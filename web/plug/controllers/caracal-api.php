@@ -136,12 +136,7 @@ function start() {
 	// Try to clean up old log file
 	execute_shell("rm $log_file");
 
-	$ret = execute_shell("service $service_name start");
-	if ($ret['return'] != 0) {
-		setFlash(t("caracalapi_start_fail")." (caracaldb-api)");
-		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
-	}
-
+	execute_program_detached("service $service_name start");
 
 	// Also install WebUi into Apache
 	$conf = new Config();
@@ -159,11 +154,7 @@ function start() {
 
 	$conf->writeConfig($apache_config_file, 'apache');
 
-	$ret = execute_shell("service apache2 restart");
-	if ($ret['return'] != 0) {
-		setFlash(t("caracalapi_start_fail")." (apache2)");
-		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
-	}
+	execute_program_detached("service apache2 restart");
 
 	setFlash(t("caracalapi_start_success"), "success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
@@ -187,17 +178,10 @@ function stop() {
 	$caracaldir->removeItem();
 	$conf->writeConfig($apache_config_file, 'apache');
 
-	$ret = execute_shell("service apache2 restart");
-	if ($ret['return'] != 0) {
-		setFlash(t("caracalapi_stop_fail")." (apache2)");
-		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
-	}
+	execute_program_detached("service apache2 restart");
 
-	$ret = execute_shell("service $service_name stop");
-	if ($ret['return'] != 0) {
-		setFlash(t("caracalapi_stop_fail")." (caracaldb-api)");
-		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
-	}
+	execute_program_detached("service $service_name stop");
+
 	setFlash(t("caracalapi_stop_success"), "success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }

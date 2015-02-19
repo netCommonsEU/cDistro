@@ -117,11 +117,8 @@ function start() {
 	// Try to clean up old log file
 	execute_shell("rm $log_file");
 
-	$ret = execute_shell("service $service_name start");
-	if ($ret['return'] != 0) {
-		setFlash(t("caracal_start_fail"));
-		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
-	}
+	execute_program_detached("service $service_name start");
+
 	setFlash(t("caracal_start_success"), "success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
@@ -129,11 +126,7 @@ function start() {
 function stop() {
 	global $urlpath, $staticFile, $service_name;
 
-	$ret = execute_shell("service $service_name stop");
-	if ($ret['return'] != 0) {
-		setFlash(t("caracal_stop_fail"));
-		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
-	}
+	execute_program_detached("service $service_name stop");
 	setFlash(t("caracal_stop_success"), "success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
