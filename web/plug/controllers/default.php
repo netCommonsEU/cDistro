@@ -2,10 +2,7 @@
 // Default file..
 
 function index(){
-        global $appHost, $appHostname, $sysCPU, $sysRAM;
-
-		$cmd="df -h | grep -e '/$' | awk '{ print $2 \" / \" $3 }' | cat";
-		$hdspace=execute_program($cmd);
+        global $appHost, $appHostname, $sysCPU, $sysRAM, $sysStorage;
 
         $page = "";
 
@@ -16,7 +13,7 @@ function index(){
         $page .= "<strong>".t('Hostname')."</strong>: ".$appHostname."<br/>";
         $page .= "<strong>CPU</strong>: ".$sysCPU."<br/>";
         $page .= "<strong>RAM</strong>: ".$sysRAM."<br/>";
-		$page .= "<strong>".t('Hard Drive (total / available)')."</strong>: ".$hdspace['output'][0]."<br/>";
+	$page .= "<strong>".t('Storage (total / available)')."</strong>: ".$sysStorage."<br/>";
         $page .= "</small><br/>";
 
         $page .= t("Let's configure your system!");
