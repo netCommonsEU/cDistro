@@ -54,6 +54,13 @@ checkPrograms() {
 			exit
 		}
 
+	[ ! -f $AVCONV ] &&
+        {
+            echo "Need Libav in '"$AVCONV"'"
+            echo "Maybe you need to execute 'apt-get install libav-tools'"
+            exit
+        }
+
 }
 
 saveInfoPeer(){
@@ -386,6 +393,23 @@ doInstall() {
 		doDebug "Installing vlc-nox..."
 		apt-get install -y --force-yes vlc-nox
 	fi
+
+	if isInstalledLibav
+	then
+		doDebug "Installing libav-tools"
+		apt-get install -y --force-yes libav-tools
+	fi
+
+}
+
+isInstalledLibav() {
+	if [ $(dpkg-query -W -f='${Status} ${Version}\n' libav-tools | cut -d " " -f1) = "install" ]
+	then
+		doDebug "libav-tools is already installed"
+		return 1
+	fi
+	doDebug "libav-tools is not installed"
+	return 0
 }
 
 # Check whether vlc (no X) is installed or not. If 0, it needs to be installed
