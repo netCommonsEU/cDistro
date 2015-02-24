@@ -15,7 +15,7 @@ addS ("menus_cloudy_logout","Salir");
 
 
 //Getinconf
-addS ("menus_getinconf_clommunity","Clommunity");
+addS ("menus_getinconf_clommunity","Community");
 addS ("menus_getinconf_getinconf","Getinconf");
 
 
@@ -34,18 +34,18 @@ addS ("menus_lang_spanish","Castellano");
 
 
 //Tahoe-LAFS
-addS ("menus_tahoe_clommunity","Clommunity");
+addS ("menus_tahoe_clommunity","Community");
 addS ("menus_tahoe_tahoe","Tahoe-LAFS");
 
 
 //WebDAV
 addS ("menus_webdav_server", "Servidor WebDAV");
-addS ("menus_webdav_clommunity", "Clommunity");
+addS ("menus_webdav_clommunity", "Community");
 
 
 //Syncthing
 addS ("menus_syncthing_server", "Syncthing");
-addS ("menus_syncthing_clommunity", "Clommunity");
+addS ("menus_syncthing_clommunity", "Community");
 
 //Etcd
 addS ("menu_etcd", "Buscar");

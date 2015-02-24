@@ -15,7 +15,7 @@ addS ("menus_cloudy_logout","Log out");
 
 
 //Getinconf
-addS ("menus_getinconf_clommunity","Clommunity");
+addS ("menus_getinconf_clommunity","Community");
 addS ("menus_getinconf_getinconf","Getinconf");
 
 
@@ -34,18 +34,18 @@ addS ("menus_lang_spanish","Spanish");
 
 
 //Tahoe-LAFS
-addS ("menus_tahoe_clommunity","Clommunity");
+addS ("menus_tahoe_clommunity","Community");
 addS ("menus_tahoe_tahoe","Tahoe-LAFS");
 
 
 //WebDAV
 addS ("menus_webdav_server", "WebDAV server");
-addS ("menus_webdav_clommunity", "Clommunity");
+addS ("menus_webdav_clommunity", "Community");
 
 
 //Syncthing
 addS ("menus_syncthing_server", "Syncthing");
-addS ("menus_syncthing_clommunity", "Clommunity");
+addS ("menus_syncthing_clommunity", "Community");
 
 
 
@@ -60,18 +60,18 @@ addS ("serf_setup", "Setup Serf");
 addS ("serf_lookfor", "Look for Services with Serf");
 
 //Caracal
-addS ("menu_caracal", "Clommunity");
+addS ("menu_caracal", "Community");
 addS ("caracal_manage", "CaracalDB");
 
 //Caracal API
-addS ("menu_caracalapi", "Clommunity");
+addS ("menu_caracalapi", "Community");
 addS ("caracalapi_manage", "Caracal REST API");
 
 //GVoD
 addS ("menus_gvod_gvod", "GVoD");
-addS ("menus_gvod_clommunity", "Clommunity");
+addS ("menus_gvod_clommunity", "Community");
 
 //Sweep
 addS ("menus_sweep_sweep", "Sweep");
-addS ("menus_sweep_clommunity", "Clommunity");
+addS ("menus_sweep_clommunity", "Community");
 ?>
