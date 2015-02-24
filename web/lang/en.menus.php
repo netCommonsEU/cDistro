@@ -67,4 +67,11 @@ addS ("caracal_manage", "CaracalDB");
 addS ("menu_caracalapi", "Clommunity");
 addS ("caracalapi_manage", "Caracal REST API");
 
+//GVoD
+addS ("menus_gvod_gvod", "GVoD");
+addS ("menus_gvod_clommunity", "Clommunity");
+
+//Sweep
+addS ("menus_sweep_sweep", "Sweep");
+addS ("menus_sweep_clommunity", "Clommunity");
 ?>
