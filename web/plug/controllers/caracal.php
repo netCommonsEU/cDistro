@@ -22,7 +22,7 @@ function index_get(){
 	$config_file_content = "";
 	$form_fields = "";
 
-	
+
 	// if (isSesionValue('flash')) {
 	// 	$flash = getSessionValue('flash');
 	// 	unsetSessionValue('flash');
@@ -30,14 +30,14 @@ function index_get(){
 	// 	unsetSessionValue('flash_class');
 	// 	$page .= "<div class='$flash_class text-center'>$flash</div>\n";
 	// }
-	
+
 
 	//$variables = load_conffile($getinconf_file);
 	$page .= hlc(t("caracal_title"));
 	$page .= hl(t("caracal_subtitle"),4);
     $page .= par(t("caracal_description"));
 
-    $stati .= hl(t('caracal_status'), 4);
+    $page .= txt(t("caracal_status"));
 
     $hasJava = _check_java();
 
@@ -51,34 +51,34 @@ function index_get(){
 
     if ($hasCaracal) {
     	$stati .= "<div class='alert alert-success text-center'>".t('caracal_caracal_installed_true')."</div>\n";
-    	
-    	$config_file_content .= hl(t("caracal_config_file"), 4);
-    	$config_file_content .= par(t("caracal_config_path")." $config_file: ");
+
+		$config_file_content .= hlc(t("caracal_config_file"), 3);
+    	$config_file_content .= par(t("caracal_config_path")." $config_file");
     	$config_file_content .= ptxt(file_get_contents($config_file));
 
-    	$buttons .= addButton(array('label'=>t("caracal_button_log"),'class'=>'btn btn-success', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
-	
+    	$buttons .= addButton(array('label'=>t("caracal_button_log"),'class'=>'btn btn-info', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
+
      	$isRunning = _check_running();
      	if ($isRunning) {
 			$stati .= "<div class='alert alert-success text-center'>".t('caracal_running_true')."</div>\n";
     		$buttons .= addButton(array('label'=>t("caracal_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop", 'divOptions'=>array('class'=>'btn-group')));
     	} else {
     		$buttons .= addButton(array('label'=>t("caracal_button_uninstall"),'class'=>'btn btn-danger', 'href'=>"$urlpath/uninstall", 'divOptions'=>array('class'=>'btn-group')));
-    
+
     		$stati .= "<div class='alert alert-fail text-center'>".t('caracal_running_false')."</div>\n";
     		$buttons .= addButton(array('label'=>t("caracal_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start", 'divOptions'=>array('class'=>'btn-group')));
-		
+
     		$variable = _get_config_values();
 
-			$form_fields .= hl(t("caracal_config_edit"), 4);
+			$form_fields .= hlc(t("caracal_config_edit"), 3);
     		$form_fields .= createForm(array('class'=>'form-horizontal'));
-    		$form_fields .= addInput('CARACAL_BOOTSTRAP_IP',t('caracal_form_bsip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_bsip'));
-    		$form_fields .= addInput('CARACAL_BOOTSTRAP_PORT',t('caracal_form_bsport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_bsport'));
-    		$form_fields .= addInput('CARACAL_LOCAL_IP',t('caracal_form_localip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_localip'));
-    		$form_fields .= addInput('CARACAL_LOCAL_PORT',t('caracal_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_localport'));
-    		
+    		$form_fields .= addInput('CARACAL_BOOTSTRAP_IP',t('caracal_form_bsip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_bsip_help'));
+    		$form_fields .= addInput('CARACAL_BOOTSTRAP_PORT',t('caracal_form_bsport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_bsport_help'));
+    		$form_fields .= addInput('CARACAL_LOCAL_IP',t('caracal_form_localip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_localip_help'));
+    		$form_fields .= addInput('CARACAL_LOCAL_PORT',t('caracal_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_localport_help'));
+
     		$submitButtons .= addSubmit(array('label'=>t('caracal_button_save')));
-		}	
+		}
     } else {
     	$stati .= "<div class='alert alert-fail text-center'>".t('caracal_caracal_installed_false')."</div>\n";
     	$buttons .= addButton(array('label'=>t("caracal_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install", 'divOptions'=>array('class'=>'btn-group')));
@@ -180,15 +180,15 @@ function logfile() { // nothing fancy...just quick and dirty^^
 
 	$page .= hlc(t("caracal_title"));
 	$page .= hl(t("caracal_log"),4);
-	$page .= par(t("caracal_log_path")." $log_file: ");
-	$page .= '<a href="#bottom">'.t("caracal_scroll_down").'</a>';
+	$page .= par(t("caracal_log_path")." $log_file");
+	$page .= '<a href="#bottom">'.t("caracal_scroll_bottom").'</a>';
     $page .= ptxt(file_get_contents($log_file));
-    $page .= '<hr id="bottom" />';
+    $page .= '<div id="bottom" />';
 
 
-    $buttons .= addButton(array('label'=>t("caracal_button_status"),'class'=>'btn btn-success', 'href'=>"$urlpath", 'divOptions'=>array('class'=>'btn-group')));
-	$buttons .= addButton(array('label'=>t("caracal_button_reload"),'class'=>'btn btn-success', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
-		
+    $buttons .= addButton(array('label'=>t("caracal_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath", 'divOptions'=>array('class'=>'btn-group')));
+	$buttons .= addButton(array('label'=>t("caracal_button_reload"),'class'=>'btn btn-primary', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
+
 
     $page .= $buttons;
 	return(array('type' => 'render','page' => $page));
