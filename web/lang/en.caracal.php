@@ -21,7 +21,7 @@ addS ("caracal_running_false", "CaracalDB is stopped");
 addS ("caracal_start_success", "CaracalDB has been started");
 addS ("caracal_start_fail", "CaracalDB failed to start");
 addS ("caracal_stop_success", "CaracalDB has been stopped");
-addS ("caracal_stop_fail", "CaracalDB failed to start");
+addS ("caracal_stop_fail", "CaracalDB failed to stop");
 
 addS ("caracal_saved_config", "Configuration file has been updated");
 
@@ -53,7 +53,7 @@ addS ("caracal_button_log", "View log");
 
 // Form
 addS ("caracal_form_bsip", "Boostrap server IP");
-addS ("caracal_form_bsip_help", "The IP address of the bootstrap serverBoostrap server. The default value in Guifi.net is 10.228.207.42.");
+addS ("caracal_form_bsip_help", "The IP address of the bootstrap server. The default value in Guifi.net is 10.228.207.42.");
 addS ("caracal_form_bsport", "Boostrap server port");
 addS ("caracal_form_bsport_help", "The port where the boostrap server is listening to incoming connections. The default value is 45678.");
 addS ("caracal_form_localip", "CaracalDB server IP");
