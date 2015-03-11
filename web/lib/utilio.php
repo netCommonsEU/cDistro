@@ -94,7 +94,7 @@ function shell_exec_user($cmd,$user){
 }
 
 function isPackageInstall($pkg){
-	$cmd = "dpkg -l ".$pkg." > /dev/null 2>&1; echo $?";
+	$cmd = 'dpkg-query -W --showformat=\'${Status}\n\' '.$pkg.'| grep "install ok installed"; echo $?';
 	return (shell_exec($cmd) == 0);
 }
 
