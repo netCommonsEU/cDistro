@@ -36,7 +36,7 @@ addS ("caracal_config_path", "Fitxer de configuració actual: ");
 addS ("caracal_log", "Registres");
 addS ("caracal_log_path", "Fitxer de registres actual: ");
 
-addS ("caracal_scroll_bottom", "Desplaçar-se avall fins al final del registre");
+addS ("caracal_scroll_bottom", "Desplaça't avall fins al final del registre");
 
 // Buttons
 addS ("caracal_button_install", "Instal·la CaracalDB");
@@ -48,8 +48,8 @@ addS ("caracal_button_stop", "Atura CaracalDB");
 addS ("caracal_button_save", "Desa la configuración");
 
 addS ("caracal_button_back", "Torna a CaracalDB");
-addS ("caracal_button_reload", "Recarrega la página");
-addS ("caracal_button_log", "Veure els registres");
+addS ("caracal_button_reload", "Recarrega la pàgina");
+addS ("caracal_button_log", "Mostra els registres");
 
 // Form
 addS ("caracal_form_bsip", "IP d'arrencada");

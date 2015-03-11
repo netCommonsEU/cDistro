@@ -64,7 +64,7 @@ addS ("caracalapi_form_localport", "CaracalDB server port");
 addS ("caracalapi_form_localport_help", "The port where the CaracalDB server is listening to incoming connections. The default value is 45678.");
 addS ("caracalapi_form_webaddr", "CaracalDB API hostname");
 addS ("caracalapi_form_webaddr_help", "The hostname of the server where CaracalDB API will run. The default value is localhost.");
-addS ("caracalapi_form_webport", "CaracalDB API port");
-addS ("caracalapi_form_webport_help", "The port where the CaracalDB API will be listening to incoming connections. The default value is 8088.");
+addS ("caracalapi_form_webport", "CaracalDB API web port");
+addS ("caracalapi_form_webport_help", "The port where the CaracalDB API web interface will be listening to incoming connections. The default value is 8088.");
 
 ?>
