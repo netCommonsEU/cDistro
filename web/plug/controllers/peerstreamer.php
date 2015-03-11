@@ -101,6 +101,7 @@ function publish_get(){
 	$page = hlc(t($title));
 	$page .= hlc(t('Publish a video stream'),2);
 	$page .= par(t("Please write a stream source"));
+	$page .= par(t("If the URL is a rtmp, please make sure to introduce all the requiered parameters separated ONLY by a simple comma."));
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('url',t('URL Source'),'',array('class'=>'input-xxlarge'));
 	$page .= addInput('port',t('Port Address'));

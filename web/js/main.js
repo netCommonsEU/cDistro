@@ -18,13 +18,31 @@ function node2color(divnode,value){
 	for(x=0; x < values.length; x++){
 		v=values[x];
 		if (v.value >= value) {
-			console.log(v.value+":"+value);
-			$(divnode).css({
+			$(divnode+" td").css({
 		 		'background-color' : v.bgcolor,
 				'color' :  v.color
 			});
+			$(divnode+" td.scan").text(100 - parseInt(value*100));
 			break;
 		}
 	}
-		
+}
+
+function SQoS(page){
+
+	$('#tableSerf').hide();
+	$('#tableSerfAjax').show();
+	tservice.destroy();
+
+	$.getJSON(page,function(data){
+			$.each( data, function( key, val ) {
+					node2color(".node-"+val.node, val.acktime);
+			});
+			tservice = $('.table-data').DataTable( { "language": { "url": "/lang/"+LANG+".table.json"} });
+			$('#tableSerfAjax').hide();
+			$('#tableSerf').show();
+	});
+
+
+
 }

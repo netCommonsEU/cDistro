@@ -31,16 +31,19 @@ function search()
 
 	$page = "";
 
-	$page .= ajaxStr('tableSerf',t("Searching for published services, please wait a moment...") );
+	$page .= ajaxStr('tableSerfAjax',t("Searching for published services, please wait a moment...") );
+	$page .= "<div id='tableSerf' style='display:none'></div>";
 	$page .= "<script>\n";
 	$page .= "$('#tableSerf').load('".$staticFile."/serf/ajaxsearch',function(){\n";
+	$page .= "	$('#tableSerfAjax').hide();";
+	$page .= "	$('#tableSerf').css({'display':'block'});";
 	$page .= "	$('#tags').tab();\n";
-	$page .= "  $('.table-data').DataTable( ";
+	$page .= "  tservice = $('.table-data').DataTable( ";
 	$page .= '		{ "language": { "url": "/lang/"+LANG+".table.json"} }';
 	$page .= "	);";
 	$page .= "});\n";
 	$page .= "</script>\n";
-	$page .=  addButton(array('label'=>t("serf_search_quality"), 'class'=>'btn', 'onclick'=>'$.getJSON("'.$staticFile.'/serf/ajaxquality",function(data){  $.each( data, function( key, val ) { node2color(".node-"+val.node+" td",val.acktime); });  })'));
+	$page .=  addButton(array('label'=>t("serf_search_quality"), 'class'=>'btn', 'onclick'=>'SQoS("'.$staticFile.'/serf/ajaxquality")'));
 
 
 	return(array('type'=>'render','page'=>$page));
@@ -99,12 +102,13 @@ function ajaxsearch()
 		if($active == $k) $services .= " active";
 		$services .= "' id='".$k."'>";
 
-		$services .= addTableHeader(array(t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped table-data'));
+		$services .= addTableHeader(array(t('%'),t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped table-data'));
 		foreach($v as $serv){
 			unset($serv['type']);
 			$node_id=$serv['node_id'];
 			unset($serv['node_id']);
-			$services .= addTableRow($serv,array('class'=>"node-".$node_id));
+			$servarray=array(0 => '', 1 => $serv['description'], 2 => $serv['host'], 3 => $serv['ip'], 4 => $serv['port'], 5 => $serv['microcloud'], 6 => $serv['action'] );
+			$services .= addTableRow($servarray,array('class'=>"node-".$node_id), array( 0 => array('class'=>'scan')));
 		}
 		$services .= addTableFooter();
 		$services .= " 	</div>";

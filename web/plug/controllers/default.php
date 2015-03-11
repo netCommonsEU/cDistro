@@ -2,7 +2,7 @@
 // Default file..
 
 function index(){
-        global $appHost, $appHostname, $sysCPU, $sysRAM;
+        global $appHost, $appHostname, $sysCPU, $sysRAM, $sysStorage;
 
         $page = "";
 
@@ -13,6 +13,7 @@ function index(){
         $page .= "<strong>".t('Hostname')."</strong>: ".$appHostname."<br/>";
         $page .= "<strong>CPU</strong>: ".$sysCPU."<br/>";
         $page .= "<strong>RAM</strong>: ".$sysRAM."<br/>";
+	$page .= "<strong>".t('Storage (total / available)')."</strong>: ".$sysStorage."<br/>";
         $page .= "</small><br/>";
 
         $page .= t("Let's configure your system!");
