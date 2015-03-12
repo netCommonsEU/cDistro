@@ -1,4 +1,4 @@
-<?php
+ <?php
 //caracal-api.php
 
 $config_file="/etc/caracaldb-api/application.conf";
@@ -15,29 +15,15 @@ function index_get(){
 
 	global $config_file, $apache_config_file;
 	global $urlpath, $appHost;
-    //$disabled = '';
 
 	$appAddress = explode(":",$appHost)[0];
 
 
 	$page = "";
 	$buttons = "";
-	$submitButtons = "";
 	$stati = "";
 	$config_file_content = "";
-	$form_fields = "";
 
-	
-	// if (isSesionValue('flash')) {
-	// 	$flash = getSessionValue('flash');
-	// 	unsetSessionValue('flash');
-	// 	$flash_class = getSessionValue('flash_class');
-	// 	unsetSessionValue('flash_class');
-	// 	$page .= "<div class='$flash_class text-center'>$flash</div>\n";
-	// }
-	
-
-	//$variables = load_conffile($getinconf_file);
 	$page .= hlc(t("caracalapi_title"));
 	$page .= hl(t("caracalapi_subtitle"),4);
     $page .= par(t("caracalapi_description"));
@@ -61,7 +47,7 @@ function index_get(){
     	$config_file_content .= par(t("caracalapi_config_path")." $config_file: ");
     	$config_file_content .= ptxt(file_get_contents($config_file));
 
-    	$buttons .= addButton(array('label'=>t("caracalapi_button_log"),'class'=>'btn btn-success', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
+    	$buttons .= addButton(array('label'=>t("caracalapi_button_log"),'class'=>'btn btn-info', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
 	
      	$isRunning = _check_running();
      	if ($isRunning) {
@@ -74,31 +60,21 @@ function index_get(){
     
     		$stati .= "<div class='alert alert-fail text-center'>".t('caracalapi_running_false')."</div>\n";
     		$buttons .= addButton(array('label'=>t("caracalapi_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start", 'divOptions'=>array('class'=>'btn-group')));
-		
-    		$variable = _get_config_values();
 
-			$form_fields .= hl(t("caracalapi_config_edit"), 4);
-    		$form_fields .= createForm(array('class'=>'form-horizontal'));
-    		$form_fields .= addInput('CARACALAPI_BOOTSTRAP_IP',t('caracalapi_form_bsip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracalapi_form_bsip'));
-    		$form_fields .= addInput('CARACALAPI_BOOTSTRAP_PORT',t('caracalapi_form_bsport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_bsport'));
-    		$form_fields .= addInput('CARACALAPI_LOCAL_IP',t('caracalapi_form_localip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracalapi_form_localip'));
-    		$form_fields .= addInput('CARACALAPI_LOCAL_PORT',t('caracalapi_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_localport'));
-    		$form_fields .= addInput('CARACALAPI_WEB_ADDR',t('caracalapi_form_webaddr'),$variable,array('type'=>'text','required'=>''),false,t('caracalapi_form_webaddr'));
-    		$form_fields .= addInput('CARACALAPI_WEB_PORT',t('caracalapi_form_webport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_webport'));
-    		
+    		$buttons .= addButton(array('label'=>t("caracalapi_button_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/config", 'divOptions'=>array('class'=>'btn-group')));
+	
 
-    		$submitButtons .= addSubmit(array('label'=>t('caracalapi_button_save')));
 		}	
     } else {
     	$stati .= "<div class='alert alert-fail text-center'>".t('caracalapi_caracalapi_installed_false')."</div>\n";
     	$buttons .= addButton(array('label'=>t("caracalapi_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install", 'divOptions'=>array('class'=>'btn-group')));
 	}
 
-    $page .= $stati . $config_file_content . $form_fields . $buttons . $submitButtons;
+    $page .= $stati . $config_file_content . $buttons;
 	return(array('type' => 'render','page' => $page));
 }
 
-function index_post(){
+function config_post(){
 
 	global $staticFile, $urlpath;
 	global $config_file, $web_config_file;
@@ -127,6 +103,60 @@ function index_post(){
 
 	setFlash(t('caracalapi_saved_config'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+}
+
+function config() {
+	global $config_file, $apache_config_file;
+	global $urlpath, $appHost, $staticFile;
+    //$disabled = '';
+
+	$appAddress = explode(":",$appHost)[0];
+
+
+	$page = "";
+	$buttons = "";
+	$submitButtons = "";
+	$stati = "";
+	$config_file_content = "";
+	$form_fields = "";
+
+	$page .= hlc(t("caracalapi_title"));
+
+    $hasCaracal = _check_caracal();
+
+    if ($hasCaracal) {
+    	$config_file_content .= hl(t("caracalapi_config_file"), 4);
+    	$config_file_content .= par(t("caracalapi_config_path")." $config_file: ");
+    	$config_file_content .= ptxt(file_get_contents($config_file));
+
+    	$isRunning = _check_running();
+     	
+     	if ($isRunning) {
+     		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
+     	} else {
+     		$variable = _get_config_values();
+
+			$form_fields .= hl(t("caracalapi_config_edit"), 4);
+    		$form_fields .= createForm(array('class'=>'form-horizontal'));
+    		$form_fields .= addInput('CARACALAPI_BOOTSTRAP_IP',t('caracalapi_form_bsip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracalapi_form_bsip'));
+    		$form_fields .= addInput('CARACALAPI_BOOTSTRAP_PORT',t('caracalapi_form_bsport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_bsport'));
+    		$form_fields .= addInput('CARACALAPI_LOCAL_IP',t('caracalapi_form_localip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracalapi_form_localip'));
+    		$form_fields .= addInput('CARACALAPI_LOCAL_PORT',t('caracalapi_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_localport'));
+    		$form_fields .= addInput('CARACALAPI_WEB_ADDR',t('caracalapi_form_webaddr'),$variable,array('type'=>'text','required'=>''),false,t('caracalapi_form_webaddr'));
+    		$form_fields .= addInput('CARACALAPI_WEB_PORT',t('caracalapi_form_webport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_webport'));
+    		
+
+    		$submitButtons .= addSubmit(array('label'=>t('caracalapi_button_save')));
+		}	
+    } else {
+    	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
+    }
+
+    $buttons .= addButton(array('label'=>t("caracalapi_button_cancel"),'class'=>'btn btn-danger', 'href'=>"$urlpath", 'divOptions'=>array('class'=>'btn-group')));
+	
+
+    $page .= $config_file_content . $form_fields . $buttons . $submitButtons;
+	return(array('type' => 'render','page' => $page));
 }
 
 function start() {
@@ -188,6 +218,9 @@ function stop() {
 
 function install() {
 	global $urlpath, $staticFile, $binary_url, $binary_deb;
+	if(!defined('STDIN'))  define('STDIN',  fopen('php://stdin',  'r'));
+	if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
+	if(!defined('STDERR')) define('STDERR', fopen('php://stderr', 'w'));
 
 	if (!_check_java()) {
 		$java_install_cmd = "apt-get install openjdk-6-jre";
@@ -197,7 +230,6 @@ function install() {
 			return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
 		}
 	}
-
 	if (!isPackageInstall("php-pear")) {
 		installPackage("php-pear");		
 	}
@@ -222,7 +254,7 @@ function install() {
 	}
 
 	setFlash(t("caracalapi_install_success"), "success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath."/config"));
 }
 
 function uninstall() {

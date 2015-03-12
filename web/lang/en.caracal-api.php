@@ -53,6 +53,9 @@ addS ("caracalapi_button_reload", "Reload");
 addS ("caracalapi_button_log", "Log");
 addS ("caracalapi_button_ui", "WebUI");
 
+addS ("caracalapi_button_cancel", "Cancel");
+addS ("caracalapi_button_config", "Edit Config");
+
 // Form
 addS ("caracalapi_form_bsip", "Boostrap Server Address");
 addS ("caracalapi_form_bsport", "Boostrap Server Port");
