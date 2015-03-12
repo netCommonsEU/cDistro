@@ -4,9 +4,6 @@
 $GUIFI_CONF_DIR = "/etc";
 $GUIFI_CONF_FILE = "guifi.conf";
 
-if (file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) && !filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE))
-	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
-
 function index(){
 	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
 
@@ -40,7 +37,7 @@ function initialize(){
 	$page .= par(t("guifi-web_initialize_description"));
 
 	$form = createForm(array('class'=>'form-horizontal'));
-	$form .= addInput('USERNAME',t("guifi-web_initialize_form_username"),'',array('type'=>'text','required'=>true),'',t("guifi-web_initialize_form_username_tooltip"));
+	$form .= addInput('USERNAME',t("guifi-web_initialize_form_username"),'',array('type'=>'text','required'=>true,'pattern'=>'[A-Za-z0-9_-\s\.]+'),'',t("guifi-web_initialize_form_username_tooltip"));
 	$form .= addInput('PASSWORD',t("guifi-web_initialize_form_password"),'',array('type'=>'password', 'required'=>true),'',t("guifi-web_initialize_form_password_tooltip"));
  	$fbuttons = addSubmit(array('label'=>t('guifi-web_button_submit_check'),'class'=>'btn btn-primary'));
 
@@ -62,57 +59,135 @@ function initialize_post(){
 	$page .= hlc(t("guifi-web_common_title"));
 	$page .= hl(t("guifi-web_initialize_subtitle"),4);
 
-	/*if (!file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE))
-		touch($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE);
-	if (fileperms($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) != "16877" )
-		chmod($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, 0755);
-	*/
-	/*if (!file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE))
-		touch($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE);
-	if (fileperms($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) != "16877" )
-		chmod($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, 0755);
-	*/
+	if (empty($_POST)) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_post_empty")."</div>\n";
+		$page .= par(t("guifi-web_initialize_post_empty"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web/initialize'));
+	}
 
-		$buttons .= addSubmit(array('label'=>t('tahoe-lafs_button_create_introducer'),'class'=>'btn btn-success'));
+	else if (empty($_POST['USERNAME'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_post_emptyusername")."</div>\n";
+		$page .= par(t("guifi-web_initialize_post_emptyusername"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+	}
 
-	/*if (! file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) || ( fileperms($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) != "16877" ))
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_config_failed")."</div>\n";
-	elseif (! file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) || ( fileperms($GUIFI_CONF_DIR) != "16877" ))
+	else if (empty($_POST['PASSWORD'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_post_emptypassword")."</div>\n";
+		$page .= par(t("guifi-web_initialize_post_emptypassword"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+	}
 
-	*/
+	else {
+		$url = "http://test.guifi.net/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=".$_POST['PASSWORD'];
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$json = curl_exec($ch);
+		curl_close($ch);
 
-	$page .= par("aa");
-	$page .= par($_POST['USERNAME']);
-	$page .= par(md5($_POST['PASSWORD']));
-	$page .= par("bb");
+		if (empty($json)) {
+			$page .= txt(t("guifi-web_initialize_curl_error"));
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_curl_empty")."</div>\n";
+			$page .= par(t("guifi-web_initialize_curl_empty"));
+			$page .= txt(t("guifi-web_initialize_curl_url"));
+			$page .= "<div class='alert alert-info text-center'>"."http://guifi.net/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=********</div>\n";
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+		}
 
-	$content = file_get_contents("http://test.guifi.net/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=".$_POST['PASSWORD']);
-		$page .= par($content);
+		else {
+			$output = json_decode ($json);
 
-//	$result_dir = (shell_exec($cmd));
+			if ($output->{'code'}->{'code'} == 200 ) {
+				$page .= txt(t("guifi-web_initialize_curl_authresult"));
+				$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_initialize_curl_ok")."</div>\n";
+				$page .= txt(t("guifi-web_initialize_curl_details"));
+				$page .= ptxt($json);
 
-/*
-	$page .= par(t("guifi-web_initialize_result"));
-		if (!file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) || !file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) )
+				if (!file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE))
+					touch($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE);
+				if (fileperms($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) != "16877" )
+					chmod($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, 0644);
 
-	if (!file_exists($GUIFI_CONF_DIR))
-		mkdir($GUIFI_CONF_DIR, 0755, true);
+				write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, array("USERNAME"=>'"'.$_POST['USERNAME'].'"', "TOKEN"=>'"'.$output->{'responses'}->{'authToken'}.'"'));
 
-	$cmd = "apt-get update";
-	$page .= ptxt(shell_exec($cmd));
-pri
+				if ( !file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) ) {
+					$page .= txt(t("guifi-web_initialize_result"));
+					$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_file_error")."</div>\n";
+					$page .= par(t("guifi-web_initialize_file_error"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+				}
 
+				else if ( filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) == 0 ) {
+					$page .= txt(t("guifi-web_initialize_result"));
+					$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_file_empty")."</div>\n";
+					$page .= par(t("guifi-web_initialize_file_empty"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+				}
 
-	$page .= par(t("guifi-web_initialize_details"));
+				else {
+					$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
 
-	if (!file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) || !file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) )
-	$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_not_initialised")."</div>\n";
+					if ( $GUIFI['USERNAME'] != $_POST['USERNAME'] || $GUIFI['TOKEN'] != $output->{'responses'}->{'authToken'} ) {
+						$page .= txt(t("guifi-web_initialize_result"));
+						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_file_different")."</div>\n";
+						$page .= par(t("guifi-web_initialize_file_different"));
+						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+					}
 
+					else {
+						$page .= txt(t("guifi-web_initialize_result"));
+						$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_initialize_success")."</div>\n";
+						$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+					}
+				}
+			}
 
-		$buttons .= addButton(array('label'=>t("tahoe-lafs_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/tahoe-lafs'));
-*/
+			else if ($output->{'code'}->{'code'} == 201 ) {
+
+				if ($output->{'errors'}[0]->{'code'} == 401 ) {
+					$page .= txt(t("guifi-web_initialize_curl_authresult"));
+					$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_curl_wrong_command")."</div>\n";
+					$page .= txt(t("guifi-web_initialize_curl_details"));
+					$page .= ptxt($json);
+					$page .= par(t("guifi-web_initialize_curl_wrong_command"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+				}
+
+				else if ($output->{'errors'}[0]->{'code'} == 403 ) {
+					$page .= txt(t("guifi-web_initialize_curl_authresult"));
+					$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_initialize_curl_wrong_login")."</div>\n";
+					$page .= txt(t("guifi-web_initialize_curl_details"));
+					$page .= ptxt($json);
+					$page .= par(t("guifi-web_initialize_curl_wrong_login"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+				}
+
+				else {
+					$page .= txt(t("guifi-web_initialize_curl_authresult"));
+					$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_curl_error")."</div>\n";
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+					$page .= txt(t("guifi-web_initialize_curl_details"));
+					$page .= ptxt($json);
+					$page .= par(t("guifi-web_initialize_curl_error"));
+				}
+			}
+
+			else {
+				$page .= txt(t("guifi-web_initialize_curl_authresult"));
+				$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_curl_error")."</div>\n";
+				$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
+				$page .= txt(t("guifi-web_initialize_curl_details"));
+				$page .= ptxt($json);
+				$page .= par(t("guifi-web_initialize_curl_error"));
+			}
+
+		}
+	}
+
 	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
+
+
 }
 
 function ffileperms(){
