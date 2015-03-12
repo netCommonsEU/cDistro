@@ -60,8 +60,8 @@ addS ("caracal_form_bsip_help", "The IP address of the bootstrap server. The def
 addS ("caracal_form_bsport", "Boostrap server port");
 addS ("caracal_form_bsport_help", "The port where the boostrap server is listening to incoming connections. The default value is 45678.");
 addS ("caracal_form_localip", "CaracalDB server IP");
-addS ("caracal_form_localip_help", "The IP address of the server where CaracalDB is running. The default value is this Cloudy instance's IP address.");
+addS ("caracal_form_localip_help", "The IP address of the server where CaracalDB will run. The default value is this Cloudy instance's IP address.");
 addS ("caracal_form_localport", "CaracalDB server port");
-addS ("caracal_form_localport_help", "The port where the CaracalDB server is listening to incoming connections. The default value is 45678.");
+addS ("caracal_form_localport_help", "The port where the CaracalDB server will be listening to incoming connections. The default value is 45678.");
 
 ?>
