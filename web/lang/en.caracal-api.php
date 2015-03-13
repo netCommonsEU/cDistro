@@ -53,6 +53,9 @@ addS ("caracalapi_button_reload", "Reload");
 addS ("caracalapi_button_log", "View log");
 addS ("caracalapi_button_ui", "WebUI");
 
+addS ("caracalapi_button_cancel", "Cancel");
+addS ("caracalapi_button_config", "Edit Config");
+
 // Form
 addS ("caracalapi_form_bsip", "Boostrap server IP");
 addS ("caracalapi_form_bsip_help", "The IP address of the bootstrap server. The default value in Guifi.net is 10.228.207.42.");

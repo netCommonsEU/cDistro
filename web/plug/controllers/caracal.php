@@ -17,10 +17,8 @@ function index_get(){
 
     $page = "";
 	$buttons = "";
-	$submitButtons = "";
 	$stati = "";
 	$config_file_content = "";
-	$form_fields = "";
 
 
 	// if (isSesionValue('flash')) {
@@ -67,28 +65,20 @@ function index_get(){
 
     		$stati .= "<div class='alert alert-fail text-center'>".t('caracal_running_false')."</div>\n";
     		$buttons .= addButton(array('label'=>t("caracal_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start", 'divOptions'=>array('class'=>'btn-group')));
-
-    		$variable = _get_config_values();
-
-			$form_fields .= hlc(t("caracal_config_edit"), 3);
-    		$form_fields .= createForm(array('class'=>'form-horizontal'));
-    		$form_fields .= addInput('CARACAL_BOOTSTRAP_IP',t('caracal_form_bsip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_bsip_help'));
-    		$form_fields .= addInput('CARACAL_BOOTSTRAP_PORT',t('caracal_form_bsport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_bsport_help'));
-    		$form_fields .= addInput('CARACAL_LOCAL_IP',t('caracal_form_localip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_localip_help'));
-    		$form_fields .= addInput('CARACAL_LOCAL_PORT',t('caracal_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_localport_help'));
-
-    		$submitButtons .= addSubmit(array('label'=>t('caracal_button_save')));
+		
+    		$buttons .= addButton(array('label'=>t("caracal_button_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/config", 'divOptions'=>array('class'=>'btn-group')));
+	
 		}
     } else {
     	$stati .= "<div class='alert alert-fail text-center'>".t('caracal_caracal_installed_false')."</div>\n";
     	$buttons .= addButton(array('label'=>t("caracal_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install", 'divOptions'=>array('class'=>'btn-group')));
 	}
 
-    $page .= $stati . $config_file_content . $form_fields . $buttons . $submitButtons;
+    $page .= $stati . $config_file_content . $buttons;
 	return(array('type' => 'render','page' => $page));
 }
 
-function index_post(){
+function config_post(){
 
 	global $staticFile, $urlpath;
 	global $config_file;
@@ -109,6 +99,56 @@ function index_post(){
 
 	setFlash(t('caracal_saved_config'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+}
+
+function config() {
+
+	global $config_file;
+	global $urlpath;
+    //$disabled = '';
+
+    $page = "";
+	$buttons = "";
+	$submitButtons = "";
+	$config_file_content = "";
+	$form_fields = "";
+
+	$page .= hlc(t("caracal_title"));
+
+    $hasCaracal = _check_caracal();
+
+    if ($hasCaracal) {
+
+		$config_file_content .= hlc(t("caracal_config_file"), 3);
+    	$config_file_content .= par(t("caracal_config_path")." $config_file");
+    	$config_file_content .= ptxt(file_get_contents($config_file));
+
+    	
+    	
+     	$isRunning = _check_running();
+     	if ($isRunning) {
+    		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+    	} else {
+    		$variable = _get_config_values();
+
+			$form_fields .= hlc(t("caracal_config_edit"), 3);
+    		$form_fields .= createForm(array('class'=>'form-horizontal'));
+    		$form_fields .= addInput('CARACAL_BOOTSTRAP_IP',t('caracal_form_bsip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_bsip_help'));
+    		$form_fields .= addInput('CARACAL_BOOTSTRAP_PORT',t('caracal_form_bsport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_bsport_help'));
+    		$form_fields .= addInput('CARACAL_LOCAL_IP',t('caracal_form_localip'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}','required'=>''),false,t('caracal_form_localip_help'));
+    		$form_fields .= addInput('CARACAL_LOCAL_PORT',t('caracal_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracal_form_localport_help'));
+
+    		$submitButtons .= addSubmit(array('label'=>t('caracal_button_save')));
+		}
+    } else {
+    	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+    }
+
+    $buttons .= addButton(array('label'=>t("caracal_button_cancel"),'class'=>'btn btn-danger', 'href'=>"$urlpath", 'divOptions'=>array('class'=>'btn-group')));
+	
+
+    $page .= $config_file_content . $form_fields . $buttons . $submitButtons;
+	return(array('type' => 'render','page' => $page));
 }
 
 function start() {
@@ -157,7 +197,7 @@ function install() {
 	}
 
 	setFlash(t("caracal_install_success"), "success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath."/config"));
 }
 
 function uninstall() {

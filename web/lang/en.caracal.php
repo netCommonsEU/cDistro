@@ -51,6 +51,9 @@ addS ("caracal_button_back", "Back to CaracalDB");
 addS ("caracal_button_reload", "Reload page");
 addS ("caracal_button_log", "View log");
 
+addS ("caracal_button_cancel", "Cancel");
+addS ("caracal_button_config", "Edit Config");
+
 // Form
 addS ("caracal_form_bsip", "Boostrap server IP");
 addS ("caracal_form_bsip_help", "The IP address of the bootstrap server. The default value in Guifi.net is 10.228.207.42.");
