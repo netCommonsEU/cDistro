@@ -42,29 +42,29 @@ function index_get(){
 
     if ($hasCaracal) {
     	$stati .= "<div class='alert alert-success text-center'>".t('caracalapi_caracalapi_installed_true')."</div>\n";
-    	
+
     	$config_file_content .= hl(t("caracalapi_config_file"), 4);
     	$config_file_content .= par(t("caracalapi_config_path")." $config_file: ");
     	$config_file_content .= ptxt(file_get_contents($config_file));
 
     	$buttons .= addButton(array('label'=>t("caracalapi_button_log"),'class'=>'btn btn-info', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
-	
+
      	$isRunning = _check_running();
      	if ($isRunning) {
 			$stati .= "<div class='alert alert-success text-center'>".t('caracalapi_running_true')."</div>\n";
     		$buttons .= addButton(array('label'=>t("caracalapi_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop", 'divOptions'=>array('class'=>'btn-group')));
     		$buttons .= addButton(array('label'=>t("caracalapi_button_ui"),'class'=>'btn btn-success', 'href'=>"http://".$appAddress."/caracalui", 'divOptions'=>array('class'=>'btn-group')));
-    	
+
     	} else {
     		$buttons .= addButton(array('label'=>t("caracalapi_button_uninstall"),'class'=>'btn btn-danger', 'href'=>"$urlpath/uninstall", 'divOptions'=>array('class'=>'btn-group')));
-    
+
     		$stati .= "<div class='alert alert-fail text-center'>".t('caracalapi_running_false')."</div>\n";
     		$buttons .= addButton(array('label'=>t("caracalapi_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start", 'divOptions'=>array('class'=>'btn-group')));
 
     		$buttons .= addButton(array('label'=>t("caracalapi_button_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/config", 'divOptions'=>array('class'=>'btn-group')));
-	
 
-		}	
+
+		}
     } else {
     	$stati .= "<div class='alert alert-fail text-center'>".t('caracalapi_caracalapi_installed_false')."</div>\n";
     	$buttons .= addButton(array('label'=>t("caracalapi_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install", 'divOptions'=>array('class'=>'btn-group')));
@@ -130,7 +130,7 @@ function config() {
     	$config_file_content .= ptxt(file_get_contents($config_file));
 
     	$isRunning = _check_running();
-     	
+
      	if ($isRunning) {
      		return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
      	} else {
@@ -144,16 +144,16 @@ function config() {
     		$form_fields .= addInput('CARACALAPI_LOCAL_PORT',t('caracalapi_form_localport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_localport'));
     		$form_fields .= addInput('CARACALAPI_WEB_ADDR',t('caracalapi_form_webaddr'),$variable,array('type'=>'text','required'=>''),false,t('caracalapi_form_webaddr'));
     		$form_fields .= addInput('CARACALAPI_WEB_PORT',t('caracalapi_form_webport'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),false,t('caracalapi_form_webport'));
-    		
+
 
     		$submitButtons .= addSubmit(array('label'=>t('caracalapi_button_save')));
-		}	
+		}
     } else {
     	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath)); // abort
     }
 
     $buttons .= addButton(array('label'=>t("caracalapi_button_cancel"),'class'=>'btn btn-danger', 'href'=>"$urlpath", 'divOptions'=>array('class'=>'btn-group')));
-	
+
 
     $page .= $config_file_content . $form_fields . $buttons . $submitButtons;
 	return(array('type' => 'render','page' => $page));
@@ -231,7 +231,7 @@ function install() {
 		}
 	}
 	if (!isPackageInstall("php-pear")) {
-		installPackage("php-pear");		
+		installPackage("php-pear");
 	}
 	$ret = execute_shell("pear install Config");
 	if ($ret['return'] != 0) {
@@ -290,7 +290,7 @@ function logfile() { // nothing fancy...just quick and dirty^^
 
     $buttons .= addButton(array('label'=>t("caracalapi_button_status"),'class'=>'btn btn-success', 'href'=>"$urlpath", 'divOptions'=>array('class'=>'btn-group')));
 	$buttons .= addButton(array('label'=>t("caracalapi_button_reload"),'class'=>'btn btn-success', 'href'=>"$urlpath/logfile", 'divOptions'=>array('class'=>'btn-group')));
-		
+
 
     $page .= $buttons;
 	return(array('type' => 'render','page' => $page));
