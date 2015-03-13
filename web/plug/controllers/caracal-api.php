@@ -1,4 +1,4 @@
- <?php
+<?php
 //caracal-api.php
 
 $config_file="/etc/caracaldb-api/application.conf";
