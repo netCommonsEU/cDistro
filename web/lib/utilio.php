@@ -23,6 +23,7 @@ function load_conffile($file,$default = null){
 	}
 	return($v);
 }
+
 function load_singlevalue($file,$varis ){
 	global $debug;
 
@@ -282,6 +283,13 @@ function getCommunityIP(){
 	$cmd = '/usr/sbin/avahi-ps info ip';
 	$ret = execute_program($cmd);
 	//$ret = $cmd;
+
+	return($ret);
+}
+
+function getCommunityDevMAC(){
+	$cmd = 'cat /sys/class/net/'.getCommunityDev()['output'][0].'/address';
+	$ret = execute_program($cmd);
 
 	return($ret);
 }
