@@ -36,36 +36,7 @@ function index(){
 			$page .= par(t("guifi-web_index_not_registered"));
 			$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/register'));
 		}
-/*
 
-
-		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN']);
-
-		print_r($gapi);
-
-		$title = "Plaça Major, 34";
-		$zone_id = 27182;
-		$lat = '42.187065853813635';
-		$lon = '2.0233726501464844';
-		$node = array();
-		$node['nick'] = 'TEST34';
-		$node['body'] = "Node creat amb la API.";
-		$node['lat'] = '41.54301946112854'; // Latitude of the node
-		$node['lon'] = '1.5803146362304688'; // Longitude of the node
-		$node['elevation'] = 30; // 30 metres high
-		$node['stable'] = 'Yes';
-		$node['graph_server'] = 15902;
-		$node['status'] = 'Planned';
-
-		//$added = $gapi->addNode( $title, $zone_id, $lat, $lon, $node );
-		if( $added ) {
-			print_r( "Node created correctly!!<br />\n<br />\nThe identificator of the new node is: node_id = <strong>".$added->node_id."</strong>");
-		} else {
-			print_r("There was an error adding the node.<br />\n");
-			echo $gapi->getErrorsStr();
-		}
-
-		*/
 	}
 
 	$page .= $buttons;
@@ -166,12 +137,14 @@ function initialize_post(){
 					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
 				}
 
+				/* This does not work as the config. file is written asynchronously
 				else if ( filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) == 0 ) {
 					$page .= txt(t("guifi-web_initialize_result"));
 					$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_file_empty")."</div>\n";
 					$page .= par(t("guifi-web_initialize_file_empty"));
 					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/initialize'));
 				}
+				*/
 
 				else {
 					$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
@@ -187,6 +160,7 @@ function initialize_post(){
 						$page .= txt(t("guifi-web_initialize_result"));
 						$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_initialize_success")."</div>\n";
 						$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+						$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/register'));
 					}
 				}
 			}
@@ -277,31 +251,70 @@ function register_post(){
 	if (empty($_POST)) {
 		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_register_post_empty")."</div>\n";
 		$page .= par(t("guifi-web_register_post_empty"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_register"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web/register'));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_register"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/register'));
 	}
 
 	else if (empty($_POST['NODE_ID'])) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_initialize_post_emptynodeid")."</div>\n";
-		$page .= par(t("guifi-web_initialize_post_emptynodeid"));
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_register_post_emptynode")."</div>\n";
+		$page .= par(t("guifi-web_register_post_emptynode"));
 		$buttons .= addButton(array('label'=>t("guifi-web_button_back_register"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/register'));
 	}
 
 	else {
+
 		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
-		/*$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN']);
 
-		$page .= ptxt(print_r($gapi,true));
+		$url = "http://test.guifi.net/guifi/cnml/".$_POST['NODE_ID']."/node";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$xml = curl_exec($ch);
+		$output = new SimpleXMLElement($xml);
+		curl_close($ch);
 
-		$node_id = $_POST['NODE_ID'];
-
-		$updated = $gapi->updateNode( $node_id );
-		if( $updated ) {
-
-			$page .= ptxt(print_r( $gapi, true));
-		} else {
-			$page .= ptxt(print_r( $gapi->getErrorsStr(), true));
+		if (!isset($output->node)) {
+			$page .= txt(t("guifi-web_register_curl_noderesult"));
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_register_wrong_nodeid_pre").' '.$_POST['NODE_ID'].' '.t("guifi-web_alert_register_wrong_nodeid_post")."</div>\n";
+			$page .= par(t("guifi-web_register_wrong_node"));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back_register"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/register'));
 		}
-		*/
+
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_register_post_found_pre").' '.$_POST['NODE_ID'].' '.t("guifi-web_alert_register_post_found_post")."</div>\n";
+			$page .= txt(t("guifi-web_alert_register_post_nodename"));
+			$page .= ptxt($output->node['title']);
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web/register'));
+
+			write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("NODEID"=>$_POST['NODE_ID'], "NODENAME"=>$output->node['title']))));
+
+			if (preg_replace('/\s+/', '', $output->node)) {
+				$page .= txt(t("guifi-web_alert_register_post_nodedescription"));
+				$page .= ptxt($output->node);
+			}
+
+			$page .= txt(t("guifi-web_alert_register_post_nodedevices"));
+			if ( $output->node['devices'][0] ) {
+				$page .= txt(t("guifi-web_alert_register_post_nodedevices"));
+				$nodeButtons = "";
+				for ($i = 0; $i < $output->node['devices'][0]; $i++) {
+					$page .= ptxt( $output->node->device[$i]['title'] );
+				}
+			}
+
+			else {
+				$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_register_post_no_devices")."</div>\n";
+				$page .= par(t("guifi-web_register_no_devices"));
+				$buttons .= addButton(array('label'=>t("guifi-web_button_register_new"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/add'));
+			}
+
+
+
+
+
+			//$page .= ptxt(print_r(htmlspecialchars($xml), true));
+
+		}
+
 
 	}
 
@@ -310,6 +323,131 @@ function register_post(){
 
 
 }
+
+
+function add(){
+	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+
+	$page = "";
+	$buttons = "";
+
+	$page .= hlc(t("guifi-web_common_title"));
+	$page .= hl(t("guifi-web_add_subtitle"),4);
+
+	$page .= par(t("guifi-web_add_description"));
+
+	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+
+	$form = createForm(array('class'=>'form-horizontal'));
+	$form .= addInput('NODEID',t("guifi-web_add_form_nodeid"),$GUIFI['NODEID'],array('type'=>'number','required'=>true,'min'=>1),'readonly',t("guifi-web_arr_form_nodeid_tooltip"));
+	$form .= addInput('DEVICENAME',t("guifi-web_add_form_nick"),$GUIFI['NODENAME'].'-'.'Cloudy',array('type'=>'text','required'=>true,'pattern'=>'[A-Za-z0-9_-\s\.]+'),'',t("guifi-web_add_form_nick_tooltip"));
+	$form .= addInput('EMAIL',t("guifi-web_add_form_mail"),'a@b.c',array('type'=>'email'),'',t("guifi-web_add_form_mail_tooltip"));
+	$form .= addInput('MAC',t("guifi-web_add_form_mac"),strtoupper(getCommunityDevMAC()['output'][0]),array('type'=>'text','required'=>true,'pattern'=>'^([0-9A-F]{2}[:]){5}([0-9A-F]{2})$'),'',t("guifi-web_add_form_mac_tooltip"));
+	$form .= addInput('DETAILS',t("guifi-web_add_form_comment"),'A Cloudy instance',array('type'=>'textarea','maxlength'=>50),'',t("guifi-web_add_form_mac_tooltip"));
+
+ 	$fbuttons = addSubmit(array('label'=>t('guifi-web_button_submit_add'),'class'=>'btn btn-default'));
+
+	$page .= $form;
+
+	$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+	$buttons .= $fbuttons;
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+}
+
+
+
+
+function add_post(){
+	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+
+	$page = "";
+	$buttons = "";
+
+	$page .= hlc(t("guifi-web_common_title"));
+	$page .= hl(t("guifi-web_add_subtitle"),4);
+
+	if (empty($_POST)) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_post_empty")."</div>\n";
+		$page .= par(t("guifi-web_register_add_empty"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+	}
+
+	else if (empty($_POST['NODEID'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_post_emptynode")."</div>\n";
+		$page .= par(t("guifi-web_add_post_emptynode"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+	}
+
+	else if (empty($_POST['DEVICENAME'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_post_nick")."</div>\n";
+		$page .= par(t("guifi-web_add_post_nick"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+	}
+
+	else if (empty($_POST['EMAIL'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_post_mail")."</div>\n";
+		$page .= par(t("guifi-web_add_post_mail"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+	}
+
+	else if (empty($_POST['MAC'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_post_mac")."</div>\n";
+		$page .= par(t("guifi-web_add_post_mac"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+	}
+
+	else if (empty($_POST['DETAILS'])) {
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_post_comment")."</div>\n";
+		$page .= par(t("guifi-web_add_post_comment"));
+		$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+	}
+
+	else {
+
+		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+
+		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'] );
+
+		$node_id = $_POST['NODEID'];
+		$type = 'cloudy';
+		$mac = $_POST['MAC'];
+
+		$device = array();
+		$device['nick'] = $_POST['DEVICENAME'];
+		$device['notification'] = $_POST['EMAIL'];
+		$device['comment'] = $_POST['DETAILS'];
+
+		$device['status'] = 'Testing';
+
+		$added = $gapi->addDevice($node_id, $type, $mac, $device );
+
+		$page .= txt(t("guifi-web_add_result"));
+		if ( $added && $added->device_id ) {
+			write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("DEVICEID"=>$added->device_id))));
+
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_add_success")."</div>\n";
+			$page .= txt(t("guifi-web_add_deviceid"));
+			$page .= ptxt($added->device_id);
+			$page .= par(t("guifi-web_add_success"));
+		}
+
+		else {
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_add_fail")."</div>\n";
+			$page .= par(t("guifi-web_add_fail"));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/add'));
+		}
+
+
+	}
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+
+
+}
+
 
 
 function ffileperms(){
