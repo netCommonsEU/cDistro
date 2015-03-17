@@ -309,4 +309,14 @@ function check_arch($list_arch = null){
 	return (in_array($myarch,$list_arch));
 
 }
+
+function add_quotes($dates){
+
+	foreach($dates as $k=>$v){
+		if(strpos($dates[$k],'"')===0)$dates[$k]=substr($dates[$k],1,(strlen($dates[$k])-1));
+		if(strripos($dates[$k],'"')===(strlen($dates[$k])-1))$v=substr($dates[$k],0,-1);
+		$dates[$k] = '"'.$dates[$k].'"';
+	}
+	return $dates;
+}
 ?>
