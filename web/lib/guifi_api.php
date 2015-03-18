@@ -16,43 +16,43 @@ class guifiAPI {
    * @var string
    */
   const http_interface = 'auto';
-  
+
   /**
    * guifi.net API URL used with normal metods
    * @var string
    */
   private $url = 'http://test.guifi.net/api';
-  
+
   /**
    * guifi.net API URL used to authenticate the user
    * @var string
    */
   private $auth_url = 'http://test.guifi.net/api/auth';
-  
+
   /**
    * Whether the class is using the Development mode or not
    * @var boolean
    */
   const dev_mode = false;
-  
+
   /**
    * What is the input format of the incoming responses from the API
    * @var string
    */
   const input_format = 'json';
-  
+
   /**
    * What is the output format of the outcoming parameters to the API
    * @var string
    */
   const output_format = 'get';
-  
+
   private $username = '';
   private $password = '';
-  
+
   private $auth_token = null;
   private $errors = array();
-  
+
   /**
    * Adds a zone to guifi.net
    * @param $title Title of the zone
@@ -66,11 +66,11 @@ class guifiAPI {
    */
   public function addZone($title, $master, $miny, $minx, $maxy, $maxx, $parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.zone.add';
     $variables['title'] = $title;
     $variables['master'] = $master;
@@ -78,17 +78,17 @@ class guifiAPI {
     $variables['miny'] = $miny;
     $variables['maxx'] = $maxx;
     $variables['maxy'] = $maxy;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
-    
+
     if ($body !== false) {
       return $body->responses;
     } else {
       return false;
     }
   }
-  
+
   /**
    * Updates a guifi zone
    * @param $zone_id Zone ID to edit
@@ -97,19 +97,19 @@ class guifiAPI {
    */
   public function updateZone($zone_id, $parameters) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.zone.update';
     $variables['zone_id'] = $zone_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Removes a guifi zone
    * @param $zone_id ID of the zone which should be removed
@@ -119,12 +119,12 @@ class guifiAPI {
     $variables = array();
     $variables['command'] = 'guifi.zone.remove';
     $variables['zone_id'] = $zone_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Gets the zone which can contain a certain point
    * @param $lat Latitude of the point
@@ -136,17 +136,17 @@ class guifiAPI {
     $variables['command'] = 'guifi.zone.nearest';
     $variables['lat'] = $lat;
     $variables['lon'] = $lon;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
-    
+
     if ($body !== false) {
       return $body->responses;
     } else {
       return false;
     }
   }
-  
+
   /**
    * Adds a new guifi.net node
    * @param $title Title of the node
@@ -158,27 +158,27 @@ class guifiAPI {
    */
   public function addNode($title, $zone_id, $lat, $lon, $parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.node.add';
     $variables['title'] = $title;
     $variables['zone_id'] = $zone_id;
     $variables['lat'] = $lat;
     $variables['lon'] = $lon;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
-    
+
     if ($body !== false) {
       return $body->responses;
     } else {
       return false;
     }
   }
-  
+
   /**
    * Updates a guifi node
    * @param $node_id Node ID to edit
@@ -187,19 +187,19 @@ class guifiAPI {
    */
   public function updateNode($node_id, $parameters) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.node.update';
     $variables['node_id'] = $node_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Removes a guifi node
    * @param $zone_id ID of the node which should be removed
@@ -209,31 +209,31 @@ class guifiAPI {
     $variables = array();
     $variables['command'] = 'guifi.node.remove';
     $variables['node_id'] = $node_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Adds a guifi device to a node
    * @param $node_id ID of the node where the device should be added
    * @param $type Type of device which should be added (radio, mobile, server, nat, generic, adsl, cam, phone)
    * @param $parameters Other parameters depending on the type of device, such as model_id, MAC address or firmware
-   * @return mixed The response with the newly created device_id or false in case of error 
+   * @return mixed The response with the newly created device_id or false in case of error
    */
   public function addDevice($node_id, $type, $mac, $parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.device.add';
     $variables['node_id'] = $node_id;
     $variables['type'] = $type;
     $variables['mac'] = $mac;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if ($body !== false) {
@@ -242,7 +242,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Updates a guifi device
    * @param $device_id Device ID to edit
@@ -251,19 +251,19 @@ class guifiAPI {
    */
   public function updateDevice($device_id, $parameters) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.device.update';
     $variables['device_id'] = $device_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Removes a guifi device from a node
    * @param $device_id ID of the device which should be removed
@@ -273,12 +273,12 @@ class guifiAPI {
     $variables = array();
     $variables['command'] = 'guifi.device.remove';
     $variables['device_id'] = $device_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Adds a guifi Radio to a device
    * @param $mode Mode of the radio to be added
@@ -288,16 +288,16 @@ class guifiAPI {
    */
   public function addRadio($mode, $device_id, $mac = '', $parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.radio.add';
     $variables['mode'] = $mode;
     $variables['device_id'] = $device_id;
     $variables['mac'] = $mac;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if ($body !== false) {
@@ -306,7 +306,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Updates a guifi radio of a device
    * @param $device_id Device ID of the radio to be updated
@@ -315,20 +315,20 @@ class guifiAPI {
    */
   public function updateRadio($device_id, $radiodev_counter, $parameters) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.radio.update';
     $variables['device_id'] = $device_id;
     $variables['radiodev_counter'] = $radiodev_counter;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Removes a guifi radio from a device
    * @param $device_id ID of the device where the radio to be removed is
@@ -340,38 +340,38 @@ class guifiAPI {
     $variables['command'] = 'guifi.radio.remove';
     $variables['device_id'] = $device_id;
     $variables['radiodev_counter'] = $radiodev_counter;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Searches the nearest radios from a given node
    * @param $node_id Node where to find the nearest radios
-   * @param $parameters Parameters such as maximum or minimum distance 
+   * @param $parameters Parameters such as maximum or minimum distance
    * @return mixed Nearest radios from a given node
    */
   public function nearestRadio($node_id, $parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.radio.nearest';
     $variables['node_id'] = $node_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
-    
+
     if ($body !== false) {
       return $body->responses;
     } else {
       return false;
     }
   }
-  
+
   /**
    * Adds a wLan interface to a radio to accept more clients
    * @param $device_id Device where the interface should be added
@@ -383,7 +383,7 @@ class guifiAPI {
     $variables['command'] = 'guifi.interface.add';
     $variables['device_id'] = $device_id;
     $variables['radiodev_counter'] = $radiodev_counter;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if ($body !== false) {
@@ -392,7 +392,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Removes a guifi interface from a radio
    * @param $interface_id ID of the interface to be removed
@@ -402,16 +402,16 @@ class guifiAPI {
     $variables = array();
     $variables['command'] = 'guifi.interface.remove';
     $variables['interface_id'] = $interface_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Adds a link to an guifi.net interface
    * @param $from_device_id Device ID of the origin of the link
-   * @param $from_radiodev_counter Position of the radio within its device of the origin of the link 
+   * @param $from_radiodev_counter Position of the radio within its device of the origin of the link
    * @param $to_device_id Device ID of the other extreme of the link
    * @param $to_radiodev_counter Position of the radio within its device of the other extreme of the link
    * @param $parameters Other parameters of the link to be added
@@ -419,17 +419,17 @@ class guifiAPI {
    */
   public function addLink($from_device_id, $from_radiodev_counter, $to_device_id, $to_radiodev_counter, $parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.link.add';
     $variables['from_device_id'] = $from_device_id;
     $variables['from_radiodev_counter'] = $from_radiodev_counter;
     $variables['to_device_id'] = $to_device_id;
     $variables['to_radiodev_counter'] = $to_radiodev_counter;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if ($body !== false) {
@@ -438,7 +438,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Updates a guifi link
    * @param $link_id Link ID to be updated
@@ -447,19 +447,19 @@ class guifiAPI {
    */
   public function updateLink($link_id, $parameters) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.link.update';
     $variables['link_id'] = $link_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Removes a link from guifi.net
    * @param $link_id Link ID to be removed
@@ -469,12 +469,12 @@ class guifiAPI {
     $variables = array();
     $variables['command'] = 'guifi.link.remove';
     $variables['link_id'] = $link_id;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     return $body !== false;
   }
-  
+
   /**
    * Gets a list of devices models
    * @param $parameters string[] of possible parameters to retrieve filtered models
@@ -482,13 +482,13 @@ class guifiAPI {
    */
   public function getModels($parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.misc.model';
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if (!empty($body->responses->models)) {
@@ -497,7 +497,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Gets a list of device manufacturers
    * @return string[] Manufacturers retrieved from the server
@@ -505,7 +505,7 @@ class guifiAPI {
   public function getManufacturers() {
     $variables = array();
     $variables['command'] = 'guifi.misc.manufacturer';
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if (!empty($body->responses->manufacturers)) {
@@ -514,7 +514,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Gets a list of supported firmwares to be used with devices
    * @param $parameters Firmware filters to be applied
@@ -522,13 +522,13 @@ class guifiAPI {
    */
   public function getFirmwares($parameters = array()) {
     $variables = array();
-    
+
     foreach ($parameters as $key => $value) {
       $variables[$key] = $value;
     }
-    
+
     $variables['command'] = 'guifi.misc.firmware';
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if (!empty($body->responses->firmwares)) {
@@ -537,7 +537,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Gets a list of supported protocols to be used with links
    * @return string[] Protocols retrieved from the server
@@ -545,7 +545,7 @@ class guifiAPI {
   public function getProtocols() {
     $variables = array();
     $variables['command'] = 'guifi.misc.protocol';
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if (!empty($body->responses->protocols)) {
@@ -554,7 +554,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Gets a list of channels to be used with links
    * @param $protocol Protocol the channels apply to
@@ -564,7 +564,7 @@ class guifiAPI {
     $variables = array();
     $variables['command'] = 'guifi.misc.channel';
     $variables['protocol'] = $protocol;
-    
+
     $response = $this->sendRequest($this->url, $variables);
     $body = $this->parseResponse($response);
     if (!empty($body->responses->channels)) {
@@ -573,10 +573,10 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Constructor function for all new guifiAPI instances
-   * 
+   *
    * Set up authentication with guifi and gets authentication token
    *
    * @param String $username Username of the guifi.net account wanted to authenticate
@@ -592,7 +592,7 @@ class guifiAPI {
       $this->authenticateUser($username, $password);
     }
   }
-  
+
   /**
    * Authenticate guifi.net account against guifi.net
    *
@@ -602,9 +602,9 @@ class guifiAPI {
    */
   protected function authenticateUser($username, $password) {
     $variables = array('command' => 'guifi.auth.login', 'username' => $username, 'password' => $password, 'method' => 'password' );
-    
+
     $response = $this->sendRequest($this->auth_url, $variables);
-    
+
     // Parses the response from the guifi.net API
     $body = $this->parseResponse($response);
     if ($body !== false) {
@@ -619,7 +619,7 @@ class guifiAPI {
       return false;
     }
   }
-  
+
   /**
    * Retreives the authentication token used to authenticate the user in upcoming methods without sending the username and password each time
    * @return string Authentication token
@@ -627,7 +627,7 @@ class guifiAPI {
   public function getAuthToken() {
     return $this->auth_token;
   }
-  
+
   /**
    * Generates the authentication header to authenticate using a token against guifi.net
    * @return mixed Header of authentication
@@ -639,7 +639,7 @@ class guifiAPI {
       return array();
     }
   }
-  
+
   /**
    * Performs the request to the guifi.net API server
    * @param $url URL to send the request to
@@ -649,7 +649,7 @@ class guifiAPI {
   protected function sendRequest($url, $variables) {
     $this->pendingUrl = $url;
     $this->pendingVariables = $variables;
-    
+
     switch (guifiAPI::output_format) {
       case 'get':
         $get_variables = $variables;
@@ -660,11 +660,11 @@ class guifiAPI {
         $post_variables = $variables;
         break;
     }
-    
+
     $response = $this->httpRequest($url, $get_variables, $post_variables, $this->generateAuthHeader());
     return $response;
   }
-  
+
   /**
    * Parses a response from the server, according ti the input format
    * @param $response Response string to be parsed
@@ -672,7 +672,7 @@ class guifiAPI {
    */
   protected function parseResponse($response) {
     $code = $response['code'];
-    
+
     switch (guifiAPI::input_format) {
       case 'json':
         $body = json_decode($response['body']);
@@ -681,40 +681,40 @@ class guifiAPI {
         parse_str(str_replace(array("\n", "\r\n" ), '&', $response['body']), $body);
         break;
     }
-    
+
     if (substr($code, 0, 1) != '2' || !is_object($body)) {
-      throw new Exception('guifiAPI: Failed to parse response. Error: "' . strip_tags($response['body']) . '"');
+      //throw new Exception('guifiAPI: Failed to parse response. Error: "' . strip_tags($response['body']) . '"');
     }
-    
+
     if (!empty($body->errors)) {
       if ($body->errors[0]->code == 502) {
         unset($this->auth_token);
         $pendingUrl = $this->pendingUrl;
         $pendingVariables = $this->pendingVariables;
         $authenticated = $this->authenticateUser($this->username, $this->password);
-        
+
         if ($authenticated) {
           $response = $this->sendRequest($pendingUrl, $pendingVariables);
           return $this->parseResponse($response);
         }
       }
       $this->errors = $body->errors;
-      
+
       return false;
     }
-    
+
     if (empty($body->code) || substr($body->code->code, 0, 1) != '2') {
       return false;
     }
-    
+
     $this->responseCode = $body->code;
     if (isset($body->responses)) {
       $this->responses = $body->responses;
     }
-    
+
     return $body;
   }
-  
+
   /**
    * Retreives the possible errors commited during a method
    * @return string[]
@@ -722,7 +722,7 @@ class guifiAPI {
   public function getErrors() {
     return $this->errors;
   }
-  
+
   /**
    * Retreives a list of the errors parsed as a string
    *
@@ -756,7 +756,7 @@ class guifiAPI {
     }
     return $ret;
   }
-  
+
   /**
    * Perform HTTP request
    *
@@ -766,7 +766,7 @@ class guifiAPI {
    */
   protected function httpRequest($url, $get_variables = null, $post_variables = null, $headers = null) {
     $interface = guifiAPI::http_interface;
-    
+
     if (guifiAPI::http_interface == 'auto') {
       if (function_exists('curl_exec')) {
         $interface = 'curl';
@@ -774,7 +774,7 @@ class guifiAPI {
         $interface = 'fopen';
       }
     }
-    
+
     if ($interface == 'curl') {
       return $this->curlRequest($url, $get_variables, $post_variables, $headers);
     } elseif ($interface == 'fopen') {
@@ -786,46 +786,46 @@ class guifiAPI {
   /**
    * HTTP request using PHP CURL functions
    * Requires curl library installed and configured for PHP
-   * 
+   *
    * @param array $get_variables
    * @param array $post_variables
    * @param array $headers
    */
   private function curlRequest($url, $get_variables = null, $post_variables = null, $headers = null) {
     $ch = curl_init();
-    
+
     if (is_array($get_variables)) {
       $get_variables = '?' . str_replace('&amp;', '&', http_build_query($get_variables));
     } else {
       $get_variables = null;
     }
-    
+
     curl_setopt($ch, CURLOPT_URL, $url . $get_variables);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    
+
     if (is_array($post_variables)) {
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $post_variables);
     }
-    
+
     if (is_array($headers)) {
       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     }
-    
+
     curl_setopt($ch, CURLOPT_HEADER, true);
-    
+
     $response = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $headers = substr($response, 0, $header_size);
     $body = substr($response, $header_size);
-    
+
     curl_close($ch);
-    
+
     return array('body' => $body, 'headers' => $headers, 'code' => $code );
   }
-  
+
   /**
    * Switches to test mode
    * @param $test Whether to switch to test mode or not
