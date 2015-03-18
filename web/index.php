@@ -10,6 +10,7 @@ require "lib/view.php";
 require "lib/errors.php";
 require "lib/utilio.php";
 require "lib/auth.php";
+require "lib/guifi_api.php";
 
 if (isset($user)) {
 	require "lib/menus.php";

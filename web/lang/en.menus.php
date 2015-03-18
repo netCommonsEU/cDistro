@@ -31,6 +31,7 @@ addS ("menus_getinconf_getinconf","Getinconf");
 
 //Guifi.net
 addS ("menus_guifi_guifi","Guifi.net");
+addS ("menus_guifi_web","Website integration");
 addS ("menus_guifi_proxy3","Proxy3");
 addS ("menus_guifi_snpservices","SNPServices");
 addS ("menus_guifi_dnsservices","DNSServices");

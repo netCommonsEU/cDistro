@@ -23,6 +23,7 @@ function load_conffile($file,$default = null){
 	}
 	return($v);
 }
+
 function load_singlevalue($file,$varis ){
 	global $debug;
 
@@ -286,6 +287,13 @@ function getCommunityIP(){
 	return($ret);
 }
 
+function getCommunityDevMAC(){
+	$cmd = 'cat /sys/class/net/'.getCommunityDev()['output'][0].'/address';
+	$ret = execute_program($cmd);
+
+	return($ret);
+}
+
 function port_listen($port){
 
 	$cmd='netstat -nlt|grep ":'.$port.'"|grep -q LISTEN; echo $?';
@@ -300,5 +308,15 @@ function check_arch($list_arch = null){
 	$myarch = rtrim($ret['output']);
 	return (in_array($myarch,$list_arch));
 
+}
+
+function add_quotes($dates){
+
+	foreach($dates as $k=>$v){
+		if(strpos($dates[$k],'"')===0)$dates[$k]=substr($dates[$k],1,(strlen($dates[$k])-1));
+		if(strripos($dates[$k],'"')===(strlen($dates[$k])-1))$v=substr($dates[$k],0,-1);
+		$dates[$k] = '"'.$dates[$k].'"';
+	}
+	return $dates;
 }
 ?>
