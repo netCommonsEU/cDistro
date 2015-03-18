@@ -3,7 +3,7 @@
 // Eduard Duran <eduard.duran at iglu.cat>.
 // It's licensed under the AFFERO GENERAL PUBLIC LICENSE unless stated otherwise.
 // You can get copies of the licenses here:
-// 		http://www.affero.org/oagpl.html
+// 		www.affero.org/oagpl.html
 // AFFERO GENERAL PUBLIC LICENSE is also included in the file called "LICENSE.txt".
 
 /**
@@ -21,13 +21,13 @@ class guifiAPI {
    * guifi.net API URL used with normal metods
    * @var string
    */
-  private $url = 'http://test.guifi.net/api';
+  private $url = 'https://guifi.net/api';
 
   /**
    * guifi.net API URL used to authenticate the user
    * @var string
    */
-  private $auth_url = 'http://test.guifi.net/api/auth';
+  private $auth_url = 'https://guifi.net/api/auth';
 
   /**
    * Whether the class is using the Development mode or not
@@ -830,13 +830,13 @@ class guifiAPI {
    * Switches to test mode
    * @param $test Whether to switch to test mode or not
    */
-  public function testMode($test = true) {
+  public function testMode($test = false) {
     if ($test == true) {
-      $this->url = 'http://test.guifi.net/api';
-      $this->auth_url = 'http://test.guifi.net/api/auth';
+      $this->url = 'https://test.guifi.net/api';
+      $this->auth_url = 'https://test.guifi.net/api/auth';
     } else {
-      $this->url = 'http://guifi.net/api';
-      $this->auth_url = 'http://guifi.net/api/auth';
+      $this->url = 'https://guifi.net/api';
+      $this->auth_url = 'https://guifi.net/api/auth';
     }
   }
 }
