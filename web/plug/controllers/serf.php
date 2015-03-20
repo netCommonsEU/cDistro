@@ -193,7 +193,7 @@ function index()
 		$page .= createForm(array('class'=>'form-horizontal'));
 		$page .= addInput('SERF_RPC_ADDR',t('serf_index_form_rpc'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}','required'=>''),$readonly,t('serf_index_form_rpc_tooltip'));
 		$page .= addInput('SERF_BIND',t('serf_index_form_bind'),$variable,array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),$readonly,t('serf_index_form_bind_tooltip'));
-		$page .= addInput('SERF_JOIN',t('serf_index_form_bootstrap'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}', 'required'=>''),$readonly,t('serf_index_form_bootstrap_tooltip'));
+		$page .= addInput('SERF_JOIN',t('serf_index_form_bootstrap'),$variable,array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}'),$readonly,t('serf_index_form_bootstrap_tooltip'));
 
 		if (_isRun())
 			$buttons .= addSubmit(array('label'=>t("serf_button_save"),'class'=>'btn btn-default','divOptions'=>array('class'=>'btn-group')));
