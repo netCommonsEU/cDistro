@@ -3,6 +3,7 @@
 
 $GUIFI_CONF_DIR = "/etc";
 $GUIFI_CONF_FILE = "guifi.conf";
+$GUIFI_WEB="https://guifi.net";
 
 function index(){
 	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
@@ -89,7 +90,7 @@ function credentials(){
 }
 
 function credentials_post(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB;
 
 	$page = "";
 	$buttons = "";
@@ -126,7 +127,7 @@ function credentials_post(){
 			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_empty")."</div>\n";
 			$page .= par(t("guifi-web_credentials_curl_empty"));
 			$page .= txt(t("guifi-web_credentials_curl_url"));
-			$page .= "<div class='alert alert-info text-center'>"."http://guifi.net/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=********</div>\n";
+			$page .= "<div class='alert alert-info text-center'>".$GUIFI_WEB."/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=********</div>\n";
 			$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
 		}
 
@@ -263,7 +264,7 @@ function register(){
 
 
 function register_post(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$GUIFI_WEB;
 
 	$page = "";
 	$buttons = "";
@@ -287,7 +288,7 @@ function register_post(){
 
 		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
 
-		$url = "http://test.guifi.net/guifi/cnml/".$_POST['NODE_ID']."/node";
+		$url = $GUIFI_WEB."/guifi/cnml/".$_POST['NODE_ID']."/node";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

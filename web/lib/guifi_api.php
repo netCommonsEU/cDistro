@@ -27,7 +27,7 @@ class guifiAPI {
    * guifi.net API URL used to authenticate the user
    * @var string
    */
-  private $auth_url = 'https://guifi.net/api/auth';
+  private $auth_url = $url.'/auth';
 
   /**
    * Whether the class is using the Development mode or not
@@ -840,5 +840,4 @@ class guifiAPI {
     }
   }
 }
-
 ?>
