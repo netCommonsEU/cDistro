@@ -215,7 +215,7 @@ function debpkgupgrade() {
 	else {
 		$page .= hl(t("cloudyupdate_debpkgupgrade_subtitle_pre") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_subtitle_post"),4);
 		$page .= txt(t("cloudyupdate_debpkgupgrade_result"))	;
-		$cmd = "apt-get -yy upgrade " . $_GET["package"] .  "2>&1";
+		$cmd = "apt-get -yy --only-upgrade install " . $_GET["package"] .  " 2>&1";
 		$page .= ptxt(shell_exec($cmd));
 
 		$buttons .= addButton(array('label'=>t('cloudyupdate_button_back'), 'class'=>'btn btn-default', 'href'=>$staticFile.'/cloudyupdate?debupdate=true'));
@@ -248,7 +248,7 @@ function debpkgupgradesim() {
 		$page .= hl(t("cloudyupdate_debpkgupgrade_subtitle_pre") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_subtitle_post"),4);
 		$page .= par(t("cloudyupdate_debpkgupgrade_simulation_1") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_simulation_2"));
 		$page .= txt(t("cloudyupdate_debpkgupgrade_simresult"))	;
-		$cmd = "apt-get -s -yy upgrade " . $_GET["package"] .  "2>&1";
+		$cmd = "apt-get -s -yy --only-upgrade install " . $_GET["package"] .  " 2>&1";
 		$page .= ptxt(shell_exec($cmd));
 
 		$page .= txt(t("cloudyupdate_debpkgupgrade_question_1") . ' <i>' . $_GET["package"] . '</i> ' . t("cloudyupdate_debpkgupgrade_question_2"));
