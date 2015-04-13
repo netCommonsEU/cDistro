@@ -268,7 +268,7 @@ doStopPeerSource(){
 
 # Function peer-with-udp-client
 doPeer2UDPClient(){
-	# Server RTSP
+	# Server UDP
 	local ippeersource=${1:-""}
 	local port=${2:-""}
 	local ipclient=${3:-"127.0.0.1"}
