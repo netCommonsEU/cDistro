@@ -2,6 +2,8 @@
 //peerstreamer
 $pspath="/opt/peerstreamer/";
 $psprogram="streamer-udp-grapes-static";
+define("pspath", "/opt/peerstreamer/");
+define("psprogram", "streamer-udp-grapes-static");
 $title="Peer Streamer";
 
 //VLC
@@ -203,9 +205,8 @@ function softwareinstalled() {
 }
 
 function _isInstalled() {
-	global $pspath,$psprogram;
 
-	return( file_exists($pspath . $psprogram) );
+	return( file_exists(pspath . psprogram) );
 }
 
 function _psviewer($url){
