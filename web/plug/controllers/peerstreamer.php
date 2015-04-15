@@ -202,6 +202,12 @@ function softwareinstalled() {
 	return( file_exists($pspath . $psprogram) && file_exists($vlcpath . $vlcprogram) );
 }
 
+function _isInstalled() {
+	global $pspath,$psprogram;
+
+	return( file_exists($pspath . $psprogram) );
+}
+
 function _psviewer($url){
 
 	global $title;
