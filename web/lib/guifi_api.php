@@ -21,13 +21,13 @@ class guifiAPI {
    * guifi.net API URL used with normal metods
    * @var string
    */
-  private $url = 'https://guifi.net/api';
+  private $url = 'http://test.guifi.net/api';
 
   /**
    * guifi.net API URL used to authenticate the user
    * @var string
    */
-  private $auth_url = 'https://guifi.net/api/auth';
+  private $auth_url = 'http://test.guifi.net/api/auth';
 
   /**
    * Whether the class is using the Development mode or not
@@ -832,11 +832,11 @@ class guifiAPI {
    */
   public function testMode($test = false) {
     if ($test == true) {
-      $this->url = 'https://test.guifi.net/api';
-      $this->auth_url = 'https://test.guifi.net/api/auth';
+      $this->url = 'http://test.guifi.net/api';
+      $this->auth_url = 'http://test.guifi.net/api/auth';
     } else {
-      $this->url = 'https://guifi.net/api';
-      $this->auth_url = 'https://guifi.net/api/auth';
+      $this->url = 'http://test.guifi.net/api';
+      $this->auth_url = 'http://test.guifi.net/api/auth';
     }
   }
 }
