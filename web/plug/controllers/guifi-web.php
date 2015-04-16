@@ -5,6 +5,9 @@ $GUIFI_CONF_DIR = "/etc";
 $GUIFI_CONF_FILE = "guifi.conf";
 $GUIFI_WEB="https://guifi.net";
 
+$GUIFI_WEB_API=$GUIFI_WEB."/api";
+$GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
+
 function index(){
 	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
 
@@ -90,7 +93,7 @@ function credentials(){
 }
 
 function credentials_post(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB;
+	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH ;
 
 	$page = "";
 	$buttons = "";
@@ -118,7 +121,7 @@ function credentials_post(){
 
 	else {
 
-		$gapi = new guifiAPI( $_POST['USERNAME'], $_POST['PASSWORD'] );
+		$gapi = new guifiAPI( $_POST['USERNAME'], $_POST['PASSWORD'] , null, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH);
 
 		//$page .= ptxt(print_r($gapi, true));
 
@@ -289,12 +292,9 @@ function register_post(){
 		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
 
 		$url = $GUIFI_WEB."/guifi/cnml/".$_POST['NODE_ID']."/node";
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		$xml = curl_exec($ch);
-		$output = new SimpleXMLElement($xml);
-		curl_close($ch);
+		$resposta = _getHttp($url);
+		$output = new SimpleXMLElement($resposta);
+
 
 		if (!isset($output->node)) {
 			$page .= txt(t("guifi-web_register_curl_noderesult"));
@@ -322,32 +322,39 @@ function register_post(){
 
 				$nodeButtons = "";
 				$cloudies = 0;
-				for ($i = 0; $i < $output->node['devices'][0]; $i++) {
-					if ( $output->node->device[$i]['type'] != 'cloudy')
-						$page .= addTableRow(
-							array(
-								$output->node->device[$i]['id'],
-								$output->node->device[$i]['title'],
-								addButton(array('label'=>t("guifi-web_button_view"),'class'=>'btn btn-default', 'target'=>'_blank', 'href'=>t("guifi-web_register_view_pre").$output->node->device[$i]['id']))
-							)
-						);
-				}
-				for ($i = 0; $i < $output->node['devices'][0]; $i++) {
-					if ( $output->node->device[$i]['type'] == 'cloudy'){
-						$page .= addTableRow(
-							array(
-								$output->node->device[$i]['id'],
-								$output->node->device[$i]['title'],
-								addButton(array('label'=>t("guifi-web_button_view"),'class'=>'btn btn-default', 'target'=>'_blank', 'href'=>t("guifi-web_register_view_pre").$output->node->device[$i]['id']))
-								.addButton(array('label'=>t("guifi-web_button_register_this"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-web/register'))
-							)
-						);
-					$cloudies++;
+
+
+				$rowsDevices = "";
+				$rowsCloudies = "";
+				foreach($output->node->device as $device){
+					$isCloudyAct = FALSE;
+					$rowAct = array(
+						$device['id'],
+						$device['title']
+					);
+					$cloudButtonsAction = "";
+					if ($device['type'] == 'cloudy'){
+						$dinterf="";
+						$isCloudyAct = TRUE;
+						$cloudButtonsAction .= addButton(array(
+							'label'=>t("guifi-web_button_register_this"),
+							'class'=>'btn btn-primary',
+							'href'=>$staticFile.'/guifi-web/assign/'.$_POST['NODE_ID']."/".$device['id']
+						));
+					}
+					$rowAct[] = addButton(array('label'=>t("guifi-web_button_view"),'class'=>'btn btn-default', 'target'=>'_blank', 'href'=>t("guifi-web_register_view_pre").$device['id'])).$cloudButtonsAction;
+					if (!$isCloudyAct) {
+						$rowsDevices .= addTableRow($rowAct);
+					} else {
+						$rowsCloudies .= addTableRow($rowAct);
 					}
 				}
+
+				$page .= $rowsDevices.$rowsCloudies;
+
 				$page .= addTableFooter();
 
-				if ($cloudies) {
+				if ($rowsCloudies) {
 					$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_register_post_cloudies")."</div>\n";
 					$page .= par(t("guifi-web_register_post_cloudies_pre").' '.$_POST['NODE_ID'].t("guifi-web_register_post_cloudies_post"));
 				}
@@ -373,6 +380,111 @@ function register_post(){
 	return(array('type' => 'render','page' => $page));
 }
 
+function assign(){
+
+	global $Parameters, $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$GUIFI_WEB,$GUIFI_WEB_API, $GUIFI_WEB_API_AUTH;
+
+	if (count($Parameters) != 2) {
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+	if (!is_numeric($Parameters[0]) || !is_numeric($Parameters[1])) {
+		setFlash(t("The parameters must be numerics."),"error");
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+
+	$page = "";
+
+	$url = $GUIFI_WEB."/guifi/cnml/".$Parameters[0]."/node";
+	$resposta = _getHttp($url);
+	$output = new SimpleXMLElement($resposta);
+
+	foreach($output->node->device as $v){
+		if($v['id'] == $Parameters[1]) break;
+	}
+	if ($v['id'] != $Parameters[1]){
+		setFlash(t("This node has not got there device."),"error");
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+	if ($v['type'] != 'cloudy'){
+		setFlash(t("This device not is cloudy type"),"error");
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+
+	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+
+	// This device has not IPv4
+	foreach($v->interface as $dinterf){
+		if($dinterf['ipv4']) break;
+	}
+
+	if(isset($dinterf['ipv4'])){
+		write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("DEVICEID"=>$Parameters[1]))));
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+
+	//$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
+
+	// Assign List nodes...
+	$page .= hlc(t("guifi-web_common_title"));
+	$page .= hl(t("guifi-web_assign_title"),4);
+	$page .= par(t("guifi-web_assign_description"));
+
+	$page .= addTableHeader(array(t("guifi-web_register_post_table_id"),t("guifi-web_register_post_table_name"),t("guifi-web_register_post_table_action")));
+
+	foreach($output->node->device as $v){
+		if (isset($v->interface) && isset($v->interface['ipv4'])){
+			$row = array(
+					$v['id'],
+					$v['title'],
+					addButton(array('label'=>t("Link to this device"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/linkcloudy/'.$v['id'].'/'.$Parameters[1]))
+			);
+			$page .= addTableRow($row);
+		}
+	}
+
+	$page .= addTableFooter();
+
+
+	return(array('type' => 'render','page' => $page));
+}
+
+function linkcloudy(){
+	global $Parameters, $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$GUIFI_WEB,$GUIFI_WEB_API, $GUIFI_WEB_API_AUTH;
+
+	if (count($Parameters) != 2) {
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+	if (!is_numeric($Parameters[0]) || !is_numeric($Parameters[1])) {
+		setFlash(t("The parameters must be numerics."),"error");
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+
+	$page = "";
+
+	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+	$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
+	$ret = $gapi->addCloudyLink($Parameters[0],$Parameters[1]);
+
+	if ($ret) {
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web/assign/'.$GUIFI['NODEID'].'/'.$Parameters[1]));
+	} else {
+		setFlash(t("Undefined Error!"),"error");
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+	}
+
+}
+function unlinkcloudy(){
+	// Remove this function!!
+	global $Parameters, $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$GUIFI_WEB,$GUIFI_WEB_API, $GUIFI_WEB_API_AUTH;
+
+	if (count($Parameters) == 1) {
+		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
+		$ret = $gapi->cloudyUnlink($Parameters[0]);
+		setFlash("Remove link cloudy (".$Parameters[0].")");
+	}
+	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
+}
 
 function add(){
 	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
@@ -409,7 +521,7 @@ function add(){
 
 
 function add_post(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH;
 
 	$page = "";
 	$buttons = "";
@@ -459,7 +571,7 @@ function add_post(){
 
 		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
 
-		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'] );
+		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
 
 		$node_id = $_POST['NODEID'];
 		$type = 'cloudy';
@@ -553,4 +665,14 @@ function login_post(){
 function config_dir_exists() {
 	global $GUIFI, $GUIFI_CONF_DIR;
 	return file_exists($GUIFI_CONF_DIR);
+}
+
+function _getHttp($url){
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	$resposta = curl_exec($ch);
+	curl_close($ch);
+
+	return($resposta);
 }

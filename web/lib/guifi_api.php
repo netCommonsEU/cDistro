@@ -21,13 +21,38 @@ class guifiAPI {
    * guifi.net API URL used with normal metods
    * @var string
    */
-  private $url = 'https://guifi.net/api';
+  private $url_default = 'https://guifi.net/api';
 
   /**
    * guifi.net API URL used to authenticate the user
    * @var string
    */
-  private $auth_url = 'https://guifi.net/api/auth';
+  private $auth_url_default = 'https://guifi.net/api/auth';
+
+  /**
+   * test.guifi.net API URL used with normal metods
+   * @var string
+   */
+  private $url_test = 'https://test.guifi.net/api';
+
+  /**
+   * test.guifi.net API URL used to authenticate the user
+   * @var string
+   */
+  private $auth_url_test = 'https://test.guifi.net/api/auth';
+
+  /**
+   * API URL used with normal metods
+   * @var string
+   */
+  private $url = '';
+
+  /**
+   * API URL used to authenticate the user
+   * @var string
+   */
+  private $auth_url = '';
+
 
   /**
    * Whether the class is using the Development mode or not
@@ -574,6 +599,168 @@ class guifiAPI {
     }
   }
 
+
+  /* Cloudy */
+  /**
+   * Add link in cloudy to another device to assign IP
+   * @param $device_id: Device to assign IP.
+   *        $cloudy_id: Device cloudy id
+   * @return string[]
+   */
+  public function addCloudyLink($device_id, $cloudy_id) {
+    $variables = array();
+    $variables['command'] = 'guifi.cloudy.addlink';
+    $variables['device_id'] = $device_id;
+    $variables['cloudy_id'] = $cloudy_id;
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Unlink in cloudy to another device to assign IP
+   * @param $cloudy_id: Device cloudy id
+   * @return string[]
+   */
+  public function cloudyUnlink($cloudy_id) {
+    $variables = array();
+    $variables['command'] = 'guifi.cloudy.unlink';
+    $variables['cloudy_id'] = $cloudy_id;
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
+  /* Services */
+  /**
+   * Add new service to server device.
+   * @param $name: Name of service
+   *        $server_id: device id from server.
+   *        $service_type: type of service.
+   *
+   * parameters in array: nick -> Unique name of service.
+   *                      status -> Status of service.
+   * @return string[]
+   */
+  public function addService($name, $server_id, $service_type, $parameters = array()) {
+    $variables = array();
+
+	foreach ($parameters as $key => $value) {
+      $variables[$key] = $value;
+    }
+
+	$variables['command'] = 'guifi.service.add';
+    $variables['name'] = $name;
+    $variables['server_id'] = $server_id;
+    $variables['service_type'] = $service_type;
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Get service.
+   * @param $service_id: device id from server.
+   * @return string[] Service Information.
+   */
+  public function getService($service_id) {
+    $variables = array();
+
+	$variables['command'] = 'guifi.service.get';
+    $variables['service_id'] = $service_id;
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Update service.
+   * @param $service: device id from server.
+   *
+   * parameters in array: nick -> Unique name of service.
+   *                      status -> Status of service.
+   *                      server_id -> Server device of service.
+   *                      name -> Name of service.
+   * @return string[]
+   */
+  public function updateService($service_id, $parameters = array()) {
+    $variables = array();
+
+	foreach ($parameters as $key => $value) {
+      $variables[$key] = $value;
+    }
+
+	$variables['command'] = 'guifi.service.update';
+    $variables['service_id'] = $service_id;
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Delete service.
+   * @param $service_id: device id from server.
+   * @return string[] Service Information.
+   */
+  public function removeService($service_id) {
+    $variables = array();
+
+	$variables['command'] = 'guifi.service.remove';
+    $variables['service_id'] = $service_id;
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Get List of service types.
+   * @param : --
+   * @return string[] List of service types.
+   */
+  public function getListServices($service_id) {
+    $variables = array();
+
+	$variables['command'] = 'guifi.service.types';
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Constructor function for all new guifiAPI instances
    *
@@ -582,15 +769,21 @@ class guifiAPI {
    * @param String $username Username of the guifi.net account wanted to authenticate
    * @param String $password Password of the guifi.net account wanted to authenticate
    * @param String $token If any token is given, no need to send the username and password to the server
+   * @param String $apiurl if you need change url to server.
+   * @param String $apiauthurl if you need change url auth to server.
    */
-  public function __construct($username, $password, $token = null) {
+  public function __construct($username, $password, $token = null, $apiurl = null, $apiauthurl = nul) {
     $this->username = $username;
     $this->password = $password;
+	$this->url = (empty($apiurl)) ? $this->url_default : $apiurl;
+	$this->auth_url = (empty($apiauthurl)) ? $this->auth_url_default : $apiauthurl;
+
     if (!empty($token)) {
       $this->auth_token = $token;
     } else {
       $this->authenticateUser($username, $password);
     }
+
   }
 
   /**
@@ -831,13 +1024,11 @@ class guifiAPI {
    * @param $test Whether to switch to test mode or not
    */
   public function testMode($test = false) {
-    if ($test == true) {
-      $this->url = 'https://test.guifi.net/api';
-      $this->auth_url = 'https://test.guifi.net/api/auth';
-    } else {
-      $this->url = 'https://guifi.net/api';
-      $this->auth_url = 'https://guifi.net/api/auth';
-    }
+
+	$this->url = ($test) ? $this->url_test : $this->url_default;
+	$this->auth_url = ($test) ? $this->auth_url_test : $this->auth_url_default;
+
   }
 }
+
 ?>
