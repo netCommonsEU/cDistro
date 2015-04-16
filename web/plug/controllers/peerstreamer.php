@@ -43,6 +43,7 @@ function index(){
 		$page .= _listPSProcs();
 		$page .= addButton(array('label'=>t('Connect to Peer'),'href'=>$staticFile.'/peerstreamer/connect'));
 		$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>$staticFile.'/peerstreamer/publish'));
+		$page .= addButton(array('label'=>t('Uninstall Peerstreamer'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/peerstreamer/uninstall'));
 
 		return(array('type' => 'render','page' => $page));
 	}
@@ -94,6 +95,21 @@ function connect_post(){
 	if ( 0 == 0 ){  // validar
 		return(array('type' => 'render','page' => _psshell($ip,$port,$myport,$tipo)));
 	}
+}
+
+function uninstall(){
+	global $psutils;
+	global $staticFile;
+	
+	$cmd = $psutils." uninstall";
+	execute_program_detached($cmd);
+
+	$output = ptxt("Peerstreamer has been removed");
+
+	setFlash($output);
+
+	return(array('type'=>'redirect','url'=>$staticFile.'/peerstreamer'));
+	return page;
 }
 
 function publish_get(){

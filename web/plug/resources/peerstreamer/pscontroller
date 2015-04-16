@@ -454,6 +454,10 @@ isInstall(){
 	return 1
 }
 
+doRemove() {
+	rm -rf /opt/peerstreamer
+}
+
 findRandFreePort() {
 	read lowerPort upperPort < /proc/sys/net/ipv4/ip_local_port_range
 	rannum=$(( RANDOM % $(( $upperPort - $lowerPort))  ))
@@ -509,5 +513,9 @@ case $1 in
 	"info")
 		shift
 		doInfo $@
+		;;
+	"uninstall")
+		shift
+		doRemove $@
 		;;
 esac
