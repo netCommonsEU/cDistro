@@ -43,7 +43,10 @@ function index(){
 		$page .= _listPSProcs();
 		$page .= addButton(array('label'=>t('Connect to Peer'),'href'=>$staticFile.'/peerstreamer/connect'));
 		$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>$staticFile.'/peerstreamer/publish'));
-		$page .= addButton(array('label'=>t('Uninstall Peerstreamer'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/peerstreamer/uninstall'));
+		$page .= "<div class=text-right>";
+		$page .= addButton(array('label'=>t('Uninstall Peerstreamer'),'class'=>'btn btn-danger', 'pull-right', 'href'=>$staticFile.'/peerstreamer/uninstall'));
+		$page .= "</div>";
+
 
 		return(array('type' => 'render','page' => $page));
 	}
