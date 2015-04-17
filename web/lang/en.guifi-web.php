@@ -5,6 +5,9 @@
 addS ("guifi-web_alert_credentials_security_ssl","Your credentials are sent to Guifi.net's authentication service using SSL encryption");
 addS ("guifi-web_alert_credentials_security_username","Your username will be stored in /etc/guifi.conf");
 addS ("guifi-web_alert_credentials_security_password","Your password will not be stored");
+addS ("guifi-web_alert_refresh_credentials_security_ssl","Your credentials are sent to Guifi.net's authentication service using SSL encryption");
+addS ("guifi-web_alert_refresh_credentials_security_username","Your username will be stored in /etc/guifi.conf");
+addS ("guifi-web_alert_refresh_credentials_security_password","Your password will not be stored");
 addS ("guifi-web_alert_index_nodeid","This device is registered at Guifi.net");
 addS ("guifi-web_alert_index_no_nodeid","This device is not registered at Guifi.net");
 addS ("guifi-web_alert_index_not_registered","Device not registered");
@@ -31,10 +34,12 @@ addS ("guifi-web_alert_register_post_found_post","found");
 addS ("guifi-web_alert_register_post_no_devices","No devices found");
 addS ("guifi-web_alert_register_post_cloudies","Cloudy devices found");
 addS ("guifi-web_alert_register_post_no_cloudies","No Cloudy devices found");
-addS ("guifi-web_alert_add_success","Device created successfully");
-addS ("guifi-web_alert_add_fail","Device creation failed");
-addS ("guifi-web_alert_add_file_error","The configuration file could not be saved");
-addS ("guifi-web_alert_add_file_correct","Configuration file saved");
+addS ("guifi-web_alert_new_cloudy_post_success","Device created successfully");
+addS ("guifi-web_alert_new_cloudy_post_fail","Device creation failed");
+addS ("guifi-web_alert_new_cloudy_post_file_error","The configuration file could not be saved");
+addS ("guifi-web_alert_new_cloudy_post_file_correct","Configuration file saved");
+addS ("guifi-web_alert_new_cloudy_post_expired","Guifi.net login credentials expired");
+addS ("guifi-web_alert_new_cloudy_post_already_in_use","this device name is already in use in this node");
 
 
 //buttons
@@ -46,6 +51,7 @@ addS ("guifi-web_button_register","Register the device");
 addS ("guifi-web_button_register_continue","Continue with the device registration");
 addS ("guifi-web_button_submit_add","Create a new Cloudy device");
 addS ("guifi-web_button_submit_check","Check user credentials");
+addS ("guifi-web_button_submit_refresh","Refresh user credentials");
 addS ("guifi-web_button_submit_nodeid","Check node ID");
 addS ("guifi-web_button_back_register","Back to the registration form");
 addS ("guifi-web_button_register_use_node","Use node");
@@ -88,6 +94,15 @@ addS ("guifi-web_credentials_security","Security notice:");
 addS ("guifi-web_credentials_subtitle","User credentials");
 addS ("guifi-web_credentials_saving","Saving configuration file:");
 
+//refresh_credentials
+addS ("guifi-web_refresh_credentials_description",'The Guifi.net login credentials stored in this Cloudy device have expired. Please refresh them by entering your password below.');
+addS ("guifi-web_refresh_credentials_success","Your credentials have been successfully refreshed.");
+addS ("guifi-web_refresh_credentials_form_password","Password");
+addS ("guifi-web_refresh_credentials_form_password_tooltip","Your passowrd at Guifi.net's website");
+addS ("guifi-web_refresh_credentials_form_username","Username");
+addS ("guifi-web_refresh_credentials_form_username_tooltip","Your username at Guifi.net's website");
+addS ("guifi-web_refresh_credentials_security","Security notice:");
+addS ("guifi-web_refresh_credentials_subtitle","Refresh user credentials");
 
 //register
 addS ("guifi-web_register_subtitle","Cloudy device registration");
@@ -113,28 +128,32 @@ addS ("guifi-web_register_post_no_cloudies_post", ". Click on the button below t
 
 
 
-//add
-addS ("guifi-web_add_subtitle","Add a new Cloudy device to a node");
-addS ("guifi-web_add_description","Fill in the required information below o create a new Cloudy device in your Guifi.net node:");
-addS ("guifi-web_add_form_nodeid","Guifi.net node ID");
-addS ("guifi-web_add_form_nodeid_tooltip","The ID of the Guifi.net node where the new Cloudy device will be created.");
-addS ("guifi-web_add_form_nick","Cloudy device name");
-addS ("guifi-web_add_form_nick_tooltip","A short name to identify the new Cloudy device, like the node's name plus \"Cloudy\". Use alphanumeric characters, dashes and underscores (no spaces or punctuation)");
-addS ("guifi-web_add_form_mail","Contact e-mail");
-addS ("guifi-web_add_form_mail_tooltip","An e-mail to be displayed as the contact address of the owner of the device. It will only be shown to users registered at Guifi.net");
-addS ("guifi-web_add_form_mail_placeholder","yourname@guifi.net");
-addS ("guifi-web_add_form_mac","MAC address");
-addS ("guifi-web_add_form_mac_tooltip","The MAC address of the network interface of this device connected to the community network (optional, you can leave the default one)");
-addS ("guifi-web_add_form_comment","Node description");
-addS ("guifi-web_add_form_comment_tooltip","A description of this device (optional, you can leave it blank)");
-addS ("guifi-web_add_form_comment_placeholder","My rocking Cloudy machine");
-addS ("guifi-web_add_result","New device creation result:");
-addS ("guifi-web_add_details","New device creation details:");
-addS ("guifi-web_add_deviceid","New device ID:");
-addS ("guifi-web_add_success","A new Cloudy device was successfully created in your node at Guifi.net. The current Cloudy instance has been registered to this new device.");
-addS ("guifi-web_add_saving","Saving configuration file:");
-addS ("guifi-web_add_file_error","The configuration file could not be saved. Check if you have free space in disk and sufficient permissions and retry.");
-addS ("guifi-web_add_fail","The creation of the new Cloudy device failed. Check the details above for more information and click on the button below to retry.");
+//new_cloudy
+addS ("guifi-web_new_cloudy_subtitle","Add a new Cloudy device to a node");
+addS ("guifi-web_new_cloudy_description","Fill in the required information below o create a new Cloudy device in your Guifi.net node:");
+addS ("guifi-web_new_cloudy_form_nodeid","Guifi.net node ID");
+addS ("guifi-web_new_cloudy_form_nodeid_tooltip","The ID of the Guifi.net node where the new Cloudy device will be created.");
+addS ("guifi-web_new_cloudy_form_nick","Cloudy device name");
+addS ("guifi-web_new_cloudy_form_nick_tooltip","A short name to identify the new Cloudy device, like the node's name plus \"Cloudy\". Use alphanumeric characters, dashes and underscores (no spaces or punctuation)");
+addS ("guifi-web_new_cloudy_form_mail","Contact e-mail");
+addS ("guifi-web_new_cloudy_form_mail_tooltip","An e-mail to be displayed as the contact address of the owner of the device. It will only be shown to users registered at Guifi.net");
+addS ("guifi-web_new_cloudy_form_mail_placeholder","yourname@guifi.net");
+addS ("guifi-web_new_cloudy_form_mac","MAC address");
+addS ("guifi-web_new_cloudy_form_mac_tooltip","The MAC address of the network interface of this device connected to the community network (optional, you can leave the default one)");
+addS ("guifi-web_new_cloudy_form_comment","Node description");
+addS ("guifi-web_new_cloudy_form_comment_tooltip","A description of this device (optional, you can leave it blank)");
+addS ("guifi-web_new_cloudy_form_comment_placeholder","My rocking Cloudy machine");
+addS ("guifi-web_new_cloudy_result","New device creation result:");
+addS ("guifi-web_new_cloudy_details","New device creation details:");
+addS ("guifi-web_new_cloudy_deviceid","New device ID:");
+addS ("guifi-web_new_cloudy_success","A new Cloudy device was successfully created in your node at Guifi.net. The current Cloudy instance has been registered to this new device.");
+addS ("guifi-web_new_cloudy_saving","Saving configuration file:");
+addS ("guifi-web_new_cloudy_file_error","The configuration file could not be saved. Check if you have free space in disk and sufficient permissions and retry.");
+addS ("guifi-web_new_cloudy_fail","The creation of the new Cloudy device failed. Check the details above for more information and click on the button below to retry.");
+addS ("guifi-web_new_cloudy_post_error","Error found:");
+addS ("guifi-web_new_cloudy_credentials_expired","The Guifi.net login credentials stored in this Cloudy device have expired. To refresh them, please click on the button below.");
+addS ("guifi-web_new_cloudy_post_already_in_use","The device name chosen is already in use in this node. To use another one, please click on the button below.");
+
 addS ("","");
 addS ("","");
 addS ("","");

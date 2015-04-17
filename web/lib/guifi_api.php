@@ -53,7 +53,6 @@ class guifiAPI {
    */
   private $auth_url = '';
 
-
   /**
    * Whether the class is using the Development mode or not
    * @var boolean
@@ -1024,10 +1023,8 @@ class guifiAPI {
    * @param $test Whether to switch to test mode or not
    */
   public function testMode($test = false) {
-
 	$this->url = ($test) ? $this->url_test : $this->url_default;
 	$this->auth_url = ($test) ? $this->auth_url_test : $this->auth_url_default;
-
   }
 }
 
