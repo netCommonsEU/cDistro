@@ -1,7 +1,7 @@
 <?php
 //plug/controllers/guifi-web.php
 
-$GUIFI_CONF_DIR = "/etc";
+$GUIFI_CONF_DIR = "/etc/guifi/";
 $GUIFI_CONF_FILE = "guifi.conf";
 $GUIFI_WEB="https://guifi.net";
 
@@ -20,14 +20,14 @@ function index(){
 	$page .= par(t("guifi-web_index_description"));
 
 	$page .= txt(t("guifi-web_index_status"));
-	if (!file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) || !filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) ) {
+	if (!file_exists($GUIFI_CONF_DIR) || !file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) || !filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_index_not_registered")."</div>\n";
 		$page .= par(t("guifi-web_index_not_registered"));
 		$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/credentials'));
 	}
 
 	else {
-		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 		if ( !isset($GUIFI['USERNAME']) || !isset($GUIFI['TOKEN']) ) {
 			$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_index_not_registered")."</div>\n";
@@ -183,15 +183,17 @@ function credentials_post(){
 						$page .= txt(t("guifi-web_credentials_curl_details"));
 						$page .= ptxt(print_r($gapi->responses,true));
 
-						if (!file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE))
-							touch($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE);
-						if (fileperms($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) != "16877" )
-							chmod($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, 0644);
+						if (!file_exists($GUIFI_CONF_DIR))
+							mkdir($GUIFI_CONF_DIR,0755);
+						if (!file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE))
+							touch($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+						if (fileperms($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) != "16877" )
+							chmod($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, 0644);
 
-						write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array("USERNAME"=>$_POST['USERNAME'], "TOKEN"=>$gapi->responses->authToken)));
+						write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array("USERNAME"=>$_POST['USERNAME'], "TOKEN"=>$gapi->responses->authToken)));
 
 						//Check if config file has been saved
-						if ( !file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) ) {
+						if ( !file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
 							$page .= txt(t("guifi-web_credentials_saving"));
 							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_error")."</div>\n";
 							$page .= par(t("guifi-web_credentials_file_error"));
@@ -199,7 +201,7 @@ function credentials_post(){
 						}
 
 						/* This does not work as the config. file is written asynchronously
-						else if ( filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) == 0 ) {
+						else if ( filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) == 0 ) {
 							$page .= txt(t("guifi-web_credentials_saving"));
 							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_empty")."</div>\n";
 							$page .= par(t("guifi-web_credentials_file_empty"));
@@ -209,7 +211,7 @@ function credentials_post(){
 
 						//Good. Check that the config file contents are correct
 						else {
-							$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+							$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 							//Ooops, something was not properly saved
 							if ( $GUIFI['USERNAME'] != $_POST['USERNAME'] || $GUIFI['TOKEN'] != $gapi->responses->authToken ) {
@@ -253,14 +255,14 @@ function refresh_credentials(){
 
 	$page .= par(t("guifi-web_refresh_credentials_description"));
 
-	if (!file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) || !filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) ) {
+	if (!file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) || !filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
 		$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_index_not_registered")."</div>\n";
 		$page .= par(t("guifi-web_index_not_registered"));
 		$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/credentials'));
 	}
 
 	else {
-		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 		if ( $GUIFI['USERNAME']==null ) {
 			$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_index_not_registered")."</div>\n";
@@ -382,15 +384,15 @@ function refresh_credentials_post(){
 						$page .= txt(t("guifi-web_credentials_curl_details"));
 						$page .= ptxt(print_r($gapi->responses,true));
 
-						if (!file_exists($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE))
-							touch($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE);
-						if (fileperms($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE) != "16877" )
-							chmod($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, 0644);
+						if (!file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE))
+							touch($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+						if (fileperms($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) != "16877" )
+							chmod($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, 0644);
 
-						write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array("USERNAME"=>$_POST['USERNAME'], "TOKEN"=>$gapi->responses->authToken)));
+						write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array("USERNAME"=>$_POST['USERNAME'], "TOKEN"=>$gapi->responses->authToken)));
 
 						//Check if config file has been saved
-						if ( !file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) ) {
+						if ( !file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
 							$page .= txt(t("guifi-web_credentials_saving"));
 							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_error")."</div>\n";
 							$page .= par(t("guifi-web_credentials_file_error"));
@@ -398,7 +400,7 @@ function refresh_credentials_post(){
 						}
 
 						/* This does not work as the config. file is written asynchronously
-						else if ( filesize($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) == 0 ) {
+						else if ( filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) == 0 ) {
 							$page .= txt(t("guifi-web_credentials_saving"));
 							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_empty")."</div>\n";
 							$page .= par(t("guifi-web_credentials_file_empty"));
@@ -408,7 +410,7 @@ function refresh_credentials_post(){
 
 						//Good. Check that the config file contents are correct
 						else {
-							$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+							$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 							//Ooops, something was not properly saved
 							if ( $GUIFI['USERNAME'] != $_POST['USERNAME'] || $GUIFI['TOKEN'] != $gapi->responses->authToken ) {
@@ -491,7 +493,7 @@ function register_post(){
 
 	else {
 
-		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 		$url = $GUIFI_WEB."/guifi/cnml/".$_POST['NODE_ID']."/node";
 		$resposta = _getHttp($url);
@@ -511,7 +513,7 @@ function register_post(){
 			$page .= ptxt($output->node['title']);
 			$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web/register'));
 
-			write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("NODEID"=>$_POST['NODE_ID'], "NODENAME"=>$output->node['title']))));
+			write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("NODEID"=>$_POST['NODE_ID'], "NODENAME"=>$output->node['title']))));
 
 			if (preg_replace('/\s+/', '', $output->node)) {
 				$page .= txt(t("guifi-web_alert_register_post_nodedescription"));
@@ -612,7 +614,7 @@ function assign(){
 		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
 	}
 
-	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+	$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 	// This device has not IPv4
 	foreach($v->interface as $dinterf){
@@ -620,7 +622,7 @@ function assign(){
 	}
 
 	if(isset($dinterf['ipv4'])){
-		write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("DEVICEID"=>$Parameters[1]))));
+		write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("DEVICEID"=>$Parameters[1]))));
 		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
 	}
 
@@ -663,7 +665,7 @@ function linkcloudy(){
 
 	$page = "";
 
-	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+	$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 	$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
 	$ret = $gapi->addCloudyLink($Parameters[0],$Parameters[1]);
 
@@ -680,7 +682,7 @@ function unlinkcloudy(){
 	global $Parameters, $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$GUIFI_WEB,$GUIFI_WEB_API, $GUIFI_WEB_API_AUTH;
 
 	if (count($Parameters) == 1) {
-		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
 		$ret = $gapi->cloudyUnlink($Parameters[0]);
 		setFlash("Remove link cloudy (".$Parameters[0].")");
@@ -699,7 +701,7 @@ function new_cloudy(){
 
 	$page .= par(t("guifi-web_new_cloudy_description"));
 
-	$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+	$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 	$form = createForm(array('class'=>'form-horizontal'));
 	$form .= addInput('NODEID',t("guifi-web_new_cloudy_form_nodeid"),$GUIFI['NODEID'],array('type'=>'number','required'=>true,'min'=>1),'readonly',t("guifi-web_new_cloudy_form_nodeid_tooltip"));
@@ -772,7 +774,7 @@ function add_post(){
 
 	else {
 
-		$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
 
@@ -792,7 +794,7 @@ function add_post(){
 		$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
 
 		if ( $added && $added->device_id ) {
-			write_conffile($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("DEVICEID"=>$added->device_id))));
+			write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array_merge($GUIFI, array("DEVICEID"=>$added->device_id))));
 
 			$page .= txt(t("guifi-web_new_cloudy_result"));
 			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_new_cloudy_post_success")."</div>\n";
@@ -800,8 +802,8 @@ function add_post(){
 			$page .= ptxt($added->device_id);
 
 			$page .= txt(t("guifi-web_new_cloudy_saving"));
-			if ( file_exists($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE) ) {
-				$GUIFI=load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+			if ( file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
+				$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 				if ( $GUIFI['DEVICEID'] == $added->device_id ) {
 					$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_new_cloudy_post_file_correct")."</div>\n";
