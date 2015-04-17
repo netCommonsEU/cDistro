@@ -15,7 +15,7 @@ function index_get(){
 
 	$page = "";
 	$buttons = "";
-	$GUIFI_CONFIG = "";
+	$GUIFI_CONFIG = [];
 
 	$page .= hlc(t("guifi-proxy3_common_title"));
 	$page .= hl(t("guifi-proxy3_index_subtitle"),4);
@@ -46,7 +46,7 @@ function index_get(){
 			$GUIFI_CONFIG = load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
 
 		//Cloudy not registered
-		if (!is_numeric($GUIFI_CONFIG["DEVICEID"])) {
+		if (!isset($GUIFI_CONFIG["DEVICEID"]) || !is_numeric($GUIFI_CONFIG["DEVICEID"])) {
 			$page .= txt(t("guifi-proxy3_common_notice"));
 			$page .= "<div class='alert alert-warning text-center'>".t("guifi-proxy3_alert_not_registered")."</div>\n";
 			$page .= par(t("guifi-proxy3_index_registration"));

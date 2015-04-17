@@ -55,7 +55,7 @@ addS ("guifi-proxy3_form_ldap2","Secondary LDAP server");
 addS ("guifi-proxy3_form_ldap2_tooltip","Hostname of the secondary LDAP server to authenticate proxy users against (default: ldap2.guifi.net) ");
 addS ("guifi-proxy3_form_welcome","Welcome message");
 addS ("guifi-proxy3_form_welcome_default","Guifi Proxy3 Squid proxy-caching federated server");
-addS ("guifi-proxy3_form_welcome_tooltip","A short message the users will first see when using the proxy. Use something that identifies your node, etc.);
+addS ("guifi-proxy3_form_welcome_tooltip","A short message the users will first see when using the proxy. Use something that identifies your node, etc.");
 //addS ("","");
 //addS ("","");
 //addS ("","");
