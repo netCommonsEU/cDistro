@@ -13,7 +13,7 @@ FILEDIR="/var/run/"
 LSOF="/usr/bin/lsof"
 CURL="/usr/bin/curl"
 PEERSTREAMERBIN="https://raw.githubusercontent.com/Clommunity/build-peerstreamer/master/bin/"
-DEBUG=1
+DEBUG=0
 S='|' # Char Separator
 
 
