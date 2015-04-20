@@ -58,6 +58,7 @@ addS ("guifi-web_button_register_use_node","Use node");
 addS ("guifi-web_button_register_new","Register the current Cloudy instance as a new device in this node");
 addS ("guifi-web_button_view","View details");
 addS ("guifi-web_button_register_this","Register with this device");
+addS ("guifi-web_button_change_register","Change a new device");
 
 
 //common
@@ -68,6 +69,7 @@ addS ("guifi-web_index_description","This page lets you integrate your Cloudy-ba
 addS ("guifi-web_index_not_registered","This Cloudy device is not registered in Guifi.net's website. Please click on the button below to start the process.");
 addS ("guifi-web_index_status","Cloudy device status:");
 addS ("guifi-web_index_subtitle","Integration of Cloudy devices with Guifi.net's website");
+addS ("guifi-web_file_information","Cloudy device information:");
 
 //credentials
 addS ("guifi-web_credentials_curl_empty","The remote server at Guifi.net could not be contacted, or it provided an empty reply. Please check your Internet connection and retry.");
@@ -154,11 +156,14 @@ addS ("guifi-web_new_cloudy_post_error","Error found:");
 addS ("guifi-web_new_cloudy_credentials_expired","The Guifi.net login credentials stored in this Cloudy device have expired. To refresh them, please click on the button below.");
 addS ("guifi-web_new_cloudy_post_already_in_use","The device name chosen is already in use in this node. To use another one, please click on the button below.");
 
-addS ("","");
-addS ("","");
-addS ("","");
-addS ("","");
-addS ("","");
+// _getNodeInformation
+addS ("guifi_list_of_services","List of Services");
+addS ("cloudy_service_id","Service Id");
+addS ("cloudy_service_title","Service Title");
+addS ("cloudy_service_type","Service Type");
+addS ("guifi_services_did_not_define_in_this_device","Services did not define in this device.");
+
+
 addS ("","");
 addS ("","");
 addS ("","");

@@ -52,9 +52,12 @@ function index(){
 			else {
 				$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_index_nodeid")."</div>\n";
 
-				$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/register'));
+				$buttons .= addButton(array('label'=>t("guifi-web_button_change_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/register'));
 			}
 		}
+		$page .= hl(t("guifi-web_file_information"),4);
+		$page .= _getNodeInformation($GUIFI['NODEID'], $GUIFI['DEVICEID'], $GUIFI['USERNAME']);
+
 	}
 
 	$page .= $buttons;
@@ -899,4 +902,42 @@ function _getHttp($url){
 
 function check_credentials() {
 
+}
+
+function _getNodeInformation($nodeid, $deviceid, $username){
+	global $GUIFI_WEB;
+
+	$page = "";
+	$url = $GUIFI_WEB."/guifi/cnml/".$nodeid."/node";
+	$resposta = _getHttp($url);
+	$output = new SimpleXMLElement($resposta);
+	foreach($output->node->device as $k=>$device){
+		if ($device['id'] == $deviceid) {
+			$info = $device['title'] ."<a target='_blank' href='".$GUIFI_WEB."/guifi/device/".$device['id']."'>&#8594;</a><br/>". t('Status') . " : " . $device['status'];
+			$strIface = "";
+			foreach($device->interface as $iface){
+				if ($strIface != ""){
+					$strIface .= ", ";
+				}
+				$strIface .= $iface['ipv4'];
+			}
+			if ($strIface != ""){
+				$info .= "<br/>IP : ".$strIface;
+			}
+			$page .= par($info);
+			$page .= hl(t('guifi_list_of_services'),4);
+			if (isset($device->service)) {
+				// Hi ha serveis definits.
+				$page .= addTableHeader(array(t('cloudy_service_id'), t('cloudy_service_title') ,t('cloudy_service_type')));
+				foreach($device->service as $service){
+					$page .= addTableRow(array($service['id'],$service['title'],$service['type']));
+				}
+				$page .= addTableFooter();
+			} else {
+				$page .= par(t('guifi_services_did_not_define_in_this_device'));
+			}
+			break;
+		}
+	}
+	return $page;
 }
