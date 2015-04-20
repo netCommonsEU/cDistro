@@ -43,4 +43,10 @@ $lang_dir = "/lang/";
 // Debug
 $debug = false;
 
+// Guifi inforamtion
+$GUIFI_CONF_DIR = "/etc/guifi/";
+$GUIFI_CONF_FILE = "guifi.conf";
+$GUIFI_WEB="https://guifi.net";
+$GUIFI_WEB_API=$GUIFI_WEB."/api";
+$GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
 ?>
