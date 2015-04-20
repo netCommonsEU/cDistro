@@ -89,7 +89,7 @@ function addTableRow($values, $tr_options=array(), $td_options=array()){
 	$page .=">";
 	foreach($values as $k=>$v){
 	$page .= "<td";
-		if(is_array($td_options[$k])) {
+		if(isset($td_options[$k]) && is_array($td_options[$k])) {
 			foreach($td_options[$k] as $td_k=>$td_v){
 				$page .= " $td_k='$td_v'";
 			}
