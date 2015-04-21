@@ -143,27 +143,42 @@ function install_post(){
 
 }
 
-
 function dnsservices_form($file,$options){
-	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables, $debug;
+	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables, $debug,
+			$GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
 
 	$page = "";
 	$buttons = "";
 
+	$webinfo = _getServiceInformation($services_types['dnsservices']['name']);
 	$variables = load_singlevalue($file,$options);
+
+	if (($variables['DNSGraphServerId'] == 0) && (isset($webinfo['id']))) {
+		$variables['DNSGraphServerId'] = $webinfo['id'];
+	}
 
 	foreach ($variables as $key => $value) {
 		if ( substr($value,0,1) == '"' && substr($value,-1,1) == '"' )
 			$variables[$key] = substr($value, 1, -1);
-
 	}
 
-	if($debug) { echo "<pre>"; print_r($variables); echo "</pre>"; }
+	if($debug) { $page .= ptxt(var_export($webinfo,true)); $page .= ptxt(var_export($variables,true)); }
 
 	$page .= createForm(array('class'=>'form-horizontal'));
 
 	foreach($options as $op=>$val){
 		$page .= addInput($op,$val['desc'],$variables,'','',$val['help']);
+		if ($op == 'DNSGraphServerId' && $variables['DNSGraphServerId'] == 0) {
+			// Crearlo automaticament?
+			$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+			if (isset($GUIFI['DEVICEID'])){
+				$bcreate = t("guifi-you_configure_your_cloudy_device");
+				$bcreate .= addButton(array('label'=>t("guifi-create_service"),'class'=>'btn btn-default', 'href'=>$staticFile.'/dnsservices/createservice/dnsservices'));
+			} else {
+				$bcreate = t("guifi-please_configure_your_cloudy");
+			}
+			$page .= par($bcreate);
+		}
 	}
 
 	if (!isPackageInstall($dnsservices_pkg))

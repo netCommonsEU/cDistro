@@ -761,6 +761,24 @@ class guifiAPI {
   }
 
   /**
+   * Clear CNML.
+   * @param : --
+   * @return string[] List of service types.
+   */
+  public function clearCnml() {
+    $variables = array();
+
+	$variables['command'] = 'guifi.cnml.clear';
+
+    $response = $this->sendRequest($this->url, $variables);
+    $body = $this->parseResponse($response);
+    if (!empty($body->responses)) {
+      return $body->responses;
+    } else {
+      return false;
+    }
+  }
+  /**
    * Constructor function for all new guifiAPI instances
    *
    * Set up authentication with guifi and gets authentication token
@@ -1005,9 +1023,9 @@ class guifiAPI {
       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     }
 
-    curl_setopt($ch, CURLOPT_HEADER, true);
-
+    curl_setopt($ch, CURLOPT_HEADER, true);	
     $response = curl_exec($ch);
+
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     $headers = substr($response, 0, $header_size);
@@ -1028,4 +1046,45 @@ class guifiAPI {
   }
 }
 
+function createservice_get(){
+	global $staticFile, $Parameters, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH, $services_types;
+		
+	if (isset($Parameters[0])){
+		$service = $Parameters[0];
+		$stype = $services_types[$service];
+		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+		$gapi = new guifiAPI( $GUIFI['USERNAME'], '', $GUIFI['TOKEN'], $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH );
+		$gapi->addService($service.$GUIFI['DEVICEID'],$GUIFI['DEVICEID'],$stype['name'], array('nick'=>$stype['prenick'].$GUIFI['DEVICEID']));
+		$gapi->clearCnml();
+		return(array('type' => 'redirect', 'url' => $stype['function']));		
+	} else {
+		return(array('type' => 'redirect', 'url' => $staticFile));		
+	}	
+}
+
+function _getServiceInformation($type){
+	global $GUIFI_WEB,$GUIFI_CONF_DIR,$GUIFI_CONF_FILE;
+
+	$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+	$page = "";
+	$url = $GUIFI_WEB."/guifi/cnml/".$GUIFI['NODEID']."/node";
+	$resposta = _getHttp($url);
+	if ($resposta)
+	{
+		$output = new SimpleXMLElement($resposta);
+		foreach($output->node->device as $k=>$device){
+			if ($device['id'] == $GUIFI['DEVICEID']) {
+				if (isset($device->service)) {
+					foreach($device->service as $service){
+						if($service['type'] == $type){
+							return ($service);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	return FALSE;
+}
 ?>

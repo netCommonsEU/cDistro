@@ -47,6 +47,13 @@ $debug = false;
 $GUIFI_CONF_DIR = "/etc/guifi/";
 $GUIFI_CONF_FILE = "guifi.conf";
 $GUIFI_WEB="https://guifi.net";
+
 $GUIFI_WEB_API=$GUIFI_WEB."/api";
 $GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
+
+$services_types = array('snpservices' => array('name' => 'SNPgraphs', 'prenick'=>'snp', 'function'=>$staticPath.'guifi/snpservices'),
+						'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'dnsservices/install'),
+						'proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi/proxy3')
+				);
+
 ?>

@@ -564,13 +564,13 @@ function register_post(){
 					$page .= par(t("guifi-web_register_post_no_cloudies_pre").' '.$_POST['NODE_ID'].t("guifi-web_register_post_no_cloudies_post"));
 				}
 
-				$buttons .= addButton(array('label'=>t("guifi-web_button_register_new"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/new_cloudy'));
+				$buttons .= addButton(array('label'=>t("guifi-web_button_register_new"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/newcloudy'));
 			}
 
 			else {
 				$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_register_post_no_devices")."</div>\n";
 				$page .= par(t("guifi-web_register_post_no_devices"));
-				$buttons .= addButton(array('label'=>t("guifi-web_button_register_new"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/new_cloudy'));
+				$buttons .= addButton(array('label'=>t("guifi-web_button_register_new"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/newcloudy'));
 			}
 			//$page .= ptxt(print_r(htmlspecialchars($xml), true));
 		}
@@ -686,7 +686,7 @@ function unlinkcloudy(){
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
 }
 
-function new_cloudy(){
+function newcloudy(){
 	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
 
 	$page = "";
@@ -700,7 +700,7 @@ function new_cloudy(){
 	$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 	$form = createForm(array('class'=>'form-horizontal'));
-	$form .= addInput('NODEID',t("guifi-web_new_cloudy_form_nodeid"),$GUIFI['NODEID'],array('type'=>'number','required'=>true,'min'=>1),'readonly',t("guifi-web_new_cloudy_form_nodeid_tooltip"));
+	$form .= addInput('NODEID',t("guifi-web_new_cloudy_form_nodeid"),$GUIFI['NODEID'],array('type'=>'number','required'=>true,'min'=>1),' readonly',t("guifi-web_new_cloudy_form_nodeid_tooltip"));
 	$form .= addInput('DEVICENAME',t("guifi-web_new_cloudy_form_nick"),$GUIFI['NODENAME'].'-'.'Cloudy',array('type'=>'text','required'=>true,'pattern'=>'[A-Za-z0-9_-]+'),'',t("guifi-web_new_cloudy_form_nick_tooltip"));
 	$form .= addInput('EMAIL',t("guifi-web_new_cloudy_form_mail"),'',array('type'=>'email','required'=>true,'placeholder'=>t("guifi-web_new_cloudy_form_mail_placeholder")),'',t("guifi-web_new_cloudy_form_mail_tooltip"));
 	$form .= addInput('MAC',t("guifi-web_new_cloudy_form_mac"),strtoupper(getCommunityDevMAC()['output'][0]),array('type'=>'text','required'=>true,'pattern'=>'^([0-9A-F]{2}[:]){5}([0-9A-F]{2})$'),'',t("guifi-web_new_cloudy_form_mac_tooltip"));
@@ -717,10 +717,7 @@ function new_cloudy(){
 	return(array('type' => 'render','page' => $page));
 }
 
-
-
-
-function add_post(){
+function newcloudy_post(){
 	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH;
 
 	$page = "";
@@ -832,7 +829,7 @@ function add_post(){
 					$page .= "<div class='alert alert-error text-center'>".$_POST['DEVICENAME'].': '.t("guifi-web_alert_new_cloudy_post_already_in_use")."</div>\n";
 					$page .= par(t("guifi-web_new_cloudy_post_already_in_use"));
 
-					$fbuttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/new_cloudy'));
+					$fbuttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/newcloudy'));
 					break;
 
 				case 502:
@@ -891,7 +888,7 @@ function _getNodeInformation($nodeid, $deviceid, $username){
 	global $GUIFI_WEB;
 
 	$page = "";
-	$url = $GUIFI_WEB."/guifi/cnml/".$nodeid."/node";
+	$url = $GUIFI_WEB."ca/guifi/cnml/".$nodeid."/node";
 	$resposta = _getHttp($url);
 	$output = new SimpleXMLElement($resposta);
 	foreach($output->node->device as $k=>$device){
