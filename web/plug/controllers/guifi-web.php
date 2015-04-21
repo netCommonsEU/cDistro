@@ -841,17 +841,13 @@ function newcloudy_post(){
 
 				default:
 					$page .= par(t("guifi-web_new_cloudy_fail"));
-
 			}
 		}
-
-
 	}
 
 	$buttons .= $fbuttons;
 	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
-
 
 }
 
@@ -901,8 +897,15 @@ function _getNodeInformation($nodeid, $deviceid, $username){
 				}
 				$strIface .= $iface['ipv4'];
 			}
+			$info .= "<br/>IP : ";
 			if ($strIface != ""){
-				$info .= "<br/>IP : ".$strIface;
+				$info .= $strIface;
+			} else {
+				$info .= addButton(array(
+							'label'=>t("guifi-web_assing_ip"),
+							'class'=>'btn btn-primary',
+							'href'=>$staticFile.'/guifi-web/assign/'.$nodeid."/".$deviceid
+						));
 			}
 			$page .= par($info);
 			$page .= hl(t('guifi_list_of_services'),4);

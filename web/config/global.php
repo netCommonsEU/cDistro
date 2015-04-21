@@ -44,7 +44,7 @@ $lang_dir = "/lang/";
 $debug = false;
 
 // Guifi inforamtion
-$GUIFI_CONF_DIR = "/etc/guifi/";
+$GUIFI_CONF_DIR = "/etc/cloudy/";
 $GUIFI_CONF_FILE = "guifi.conf";
 $GUIFI_WEB="https://guifi.net";
 
