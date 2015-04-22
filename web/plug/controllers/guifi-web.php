@@ -533,7 +533,7 @@ function _getNodeInformation($nodeid, $deviceid, $username){
 	global $GUIFI_WEB;
 
 	$page = "";
-	$url = $GUIFI_WEB."ca/guifi/cnml/".$nodeid."/node";
+	$url = $GUIFI_WEB."/ca/guifi/cnml/".$nodeid."/node";
 	$resposta = _getHttp($url);
 	$output = new SimpleXMLElement($resposta);
 	foreach($output->node->device as $k=>$device){
