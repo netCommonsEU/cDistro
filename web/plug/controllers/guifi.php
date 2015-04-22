@@ -126,11 +126,11 @@ function snpservices_form($file,$options){
 
 	$webinfo = _getServiceInformation($services_types['snpservices']['name']);
 	$variables = load_singlevalue($file,$options);
-	
+
 	if (($variables['SNPGraphServerId'] == 0) && (isset($webinfo['id']))) {
 		$variables['SNPGraphServerId'] = $webinfo['id'];
 	}
-	
+
 	$page .= hlc(t("Guifi SNPServices"));
 	$page .= hl(t("Monitorization and graphing tools for Guifi.net nodes"),4);
 
@@ -145,8 +145,9 @@ function snpservices_form($file,$options){
 
 	foreach($options as $op=>$val){
 		$page .= addInput($op,$val['desc'],$variables,'','',t("The ID number of the service at Guifi.net website (e.g. http://guifi.net/node/<strong>123456</strong>)"));
-		if ($op == 'SNPGraphServerId' && $variables['SNPGraphServerId'] == 0) {
+		if ($op == 'SNPGraphServerId' && $variables['SNPGraphServerId'] == 0 && file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)) {
 			// Crearlo automaticament?
+
 			$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 			if (isset($GUIFI['DEVICEID'])){
 				$bcreate = t("guifi-you_configure_your_cloudy_device");

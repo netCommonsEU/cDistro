@@ -56,387 +56,36 @@ function index(){
 	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 
-
 }
 
 function credentials(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+	global $staticPath;
 
-	$page = "";
-	$buttons = "";
-
-	$page .= hlc(t("guifi-web_common_title"));
-	$page .= hl(t("guifi-web_credentials_subtitle"),4);
-
-	$page .= par(t("guifi-web_credentials_description"));
-
-	$form = createForm(array('class'=>'form-horizontal'));
-	$form .= addInput('USERNAME',t("guifi-web_credentials_form_username"),'',array('type'=>'text','required'=>true,'pattern'=>'[A-Za-z0-9_-\s\.]+'),'',t("guifi-web_credentials_form_username_tooltip"));
-	$form .= addInput('PASSWORD',t("guifi-web_credentials_form_password"),'',array('type'=>'password', 'required'=>true),'',t("guifi-web_credentials_form_password_tooltip"));
-
-	$fbuttons = addSubmit(array('label'=>t('guifi-web_button_submit_check'),'class'=>'btn btn-primary'));
-
-	$page .= $form;
-
-	$page .= txt(t("guifi-web_credentials_security"));
-	$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_credentials_security_username")."</div>\n";
-	$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_security_password")."</div>\n";
-	$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_security_ssl")."</div>\n";
-
-	$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
-	$buttons .= $fbuttons;
-
-	$page .= $buttons;
-	return(array('type' => 'render','page' => $page));
+	return(array('type' => 'render','page' => _ask_credentials(array('label'=>t("guifi-web_button_back"),'href'=>$staticFile.'/guifi-web'))));
 }
 
 function credentials_post(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH ;
-
-	$page = "";
-	$buttons = "";
-
-	$page .= hlc(t("guifi-web_common_title"));
-	$page .= hl(t("guifi-web_credentials_subtitle"),4);
-
-	if (empty($_POST)) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_post_empty")."</div>\n";
-		$page .= par(t("guifi-web_credentials_post_empty"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-	}
-
-	else if (empty($_POST['USERNAME'])) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_post_emptyusername")."</div>\n";
-		$page .= par(t("guifi-web_credentials_post_emptyusername"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-	}
-
-	else if (empty($_POST['PASSWORD'])) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_post_emptypassword")."</div>\n";
-		$page .= par(t("guifi-web_credentials_post_emptypassword"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-	}
-
-	else {
-
-		$gapi = new guifiAPI( $_POST['USERNAME'], $_POST['PASSWORD'] , null, $GUIFI_WEB_API, $GUIFI_WEB_API_AUTH);
-
-		//$page .= ptxt(print_r($gapi, true));
-
-		//Server could not be reached
-		if ( !isset($gapi->responseCode) && $gapi->getErrors() == NULL ) {
-			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_empty")."</div>\n";
-			$page .= par(t("guifi-web_credentials_curl_empty"));
-			$page .= txt(t("guifi-web_credentials_curl_url"));
-			$page .= "<div class='alert alert-info text-center'>".$GUIFI_WEB."/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=********</div>\n";
-			$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-		}
-
-		//Server was reached
-		elseif ( isset($gapi->responseCode) || isset($gapi->getErrors()[0])) {
-
-			//In case of error
-			if ( $gapi->getErrors()) {
-
-				switch($gapi->getErrors()[0]->code) {
-					case 401:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_wrong_command")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_command"));
-						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-						break;
-
-					case 403:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_credentials_curl_wrong_login")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_login"));
-						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-						break;
-
-					default:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_error")."</div>\n";
-						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_error"));
-						break;
-				}
-			}
-
-			//No error (apparently)
-			else if ( isset($gapi->responseCode) ) {
-
-				switch ($gapi->responseCode->code) {
-					//Success
-					case 200:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_curl_ok")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->responses,true));
-
-						if (!file_exists($GUIFI_CONF_DIR))
-							mkdir($GUIFI_CONF_DIR,0755);
-						if (!file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE))
-							touch($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-						if (fileperms($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) != "16877" )
-							chmod($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, 0644);
-
-						write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array("USERNAME"=>$_POST['USERNAME'], "TOKEN"=>$gapi->responses->authToken)));
-
-						//Check if config file has been saved
-						if ( !file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
-							$page .= txt(t("guifi-web_credentials_saving"));
-							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_error")."</div>\n";
-							$page .= par(t("guifi-web_credentials_file_error"));
-							$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-						}
-
-						/* This does not work as the config. file is written asynchronously
-						else if ( filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) == 0 ) {
-							$page .= txt(t("guifi-web_credentials_saving"));
-							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_empty")."</div>\n";
-							$page .= par(t("guifi-web_credentials_file_empty"));
-							$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-						}
-						*/
-
-						//Good. Check that the config file contents are correct
-						else {
-							$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-
-							//Ooops, something was not properly saved
-							if ( $GUIFI['USERNAME'] != $_POST['USERNAME'] || $GUIFI['TOKEN'] != $gapi->responses->authToken ) {
-								$page .= txt(t("guifi-web_credentials_saving"));
-								$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_different")."</div>\n";
-								$page .= par(t("guifi-web_credentials_file_different"));
-								$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-							}
-
-							//Good, data was saved correctly
-							else {
-								$page .= txt(t("guifi-web_credentials_saving"));
-								$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_file_correct")."</div>\n";
-								$page .= par(t("guifi-web_credentials_register"));
-								$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
-								$buttons .= addButton(array('label'=>t("guifi-web_button_register_continue"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/register'));
-							}
-						}
-						break;
-
-					default:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						break;
-				}
-			}
-		}
-	}
-
-	$page .= $buttons;
-	return(array('type' => 'render','page' => $page));
+	return(array('type' => 'render','page' => _check_credentials($_POST,
+						array('label'=>t("guifi-web_button_back_credentials"), 'href'=>$staticFile.'/guifi-web/credentials'),
+						array('label'=>t("guifi-web_button_register_continue"), 'href'=>$staticFile.'/guifi-web/register'),
+						array('label'=>t("guifi-web_button_back"), 'href'=>$staticFile.'/guifi-web')
+						)));
 }
 
 function refresh_credentials(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
-
-	$page = "";
-	$buttons = "";
-
-	$page .= hlc(t("guifi-web_common_title"));
-	$page .= hl(t("guifi-web_refresh_credentials_subtitle"),4);
-
-	$page .= par(t("guifi-web_refresh_credentials_description"));
-
-	if (!file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) || !filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
-		$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_index_not_registered")."</div>\n";
-		$page .= par(t("guifi-web_index_not_registered"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/credentials'));
-	}
-
-	else {
-		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-
-		if ( $GUIFI['USERNAME']==null ) {
-			$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_index_not_registered")."</div>\n";
-			$page .= par(t("guifi-web_index_not_registered"));
-			$buttons .= addButton(array('label'=>t("guifi-web_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/credentials'));
-		}
-
-		else {
-
-			$form = createForm(array('class'=>'form-horizontal'));
-			$form .= addInput('USERNAME',t("guifi-web_refresh_credentials_form_username"),$GUIFI['USERNAME'],array('type'=>'text','required'=>true,'pattern'=>'[A-Za-z0-9_-\s\.]+','readonly'=>true),'',t("guifi-web_refresh_credentials_form_username_tooltip"));
-			$form .= addInput('PASSWORD',t("guifi-web_refresh_credentials_form_password"),'',array('type'=>'password', 'required'=>true),'',t("guifi-web_refresh_credentials_form_password_tooltip"));
-
-			$fbuttons = addSubmit(array('label'=>t('guifi-web_button_submit_refresh'),'class'=>'btn btn-primary'));
-
-			$page .= $form;
-
-			$page .= txt(t("guifi-web_refresh_credentials_security"));
-			$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_refresh_credentials_security_username")."</div>\n";
-			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_refresh_credentials_security_password")."</div>\n";
-			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_refresh_credentials_security_ssl")."</div>\n";
-
-			$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
-			$buttons .= $fbuttons;
-
-
-		}
-	}
-	$page .= $buttons;
-	return(array('type' => 'render','page' => $page));
+	return(array('type' => 'render','page' => _reask_credentials(array('label'=>t("guifi-web_button_back"),'href'=>$staticFile.'/guifi-web'))));
 }
 
 function refresh_credentials_post(){
-	global $staticFile, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_WEB;
+	global $Parameters,$controller,$staticFile;
 
-	$page = "";
-	$buttons = "";
+	$cntrll = (isset($Parameters[0])) ? $Parameters[0] : "";
 
-	$page .= hlc(t("guifi-web_common_title"));
-	$page .= hl(t("guifi-web_credentials_subtitle"),4);
-
-	if (empty($_POST)) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_post_empty")."</div>\n";
-		$page .= par(t("guifi-web_credentials_post_empty"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-	}
-
-	else if (empty($_POST['USERNAME'])) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_post_emptyusername")."</div>\n";
-		$page .= par(t("guifi-web_credentials_post_emptyusername"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-	}
-
-	else if (empty($_POST['PASSWORD'])) {
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_post_emptypassword")."</div>\n";
-		$page .= par(t("guifi-web_credentials_post_emptypassword"));
-		$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-	}
-
-	else {
-
-		$gapi = new guifiAPI( $_POST['USERNAME'], $_POST['PASSWORD'] );
-
-		//$page .= ptxt(print_r($gapi, true));
-
-		//Server could not be reached
-		if ( !isset($gapi->responseCode) && $gapi->getErrors() == NULL ) {
-			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_empty")."</div>\n";
-			$page .= par(t("guifi-web_credentials_curl_empty"));
-			$page .= txt(t("guifi-web_credentials_curl_url"));
-			$page .= "<div class='alert alert-info text-center'>".$GUIFI_WEB."/api?command=guifi.auth.login&username=".$_POST['USERNAME']."&password=********</div>\n";
-			$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-		}
-
-		//Server was reached
-		elseif ( isset($gapi->responseCode) || isset($gapi->getErrors()[0])) {
-
-			//In case of error
-			if ( $gapi->getErrors()) {
-
-				switch($gapi->getErrors()[0]->code) {
-					case 401:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_wrong_command")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_command"));
-						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-						break;
-
-					case 403:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_credentials_curl_wrong_login")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_login"));
-						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-						break;
-
-					default:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_error")."</div>\n";
-						$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_error"));
-						break;
-				}
-			}
-
-			//No error (apparently)
-			else if ( isset($gapi->responseCode) ) {
-
-				switch ($gapi->responseCode->code) {
-					//Success
-					case 200:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_curl_ok")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->responses,true));
-
-						if (!file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE))
-							touch($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-						if (fileperms($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) != "16877" )
-							chmod($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, 0644);
-
-						write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes(array("USERNAME"=>$_POST['USERNAME'], "TOKEN"=>$gapi->responses->authToken)));
-
-						//Check if config file has been saved
-						if ( !file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) ) {
-							$page .= txt(t("guifi-web_credentials_saving"));
-							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_error")."</div>\n";
-							$page .= par(t("guifi-web_credentials_file_error"));
-							$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-						}
-
-						/* This does not work as the config. file is written asynchronously
-						else if ( filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) == 0 ) {
-							$page .= txt(t("guifi-web_credentials_saving"));
-							$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_empty")."</div>\n";
-							$page .= par(t("guifi-web_credentials_file_empty"));
-							$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
-						}
-						*/
-
-						//Good. Check that the config file contents are correct
-						else {
-							$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-
-							//Ooops, something was not properly saved
-							if ( $GUIFI['USERNAME'] != $_POST['USERNAME'] || $GUIFI['TOKEN'] != $gapi->responses->authToken ) {
-								$page .= txt(t("guifi-web_credentials_saving"));
-								$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_file_different")."</div>\n";
-								$page .= par(t("guifi-web_credentials_file_different"));
-								$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
-							}
-
-							//Good, data was saved correctly
-							else {
-								$page .= txt(t("guifi-web_credentials_saving"));
-								$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_file_correct")."</div>\n";
-								$page .= par(t("guifi-web_refresh_credentials_success"));
-								$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
-								//$buttons .= addButton(array('label'=>t("guifi-web_button_register_continue"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web/register'));
-							}
-						}
-						break;
-
-					default:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						break;
-				}
-			}
-		}
-	}
-
-	$page .= $buttons;
-	return(array('type' => 'render','page' => $page));
+	return(array('type' => 'render','page' => _recheck_credentials($_POST,
+						array('label'=>t("guifi-web_button_back_credentials"), 'href'=>$staticFile.'/guifi-web/refresh_credentials'),
+						array('label'=>t("guifi-web_button_register_continue"), 'href'=>$staticFile.'/'.$controller.'/'.$cntrll),
+						array('label'=>t("guifi-web_button_back"), 'href'=>$staticFile.'/guifi-web')
+						)));
 }
 
 
@@ -836,7 +485,7 @@ function newcloudy_post(){
 					$page .= txt(t("guifi-web_new_cloudy_post_error"));
 					$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_new_cloudy_post_expired")."</div>\n";
 					$page .= par(t("guifi-web_new_cloudy_credentials_expired"));
-					$fbuttons = addButton(array('label'=>t('guifi-web_button_submit_refresh'),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-web/refresh_credentials'));
+					$fbuttons = addButton(array('label'=>t('guifi-web_button_submit_refresh'),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-web/refresh_credentials/newcloudy'));
 					break;
 
 				default:

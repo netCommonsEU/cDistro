@@ -47,6 +47,8 @@ $debug = false;
 $GUIFI_CONF_DIR = "/etc/cloudy/";
 $GUIFI_CONF_FILE = "guifi.conf";
 $GUIFI_WEB="https://guifi.net";
+$GUIFI_WEB="http://10.139.40.169/";
+//$GUIFI_WEB="http://10.1.72.172/guifi";
 
 $GUIFI_WEB_API=$GUIFI_WEB."/api";
 $GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
