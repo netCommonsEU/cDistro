@@ -225,7 +225,7 @@ function configuration_post() {
 		}
 	}
 
-		//Canviar el fitxer de configuració
+		//Canviar el fitxer de configuraci\F3
 		foreach ($dataToSave as $key => $value) {
 			if($guifi_proxy3_variables[$key]['kdeb'] == 'string'){
 				$dataToSave[$key] = "'".$value."'";
@@ -241,7 +241,7 @@ function configuration_post() {
 }
 
 function install_not_registered() {
-	global $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME;
+	global $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME,$staticFile;
 
 	$page = "";
 	$buttons = "";
@@ -321,16 +321,33 @@ function install_not_registered_post() {
 }
 
 function generate_form($file){
-	global $staticFile, $GUIFI_PROXY3_DEFAULTS;
+	global $staticFile, $GUIFI_PROXY3_DEFAULTS,$GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
 
 	$page = "";
 
+	$webinfo = _getServiceInformation($services_types['proxy3']['name']);
 	$variables = load_conffile($file,$GUIFI_PROXY3_DEFAULTS);
+
+	if (($variables['node'] == 0) && (isset($webinfo['id']))) {
+		$variables['node'] = $webinfo['id'];
+	}
 
 	$page .= createForm(array('class'=>'form-horizontal'));
 
-	foreach($GUIFI_PROXY3_DEFAULTS as $op=>$val)
+	foreach($GUIFI_PROXY3_DEFAULTS as $op=>$val) {
 		$page .= addInput($op, $val['desc'], $variables, $val['options'], '', $val['tooltip']);
+		if ($op == 'node' && $variables['node'] == 0) {
+			// Crearlo automaticament?
+			$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+			if (isset($GUIFI['DEVICEID'])){
+				$bcreate = t("guifi-you_configure_your_cloudy_device");
+				$bcreate .= addButton(array('label'=>t("guifi-create_service"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3/createservice/proxy3'));
+			} else {
+				$bcreate = t("guifi-please_configure_your_cloudy");
+			}
+			$page .= par($bcreate);
+		}
+	}
 
 	return($page);
 }

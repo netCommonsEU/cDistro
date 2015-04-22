@@ -53,7 +53,7 @@ $GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
 
 $services_types = array('snpservices' => array('name' => 'SNPgraphs', 'prenick'=>'snp', 'function'=>$staticPath.'guifi/snpservices'),
 						'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'dnsservices/install'),
-						'proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi/proxy3')
+						'proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi-proxy3/install_not_registered')
 				);
 
 ?>
