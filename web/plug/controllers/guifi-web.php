@@ -62,7 +62,7 @@ function index(){
 }
 
 function credentials(){
-	global $staticPath;
+	global $staticPath, $staticFile;
 
 	return(array('type' => 'render','page' => _ask_credentials(array('label'=>t("guifi-web_button_back"),'href'=>$staticFile.'/guifi-web'))));
 }
