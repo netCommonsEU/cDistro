@@ -50,8 +50,8 @@ function index(){
 			$nodeinfo = _getNodeInformation($GUIFI['NODEID'], $GUIFI['DEVICEID'], $GUIFI['USERNAME']);
 			$buttons .= $nodeinfo['buttons'];
 			$page .= $nodeinfo['page'];
-			$buttons .= addButton(array('label'=>t("guifi-web_button_change_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials/selectnode'));
-			$buttons .= addButton(array('label'=>t("guifi-web_button_change_device"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials/selectnode'));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_change_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_change_device"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/selectdevice'));
 		}
 
 	}
@@ -238,7 +238,8 @@ function selectdevice(){
 			$page .= txt(t("guifi-web_selectdevice_description_pre").$GUIFI['NODEID'].t("guifi-web_selectdevice_description_post"));
 			$page .= txt(t("guifi-web_common_nodename:"));
 			$page .= ptxt($output->node['title']);
-			$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web/selectnode'));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back_selectnode"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/selectnode'));
 
 
 			if (preg_replace('/\s+/', '', $output->node)) {
@@ -289,7 +290,7 @@ function selectdevice(){
 				}
 
 				else {
-					$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_selectdevice_post_no_cloudies")."</div>\n";
+					$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_selectdevice_no_cloudies")."</div>\n";
 					$page .= par(t("guifi-web_selectdevice_no_cloudies_pre").' '.$GUIFI['NODEID'].t("guifi-web_selectdevice_no_cloudies_post"));
 				}
 
@@ -406,9 +407,8 @@ function linkcloudy(){
 		//$page .= ptxt(print_r($ret,1));
 		//return(array('type' => 'render','page' => $page));
 	} else {
-		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'guifi-web'));
-		//$page .= _handle_error(null,$gapi->getErrors(),null,null);
-		//return(array('type' => 'render','page' => $page));
+		$page .= _handle_error(null,$gapi->getErrors(),null,null);
+		return(array('type' => 'render','page' => $page));
 	}
 
 }

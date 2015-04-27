@@ -1214,35 +1214,7 @@ function _recheck_credentials($post, $error, $callback, $back){
 
 			//In case of error
 			if ( $gapi->getErrors()) {
-
-				switch($gapi->getErrors()[0]->code) {
-					case 401:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_wrong_command")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_command"));
-						$buttons .= addButton(array('label'=>$error['label'],'class'=>'btn btn-warning', 'href'=>$error['href']));
-						break;
-
-					case 403:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_credentials_curl_wrong_login")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_login"));
-						$buttons .= addButton(array('label'=>$error['label'],'class'=>'btn btn-warning', 'href'=>$error['href']));
-						break;
-
-					default:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_error")."</div>\n";
-						$buttons .= addButton(array('label'=>$error['label'],'class'=>'btn btn-warning', 'href'=>$error['href']));
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_error"));
-						break;
-				}
+				$page .= _handle_error(null,$gapi->getErrors(),'refresh_credentials',null);
 			}
 
 			//No error (apparently)
@@ -1329,8 +1301,8 @@ function _ask_credentials($back){
 
 	if (file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)){
 		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-		unset($GUIFI['TOKEN']);
-		write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes($GUIFI));
+		//unset($GUIFI['TOKEN']);
+		//write_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE, add_quotes($GUIFI));
 	}
 
 	$page = "";
@@ -1409,35 +1381,7 @@ function _check_credentials($post, $error, $callback, $back){
 
 			//In case of error
 			if ( $gapi->getErrors()) {
-
-				switch($gapi->getErrors()[0]->code) {
-					case 401:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_wrong_command")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_command"));
-						$buttons .= addButton(array('label'=>$error['label'],'class'=>'btn btn-warning', 'href'=>$error['href']));
-						break;
-
-					case 403:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-warning text-center'>".t("guifi-web_alert_credentials_curl_wrong_login")."</div>\n";
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_wrong_login"));
-						$buttons .= addButton(array('label'=>$error['label'],'class'=>'btn btn-warning', 'href'=>$error['href']));
-						break;
-
-					default:
-						$page .= txt(t("guifi-web_credentials_curl_authresult"));
-						$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_credentials_curl_error")."</div>\n";
-						$buttons .= addButton(array('label'=>$error['label'],'class'=>'btn btn-warning', 'href'=>$error['href']));
-						$page .= txt(t("guifi-web_credentials_curl_details"));
-						$page .= ptxt(print_r($gapi->getErrors(), true));
-						$page .= par(t("guifi-web_credentials_curl_error"));
-						break;
-				}
+				$page .= _handle_error(null,$gapi->getErrors(),'credentials',null);
 			}
 
 			//No error (apparently)
@@ -1529,10 +1473,37 @@ function _handle_error($post, $error, $callback, $back) {
 
 	switch($error[0]->code) {
 		case 403:
-			$page .= txt(t("guifi-web_new_cloudy_post_error"));
-			$page .= "<div class='alert alert-error text-center'>".$_POST['DEVICENAME'].': '.t("guifi-web_alert_new_cloudy_post_already_in_use")."</div>\n";
-			$page .= par(t("guifi-web_new_cloudy_post_already_in_use"));
-			$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/newcloudy'));
+			switch($error[0]->extra) {
+				case 'Either the supplied username or password are not correct':
+					$page .= txt(t("guifi-api_handle_error_found:"));
+					$page .= "<div class='alert alert-error text-center'>".t("guifi-api_alert_error_403_login")."</div>\n";
+					$page .= par(t("guifi-api_handle_error_403_login"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_credentials"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/'.$callback));
+					break;
+
+				case 'nick already in use':
+					$page .= txt(t("guifi-api_handle_error_found:"));
+					$page .= "<div class='alert alert-error text-center'>".$post['DEVICENAME'].': '.t("guifi-web_alert_new_cloudy_post_already_in_use")."</div>\n";
+					$page .= par(t("guifi-web_new_cloudy_post_already_in_use"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/newcloudy'));
+					break;
+
+				default:
+					$page .= par(t("guifi-api_handle_error_403_default"));
+					$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+
+					break;
+			}
+			break;
+		case 500:
+			$page .= txt(t("guifi-api_handle_error_found:"));
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-api_alert_error_500")."</div>\n";
+			$page .= par(t("guifi-api_handle_error_500"));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addButton(array('label'=>t('guifi-web_button_change_deviceid'),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/selectdevice'));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_noip"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web'));
 			break;
 
 		case 501:

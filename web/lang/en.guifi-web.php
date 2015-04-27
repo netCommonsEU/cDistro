@@ -65,6 +65,7 @@ addS ("guifi-web_button_change_deviceid","Choose another device");
 addS ("guifi-web_button_retry","Retry node selection");
 addS ("guifi-web_button_assign_ip","Assign an IP address to the device");
 addS ("guifi-web_button_obtain_ip","Obtain an IP address from this device");
+addS ("guifi-web_button_noip","Continue without assigning an IP address to the device");
 addS ("guifi-web_button_change_credentials","Modify saved Guifi.net credentials");
 addS ("guifi-web_button_change_device","Modify Cloudy device registration");
 
