@@ -3,10 +3,10 @@
 
 //alerts
 addS ("guifi-web_alert_credentials_security_ssl","Your credentials are sent to Guifi.net's authentication service using SSL encryption");
-addS ("guifi-web_alert_credentials_security_username","Your username will be stored in /etc/guifi.conf");
+addS ("guifi-web_alert_credentials_security_username","Your username will be stored in");
 addS ("guifi-web_alert_credentials_security_password","Your password will not be stored");
 addS ("guifi-web_alert_refresh_credentials_security_ssl","Your credentials are sent to Guifi.net's authentication service using SSL encryption");
-addS ("guifi-web_alert_refresh_credentials_security_username","Your username will be stored in /etc/guifi.conf");
+addS ("guifi-web_alert_refresh_credentials_security_username","Your username will be stored in");
 addS ("guifi-web_alert_refresh_credentials_security_password","Your password will not be stored");
 addS ("guifi-web_alert_index_nodeid","This device is registered at Guifi.net");
 addS ("guifi-web_alert_index_no_nodeid","This device is not registered at Guifi.net");

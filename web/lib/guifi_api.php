@@ -1152,7 +1152,7 @@ function _reask_credentials($back){
 			$page .= $form;
 
 			$page .= txt(t("guifi-web_refresh_credentials_security"));
-			$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_refresh_credentials_security_username")."</div>\n";
+			$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_refresh_credentials_security_username").' '.$GUIFI_CONF_DIR.$GUIFI_CONF_FILE."</div>\n";
 			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_refresh_credentials_security_password")."</div>\n";
 			$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_refresh_credentials_security_ssl")."</div>\n";
 
@@ -1322,7 +1322,7 @@ function _ask_credentials($back){
 	$page .= $form;
 
 	$page .= txt(t("guifi-web_credentials_security"));
-	$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_credentials_security_username")."</div>\n";
+	$page .= "<div class='alert alert-info text-center'>".t("guifi-web_alert_credentials_security_username").' '.$GUIFI_CONF_DIR.$GUIFI_CONF_FILE."</div>\n";
 	$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_security_password")."</div>\n";
 	$page .= "<div class='alert alert-success text-center'>".t("guifi-web_alert_credentials_security_ssl")."</div>\n";
 
