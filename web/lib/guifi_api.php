@@ -1516,4 +1516,46 @@ function _check_credentials($post, $error, $callback, $back){
 	$page .= $buttons;
 	return($page);
 }
+
+function _handle_error($post, $error, $callback, $back) {
+
+	$buttons = '';
+	$page = '';
+
+	$page .= txt(t("guifi-api_handle_error_call_result:"));
+	$page .= "<div class='alert alert-error text-center'>".t("guifi-api_alert_error")."</div>\n";
+	$page .= txt(t("guifi-api_handle_error_details:"));
+	$page .= ptxt(print_r($error,true));
+
+	switch($error[0]->code) {
+		case 403:
+			$page .= txt(t("guifi-web_new_cloudy_post_error"));
+			$page .= "<div class='alert alert-error text-center'>".$_POST['DEVICENAME'].': '.t("guifi-web_alert_new_cloudy_post_already_in_use")."</div>\n";
+			$page .= par(t("guifi-web_new_cloudy_post_already_in_use"));
+			$buttons .= addButton(array('label'=>t("guifi-web_button_back_add"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/newcloudy'));
+			break;
+
+		case 501:
+			$page .= txt(t("guifi-api_handle_error_found:"));
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-api_alert_error_501")."</div>\n";
+			$page .= par(t("guifi-api_handle_error_501"));
+			$buttons = addButton(array('label'=>t('guifi-web_button_submit_refresh'),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-web/credentials'.$callback));
+			break;
+
+		case 502:
+			$page .= txt(t("guifi-web_new_cloudy_post_error"));
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-web_alert_new_cloudy_post_expired")."</div>\n";
+			$page .= par(t("guifi-web_new_cloudy_credentials_expired"));
+			$buttons = addButton(array('label'=>t('guifi-web_button_submit_refresh'),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-web/credentials'.$callback));
+			break;
+
+		default:
+			$page .= par(t("guifi-web_new_cloudy_fail"));
+	}
+
+	$page .= $buttons;
+	return ($page);
+
+}
+
 ?>
