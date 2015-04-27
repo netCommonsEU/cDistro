@@ -125,24 +125,36 @@ function remove_get() {
 function stopprogram() {
 	global $sc_initd, $sc_user, $sc_avahi_type, $sc_port;
 	avahi_unpublish($sc_avahi_type, $sc_port);
-	while (isRunning()) {
+	$counter = 0;
+	while (isRunning() && $counter < sc_counter) {
+		$counter++;
 		exec("$sc_initd stop", $sc_user);
 		sleep(1);
 	}
+	if ($counter == sc_counter){
+		return FALSE;
+	}
+	return TRUE;
 }
 
 function startprogram() {
 	global $sc_initd, $sc_avahi_type, $sc_avahi_desc, $sc_port, $sc_user;
 	if (isRunning()) {
-		return;
+		return TRUE;
 	}
-	execute_program_detached("$sc_initd start", $sc_user);
-	while (!isRunning()) {
+	execute_program_detached("$sc_initd start");
+	$counter = 0;
+	while (!isRunning() && $counter < sc_counter) {
+		$counter ++;
 		sleep(1);
+	}
+	if ($counter == sc_counter){
+		return FALSE;
 	}
 	$config = readConfig();
 	$sc_id = getNodeID($config);
 	avahi_publish($sc_avahi_type, $sc_avahi_desc, $sc_port, "node_id=$sc_id");
+	return TRUE;
 }
 
 function configure_get() {
@@ -154,9 +166,19 @@ function configure_get() {
 		return array('type'=>'redirect','url'=>"$urlpath");
 	}
 	execute_program_shell("/bin/su $sc_user -c '$sc_binpath -generate=$sc_cfgpath'");
+
 	startprogram(); // Start it to generate the default config
-	while (!hasConfig()) sleep(1);
-	stopprogram(); // Make sure the config file is ours
+	$counter = 0;
+	while (!hasConfig()&& $counter < sc_counter) {
+		$counter ++;
+		sleep(1);
+	}
+	if ($counter == sc_counter){
+		return array('type'=>'redirect','url'=>"$urlpath");
+	}
+	if (!stopprogram()) {
+		return array('type'=>'redirect','url'=>"$urlpath");
+	} // Make sure the config file is ours
 	$config = readConfig();
 	unset($config->folder);
 	$config->gui->attributes()->enabled="true";
@@ -170,7 +192,10 @@ function configure_get() {
 	writeConfig($config);
 	file_put_contents($sc_nodeidpath, getNodeID($config));
 	execute_program_shell("chown -R www-data:www-data $sc_dirpath");
-	startprogram(); // Make it load the new config
+
+	if (!startprogram()) {  // Make it load the new config
+		return array('type'=>'redirect','url'=>"$urlpath");
+	}
 	return array('type'=>'redirect','url'=>"$urlpath");
 }
 
