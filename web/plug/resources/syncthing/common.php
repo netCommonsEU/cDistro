@@ -31,7 +31,7 @@ $sc_avahi_desc="Syncthing instance running";
 
 global $sc_releases_url, $sc_version;
 $sc_releases_url="https://github.com/syncthing/syncthing/releases/download";
-$sc_version="0.10.18";
+$sc_version="0.10.31";
 define("sc_counter", 30);
 
 function nameForArch($arch) {
