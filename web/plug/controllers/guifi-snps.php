@@ -102,7 +102,7 @@ function install(){
 			if (!serviceDeclared()) {
 				$page .= par(t("guifi-snps_install_declare").' '.t("guifi-snps_install_autodeclare").' '.t("guifi-snps_install_otherwise"));
 				$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
-				$buttons .= addButton(array('label'=>t("guifi-snps_button_create_service"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi/createservice/snpservices'));
+				$buttons .= addButton(array('label'=>t("guifi-snps_button_create_service"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-snps/createservice/snpservices'));
 				$buttons .= addSubmit(array('label'=>t("guifi-snps_button_unregistereds_pre").t("guifi-snps_common_appname").t("guifi-snps_button_unregistereds_post"),'class'=>'btn btn-default'));
 			}
 
