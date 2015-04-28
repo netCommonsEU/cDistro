@@ -32,7 +32,7 @@ function index(){
 	$page .= par("<a href='http://peerstreamer.org'>".t("PeerStreamer")."</a>". t(" is an open source P2P Media Streaming framework written in C.").' '.t("It includes a streaming engine for the efficient distribution of media streams.") .' '. t("A source application for the creation of channels and a player applications to visualize the streams."));
 	$page .= txt(t("PeerStreamer status:"));
 
-	if ( ! isPSInstalled() ) {
+	if ( ! softwareinstalled() ) {
 		$page .= "<div class='alert alert-error text-center'>".t("PeerStreamer is not installed")."</div>\n";
 		$page .= par(t("Click on the button to install PeerStreamer and view share videos from users."));
 		$buttons .= addButton(array('label'=>t("Install PeerStreamer"),'class'=>'btn btn-success', 'href'=>$staticFile.'/peerstreamer/getprogram'));
@@ -41,6 +41,7 @@ function index(){
 	} else {
 		$page .= "<div class='alert alert-success text-center'>".t("PeerStreamer installed")."</div>\n";
 		$page .= _listPSProcs();
+		
 		$page .= addButton(array('label'=>t('Connect to Peer'),'href'=>$staticFile.'/peerstreamer/connect'));
 		$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>$staticFile.'/peerstreamer/publish'));
 		$page .= "<div class=text-right>";
