@@ -20,8 +20,6 @@ addS ("guifi-dnss_alert_not_installed_post"," is not installed");
 addS ("guifi-dnss_alert_guifi","This Cloudy device is registered with Guifi.net's website");
 addS ("guifi-dnss_alert_not_guifi","This Cloudy device is not registered with Guifi.net's website");
 addS ("guifi-dnss_alert_save","Saving configuration...");
-addS ("","");
-addS ("","");
 
 //Buttons
 addS ("guifi-dnss_button_create_service","Create DNSServices at Guifi.net website");
