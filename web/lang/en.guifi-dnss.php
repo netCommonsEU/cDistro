@@ -41,18 +41,18 @@ addS ("guifi-dnss_button_start_post","");
 addS ("guifi-dnss_button_unregistered_pre","Install ");
 addS ("guifi-dnss_button_unregistered_post"," without registering this device");
 addS ("guifi-dnss_button_unregistereds_pre","Install ");
-addS ("guifi-dnss_button_unregistereds_post"," without declaring it website");
+addS ("guifi-dnss_button_unregistereds_post"," without declaring it at the website");
 
 //Index
 addS ("guifi-dnss_index_desc","DNSServices is an automatic DNS servers configuration system for Guifi.net nodes. It provides address resolution for the domain names created by users at Guifi.net's website (including reverse DNS lookup) and for Internet domain names.");
-addS ("guifi-dnss_index_connected","To run this service, the device has to be connected to both Guifi and the Internet.");
+addS ("guifi-dnss_index_connected","To install this service, the device has to be connected to both Guifi and the Internet.");
 addS ("guifi-dnss_index_checkwiki","You can check this wiki page for more information: ");
 addS ("guifi-dnss_index_wikiurl","http://en.wiki.guifi.net/wiki/DNS_Server");
 addS ("guifi-dnss_index_not_guifi","This Cloudy device is not linked with any device at Guifi.net's website.");
 addS ("guifi-dnss_index_register_before_pre","Click on the button below to register it before installing the ");
 addS ("guifi-dnss_index_register_before_post"," service.");
 addS ("guifi-dnss_index_register","Click on the button below to register it.");
-addS ("guifi-dnss_index_guifi","Click on the button below to install the DNSService service.");
+addS ("guifi-dnss_index_guifi","Click on the button below to install the Guifi DNSServices service.");
 
 //Install
 addS ("guifi-dnss_install_subtitle","Installation and configuration");
@@ -66,10 +66,9 @@ addS ("guifi-dnss_install_configure_post"," configuration or to uninstall it.");
 addS ("guifi-dnss_install_value","The service ID has been autocompleted with the information retrieved from Guifi.net's website.");
 
 //Form
-addS ("guifi-dnss_form_id","Service id.");
+addS ("guifi-dnss_form_id","Service id");
 addS ("guifi-dnss_form_id_tooltip","The ID of the service at Guifi.net's website (e.g. http://guifi.net/node/<strong>123456</strong>)");
 addS ("guifi-dnss_form_url","DNS data URL");
 addS ("guifi-dnss_form_url_tooltip","The URL of the server to synchronize the DNS database with (default <strong>http://guifi.net</strong>). Do not add the trailing slash.");
-
 
 ?>
