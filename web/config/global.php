@@ -51,8 +51,8 @@ $GUIFI_WEB="https://guifi.net";
 $GUIFI_WEB_API=$GUIFI_WEB."/api";
 $GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
 
-$services_types = array('snpservices' => array('name' => 'SNPgraphs', 'prenick'=>'snp', 'function'=>$staticPath.'guifi/snpservices'),
-						'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'dnsservices/install'),
+$services_types = array('snpservices' => array('name' => 'SNPgraphs', 'prenick'=>'snp', 'function'=>$staticPath.'guifi-snps/install'),
+						'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'guifi-dnss/install'),
 						'proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi-proxy3/install_not_registered')
 				);
 
