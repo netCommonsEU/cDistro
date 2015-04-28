@@ -46,13 +46,13 @@ addS ("guifi-dnss_button_unregistereds_post"," sense declarar-lo al web");
 //Index
 addS ("guifi-dnss_index_desc","DNSServices és un sistema de configuració automàtica de servidors DNS per a nodes de Guifi.net. Proporciona resolució d'adreces tant per a noms de dominis creats pels usuaris al web de Guifi.net (incloent cerca DNS inversa) com per a noms de domini d'Internet.");
 addS ("guifi-dnss_index_connected","Per instal·lar aquest servei, el dispositiu ha d'estar connectat tant a Guifi com a Internet.");
-addS ("guifi-dnss_index_checkwiki","Per a més informació, podeu llegir aquesta pàgina de la wiki: ");
+addS ("guifi-dnss_index_checkwiki","Per a més informació, podeu consultar aquesta pàgina wiki: ");
 addS ("guifi-dnss_index_wikiurl","http://ca.wiki.guifi.net/wiki/Servidor_DNS");
 addS ("guifi-dnss_index_not_guifi","Aquest dispositiu Cloudy no està vinculat amb cap dispositiu al web de Guifi.net.");
 addS ("guifi-dnss_index_register_before_pre","Feu clic al botó de sota per registrar-lo abans d'instal·lar el servei ");
 addS ("guifi-dnss_index_register_before_post",".");
 addS ("guifi-dnss_index_register","Feu clic al botó de sota per registrar-lo.");
-addS ("guifi-dnss_index_guifi","Feu clic al botó de sota per instal·lar el servei Guifi DNSService.");
+addS ("guifi-dnss_index_guifi","Feu clic al botó de sota per instal·lar el servei Guifi DNSServices.");
 
 //Install
 addS ("guifi-dnss_install_subtitle","Instal·lació i configuració");
