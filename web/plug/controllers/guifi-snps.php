@@ -2,16 +2,19 @@
 //plug/controllers/guifi-snps.php
 
 $snpservices_files="/etc/snpservices/config.php";
-$snpservices_pkg="snpservices";
-$snpservices_desc=t("This software provides graphing services in the context of Guifi.net");
-$snpservices_variables=array (
+$snpservices_desc=t("guifi-snps_common_desc");
+$SNPS_PKGNAME="snpservices";
+$SNPS_DEFAULTS = array (
 	'SNPGraphServerId' => array (
-		'default' => '0',
-		'desc' => t('Service ID'),
+		'default' => '-1',
+		'desc' => t('guifi-snps_form_id'),
 		'vdeb' => 'snpservices/SNPGraphServerId',
-		'kdeb' => 'string'
+		'kdeb' => 'string',
+		'options'=>array('type'=>'number', 'required'=>true, 'min'=>0),
+		'tooltip'=>t("guifi-snps_form_id_tooltip")
 	)
 );
+
 $snpservices_undefined_variables=array (
 	array(
 		'debpkg' => 'mrtg',
@@ -21,79 +24,113 @@ $snpservices_undefined_variables=array (
 	)
 );
 
-function snpservices_form($file,$options){
-	global $staticFile, $GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
+function index() {
+	global $SNPS_PKGNAME;
+	$buttons = '';
+	$page = '';
+	$GUIFI_CONF = '';
 
-	$buttons = "";
-	$page = "";
+	$page .= hlc(t("guifi-snps_common_appname"));
+	$page .= hl(t("guifi-snps_index_subtitle"),4);
 
+	$page .= par(t("guifi-snps_index_description1").' '.t("guifi-snps_index_description2").' '.t("guifi-snps_index_description3"));
 
-	$webinfo = _getServiceInformation($services_types['snpservices']['name']);
-	$variables = load_singlevalue($file,$options);
+	$page .= par(t("guifi-snps_index_connected").' '.t("guifi-snps_index_checkwiki").' '.'<a href="'.t("guifi-snps_index_wikiurl").'">'.t("guifi-snps_index_wikiurl").'</a>');
 
-	if (($variables['SNPGraphServerId'] == 0) && (isset($webinfo['id']))) {
-		$variables['SNPGraphServerId'] = $webinfo['id'];
-	}
+	$page .= txt(t("guifi-snps_common_status_pre").t("guifi-snps_common_appname").t("guifi-snps_common_status_post"));
+	if (!isPackageInstall($SNPS_PKGNAME)){
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-snps_alert_not_installed_pre").t("guifi-snps_common_appname").t("guifi-snps_alert_not_installed_post")."</div>\n";
+		$page .= txt(t("guifi-snps_common_guifi:"));
 
-	$page .= hlc(t("Guifi SNPServices"));
-	$page .= hl(t("Monitorization and graphing tools for Guifi.net nodes"),4);
-
-	$page .= par(t("SNPServices is a set of tools to capture the status of the Guifi.net network nodes in your area that are registered with this server.").' '.t("The web server at www.guifi.net tells your server which nodes to monitor and asks for the graphs via a web interface.").' '.t("These graphs are then visible on the Guifi.net website."));
-
-	$page .= par(t("Before setting up this service, you should have added it to your node at Guifi.net's website.").' '.t("You can check this wiki page for more information:").' '.'<a href="'.t("http://en.wiki.guifi.net/wiki/Graphs_server").'">'.t("http://en.wiki.guifi.net/wiki/Graphs_server").'</a>');
-
-	$page .= par(t("To run this service, the machine has to be connected to both Guifi and the Internet."));
-
-
-	$page .= createForm(array('class'=>'form-horizontal'));
-
-	foreach($options as $op=>$val){
-		$page .= addInput($op,$val['desc'],$variables,'','',t("The ID number of the service at Guifi.net website (e.g. http://guifi.net/node/<strong>123456</strong>)"));
-		if ($op == 'SNPGraphServerId' && $variables['SNPGraphServerId'] == 0 && file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)) {
-			// Crear-lo automàticament?
-
-			$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-			if (isset($GUIFI['DEVICEID'])){
-				$page .= par(t("guifi-snps_create_service"));
-				$buttons .= addButton(array('label'=>t("guifi-snps_button_create_service"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi/createservice/snpservices'));
-				$page .= addSubmit(array('label'=>t("guifi-snps_button_unregistereds"),'class'=>'btn btn-default'));
-			} else {
-				$page .= addSubmit(array('label'=>t("Save and apply configuration"),'class'=>'btn btn-success'));
-
-			}
-			$page .= par($bcreate);
+		if ( !cloudyRegistrationFull() ) {
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-snps_alert_not_guifi")."</div>\n";
+			$page .= par(t("guifi-snps_index_not_guifi").' '.t("guifi-snps_index_register_before"));
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_unregistered"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-snps/install'));
 		}
 
 		else {
-			$page .= par(t("guifi-snps_register_cloudy"));
-			$page .= addSubmit(array('label'=>t("guifi-snps_button_unregistered"),'class'=>'btn btn-default'));
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-snps_alert_guifi")."</div>\n";
+			$page .= par(t("guifi-snps_index_guifi"));
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_install_pre").t("guifi-snps_common_appname").t("guifi-snps_button_install_post"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-snps/install'));
+		}
+	}
+
+	else {
+		$page .= "<div class='alert alert-success text-center'>".t("guifi-snps_alert_installed_pre").t("guifi-snps_common_appname").t("guifi-snps_alert_installed_post")."</div>\n";
+		$page .= txt(t("guifi-snps_common_guifi:"));
+
+		if ( !cloudyRegistrationFull() ) {
+			$page .= "<div class='alert alert-warning text-center'>".t("guifi-snps_alert_not_guifi")."</div>\n";
+			$page .= par(t("guifi-snps_index_not_guifi").' '.t("guifi-snps_index_register"));
 			$buttons .= addButton(array('label'=>t("guifi-snps_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_manage_pre").t("guifi-snps_common_appname").t("guifi-snps_button_manage_post"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-snps/install'));
 		}
 
-
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-snps_alert_guifi")."</div>\n";
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_manage_pre").t("guifi-snps_common_appname").t("guifi-snps_button_manage_post"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-snps/install'));
+		}
 	}
 
 	$page .= $buttons;
-
-	return($page);
-
-}
-
-function index_get(){
-
-	global $snpservices_files, $snpservices_pkg, $snpservices_desc, $snpservices_variables, $staticFile;
-
-	$page = snpservices_form($snpservices_files,$snpservices_variables);
-	if (isPackageInstall($snpservices_pkg)){
-		$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$snpservices_pkg));
-	}
 	return(array('type' => 'render','page' => $page));
-
 }
 
-function index_post(){
 
-	global $snpservices_files, $snpservices_pkg, $snpservices_desc, $snpservices_variables, $staticFile, $snpservices_undefined_variables;
+function install(){
+	global $snpservices_files, $SNPS_PKGNAME, $snpservices_desc, $SNPS_DEFAULTS, $staticFile;
+
+	$page = '';
+	$buttons = '';
+
+	$page .= hlc(t("guifi-snps_common_appname"));
+	$page .= hl(t("guifi-snps_install_subtitle"),4);
+
+	$buttons .= addButton(array('label'=>t("guifi-snps_button_back"),'class'=>'btn btn-defaukt', 'href'=>$staticFile.'/guifi-snps'));
+
+	if (!isPackageInstall($SNPS_PKGNAME)) {
+		if (!CloudyRegistrationFull()) {
+			$page .= par(t("guifi-snps_install_declare").' '.t("guifi-snps_index_checkwiki").' '.'<a href="'.t("guifi-snps_index_wikiurl").'">'.t("guifi-snps_index_wikiurl").'</a>');
+			$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addSubmit(array('label'=>t("guifi-snps_button_unregistered_pre").t("guifi-snps_common_appname").t("guifi-snps_button_unregistered_post"),'class'=>'btn btn-default'));
+		}
+
+		else {
+
+			if (!serviceDeclared()) {
+				$page .= par(t("guifi-snps_install_declare").' '.t("guifi-snps_install_autodeclare").' '.t("guifi-snps_install_otherwise"));
+				$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
+				$buttons .= addButton(array('label'=>t("guifi-snps_button_create_service"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi/createservice/snpservices'));
+				$buttons .= addSubmit(array('label'=>t("guifi-snps_button_unregistereds_pre").t("guifi-snps_common_appname").t("guifi-snps_button_unregistereds_post"),'class'=>'btn btn-default'));
+			}
+
+			else {
+				$page .= par(t("guifi-snps_install_declared_pre").t("guifi-snps_common_appname").t("guifi-snps_install_declared_post"));
+				$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
+				$page .= par(t("guifi-snps_install_value"));
+				$buttons .= addSubmit(array('label'=>t("guifi-snps_button_sinstall_pre").t("guifi-snps_common_appname").t("guifi-snps_button_sinstall_post"),'class'=>'btn btn-success'));
+			}
+
+		}
+	}
+	else {
+		$page .= par(t("guifi-snps_install_configure_pre").t("guifi-snps_common_appname").t("guifi-snps_install_configure_post"));
+		$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
+		$buttons .= addSubmit(array('label'=>t("Save and apply configuration"),'class'=>'btn btn-primary'));
+		$buttons .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$SNPS_PKGNAME));
+	}
+
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+}
+
+
+function install_post(){
+
+	global $snpservices_files, $SNPS_PKGNAME, $snpservices_desc, $SNPS_DEFAULTS, $staticFile, $snpservices_undefined_variables;
 
 	$page = "";
 
@@ -102,22 +139,66 @@ function index_post(){
 		$datesToSave[$key] = $value;
 	}
 
-	if (!isPackageInstall($snpservices_pkg)){
-		if (($define_variables = package_default_variables($datesToSave,$snpservices_variables, $snpservices_pkg, $snpservices_undefined_variables)) != ""){
+	if (!isPackageInstall($SNPS_PKGNAME)) {
+		if (($define_variables = package_default_variables($datesToSave,$SNPS_DEFAULTS, $SNPS_PKGNAME, $snpservices_undefined_variables)) != ""){
 			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
 		}
-		$page .= package_not_install($snpservices_pkg,$snpservices_desc);
-	} else {
+		$page .= package_not_install($SNPS_PKGNAME,$snpservices_desc);
+	}
+
+	else {
 		//Canviar el fitxer de configuració
 		foreach ($datesToSave as $key => $value) {
-			if($snpservices_variables[$key]['kdeb'] == 'string'){
+			if($SNPS_DEFAULTS[$key]['kdeb'] == 'string'){
 				$datesToSave[$key] = "'".$value."'";
 			}
 		}
+
 		write_merge_conffile($snpservices_files,$datesToSave);
-		setFlash(t("Save it")."!","success");
+		setFlash(t("guifi-snps_alert_save"),"success");
+
 		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi-snps'));
 	}
+
 	return(array('type' => 'render','page' => $page));
+}
+
+function snpservices_form($file,$options){
+	global $staticFile, $GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
+
+	$buttons = "";
+	$page = "";
+
+	$webinfo = _getServiceInformation($services_types['snpservices']['name']);
+	$variables = load_singlevalue($file,$options);
+
+	if (($variables['SNPGraphServerId'] == -1) && (isset($webinfo['id']))) {
+		$variables['SNPGraphServerId'] = $webinfo['id'];
+	}
+
+	$page .= createForm(array('class'=>'form-horizontal'));
+
+	foreach($options as $op=>$val)
+		$page .= addInput($op, $val['desc'], $variables, $val['options'], '', $val['tooltip']);
+
+	$page .= $buttons;
+
+	return($page);
+
+}
+
+function serviceDeclared() {
+	global  $GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $services_types;
+
+	$buttons = "";
+	$page = "";
+
+
+	$guifiWebService = _getServiceInformation($services_types['snpservices']['name']);
+
+	if ( isset($guifiWebService['id']) )
+		return true;
+
+	return false;
 }
 ?>
