@@ -25,7 +25,7 @@ $snpservices_undefined_variables=array (
 );
 
 function index() {
-	global $SNPS_PKGNAME;
+	global $SNPS_PKGNAME, $staticFile;
 	$buttons = '';
 	$page = '';
 	$GUIFI_CONF = '';
@@ -87,7 +87,7 @@ function install(){
 	$page .= hlc(t("guifi-snps_common_appname"));
 	$page .= hl(t("guifi-snps_install_subtitle"),4);
 
-	$buttons .= addButton(array('label'=>t("guifi-snps_button_back"),'class'=>'btn btn-defaukt', 'href'=>$staticFile.'/guifi-snps'));
+	$buttons .= addButton(array('label'=>t("guifi-snps_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-snps'));
 
 	if (!isPackageInstall($SNPS_PKGNAME)) {
 		if (!CloudyRegistrationFull()) {
@@ -99,7 +99,7 @@ function install(){
 
 		else {
 
-			if (!serviceDeclared()) {
+			if (!serviceDeclared($SNPS_PKGNAME)) {
 				$page .= par(t("guifi-snps_install_declare").' '.t("guifi-snps_install_autodeclare").' '.t("guifi-snps_install_otherwise"));
 				$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
 				$buttons .= addButton(array('label'=>t("guifi-snps_button_create_service"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-snps/createservice/snpservices'));
@@ -118,8 +118,8 @@ function install(){
 	else {
 		$page .= par(t("guifi-snps_install_configure_pre").t("guifi-snps_common_appname").t("guifi-snps_install_configure_post"));
 		$page .= snpservices_form($snpservices_files,$SNPS_DEFAULTS);
-		$buttons .= addSubmit(array('label'=>t("Save and apply configuration"),'class'=>'btn btn-primary'));
-		$buttons .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$SNPS_PKGNAME));
+		$buttons .= addSubmit(array('label'=>t("guifi-snps_button_save"),'class'=>'btn btn-primary'));
+		$buttons .= addButton(array('label'=>t("guifi-snps_button_uninstall_pre").t("guifi-snps_common_appname").t("guifi-snps_button_uninstall_post"),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$SNPS_PKGNAME));
 	}
 
 
@@ -187,18 +187,5 @@ function snpservices_form($file,$options){
 
 }
 
-function serviceDeclared() {
-	global  $GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $services_types;
 
-	$buttons = "";
-	$page = "";
-
-
-	$guifiWebService = _getServiceInformation($services_types['snpservices']['name']);
-
-	if ( isset($guifiWebService['id']) )
-		return true;
-
-	return false;
-}
 ?>
