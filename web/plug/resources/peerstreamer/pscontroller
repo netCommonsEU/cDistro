@@ -405,6 +405,8 @@ doInstall() {
 		apt-get install -y --force-yes libav-tools
 	fi
 
+	[ "$(cat /etc/passwd | grep nobody | cut -d: -f7)" == "/usr/sbin/nologin" ] && chsh nobody -s /bin/sh
+
 }
 
 isInstalledLibav() {
