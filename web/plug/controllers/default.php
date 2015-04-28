@@ -43,56 +43,64 @@ function lang() {
 
 function realInstall(){
 	global $Parameters,$staticFile;
-
 	$page = "";
 
 	if (isset($Parameters[0]) && ($Parameters[0]  != "" )) {
 		$pkg = $Parameters[0];
 		$ret = "";
 
+		$page .= txt(t("default_realInstall_result"));
 		if (!isPackageInstall($pkg)){
 			$ret = installPackage($pkg);
-		} else {
-			$ret = "$pkg ".t("is already installed.");
+
+			if (isPackageInstall($pkg))
+				$page .= "<div class='alert alert-success text-center'>".t("default_realInstall_installed_pre").$pkg.t("default_realInstall_installed_post")."</div>\n";
+			else
+				$page .= "<div class='alert alert-error text-center'>".t("default_realInstall_not_installed_pre").$pkg.t("default_realInstall_not_installed_post")."</div>\n";
+
+			$page .= txt(t("default_realInstall_details"));
+			$page .= ptxt($ret);
 		}
 
-		$page .= hl(t("Installed")." '".$pkg."'");
-		$page .= "<pre>";
-		$page .= $ret;
-		$page .= "</pre>";
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("default_realInstall_not_installed_pre").$pkg.t("default_realInstall_not_installed_post")."</div>\n";
+		}
 	}
-	$page .= "<a class='btn btn-primar' href='".$staticFile."'>Home</a>";
+	$page .= "<a class='btn btn-default' href='".$staticFile."'>".t("default_button_back")."</a>";
 
 	return(array('type'=>'ajax','page'=>$page));
+
 
 }
 
 function realUninstall(){
-
 	global $Parameters,$staticFile;
-
 	$page = "";
 
 	if (isset($Parameters[0]) && ($Parameters[0]  != "" )) {
 		$pkg = $Parameters[0];
 		$ret = "";
 
+		$page .= txt(t("default_realUninstall_result"));
 		if (isPackageInstall($pkg)){
 			$ret = uninstallPackage($pkg);
-		} else {
-			$ret = "$pkg ".t("isn't installed.");
+
+			if (isPackageInstall($pkg))
+				$page .= "<div class='alert alert-error text-center'>".t("default_realUninstall_installed_pre").$pkg.t("default_realUninstall_installed_post")."</div>\n";
+			else
+				$page .= "<div class='alert alert-success text-center'>".t("default_realUninstall_not_installed_pre").$pkg.t("default_realUninstall_not_installed_post")."</div>\n";
+
+			$page .= txt(t("default_realUninstall_details"));
 		}
 
-		$page .= hl(t("Uninstalled")." '".$pkg."'");
-		$page .= "<pre>";
-		$page .= $ret;
-		$page .= "</pre>";
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("default_realUninstall_not_installed_pre").$pkg.t("default_realUninstall_not_installed_post")."</div>\n";
+			$ret = "$pkg ".t("isn't installed.");
+		}
 	}
-
-	$page .= "<a class='btn btn-primar' href='".$staticFile."'>".t("Home")."</a>";
+	$page .= "<a class='btn btn-default' href='".$staticFile."'>".t("default_button_back")."</a>";
 
 	return(array('type'=>'ajax','page'=>$page));
-
 }
 
 function _genericInstallUninstall($strFunction){
@@ -102,7 +110,12 @@ function _genericInstallUninstall($strFunction){
 		$pkg = $Parameters[0];
 		$ret = "";
 
-		$page = ajaxStr('console',t($strFunction)." '".$pkg."' ".t("package, please wait!"));
+		$page = "";
+
+		$page .= hlc(t("lib-view_common_package_manager_title"));
+		$page .= hl(t("lib-view_common_package_manager_subtitle"),4);
+
+		$page .= ajaxStr('console',t("default_generic_I_U_pre_".$strFunction).$pkg.t("default_generic_I_U_post_".$strFunction));
 		$page .= "<script>\n";
 		$page .= "$('#console').load('".$staticFile."/default/real".$strFunction."/".$pkg."');\n";
 		$page .= "</script>\n";

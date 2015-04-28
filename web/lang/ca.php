@@ -58,5 +58,31 @@ addS ('Url from DNSDataServer (without ending backslash)','Url de DNSDataServer 
 addS ("Guifi DNSServices","Servei de DNS a Guifi");
 
 // lib/view.php
-addS ('This package is not yet installed','Aquest paquet encara no està Instal·lat:');
-addS ('Install','Instal·lar');
+addS ("lib-view_button_back","Torna");
+addS ("lib-view_button_install_pre","Instal·la el paquet ");
+addS ("lib-view_button_install_post","");
+addS ("lib-view_common_package_manager_title","Gestor de paquets");
+addS ("lib-view_common_package_manager_subtitle","Instal·lador y desinstal·lador automatitzat de paquetes de Cloudy");
+addS ("lib-view_package_not_installed_to_install","S'instal·larà el següent paquet:");
+addS ("lib-view_package_not_installed_text","Feu clic al botó per procedir amb la instal·lació. Les dependències del paquet s'instal·laran automàticament.");
+
+// plug/controller/default.php
+addS ("default_button_back","Enrere");
+addS ("default_button_home","Inici");
+addS ("default_generic_I_U_pre_Install","Instal·lant el paquet ");
+addS ("default_generic_I_U_post_Install",", si us plau, espereu...");
+addS ("default_generic_I_U_pre_Uninstall","Desinstalando el paquete ");
+addS ("default_generic_I_U_post_Uninstall",", si us plau, espereu...");
+addS ("default_realInstall_result","Resultat del procés d'instal·lació:");
+addS ("default_realInstall_details","Detalls del procés d'instal·lació:");
+addS ("default_realInstall_installed_pre","El paquet ");
+addS ("default_realInstall_installed_post"," està instal·lat");
+addS ("default_realInstall_not_installed_pre","El paquete ");
+addS ("default_realInstall_not_installed_post"," no està instal·lat");
+addS ("default_realUninstall_result","Resultat del procés de desinstal·lació:");
+addS ("default_realUninstall_details","Detalls del procés de desinstal·lació:");
+addS ("default_realUninstall_installed_pre","El paquet ");
+addS ("default_realUninstall_installed_post"," està instal·lat");
+addS ("default_realUninstall_not_installed_pre","El paquete ");
+addS ("default_realUninstall_not_installed_post"," no està instal·lat");
+

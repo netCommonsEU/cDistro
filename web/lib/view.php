@@ -54,10 +54,16 @@ function package_not_install($pkg,$des){
 
 	$page = "";
 
-	$page .= hl(t('This package is not yet installed'));
-	$page .= hl($pkg, 2);
-	$page .= "<p>".$des."</p>";
-	$page .= addButton(array('label'=>t('Install'),'class'=>'btn btn-warning','href'=> $staticFile.'/default/install/'.$pkg));
+	$page .= hlc(t("lib-view_common_package_manager_title"));
+	$page .= hl(t("lib-view_common_package_manager_subtitle"),4);
+
+	$page .= txt(t("lib-view_package_not_installed_to_install"));
+	$page .= ptxt("<strong>".$pkg."</strong> - ".$des);
+
+	$page .= par(t("lib-view_package_not_installed_text"));
+
+	$page .= addButton(array('label'=>t("lib-view_button_back"),'class'=>'btn btn-default','href'=> $staticFile));
+	$page .= addButton(array('label'=>t("lib-view_button_install_pre").$pkg.t("lib-view_button_install_post"),'class'=>'btn btn-success','href'=> $staticFile.'/default/install/'.$pkg));
 
 	return($page);
 }
