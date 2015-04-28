@@ -358,38 +358,37 @@ doPeer2RTSPServer(){
 }
 # Install PeerStreamer from source
 doInstall() {
-	if isInstall
+	if isInstall 
 	then
 		echo "PeerStreamer is already installed."
-		return
+	else
+		[ ! -d $PSPATH ] && {
+			doDebug "Peer Streamer directory ($PSPATH) does not exist."
+			mkdir -p $PSPATH
+		}
+		march=$(uname -m)
+
+		case $march in
+		"i686")
+			march="i386"
+			;;
+		"x86_64")
+			march="amd64"
+			;;
+		"armv6l")
+			march="arm"
+			;;
+		esac
+
+		$CURL ${PEERSTREAMERBIN}${march}/$PSPROG -o $PSPATH$PSPROG
+		chmod 0755 $PSPATH$PSPROG
+
+		# Adding version hash to file
+		COMMUNITY=Clommunity
+		REPOSITORY=build-peerstreamer
+		mkdir -p /etc/cloudy
+		curl -s https://api.github.com/repos/$COMMUNITY/$REPOSITORY/git/refs/heads/master | grep 'sha'|awk -F':' '{print $2}'|awk -F'"' '{print $2}' > /etc/cloudy/${COMMUNITY}-${REPOSITORY}.sha
 	fi
-
-	[ ! -d $PSPATH ] && {
-		doDebug "Peer Streamer directory ($PSPATH) does not exist."
-		mkdir -p $PSPATH
-	}
-	march=$(uname -m)
-
-	case $march in
-	"i686")
-		march="i386"
-		;;
-	"x86_64")
-		march="amd64"
-		;;
-	"armv6l")
-		march="arm"
-		;;
-	esac
-
-	$CURL ${PEERSTREAMERBIN}${march}/$PSPROG -o $PSPATH$PSPROG
-	chmod 0755 $PSPATH$PSPROG
-
-	# Adding version hash to file
-	COMMUNITY=Clommunity
-	REPOSITORY=build-peerstreamer
-	mkdir -p /etc/cloudy
-	curl -s https://api.github.com/repos/$COMMUNITY/$REPOSITORY/git/refs/heads/master | grep 'sha'|awk -F':' '{print $2}'|awk -F'"' '{print $2}' > /etc/cloudy/${COMMUNITY}-${REPOSITORY}.sha
 
 	# VLC packages installation---
 	# Checking if VLC is already installed
