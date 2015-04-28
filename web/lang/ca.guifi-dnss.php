@@ -1,58 +1,75 @@
 <?php
-// plug/controllers/guifi.php
+// plug/controllers/guifi-dnss.php
 
-//SNPServices
+//Common
+addS ("guifi-dnss_common_appname","Guifi DNSServices");
+addS ("guifi-dnss_common_desc","Sistema de configuració automàtica de servidors DNS per a nodes de Guifi.net");
+addS ("guifi-dnss_common_status_pre","Estat de ");
+addS ("guifi-dnss_common_status_post",":");
+addS ("guifi-dnss_common_guifi:","Integració amb el web de Guifi.net:");
+addS ("guifi-dnss_alert_running_pre","");
+addS ("guifi-dnss_alert_running_post"," està en marxa");
+addS ("guifi-dnss_alert_stopped_pre","");
+addS ("guifi-dnss_alert_stopped_post"," està aturat");
 
-addS ("Guifi SNPServices","Guifi SNPServices");
-addS ("Monitorization and graphing tools for Guifi.net nodes","Eines de gràfiques i monitorització per a nodes de Guifi.net");
-addS ("SNPServices is a set of tools to capture the status of the Guifi.net network nodes in your area that are registered with this server.","SNPServices és un conjunt d'eines per capturar l'estat dels nodes de la xarxa Guifi.net a la vostra àrea que s'hagin registrat amb aquest servidor.");
-addS ("The web server at www.guifi.net tells your server which nodes to monitor and asks for the graphs via a web interface.","El servidor web de www.guifi.net li indica al vostre servidor quins nodes ha de monitoritzar i en demana les gràfiques a través d'una interfície web.");
-addS ("These graphs are then visible on the Guifi.net website.","Aquestes gràfiques són visibles a la pàgina web de Guifi.net.");
-addS ("Before setting up this service, you should have added it to your node at Guifi.net's website.","Abans de configurar aquest servei, hauríeu d'haver-lo afegit al vostre node a la pàgina de Guifi.net.");
-addS ("You can check this wiki page for more information:","Podeu fer un cop d'ull a aquèsta pàgina wiki per a més informació:");
-addS ("http://en.wiki.guifi.net/wiki/Graphs_server","http://ca.wiki.guifi.net/wiki/Servidor_de_gràfiques");
-addS ("To run this service, the machine has to be connected to both Guifi and the Internet.","Per allotjar aquest servei, la màquina necessita connexió a Guifi i a Internet.");
-addS ("Save and apply configuration","Desa i aplica la configuració");
-addS ("Service ID.","Id. del servei");
-addS ("The ID number of the service at Guifi.net website (e.g. http://guifi.net/node/<strong>123456</strong>)","L'identificador del servei a la pàgina web de Guifi.net web de Guifi.net (ex.: http://guifi.net/node/<strong>123456</strong>)");
+//Alerts
+addS ("guifi-dnss_alert_installed_pre","");
+addS ("guifi-dnss_alert_installed_post"," està instal·lat");
+addS ("guifi-dnss_alert_not_installed_pre","");
+addS ("guifi-dnss_alert_not_installed_post"," no està instal·lat");
+addS ("guifi-dnss_alert_guifi","Aquest dispositiu Cloudy està registrat al web de Guifi.net");
+addS ("guifi-dnss_alert_not_guifi","Aquest dispositiu Cloudy no està registrat al web de Guifi.net");
+addS ("guifi-dnss_alert_save","Desant la configuració...");
 
+//Buttons
+addS ("guifi-dnss_button_create_service","Crea el servei DNSServices al web de Guifi.net");
+addS ("guifi-dnss_button_register","Registra aquest dispositiu Cloudy al web de Guifi.net");
+addS ("guifi-dnss_button_back","Enrere");
+addS ("guifi-dnss_button_install_pre","Instal·la ");
+addS ("guifi-dnss_button_install_post","");
+addS ("guifi-dnss_button_sinstall_pre","Desa la configuració i instal·la ");
+addS ("guifi-dnss_button_sinstall_post","");
+addS ("guifi-dnss_button_save","Desa i aplica la configuració");
+addS ("guifi-dnss_button_configure_pre","Configura ");
+addS ("guifi-dnss_button_configure_post","");
+addS ("guifi-dnss_button_uninstall_pre","Desinstal·la ");
+addS ("guifi-dnss_button_uninstall_post","");
+addS ("guifi-dnss_button_stop_pre","Atura ");
+addS ("guifi-dnss_button_stop_post","");
+addS ("guifi-dnss_button_start_pre","Arrenca ");
+addS ("guifi-dnss_button_start_post","");
+addS ("guifi-dnss_button_unregistered_pre","Instal·la ");
+addS ("guifi-dnss_button_unregistered_post"," sense registrar aquest dispositiu");
+addS ("guifi-dnss_button_unregistereds_pre","Install ");
+addS ("guifi-dnss_button_unregistereds_post"," sense declarar-lo al web");
 
-//DNSServices
-addS ("dnsservices_shortdesc","Sistema de configuració automàtica de servidors DNS per a nodes de Guifi.net");
-addS ("dnsservices_desc","DNSServices és un sistema de configuració automàtica de servidors DNS per a nodes de Guifi.net. Proporciona resolució d'adreces de noms de dominis creats pels usuaris a la pàgina web de Guifi.net (incloent resolució inversa) i de noms de dominis d'Internet.");
-addS ("dnsservices_status","Estat de DNSServices");
-addS ("dnsservices_not_installed","DNSServices no està instal·lat en aquesta màquina");
-addS ("dnsservices_click_to_install","Feu clic al botó per instal·lar DNSServices i crear un servidor DNS en aquesta màquina.");
-addS ("dnsservices_install_button","Instal·la DNSServices");
-addS ("dnsservices_install_desc1","Abans d'instal·lar aquest servei heu d'afegir-lo al vostre node a la web de Guifi.net. Allà obtindreu els paràmetres per omplir els camps de configuració que apareixen a continuació.");
-addS ("dnsservices_install_desc2","Podeu fer un cop d'ull a aquèsta pàgina wiki per a més informació: <strike></strike>");
-addS ("dnsservices_install_wiki","http://ca.wiki.guifi.net/wiki/Servidor DNS");
-addS ("dnsservices_install_configure_button","Instal·la i configura");
-addS ("dnsservices_form_service_id_label","ID del servei");
-addS ("dnsservices_form_service_id_help","L'identificador del servei a la pàgina web de Guifi.net web de Guifi.net (ex.: http://guifi.net/node/<strong>123456</strong>)");
-addS ("dnsservices_form_url_label","URL del DNSDataServer");
-addS ("dnsservices_form_url_help","La URL del servidor on sincronitzar-se amb la base de dades de DNS (per defecte <strong>http://guifi.net</strong>). No hi afegiu la barra al final. (/)");
-addS ("dnsservices_running","El DNSServices està en marxa");
-addS ("dnsservices_not_running","DNSServices està aturat");
-addS ("dnsservices_button_start","Arrenca DNSServices");
-addS ("dnsservices_button_stop","Atura DNSServices");
-addS ("dnsservices_button_configure","Configura DNSServices");
-addS ("dnsservices_button_uninstall","Desinstal·la DNSServices");
-addS ("dnsservices_button_reconfigure","Aplica la configuració");
-addS ("dnsservices_button_back","Torna a DNSServices");
-addS ("dnsservices_installation_result","Resultat del procés d'instal·lació:");
-addS ("dnsservices_installation_successful","DNSServices s'ha instal·lat correctament");
-addS ("dnsservices_installation_details","Detalls del procés d'instal·lació:");
-addS ("dnsservices_postinstallation_result","Resultat del procés de post-instal·lació:");
-addS ("dnsservices_configuration_successful","La configuració s'ha aplicat correctament.");
-addS ("dnsservices_uninstallation_result","Resultat del procés de desinstal·lació:");
-addS ("dnsservices_uninstallation_successful","DNSServices s'ha desinstal·lat correctament");
-addS ("dnsservices_uninstallation_unsuccessful","DNSServices no s'ha desinstal·lat correctament. Feu un cop d'ull als detalls de sota per a més informació.");
-addS ("dnsservices_uninstallation_details","Detalls del procés de desinstal·lació:");
-addS ("dnsservices_uninstallation_started","DNSServices està en marxa. Atureu-lo abans de desinstal·lar-lo.");
+//Index
+addS ("guifi-dnss_index_desc","DNSServices és un sistema de configuració automàtica de servidors DNS per a nodes de Guifi.net. Proporciona resolució d'adreces tant per a noms de dominis creats pels usuaris al web de Guifi.net (incloent cerca DNS inversa) com per a noms de domini d'Internet.");
+addS ("guifi-dnss_index_connected","Per instal·lar aquest servei, el dispositiu ha d'estar connectat tant a Guifi com a Internet.");
+addS ("guifi-dnss_index_checkwiki","Per a més informació, podeu llegir aquesta pàgina de la wiki: ");
+addS ("guifi-dnss_index_wikiurl","http://ca.wiki.guifi.net/wiki/Servidor_DNS");
+addS ("guifi-dnss_index_not_guifi","Aquest dispositiu Cloudy no està vinculat amb cap dispositiu al web de Guifi.net.");
+addS ("guifi-dnss_index_register_before_pre","Feu clic al botó de sota per registrar-lo abans d'instal·lar el servei ");
+addS ("guifi-dnss_index_register_before_post",".");
+addS ("guifi-dnss_index_register","Feu clic al botó de sota per registrar-lo.");
+addS ("guifi-dnss_index_guifi","Feu clic al botó de sota per instal·lar el servei Guifi DNSService.");
 
-//addS ("","");
+//Install
+addS ("guifi-dnss_install_subtitle","Instal·lació i configuració");
+addS ("guifi-dnss_install_declare","Per instal·lar aquest servei heu de declarar-lo al web de Guifi.net per obtenir un identificador (ID) de servei.");
+addS ("guifi-dnss_install_autodeclare","Feu clic al botó de sota per crear el servei automàticament al web de Guifi.net.");
+addS ("guifi-dnss_install_otherwise","Altrament, ompliu el formulari feu clic al botó per instal·lar el servei sense declarar-lo.");
+addS ("guifi-dnss_install_declared_pre","Per instal·lar ");
+addS ("guifi-dnss_install_declared_post",", ompliu el formulari i feu clic al botó de sota.");
+addS ("guifi-dnss_install_configure_pre","Empreu aquesta pàgina per canviar la configuració de ");
+addS ("guifi-dnss_install_configure_post"," o per desinstal·lar-lo.");
+addS ("guifi-dnss_install_value","L'identificador (ID) de servei s'ha autocompletat amb la informació recollida del web de Guifi.net.");
 
+//Form
+addS ("guifi-dnss_form_id","ID del servei");
+addS ("guifi-dnss_form_id_tooltip","L'identificador (ID) del servei al web de Guifi.net (ex.: http://guifi.net/node/<strong>123456</strong>)");
+addS ("guifi-dnss_form_url","URL dades DNS");
+addS ("guifi-dnss_form_url_tooltip","La URL del servidor des d'on sincronitzar la base de dades de DNS (per defecte <strong>http://guifi.net</strong>). No afegiu la barra al final (/).");
 
 
 ?>
