@@ -71,5 +71,4 @@ addS ("guifi-dnss_form_id_tooltip","L'identificador (ID) del servei al web de Gu
 addS ("guifi-dnss_form_url","URL dades DNS");
 addS ("guifi-dnss_form_url_tooltip","La URL del servidor des d'on sincronitzar la base de dades de DNS (per defecte <strong>http://guifi.net</strong>). No afegiu la barra al final (/).");
 
-
 ?>
