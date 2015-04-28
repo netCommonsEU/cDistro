@@ -1529,4 +1529,54 @@ function _handle_error($post, $error, $callback, $back) {
 
 }
 
+function cloudyRegistrationCredentials () {
+	global $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+
+	if (file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) && filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)) {
+		$GUIFI_CONF = load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+
+		if (isset($GUIFI_CONF['USERNAME']) && isset($GUIFI_CONF['TOKEN']) )
+			return true;
+	}
+	return false;
+}
+
+function cloudyRegistrationNode () {
+	global $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+
+	if (file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) && filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)) {
+		$GUIFI_CONF = load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+
+		if (isset($GUIFI_CONF['NODEID']) )
+			return true;
+	}
+	return false;
+}
+
+function cloudyRegistrationDevice () {
+	global $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+
+	if (file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) && filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)) {
+		$GUIFI_CONF = load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+
+		if (isset($GUIFI_CONF['DEVICEID']) )
+			return true;
+	}
+	return false;
+}
+
+
+function cloudyRegistrationFull () {
+	global $GUIFI_CONF_DIR, $GUIFI_CONF_FILE;
+
+	if (file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) && filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE)) {
+		$GUIFI_CONF = load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
+
+		if ( isset($GUIFI_CONF['USERNAME']) && isset($GUIFI_CONF['TOKEN']) && isset($GUIFI_CONF['NODEID']) && isset($GUIFI_CONF['DEVICEID']) )
+			return true;
+	}
+	return false;
+}
+
+
 ?>
