@@ -1578,5 +1578,19 @@ function cloudyRegistrationFull () {
 	return false;
 }
 
+function serviceDeclared($serviceType) {
+	global $services_types;
+
+	$buttons = "";
+	$page = "";
+
+	$guifiWebService = _getServiceInformation($services_types[$serviceType]['name']);
+
+	if ( isset($guifiWebService['id']) )
+		return true;
+
+	return false;
+}
+
 
 ?>
