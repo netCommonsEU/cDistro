@@ -58,7 +58,7 @@ addS ("guifi-dnss_index_guifi","Feu clic al botó de sota per instal·lar el ser
 addS ("guifi-dnss_install_subtitle","Instal·lació i configuració");
 addS ("guifi-dnss_install_declare","Per instal·lar aquest servei heu de declarar-lo al web de Guifi.net per obtenir un identificador (ID) de servei.");
 addS ("guifi-dnss_install_autodeclare","Feu clic al botó de sota per crear el servei automàticament al web de Guifi.net.");
-addS ("guifi-dnss_install_otherwise","Altrament, ompliu el formulari feu clic al botó per instal·lar el servei sense declarar-lo.");
+addS ("guifi-dnss_install_otherwise","Altrament, ompliu el formulari i feu clic al botó per instal·lar el servei sense declarar-lo.");
 addS ("guifi-dnss_install_declared_pre","Per instal·lar ");
 addS ("guifi-dnss_install_declared_post",", ompliu el formulari i feu clic al botó de sota.");
 addS ("guifi-dnss_install_configure_pre","Empreu aquesta pàgina per canviar la configuració de ");
