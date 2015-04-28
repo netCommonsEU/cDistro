@@ -1,22 +1,28 @@
 <?php
+
 //plug/controllers/wifi/dnsservices.php
 
-$dnsservices_files="/etc/dnsservices/config.php";
-$dnsservices_initd="/etc/init.d/bind9";
-$dnsservices_name="Guifi DNSServices";
-$dnsservices_pkg="dnsservices";
-$dnsservices_plug="dnsservices";
-$dnsservices_variables=array('DNSGraphServerId' => array('default' => '0',
-												'desc' => t('dnsservices_form_service_id_label'),
-												'vdeb' => 'dnsservices/DNSGraphServerId',
-												'help' => t('dnsservices_form_service_id_help'),
-												'kdeb' => 'string'),
-							 'DNSDataServer_url' => array('default' => 'http://guifi.net',
-												'desc' => t('dnsservices_form_url_label'),
-												'vdeb' => 'dnsservices/DNSDataServerurl',
-												'help' => t('dnsservices_form_url_help'),
-												'kdeb' => 'string')
-					    );
+$DNSS_DIR = "/etc/dnsservices/";
+$DNSS_CONF = "config.php";
+$DNSS_INITD = "/etc/init.d/bind9";
+$DNSS_PKGNAME = "dnsservices";
+$DNSS_PLUG = "guifi-dnss";
+$DNSS_DEFAULTS = array (
+	'DNSGraphServerId' => array(
+		'default' => '-1',
+		'desc' => t("guifi-dnss_form_id"),
+		'vdeb' => 'dnsservices/DNSGraphServerId',
+		'tooltip' => t("guifi-dnss_form_id_tooltip"),
+		'options'=>array('type'=>'number', 'required'=>true, 'min'=>0),
+		'kdeb' => 'string'),
+	'DNSDataServer_url' => array (
+		'default' => 'http://guifi.net',
+		'desc' => t("guifi-dnss_form_url"),
+		'vdeb' => 'dnsservices/DNSDataServerurl',
+		'tooltip' => t("guifi-dnss_form_url_tooltip"),
+		'options'=>array('type'=>'url', 'required'=>true),
+		'kdeb' => 'string')
+	);
 
 $dnsservices_undefined_variables=array(array('vdeb'=> 'dnsservices/forcefetch',
 										     'kdeb' => 'boolean',
@@ -26,210 +32,182 @@ $dnsservices_undefined_variables=array(array('vdeb'=> 'dnsservices/forcefetch',
 
 function index(){
 
-	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables;
+	global $DNSS_PLUG, $DNSS_DIR, $DNSS_CONF, $DNSS_PKGNAME, $DNSS_DEFAULTS, $staticFile, $dnsservices_undefined_variables;
 
 	$page = "";
 	$buttons = "";
 
-	$page .= hlc($dnsservices_name);
-	$page .= hl(t("dnsservices_shortdesc"),4);
-	$page .= par(t("dnsservices_desc"));
+	$page .= hlc(t("guifi-dnss_common_appname"));
+	$page .= hl(t("guifi-dnss_common_desc"),4);
 
-	if (!isPackageInstall($dnsservices_pkg)){
-		$page .= "<div class='alert alert-error text-center'>".t("dnsservices_not_installed")."</div>\n";
-		$page .= par(t("dnsservices_click_to_install"));
-		$buttons .= addButton(array('label'=>t("dnsservices_install_button"),'class'=>'btn btn-success', 'href'=>$staticFile.'/'.$dnsservices_plug.'/install'));
-		$page .= $buttons;
-		return(array('type' => 'render','page' => $page));
-	}
-	else {
-		if (dnsservicesStarted()){
-			$page .= "<div class='alert alert-success text-center'>".t("dnsservices_running")."</div>\n";
-			$buttons .= addButton(array('label'=>t("dnsservices_button_stop"),'class'=>'btn btn-warning', 'href'=>'./dnsservices/stop'));
-			$buttons .= addButton(array('label'=>t("dnsservices_button_configure"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/'.$dnsservices_plug.'/install'));
-			}
+	$page .= par(t("guifi-dnss_index_desc"));
+	$page .= par(t("guifi-dnss_index_connected").' '.t("guifi-dnss_index_checkwiki").' '.'<a href="'.t("guifi-dnss_index_wikiurl").'">'.t("guifi-dnss_index_wikiurl").'</a>');
+
+	$page .= txt(t("guifi-dnss_common_status_pre").t("guifi-dnss_common_appname").t("guifi-dnss_common_status_post"));
+	if (!isPackageInstall($DNSS_PKGNAME)){
+
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-dnss_alert_not_installed_pre").t("guifi-dnss_common_appname").t("guifi-dnss_alert_not_installed_post")."</div>\n";
+
+		$page .= txt(t("guifi-dnss_common_guifi:"));
+		if ( !cloudyRegistrationFull() ) {
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-dnss_alert_not_guifi")."</div>\n";
+			$page .= par(t("guifi-dnss_index_not_guifi").' '.t("guifi-dnss_index_register_before_pre").t("guifi-dnss_common_appname").t("guifi-dnss_index_register_before_post"));
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_unregistered_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_unregistered_post"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-dnss/install'));
+		}
+
 		else {
-			$page .= "<div class='alert alert-warning text-center'>".t("dnsservices_not_running")."</div>\n";
-			$buttons .= addButton(array('label'=>t("dnsservices_button_start"),'class'=>'btn btn-success', 'href'=>'./dnsservices/start'));
-			$buttons .= addButton(array('label'=>t("dnsservices_button_configure"),'class'=>'btn btn-primary', 'href'=>$staticFile.'/'.$dnsservices_plug.'/install'));
-			$buttons .= addButton(array('label'=>t("dnsservices_button_uninstall"),'class'=>'btn btn-danger', 'href'=>$staticFile.'/'.$dnsservices_plug.'/uninstall'));
-			}
-
-		$page .= $buttons;
-		return(array('type' => 'render','page' => $page));
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-dnss_alert_guifi")."</div>\n";
+			$page .= par(t("guifi-dnss_index_guifi"));
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_install_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_install_post"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-dnss/install'));
+		}
 	}
 
+	else {
+		$page .= "<div class='alert alert-success text-center'>".t("guifi-dnss_alert_installed_pre").t("guifi-dnss_common_appname").t("guifi-dnss_alert_installed_post")."</div>\n";
+		if ( serviceStarted() ) {
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-dnss_alert_running_pre").t("guifi-dnss_common_appname").t("guifi-dnss_alert_running_post")."</div>\n";
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_stop_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_stop_post"),'class'=>'btn btn-danger', 'href'=>'./'.$DNSS_PLUG.'/stop'));
+		}
+		else {
+			$page .= "<div class='alert alert-warning text-center'>".t("guifi-dnss_alert_stopped_pre").t("guifi-dnss_common_appname").t("guifi-dnss_alert_stopped_post")."</div>\n";
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_start_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_start_post"),'class'=>'btn btn-success', 'href'=>'./'.$DNSS_PLUG.'/start'));
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_configure_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_configure_post"),'class'=>'btn btn-primary', 'href'=>'./'.$DNSS_PLUG.'/install'));
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_uninstall_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_uninstall_post"),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$DNSS_PKGNAME));
+		}
+
+		$page .= txt(t("guifi-dnss_common_guifi:"));
+		if ( !cloudyRegistrationFull() ) {
+			$page .= "<div class='alert alert-warning text-center'>".t("guifi-dnss_alert_not_guifi")."</div>\n";
+			$page .= par(t("guifi-dnss_index_not_guifi").' '.t("guifi-dnss_index_register"));
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+		}
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-dnss_alert_guifi")."</div>\n";
+		}
+	}
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
 }
 
-function install_get(){
+function install(){
 
-	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables;
+	global $DNSS_PLUG, $DNSS_DIR, $DNSS_CONF, $DNSS_PKGNAME, $DNSS_DEFAULTS, $staticFile, $dnsservices_undefined_variables;
 
 	$page = "";
 	$buttons = "";
 
-	$page .= hl($dnsservices_name);
-	$page .= hl(t("dnsservices_shortdesc"),4);
-	$page .= par(t("dnsservices_install_desc1"));
-	$page .= par(t("dnsservices_install_desc2").'<a href="'.t("dnsservices_install_wiki").'">'.t("dnsservices_install_wiki").'</a>');
+	$page .= hl(t("guifi-dnss_common_appname"));
+	$page .= hl(t("guifi-dnss_install_subtitle"),4);
 
-	$page .= dnsservices_form($dnsservices_files,$dnsservices_variables);
+	$buttons .= addButton(array('label'=>t("guifi-dnss_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/'.$DNSS_PLUG));
 
+	if (!isPackageInstall($DNSS_PKGNAME)) {
+		if (!CloudyRegistrationFull()) {
+			$page .= par(t("guifi-dnss_install_declare").' '.t("guifi-dnss_index_checkwiki").' '.'<a href="'.t("guifi-dnss_index_wikiurl").'">'.t("guifi-dnss_index_wikiurl").'</a>');
+			$page .= dnsservices_form($DNSS_DIR.$DNSS_CONF,$DNSS_DEFAULTS);
+			$buttons .= addButton(array('label'=>t("guifi-dnss_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addSubmit(array('label'=>t("guifi-dnss_button_unregistered_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_unregistered_post"),'class'=>'btn btn-default'));
+		}
+
+		else {
+
+			if (!serviceDeclared($DNSS_PKGNAME)) {
+				$page .= par(t("guifi-dnss_install_declare").' '.t("guifi-dnss_install_autodeclare").' '.t("guifi-dnss_install_otherwise"));
+				$page .= dnsservices_form($DNSS_DIR.$DNSS_CONF,$DNSS_DEFAULTS);
+				$buttons .= addButton(array('label'=>t("guifi-dnss_button_create_service"),'class'=>'btn btn-success', 'href'=>$staticFile.'/'.$DNSS_PLUG.'/createservice/'.$DNSS_PKGNAME));
+				$buttons .= addSubmit(array('label'=>t("guifi-dnss_button_unregistereds_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_unregistereds_post"),'class'=>'btn btn-default'));
+			}
+
+			else {
+				$page .= par(t("guifi-dnss_install_declared_pre").t("guifi-dnss_common_appname").t("guifi-dnss_install_declared_post"));
+				$page .= dnsservices_form($DNSS_DIR.$DNSS_CONF,$DNSS_DEFAULTS);
+				$page .= par(t("guifi-dnss_install_value"));
+				$buttons .= addSubmit(array('label'=>t("guifi-dnss_button_sinstall_pre").t("guifi-dnss_common_appname").t("guifi-dnss_button_sinstall_post"),'class'=>'btn btn-success'));
+			}
+
+		}
+	}
+
+	else {
+		$page .= par(t("guifi-dnss_install_configure_pre").t("guifi-dnss_common_appname").t("guifi-dnss_install_configure_post"));
+		$page .= dnsservices_form($DNSS_DIR.$DNSS_CONF,$DNSS_DEFAULTS);
+		$buttons .= addSubmit(array('label'=>t("guifi-dnss_button_save"),'class'=>'btn btn-primary'));
+	}
+
+	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 
 }
 
 function install_post(){
 
-	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables;
+	global $DNSS_PLUG, $DNSS_DIR, $DNSS_CONF, $DNSS_PKGNAME, $DNSS_DEFAULTS, $staticFile, $dnsservices_undefined_variables;
+
+	$page = "";
 
 	$datesToSave = array();
 	foreach ($_POST as $key => $value) {
 		$datesToSave[$key] = $value;
 	}
 
-	if (($define_variables = package_default_variables($datesToSave,$dnsservices_variables, $dnsservices_pkg,$dnsservices_undefined_variables)) != ""){
-		$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
-	}
-
-	$page = "";
-	$page .= hl($dnsservices_name);
-	$page .= hl(t("dnsservices_shortdesc"),4);
-
-		if (!isPackageInstall($dnsservices_pkg)){
-			$pkgInstall = ptxt(installPackage($dnsservices_pkg));
-
-		if (isPackageInstall($dnsservices_pkg)){
-			$page .= txt(t("dnsservices_installation_result"));
-			$page .= "<div class='alert alert-success text-center'>".t("dnsservices_installation_successful")."</div>\n";
-
-			$page .= txt(t("dnsservices_installation_details"));
-			$page .= $pkgInstall;
-
-		//Afegir fitxer de configuració
-		foreach ($datesToSave as $key => $value) {
-			if($dnsservices_variables[$key]['kdeb'] == 'string'){
-				$datesToSave[$key] = '"'.$value.'"';
-				}
-			}
-
-		write_merge_conffile($dnsservices_files,$datesToSave);
-			$page .= txt(t("dnsservices_postinstallation_result"));
-			$page .= ptxt(t("dnsservices_configuration_successful"));
-
-		$page .= addButton(array('label'=>t('dnsservices_button_back'),'class'=>'btn', 'href'=>$staticFile.'/'.$dnsservices_pkg));
-
-		return(array('type' => 'render','page' => $page));
+	if (!isPackageInstall($DNSS_PKGNAME)) {
+		if (($define_variables = package_default_variables($datesToSave,$DNSS_DEFAULTS, $DNSS_PKGNAME, $dnsservices_undefined_variables)) != ""){
+			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
 		}
+		$page .= package_not_install($DNSS_PKGNAME,t("guifi-dnss_common_desc"));
 	}
 
-
-		else {
-		//Afegir fitxer de configuració
+	else {
+		//Canviar el fitxer de configuració
 		foreach ($datesToSave as $key => $value) {
-			if($dnsservices_variables[$key]['kdeb'] == 'string'){
-				$datesToSave[$key] = '"'.$value.'"';
-				}
+			if($DNSS_DEFAULTS[$key]['kdeb'] == 'string'){
+				$datesToSave[$key] = "'".$value."'";
 			}
+		}
 
-		write_merge_conffile($dnsservices_files,$datesToSave);
-			$page .= txt(t("dnsservices_postinstallation_result"));
-			$page .= ptxt(t("dnsservices_configuration_successful"));
+		write_merge_conffile($DNSS_DIR.$DNSS_CONF,$datesToSave);
+		setFlash(t("guifi-dnss_alert_save"),"success");
+		setFlash(t("guifi-dnss_alert_save"),"success");
 
-		$page .= addButton(array('label'=>t('dnsservices_button_back'),'class'=>'btn', 'href'=>$staticFile.'/'.$dnsservices_pkg));
-
-		return(array('type' => 'render','page' => $page));
+		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi-dnss'));
 	}
 
+	return(array('type' => 'render','page' => $page));
 }
 
+
 function dnsservices_form($file,$options){
-	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables, $debug,
-			$GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
+	global $staticFile, $GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $DNSS_PKGNAME, $services_types;
 
-	$page = "";
 	$buttons = "";
+	$page = "";
 
-	$webinfo = _getServiceInformation($services_types['dnsservices']['name']);
+	$webinfo = _getServiceInformation($services_types[$DNSS_PKGNAME]['name']);
 	$variables = load_singlevalue($file,$options);
 
-	if (($variables['DNSGraphServerId'] == 0) && (isset($webinfo['id']))) {
+	if (($variables['DNSGraphServerId'] == -1) && (isset($webinfo['id']))) {
 		$variables['DNSGraphServerId'] = $webinfo['id'];
 	}
 
-	foreach ($variables as $key => $value) {
-		if ( substr($value,0,1) == '"' && substr($value,-1,1) == '"' )
-			$variables[$key] = substr($value, 1, -1);
-	}
-
-	if($debug) { $page .= ptxt(var_export($webinfo,true)); $page .= ptxt(var_export($variables,true)); }
-
 	$page .= createForm(array('class'=>'form-horizontal'));
 
-	foreach($options as $op=>$val){
-		$page .= addInput($op,$val['desc'],$variables,'','',$val['help']);
-		if ($op == 'DNSGraphServerId' && $variables['DNSGraphServerId'] == 0) {
-			// Crearlo automaticament?
-			$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-			if (isset($GUIFI['DEVICEID'])){
-				$bcreate = t("guifi-you_configure_your_cloudy_device");
-				$bcreate .= addButton(array('label'=>t("guifi-create_service"),'class'=>'btn btn-default', 'href'=>$staticFile.'/dnsservices/createservice/dnsservices'));
-			} else {
-				$bcreate = t("guifi-please_configure_your_cloudy");
-			}
-			$page .= par($bcreate);
-		}
-	}
+	foreach($options as $op=>$val)
+		$page .= addInput($op, $val['desc'], $variables, $val['options'], '', $val['tooltip']);
 
-	if (!isPackageInstall($dnsservices_pkg))
-		$page .= addSubmit(array('label'=>t('dnsservices_install_configure_button'),'class'=>'btn btn-primary'));
-	else
-		$page .= addSubmit(array('label'=>t('dnsservices_button_reconfigure'),'class'=>'btn btn-primary'));
+	$page .= $buttons;
 
 	return($page);
 
 }
 
-function uninstall(){
 
-	global $dnsservices_name, $dnsservices_plug, $dnsservices_files, $dnsservices_pkg, $dnsservices_variables, $staticFile, $dnsservices_undefined_variables;
+function serviceStarted(){
 
-  $page = "";
-	$page .= hl($dnsservices_name);
-	$page .= hl(t("dnsservices_shortdesc"),4);
+global $DNSS_INITD;
 
-	if (isPackageInstall($dnsservices_pkg) && !dnsservicesStarted()){
-		$pkgUninstall = ptxt(uninstallPackage($dnsservices_pkg));
-
-	$page .= txt(t("dnsservices_uninstallation_result"));
-
-	if (!isPackageInstall($dnsservices_pkg))
-		$page .= "<div class='alert alert-success text-center'>".t("dnsservices_uninstallation_successful")."</div>\n";
-	else
-	  $page .= "<div class='alert alert-error text-center'>".t("dnsservices_uninstallation_unsuccessful")."</div>\n";
-
-	$page .= txt(t("dnsservices_uninstallation_details"));
-	$page .= $pkgUninstall;
-
-	$page .= addButton(array('label'=>t('dnsservices_button_back'),'class'=>'btn', 'href'=>$staticFile.'/'.$dnsservices_pkg));
-
-	return(array('type' => 'render','page' => $page));
-	}
-	else if (!isPackageInstall($dnsservices_pkg)){
-	$page .= "<div class='alert alert-error text-center'>".t("dnsservices_not_installed")."</div>\n";
-
-	$page .= addButton(array('label'=>t('dnsservices_button_back'),'class'=>'btn', 'href'=>$staticFile.'/'.$dnsservices_pkg));
-
-	return(array('type' => 'render','page' => $page));}
-}
-
-
-
-function dnsservicesStarted(){
-
-global $dnsservices_initd;
-
-		if (strpos(shell_exec("$dnsservices_initd status"),'is running') != false)
+	if (strpos(shell_exec("$DNSS_INITD status"),'is running') != false)
 		return 1;
 	else
 		return 0;
@@ -237,16 +215,16 @@ global $dnsservices_initd;
 
 function start(){
 
-global $dnsservices_initd, $staticFile;
+global $DNSS_INITD, $staticFile, $DNSS_PLUG;
 
-		setFlash(shell_exec("$dnsservices_initd start"));
-		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'dnsservices'));
+		setFlash(shell_exec("$DNSS_INITD start"));
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.$DNSS_PLUG));
 }
 
 function stop(){
 
-global $dnsservices_initd, $staticFile;
+global $DNSS_INITD, $staticFile, $DNSS_PLUG;
 
-		setFlash(shell_exec("$dnsservices_initd stop"));
-		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.'dnsservices'));
+		setFlash(shell_exec("$DNSS_INITD stop"));
+		return(array('type'=> 'redirect', 'url' => $staticFile.'/'.$DNSS_PLUG));
 }
