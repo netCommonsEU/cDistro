@@ -46,7 +46,7 @@ function index() {
 			$page .= "<div class='alert alert-error text-center'>".t("guifi-snps_alert_not_guifi")."</div>\n";
 			$page .= par(t("guifi-snps_index_not_guifi").' '.t("guifi-snps_index_register_before"));
 			$buttons .= addButton(array('label'=>t("guifi-snps_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
-			$buttons .= addButton(array('label'=>t("guifi-snps_button_unregistered"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-snps/install'));
+			$buttons .= addButton(array('label'=>t("guifi-snps_button_unregistered_pre").t("guifi-snps_common_appname").t("guifi-snps_button_unregistered_post"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-snps/install'));
 		}
 
 		else {
