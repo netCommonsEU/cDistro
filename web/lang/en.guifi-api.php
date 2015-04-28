@@ -7,6 +7,8 @@ addS ("guifi-api_alert_error_500","The selected device did not provide and IPv4"
 addS ("guifi-api_alert_error_501","Insufficient permissions");
 addS ("guifi-api_alert_error_403_login","Wrong username of password");
 
+//Common
+addS ("guifi-seguir","Continue");
 
 //_handle_error
 addS ("guifi-api_handle_error_call_result:","Call to Guifi.net API result:");
