@@ -1071,7 +1071,7 @@ function createservice_get(){
 }
 
 function createservice_post(){
-	global $Parameters,$services_types, $_POST, $staticFile, $controller, $action;
+	global $Parameters,$services_types, $_POST, $staticFile, $controller, $action, $staticPath;
 
 	if (!isset($Parameters[0]) || !isset($services_types[$Parameters[0]])){
 		return(array('type' => 'redirect', 'url' => $staticPath));
