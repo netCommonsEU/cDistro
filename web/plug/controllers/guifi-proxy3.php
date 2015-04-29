@@ -6,10 +6,11 @@ $GUIFI_CONF_FILE = "guifi.conf";
 $GUIFI_PROXY3_FILE = "config.sh";
 $GUIFI_PROXY3_DIR = "/etc/guifi-proxy3/";
 $GUIFI_PROXY3_PKGNAME = "guifi-proxy3";
+$GUIFI_PROXY3_PLUG = "guifi-proxy3";
 $SQUID3_PID_FILE = "/var/run/squid3.pid";
 $SQUID3_INIT_FILE = "/etc/init.d/squid3";
 
-$guifi_proxy3_desc = t("This software provides a federated proxy service in the context of Guifi.net");
+$guifi_proxy3_desc = t("guifi-proxy3_common_desc");
 
 $GUIFI_PROXY3_DEFAULTS = array(
 	'base_url'=> array('default'=>'http://www.guifi.net',
@@ -19,7 +20,7 @@ $GUIFI_PROXY3_DEFAULTS = array(
 		'options'=>array('type'=>'url', 'required'=>true),
 		'tooltip'=>t("guifi-proxy3_form_url_tooltip")),
 
-	'node' =>  array('default'=>'0',
+	'node' =>  array('default'=>'-1',
 		'desc'=>t('guifi-proxy3_form_node'),
 		'vdeb'=>'guifi-proxy3/node',
 		'kdeb'=>'string',
@@ -61,7 +62,7 @@ $GUIFI_PROXY3_DEFAULTS = array(
 		'options'=>array('type'=>'text', 'required'=>true, 'pattern'=>"Armenian|Azerbaijani|Bulgarian|Catalan|Czech|Danish|Dutch|English|Estonian|Finnish|French|German|Greek|Hebrew|Hungarian|Italian|Japanese|Korean|Lithuanian|Polish|Portuguese|Romanian|Serbian|Slovak|Spanish|Swedish|Turkish"),
 		'tooltip'=>t("guifi-proxy3_form_language_tooltip")),
 
-	'cache_size' =>  array('default'=>'10240',
+	'cache_size' =>  array('default'=>'1024',
 		'desc'=>t('guifi-proxy3_form_cache'),
 		'vdeb'=>'guifi-proxy3/hd',
 		'kdeb'=>'string',
@@ -77,23 +78,42 @@ $GUIFI_PROXY3_DEFAULTS = array(
 );
 
 
-function index_get(){
-	global $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_PROXY3_PKGNAME, $GUIFI_PROXY3_PKGNAME, $staticFile;
+function index(){
+	global $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $GUIFI_PROXY3_PKGNAME, $GUIFI_PROXY3_PKGNAME, $GUIFI_PROXY3_PLUG, $staticFile;
 
 	$page = "";
 	$buttons = "";
 	$GUIFI_CONFIG = [];
 
-	$page .= hlc(t("guifi-proxy3_common_title"));
-	$page .= hl(t("guifi-proxy3_index_subtitle"),4);
+	$page .= hlc(t("guifi-proxy3_common_appname"));
+	$page .= hl(t("guifi-proxy3_common_desc"),4);
 
-	$page .= par(t("guifi-proxy3_index_description1") . ' ' . t("guifi-proxy3_index_description2"));
+	$page .= par(t("guifi-proxy3_index_description"));
 
-	$page .= txt(t("guifi-proxy3_index_guifi_proxy3_status"));
-	//Proxy3 is installed
-	if (isPackageInstall($GUIFI_PROXY3_PKGNAME)) {
+	$page .= par(t("guifi-proxy3_index_connected").' '.t("guifi-proxy3_index_checkwiki").' '.'<a href="'.t("guifi-proxy3_index_wikiurl").'">'.t("guifi-proxy3_index_wikiurl").'</a>');
 
+	$page .= txt(t("guifi-proxy3_common_status_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_common_status_post"));
+	if (!isPackageInstall($GUIFI_PROXY3_PKGNAME)) {
 
+		$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_alert_not_installed_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_alert_not_installed_post")."</div>\n";
+
+		$page .= txt(t("guifi-proxy3_common_guifi:"));
+		if ( !cloudyRegistrationFull() ) {
+			$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_alert_not_guifi")."</div>\n";
+			$page .= par(t("guifi-proxy3_index_not_guifi").' '.t("guifi-proxy3_index_register_before_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_index_register_before_post"));
+			$buttons .= addButton(array('label'=>t("guifi-proxy3_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addButton(array('label'=>t("guifi-proxy3_button_unregistered_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_button_unregistered_post"),'class'=>'btn btn-default', 'href'=>$staticFile.'/'.$GUIFI_PROXY3_PLUG.'/install'));
+		}
+
+		else {
+			$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_alert_guifi")."</div>\n";
+			$page .= par(t("guifi-proxy3_index_install_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_index_install_post"));
+			$buttons .= addButton(array('label'=>t("guifi-proxy3_button_install_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_button_install_post"),'class'=>'btn btn-success', 'href'=>$staticFile.'/'.$GUIFI_PROXY3_PLUG.'/install'));
+		}
+	}
+
+	else {
+		$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_alert_installed_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_alert_installed_post")."</div>\n";
 		//Proxy3 is running
 		if (Proxy3IsRunning()) {
 			$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_running")."</div>\n";
@@ -104,68 +124,74 @@ function index_get(){
 		//Proxy3 is not running
 		else {
 			$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_stopped")."</div>\n";
-			$page .= addButton(array('label'=>t('guifi-proxy3_button_configuration'),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-proxy3/configuration'));
+			$page .= addButton(array('label'=>t('guifi-proxy3_button_configuration'),'class'=>'btn btn-primary', 'href'=>$staticFile.'/guifi-proxy3/install'));
 			$page .= addButton(array('label'=>t('guifi-proxy3_button_start'),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-proxy3/start'));
 		}
 
 	}
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+}
 
-	//Proxy3 is not installed
-	else{
-		$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_alert_not_installed")."</div>\n";
-		if (file_exists($GUIFI_CONF_DIR.$GUIFI_CONF_FILE) && filesize($GUIFI_CONF_DIR.$GUIFI_CONF_FILE))
-			$GUIFI_CONFIG = load_conffile($GUIFI_CONF_DIR . '/' . $GUIFI_CONF_FILE);
+function install() {
+	global $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME, $GUIFI_PROXY3_PLUG, $staticFile;
 
-		//Cloudy not registered
-		if (!isset($GUIFI_CONFIG["DEVICEID"]) || !is_numeric($GUIFI_CONFIG["DEVICEID"])) {
-			$page .= txt(t("guifi-proxy3_common_notice"));
-			$page .= "<div class='alert alert-warning text-center'>".t("guifi-proxy3_alert_not_registered")."</div>\n";
-			$page .= par(t("guifi-proxy3_index_registration"));
+	$page = "";
+	$buttons = "";
 
-			$page .= addButton(array('label'=>t('Register this Cloudy device before installing Guifi Proxy3'),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
-			$page .= addButton(array('label'=>t('guifi-proxy3_button_install_not_registered'),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3/install_not_registered'));
+	$page .= hlc(t("guifi-proxy3_common_appname"));
+	$page .= hl(t("guifi-proxy3_install_subtitle"),4);
+
+	$buttons .= addButton(array('label'=>t("guifi-proxy3_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/'.$GUIFI_PROXY3_PLUG));
+
+	if (!isPackageInstall($GUIFI_PROXY3_PKGNAME)) {
+
+		if ( !CloudyRegistrationFull()) {
+			$page .= par(t("guifi-proxy3_install_declare").' '.t("guifi-proxy3_index_checkwiki").' '.'<a href="'.t("guifi-proxy3_index_wikiurl").'">'.t("guifi-proxy3_index_wikiurl").'</a>');
+			$page .= proxy3_generate_form($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
+			$buttons .= addButton(array('label'=>t("guifi-proxy3_button_register"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-web'));
+			$buttons .= addSubmit(array('label'=>t("guifi-proxy3_button_unregistered_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_button_unregistered_post"),'class'=>'btn btn-default'));
 		}
 
 		else {
-			$page .= addButton(array('label'=>t('guifi-proxy3_button_install'),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-proxy3/install'));
+
+			if (!serviceDeclared($GUIFI_PROXY3_PKGNAME)) {
+				$page .= par(t("guifi-proxy3_install_declare").' '.t("guifi-proxy3_install_autodeclare").' '.t("guifi-proxy3_install_otherwise"));
+				$page .= proxy3_generate_form($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
+				$buttons .= addButton(array('label'=>t("guifi-proxy3_button_create_service_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_button_create_service_post"),'class'=>'btn btn-success', 'href'=>$staticFile.'/'.$GUIFI_PROXY3_PLUG.'/createservice/'.$GUIFI_PROXY3_PKGNAME));
+				$buttons .= addSubmit(array('label'=>t("guifi-proxy3_button_unregistereds_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_button_unregistereds_post"),'class'=>'btn btn-default'));
+			}
+
+			else {
+				$page .= par(t("guifi-proxy3_install_declared_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_install_declared_post"));
+				$page .= proxy3_generate_form($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
+				$page .= par(t("guifi-proxy3_install_value"));
+				$buttons .= addSubmit(array('label'=>t("guifi-proxy3_button_sinstall_pre").t("guifi-proxy3_common_appname").t("guifi-proxy3_button_sinstall_post"),'class'=>'btn btn-success'));
+			}
 		}
-
 	}
+
+	else {
+		$page .= proxy3_generate_form($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
+		$buttons .= addSubmit(array('label'=>t("guifi-proxy3_button_save"),'class'=>'btn btn-primary'));
+	}
+
+	$page .= $buttons;
 	return(array('type' => 'render','page' => $page));
 }
 
-function configuration(){
-	global $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME;
+
+
+
+
+
+
+
+function install_post() {
+	global $GUIFI_PROXY3_DEFAULTS, $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME, $GUIFI_PROXY3_PLUG, $staticFile, $guifi_proxy3_desc;
 
 	$page = "";
 	$buttons = "";
-
-	$page .= hlc(t("guifi-proxy3_common_title"));
-	$page .= hl(t("guifi-proxy3_install_subtitle"),4);
-
-	$page .= par(t("guifi-proxy3_install_not_registered_description"));
-
-	$page .= generate_form($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
-	if (isPackageInstall($GUIFI_PROXY3_PKGNAME)){
-		//$page .= addButton(array('label'=>t('Uninstall package'),'class'=>'btn btn-success', 'href'=>$staticFile.'/default/uninstall/'.$guifi_proxy3_pkg));
-	}
-
-	$page .= addButton(array('label'=>t("guifi-proxy3_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3'));
-	$page .= addSubmit(array('label'=>t('guifi-proxy3_button_submit_save'),'class'=>'btn btn-success'));
-
-	return(array('type' => 'render','page' => $page));
-}
-
-function configuration_post() {
-	global $GUIFI_PROXY3_DEFAULTS, $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME, $staticFile, $guifi_proxy3_desc;
-
-	$page = "";
-	$buttons = "";
-
-	$page .= hlc(t("guifi-proxy3_common_title"));
-	$page .= hl(t("guifi-proxy3_install_subtitle"),4);
-
-	$page .= txt(t("guifi-proxy3_install_configuration"));
 
 	$missingVariables = false;
 	foreach ($GUIFI_PROXY3_DEFAULTS as $key => $value) {
@@ -181,173 +207,57 @@ function configuration_post() {
 		$page .= addButton(array('label'=>t("guifi-proxy3_button_retry"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-proxy3/install_not_registered'));
 	}
 	else {
-		$dataToSave = array();
-		foreach ($_POST as $key => $value)
-			$dataToSave[$key] = $value;
-
-		if (!file_exists($GUIFI_PROXY3_DIR))
-			mkdir ($GUIFI_PROXY3_DIR, 16877);
-		if (fileperms($GUIFI_PROXY3_DIR) != 16877)
-			chmod ($GUIFI_PROXY3_DIR, 16877);
-		if (!file_exists($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE))
-			touch($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
-		if (fileperms($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE) != 33188)
-			chmod($GUIFI_CONF_DIR.'/'.$GUIFI_CONF_FILE, 33188);
-
-		write_merge_conffile($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE,add_quotes($dataToSave));
-
-
-		$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_alert_configuration_saved")."</div>\n";
-		$page .= par(t("guifi-proxy3_install_saved").' '.$GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
-
-		if (($define_variables = package_default_variables($dataToSave,$GUIFI_PROXY3_DEFAULTS, $GUIFI_PROXY3_PKGNAME)) != ""){
-			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
+		$datesToSave = array();
+		foreach ($_POST as $key => $value) {
+			$datesToSave[$key] = $value;
 		}
 
-		$page .= txt(t("guifi-proxy3_install_result"));
-		if (isPackageInstall($GUIFI_PROXY3_PKGNAME)){
-			$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_alert_installation_success")."</div>\n";
-			$page .= txt(t("guifi-proxy3_install_details"));
-			$page .= $installationLog;
-			$page .= txt(t("guifi-proxy3_install_status"));
-			if (Proxy3IsRunning()){
-				$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_running")."</div>\n";
+		if (!isPackageInstall($GUIFI_PROXY3_PKGNAME)) {
+			if (($define_variables = package_default_variables($datesToSave,$GUIFI_PROXY3_DEFAULTS, $GUIFI_PROXY3_PKGNAME)) != ""){
+				$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
 			}
-			else {
-				$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_stopped")."</div>\n";
-			}
-			$page .= addButton(array('label'=>t("guifi-proxy3_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3'));
+			$page .= package_not_install($GUIFI_PROXY3_PKGNAME,t("guifi-proxy3_common_desc"));
 		}
+
 		else {
-			$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_alert_installation_fail")."</div>\n";
-			$page .= txt(t("guifi-proxy3_install_details"));
-			$page .= $installationLog;
-		}
-	}
-
-		//Canviar el fitxer de configuraci\F3
-		foreach ($dataToSave as $key => $value) {
-			if($guifi_proxy3_variables[$key]['kdeb'] == 'string'){
-				$dataToSave[$key] = "'".$value."'";
+			//Canviar el fitxer de configuració
+			foreach ($datesToSave as $key => $value) {
+				if($GUIFI_PROXY3_DEFAULTS[$key]['kdeb'] == 'string'){
+					$datesToSave[$key] = "'".$value."'";
+				}
 			}
-		}
 
-		write_conffile($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE,$dataToSave);
-		setFlash(t("guifi-proxy3_alert_saved"),"success");
-		restart();
-		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi-proxy3'));
+			write_merge_conffile($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE,$datesToSave);
+			setFlash(t("guifi-proxy3_alert_save"),"success");
+			setFlash(t("guifi-proxy3_alert_save"),"success");
 
-	return(array('type' => 'render','page' => $page));
-}
-
-function install_not_registered() {
-	global $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME,$staticFile;
-
-	$page = "";
-	$buttons = "";
-
-	$page .= hlc(t("guifi-proxy3_common_title"));
-	$page .= hl(t("guifi-proxy3_install_subtitle"),4);
-
-	$page .= par(t("guifi-proxy3_install_not_registered_description"));
-
-	$page .= generate_form($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
-
-	$page .= addButton(array('label'=>t("guifi-proxy3_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3'));
-	$page .= addSubmit(array('label'=>t('guifi-proxy3_button_submit_install'),'class'=>'btn btn-success'));
-	return(array('type' => 'render','page' => $page));
-}
-
-function install_not_registered_post() {
-	global $GUIFI_PROXY3_DEFAULTS, $GUIFI_PROXY3_DIR, $GUIFI_PROXY3_FILE, $GUIFI_PROXY3_PKGNAME, $staticFile, $guifi_proxy3_desc;
-
-	$page = "";
-	$buttons = "";
-
-	$page .= hlc(t("guifi-proxy3_common_title"));
-	$page .= hl(t("guifi-proxy3_install_subtitle"),4);
-
-	$page .= txt(t("guifi-proxy3_install_configuration"));
-
-	$missingVariables = false;
-	foreach ($GUIFI_PROXY3_DEFAULTS as $key => $value) {
-		if (!isset ($_POST[$key])){
-			$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_alert_missing_variable").' '.$key."</div>\n";
-			$missingVariables = true;
-		}
-	}
-
-	if ($missingVariables) {
-		$page .= par(t("guifi-proxy3_install_missing_variables"));
-		$page .= addButton(array('label'=>t("guifi-proxy3_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3'));
-		$page .= addButton(array('label'=>t("guifi-proxy3_button_retry"),'class'=>'btn btn-warning', 'href'=>$staticFile.'/guifi-proxy3/install_not_registered'));
-	}
-	else {
-		$dataToSave = array();
-		foreach ($_POST as $key => $value)
-			$dataToSave[$key] = $value;
-
-		$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_alert_configuration_saved")."</div>\n";
-		$page .= par(t("guifi-proxy3_install_saved").' '.$GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE);
-
-		if (($define_variables = package_default_variables($dataToSave,$GUIFI_PROXY3_DEFAULTS, $GUIFI_PROXY3_PKGNAME)) != ""){
-			$page .= "<div class='alert'><pre>".$define_variables."</pre></div>";
-		}
-
-		$installationLog = ptxt(installPackage($GUIFI_PROXY3_PKGNAME));
-
-		$page .= txt(t("guifi-proxy3_install_result"));
-		if (isPackageInstall($GUIFI_PROXY3_PKGNAME)){
-			$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_alert_installation_success")."</div>\n";
-			$page .= txt(t("guifi-proxy3_install_details"));
-			$page .= $installationLog;
-			$page .= txt(t("guifi-proxy3_install_status"));
-			if (Proxy3IsRunning()){
-				$page .= "<div class='alert alert-success text-center'>".t("guifi-proxy3_running")."</div>\n";
-			}
-			else {
-				$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_stopped")."</div>\n";
-			}
-			$page .= addButton(array('label'=>t("guifi-proxy3_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3'));
-		}
-		else {
-			$page .= "<div class='alert alert-error text-center'>".t("guifi-proxy3_alert_installation_fail")."</div>\n";
-			$page .= txt(t("guifi-proxy3_install_details"));
-			$page .= $installationLog;
+			return(array('type' => 'redirect', 'url' => $staticFile.'/'.$GUIFI_PROXY3_PLUG));
 		}
 	}
 
 	return(array('type' => 'render','page' => $page));
 }
 
-function generate_form($file){
+
+
+
+
+function proxy3_generate_form($file){
 	global $staticFile, $GUIFI_PROXY3_DEFAULTS,$GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
 
-	$page = "";
+	$page = '';
 
-	$webinfo = _getServiceInformation($services_types['proxy3']['name']);
+	$webinfo = _getServiceInformation($services_types['guifi-proxy3']['name']);
 	$variables = load_conffile($file,$GUIFI_PROXY3_DEFAULTS);
 
-	if (($variables['node'] == 0) && (isset($webinfo['id']))) {
+	if (($variables['node'] == -1) && (isset($webinfo['id']))) {
 		$variables['node'] = $webinfo['id'];
 	}
 
 	$page .= createForm(array('class'=>'form-horizontal'));
 
-	foreach($GUIFI_PROXY3_DEFAULTS as $op=>$val) {
+	foreach($GUIFI_PROXY3_DEFAULTS as $op=>$val)
 		$page .= addInput($op, $val['desc'], $variables, $val['options'], '', $val['tooltip']);
-		if ($op == 'node' && $variables['node'] == 0) {
-			// Crearlo automaticament?
-			$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
-			if (isset($GUIFI['DEVICEID'])){
-				$bcreate = t("guifi-you_configure_your_cloudy_device");
-				$bcreate .= addButton(array('label'=>t("guifi-create_service"),'class'=>'btn btn-default', 'href'=>$staticFile.'/guifi-proxy3/createservice/proxy3'));
-			} else {
-				$bcreate = t("guifi-please_configure_your_cloudy");
-			}
-			$page .= par($bcreate);
-		}
-	}
 
 	return($page);
 }
@@ -371,7 +281,7 @@ function restart(){
 	$cmd = $SQUID3_INIT_FILE." restart";
 	execute_program_detached($cmd);
 
-	setFlash(t('guifi-proxy3_flash_restarting'),"warning");
+	setFlash(t('guifi-proxy3_flash_restarting'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/guifi-proxy3'));
 }
 
@@ -381,7 +291,7 @@ function start(){
 	$cmd = $SQUID3_INIT_FILE." start";
 	execute_program_detached($cmd);
 
-	setFlash(t('guifi-proxy3_flash_starting'),"warning");
+	setFlash(t('guifi-proxy3_flash_starting'),"success");
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/guifi-proxy3'));
 }
 
@@ -392,6 +302,6 @@ function stop() {
 	execute_program_detached($cmd);
 	execute_program_detached($cmd);
 
-	setFlash(t('guifi-proxy3_flash_stopping'),"warning");
+	setFlash(t('guifi-proxy3_flash_stopping'),"error");
 	return(array('type'=> 'redirect', 'url' => $staticFile.'/guifi-proxy3'));
 }
