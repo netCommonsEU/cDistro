@@ -45,7 +45,7 @@ $GUIFI_PROXY3_DEFAULTS = array(
 		'desc'=>t('guifi-proxy3_form_welcome'),
 		'vdeb'=>'guifi-proxy3/proxy_name',
 		'kdeb'=>'string',
-		'options'=>array('type'=>'text', 'required'=>true),
+		'options'=>array('type'=>'text', 'required'=>true, 'pattern'=>"^[a-zA-Z][a-zA-Z0-9-_\.]{1,256}$"),
 		'tooltip'=>t('guifi-proxy3_form_welcome_tooltip')),
 
 	'manager' =>  array('default'=>'',
@@ -226,11 +226,9 @@ function install_post() {
 					$datesToSave[$key] = "'".$value."'";
 				}
 			}
-
+			$page .= ptxt(print_r($datesToSave,1));
 			write_merge_conffile($GUIFI_PROXY3_DIR.$GUIFI_PROXY3_FILE,$datesToSave);
 			setFlash(t("guifi-proxy3_alert_save"),"success");
-			setFlash(t("guifi-proxy3_alert_save"),"success");
-
 			return(array('type' => 'redirect', 'url' => $staticFile.'/'.$GUIFI_PROXY3_PLUG));
 		}
 	}
