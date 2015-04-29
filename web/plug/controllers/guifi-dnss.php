@@ -98,7 +98,7 @@ function install(){
 	$page = "";
 	$buttons = "";
 
-	$page .= hl(t("guifi-dnss_common_appname"));
+	$page .= hlc(t("guifi-dnss_common_appname"));
 	$page .= hl(t("guifi-dnss_install_subtitle"),4);
 
 	$buttons .= addButton(array('label'=>t("guifi-dnss_button_back"),'class'=>'btn btn-default', 'href'=>$staticFile.'/'.$DNSS_PLUG));
@@ -169,7 +169,6 @@ function install_post(){
 
 		write_merge_conffile($DNSS_DIR.$DNSS_CONF,$datesToSave);
 		setFlash(t("guifi-dnss_alert_save"),"success");
-		setFlash(t("guifi-dnss_alert_save"),"success");
 
 		return(array('type' => 'redirect', 'url' => $staticFile.'/guifi-dnss'));
 	}
@@ -181,7 +180,6 @@ function install_post(){
 function dnsservices_form($file,$options){
 	global $staticFile, $GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE, $DNSS_PKGNAME, $services_types;
 
-	$buttons = "";
 	$page = "";
 
 	$webinfo = _getServiceInformation($services_types[$DNSS_PKGNAME]['name']);
@@ -196,10 +194,7 @@ function dnsservices_form($file,$options){
 	foreach($options as $op=>$val)
 		$page .= addInput($op, $val['desc'], $variables, $val['options'], '', $val['tooltip']);
 
-	$page .= $buttons;
-
 	return($page);
-
 }
 
 
