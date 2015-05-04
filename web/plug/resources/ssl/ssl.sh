@@ -5,8 +5,7 @@ CERTHOME=/etc/cloudy/cert
 PORTSSL=7443
 PORTCDISTRO=7000
 APACHEHOME=/etc/apache2/sites-available/
-APACHESITE="cdistro-ssl"
-APACHECONFEXT=".conf"
+APACHESITE="cdistro-ssl.conf"
 CDISTROCONF=/etc/cdistro.conf
 CERTHOME=/etc/cloudy/cert
 
@@ -36,8 +35,8 @@ EOF
 	}
 	# Declare web site
 
-	[ ! -f ${APACHEHOME}${APACHESITE}${APACHECONFEXT} ] && {
-	cat > ${APACHEHOME}${APACHESITE}${APACHECONFEXT} << EOF
+	[ ! -f ${APACHEHOME}${APACHESITE} ] && {
+	cat > ${APACHEHOME}${APACHESITE} << EOF
 
 Listen $PORTSSL
 <VirtualHost *:$PORTSSL>
@@ -74,7 +73,7 @@ EOF
 	/etc/init.d/cdistro start
 
 	# Enable site
-	a2ensite $APACHESITE
+	a2ensite ${APACHESITE}
 
 	# Reload apache2
 	service apache2 stop
@@ -90,7 +89,7 @@ Remove(){
 	service apache stop
 
 	# Disable site
-	a2dissite $APACHESITE
+	a2dissite ${APACHESITE}
 
 	# Change cdistro remove PORT_SSL variable
 	sed -i -e 's/^PORT_SSL=.*$//' $CDISTROCONF
@@ -101,7 +100,7 @@ Remove(){
 	/etc/init.d/cdistro start
 
 	# Remove config file
-	rm -f ${APACHEHOME}${APACHESITE}${APACHECONFEXT}
+	rm -f ${APACHEHOME}${APACHESITE}
 
 	# Remove keys
 	rm -rf $CERTHOME
