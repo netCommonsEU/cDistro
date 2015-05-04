@@ -51,7 +51,7 @@ function index() {
 
 		else {
 			$page .= "<div class='alert alert-success text-center'>".t("guifi-snps_alert_guifi")."</div>\n";
-			$page .= par(t("guifi-snps_index_guifi"));
+			$page .= par(t("guifi-snps_index_guifi_pre").t("guifi-snps_common_appname").t("guifi-snps_index_guifi_post"));
 			$buttons .= addButton(array('label'=>t("guifi-snps_button_install_pre").t("guifi-snps_common_appname").t("guifi-snps_button_install_post"),'class'=>'btn btn-success', 'href'=>$staticFile.'/guifi-snps/install'));
 		}
 	}
