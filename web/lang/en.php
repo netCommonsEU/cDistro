@@ -7,10 +7,8 @@ addS ('Catalan','Catalan');
 addS ('English','English');
 addS ('Spanish','Spanish');
 
-// plug/controller/default.php
 addS ("Welcome!","Welcome!");
 addS ("Define language to: ", "Define language to: ");
-addS ("Let's configure your system!","Let's configure your system!");
 addS ("is already installed.","is already installed.");
 addS ("isn't installed.","isn't installed.");
 addS ("Install","Install");
@@ -22,24 +20,7 @@ addS ("package, please wait!","package, please wait!");
 addS ("System info","System info");
 addS ("Address","Address");
 addS ("Hostname","Hostname");
-addS ("default_button_back","Back");
-addS ("default_button_home","Home");
-addS ("default_generic_I_U_pre_Install","Installing package ");
-addS ("default_generic_I_U_post_Install",", please wait...");
-addS ("default_generic_I_U_pre_Uninstall","Uninstalling package ");
-addS ("default_generic_I_U_post_Uninstall",", please wait...");
-addS ("default_realInstall_result","Installation process result:");
-addS ("default_realInstall_details","Installation process details:");
-addS ("default_realInstall_installed_pre","Package ");
-addS ("default_realInstall_installed_post"," is installed");
-addS ("default_realInstall_not_installed_pre","Package ");
-addS ("default_realInstall_not_installed_post"," is not installed");
-addS ("default_realUninstall_result","Uninstallation process result:");
-addS ("default_realUninstall_details","Uninstallation process details:");
-addS ("default_realUninstall_installed_pre","Package ");
-addS ("default_realUninstall_installed_post"," is installed");
-addS ("default_realUninstall_not_installed_pre","Package ");
-addS ("default_realUninstall_not_installed_post"," is not installed");
+
 
 // plug/controllers/getinconf.php
 addS ('Getinconf Server URL','Getinconf Server URL');
