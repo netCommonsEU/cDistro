@@ -37,7 +37,7 @@ addS ("guifi-snps_button_manage_post","");
 addS ("guifi-snps_button_unregistered_pre","Install ");
 addS ("guifi-snps_button_unregistered_post"," without registering this device");
 addS ("guifi-snps_button_unregistereds_pre","Install ");
-addS ("guifi-snps_button_unregistereds_post"," without declaring it website");
+addS ("guifi-snps_button_unregistereds_post"," without declaring it at the website");
 
 //Index
 addS ("guifi-snps_index_subtitle","Monitorization and graphing tools for Guifi.net nodes");
@@ -50,7 +50,8 @@ addS ("guifi-snps_index_wikiurl","http://en.wiki.guifi.net/wiki/Graphs_Server");
 addS ("guifi-snps_index_not_guifi","This Cloudy device is not linked with any device at Guifi.net's website.");
 addS ("guifi-snps_index_register_before","Click on the button below to register it before installing the SNPServices service.");
 addS ("guifi-snps_index_register","Click on the button below to register it.");
-addS ("guifi-snps_index_guifi","Click on the button below to install the SNPServices service.");
+addS ("guifi-snps_index_guifi_pre","Click on the button below to install the  ");
+addS ("guifi-snps_index_guifi_post"," service.");
 
 //Install
 addS ("guifi-snps_install_subtitle","Installation and configuration");
