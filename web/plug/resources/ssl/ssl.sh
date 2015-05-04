@@ -5,7 +5,8 @@ CERTHOME=/etc/cloudy/cert
 PORTSSL=7443
 PORTCDISTRO=7000
 APACHEHOME=/etc/apache2/sites-available/
-APACHESITE=cdistro-ssl
+APACHESITE="cdistro-ssl"
+APACHECONFEXT=".conf"
 CDISTROCONF=/etc/cdistro.conf
 CERTHOME=/etc/cloudy/cert
 
@@ -19,11 +20,11 @@ Help() {
 Install() {
 	# Load moduls
 	a2enmod proxy proxy_http ssl
-	
+
 	# Make keys
 	mkdir -p $CERTHOME
 	[ ! -f $CERTHOME/cdistro.key ] && {
-	cat << EOF |openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout $CERTHOME/cdistro.key -out $CERTHOME/cdistro.crt                       
+	cat << EOF |openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout $CERTHOME/cdistro.key -out $CERTHOME/cdistro.crt
 CN
 Community Network
 Cloudy
@@ -34,9 +35,9 @@ Clommunity
 EOF
 	}
 	# Declare web site
-	
-	[ ! -f ${APACHEHOME}${APACHESITE} ] && {
-	cat > ${APACHEHOME}${APACHESITE} << EOF 
+
+	[ ! -f ${APACHEHOME}${APACHESITE}${APACHECONFEXT} ] && {
+	cat > ${APACHEHOME}${APACHESITE}${APACHECONFEXT} << EOF
 
 Listen $PORTSSL
 <VirtualHost *:$PORTSSL>
@@ -55,59 +56,59 @@ Listen $PORTSSL
     ProxyPreserveHost On
     ProxyPass / http://localhost:$PORTCDISTRO/
     ProxyPassReverse / http://localhost:$PORTCDISTRO/
-		
+
 </VirtualHost>
 
 EOF
 	}
-	
+
 	# change cdistro.conf
 	sed -i -e 's/BINDIP="0.0.0.0"/BINDIP="127.0.0.1"/' $CDISTROCONF
-	
+
 	fgrep -q PORT_SSL $CDISTROCONF || {
 		echo -e "\nPORT_SSL=$PORTSSL" >> $CDISTROCONF
 	}
-	
+
 	# Restart cdistro
 	/etc/init.d/cdistro stop
-	/etc/init.d/cdistro start	
-	
+	/etc/init.d/cdistro start
+
 	# Enable site
 	a2ensite $APACHESITE
-	
+
 	# Reload apache2
 	service apache2 stop
 	service apache2 start
-	
+
 	# Execute /etc/rc.local to rebuild /etc/issue
 	/etc/rc.local
-	
+
 }
 
 Remove(){
 	# Stop services
 	service apache stop
-	
+
 	# Disable site
 	a2dissite $APACHESITE
-	
+
 	# Change cdistro remove PORT_SSL variable
 	sed -i -e 's/^PORT_SSL=.*$//' $CDISTROCONF
 	sed -i -e 's/BINDIP="127.0.0.1"/BINDIP="0.0.0.0"/' $CDISTROCONF
-	
+
 	# Reload cdistro
 	/etc/init.d/cdistro stop
-	/etc/init.d/cdistro start	
-	
+	/etc/init.d/cdistro start
+
 	# Remove config file
-	rm -f ${APACHEHOME}${APACHESITE}
-	
+	rm -f ${APACHEHOME}${APACHESITE}${APACHECONFEXT}
+
 	# Remove keys
 	rm -rf $CERTHOME
-	
+
 	# Disable moduls
 	a2dismod proxy_http proxy ssl
-	
+
 	# Active apache
 	service apache start
 
