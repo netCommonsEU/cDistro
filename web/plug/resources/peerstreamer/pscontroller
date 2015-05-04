@@ -221,12 +221,12 @@ doPeerSource(){
 
 		return
 	else
-		cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy \"'$urlstream'\" --sout=\"#standard{access=udp,mux=ts,dst=127.0.0.1:'$udpport'}\" > '$LOGFILE' 2>&1 & }; echo \$!"'
+		cmd='su '$VLCUSER' --shell=/bin/sh -c "{ '$VLCPATH' -I dummy \"'$urlstream'\" --sout=\"#standard{access=udp,mux=ts,dst=127.0.0.1:'$udpport'}\" > '$LOGFILE' 2>&1 & }; echo \$!"'
 		doDebug "Execute: $cmd"
 		pidvlc=$(eval $cmd)
 		doDebug "PID from VLC is $pidvlc."
 
-		cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -f null,chunkiser=udp,port0='$udpport',addr=127.0.0.1 -P '$port' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+		cmd='su '$PSUSER' --shell=/bin/sh -c "{ '$PSPATH$PSPROG' -f null,chunkiser=udp,port0='$udpport',addr=127.0.0.1 -P '$port' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 		doDebug "Execute: $cmd"
 		pidps=$(eval $cmd)
 		doDebug "PID from PeerStreamer is $pidps."
@@ -290,7 +290,7 @@ doPeer2UDPClient(){
 		# if [ -z "$check" ] #If there is no line with first parameter equal to $port then proceed with:
 		[ "$(cat $FILEPEERS | grep $port | cut -d '|' -f1)" != "$port" ] && (
 			doDebug "Port is free, creating stream."
-			cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+			cmd='su '$PSUSER' --shell=/bin/sh -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr='$ipclient' -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 			doDebug "Execute: $cmd"
 			pidps=$(eval $cmd)
 			doDebug "PID from PeerStreamer is $pidps."
@@ -333,12 +333,12 @@ doPeer2RTSPServer(){
 			[ -z "$udpport" ] && udpport=$(findRandFreePort)
 			doDebug "Port to upd local: $udpport"
 
-			cmd='su '$PSUSER' -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
+			cmd='su '$PSUSER' --shell=/bin/sh -c "{ '$PSPATH$PSPROG' -i '$ippeersource' -p '$port' -P '$port' -F null,dechunkiser=udp,port0='$udpport',addr=127.0.0.1 -I '$device' > '$LOGFILE' 2>&1 & }; echo \$!"'
 			doDebug "Execute: $cmd"
 			pidps=$(eval $cmd)
 			doDebug "PID from PeerStreamer is $pidps."
 
-			cmd='su '$VLCUSER' -c "{ '$VLCPATH' -I dummy udp://@127.0.0.1:'$udpport' --sout=\"#rtp{sdp=rtsp://'$ipserver':'$udpport'/} --sout-keep\" > '$LOGFILE' 2>&1 & }; echo \$!"'
+			cmd='su '$VLCUSER' --shell=/bin/sh -c "{ '$VLCPATH' -I dummy udp://@127.0.0.1:'$udpport' --sout=\"#rtp{sdp=rtsp://'$ipserver':'$udpport'/} --sout-keep\" > '$LOGFILE' 2>&1 & }; echo \$!"'
 			doDebug "Execute: $cmd"
 			pidvlc=$(eval $cmd)
 			doDebug "PID from VLC is $pidvlc."
@@ -404,9 +404,6 @@ doInstall() {
 		doDebug "Installing libav-tools"
 		apt-get install -y --force-yes libav-tools
 	fi
-
-	[ "$(cat /etc/passwd | grep nobody | cut -d: -f7)" == "/usr/sbin/nologin" ] && chsh nobody -s /bin/sh
-
 }
 
 isInstalledLibav() {
