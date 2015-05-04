@@ -2,23 +2,21 @@
 // Default file..
 
 function index(){
-        global $appHost, $appHostname, $sysCPU, $sysRAM, $sysStorage;
+	global $appHost, $appHostname, $sysCPU, $sysRAM, $sysStorage;
 
-        $page = "";
+	$page = "";
 
-        $page .= hl(t('Welcome!'));
-        $page .= "<h3><strong>".t('System info')."</strong></h3>";
-        $page .= "<small>";
-        $page .= "<strong>".t('Address')."</strong>: ".$appHost."<br/>";
-        $page .= "<strong>".t('Hostname')."</strong>: ".$appHostname."<br/>";
-        $page .= "<strong>CPU</strong>: ".$sysCPU."<br/>";
-        $page .= "<strong>RAM</strong>: ".$sysRAM."<br/>";
-	$page .= "<strong>".t('Storage (total / available)')."</strong>: ".$sysStorage."<br/>";
-        $page .= "</small><br/>";
+	$page .= hlc(t("default_common_cloudy"));
+	$page .= hl(t("default_common_description"),4);
 
-        $page .= t("Let's configure your system!");
+	$page .= hlc(t("default_index_systeminfo"),2);
+	$page .= "<strong>".t('default_index_address')."</strong>".$appHost."<br/>";
+	$page .= "<strong>".t('default_index_hostname')."</strong>".$appHostname."<br/>";
+	$page .= "<strong>".t('default_index_cpu')."</strong>".$sysCPU."<br/>";
+	$page .= "<strong>".t('default_index_ram')."</strong>".$sysRAM."<br/>";
+	$page .= "<strong>".t('default_index_storage')."</strong>".$sysStorage."<br/>";
 
-        return(array('type'=>'render','page'=>$page));
+	return(array('type'=>'render','page'=>$page));
 }
 
 function install(){
