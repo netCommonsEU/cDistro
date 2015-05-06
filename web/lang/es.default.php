@@ -17,6 +17,8 @@ addS ("default_index_hostname","Nombre del dispositivo: ");
 addS ("default_index_cpu","Procesador: ");
 addS ("default_index_ram","Memoria RAM: ");
 addS ("default_index_storage","Almacenamiento: ");
+addS ("default_index_storage_free","libres");
+addS ("default_index_storage_total","total");
 
 
 addS ("default_generic_I_U_pre_Install","Instalando el paquete ");

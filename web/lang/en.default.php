@@ -17,6 +17,8 @@ addS ("default_index_hostname","Device name: ");
 addS ("default_index_cpu","Processor: ");
 addS ("default_index_ram","RAM memory: ");
 addS ("default_index_storage","Storage: ");
+addS ("default_index_storage_free","free");
+addS ("default_index_storage_total","total");
 
 addS ("default_generic_I_U_pre_Install","Installing package ");
 addS ("default_generic_I_U_post_Install",", please wait...");

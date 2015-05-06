@@ -17,6 +17,8 @@ addS ("default_index_hostname","Nom del dispositiu: ");
 addS ("default_index_cpu","Processador: ");
 addS ("default_index_ram","Memòria RAM: ");
 addS ("default_index_storage","Emmagatzematge: ");
+addS ("default_index_storage_free","lliures");
+addS ("default_index_storage_total","total");
 
 addS ("default_generic_I_U_pre_Install","Instal·lant el paquet ");
 addS ("default_generic_I_U_post_Install",", si us plau, espereu...");

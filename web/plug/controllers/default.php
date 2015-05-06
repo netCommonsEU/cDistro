@@ -2,7 +2,7 @@
 // Default file..
 
 function index(){
-	global $appHost, $appHostname, $sysCPU, $sysRAM, $sysStorage;
+	global $appHost, $appHostname, $sysCPU, $sysRAMHuman, $sysRAM, $sysStorageFree, $sysStorageTotal;
 
 	$page = "";
 
@@ -13,8 +13,8 @@ function index(){
 	$page .= "<strong>".t('default_index_address')."</strong>".$appHost."<br/>";
 	$page .= "<strong>".t('default_index_hostname')."</strong>".$appHostname."<br/>";
 	$page .= "<strong>".t('default_index_cpu')."</strong>".$sysCPU."<br/>";
-	$page .= "<strong>".t('default_index_ram')."</strong>".$sysRAM."<br/>";
-	$page .= "<strong>".t('default_index_storage')."</strong>".$sysStorage."<br/>";
+	$page .= "<strong>".t('default_index_ram')."</strong>".$sysRAMHuman." (".rtrim(ltrim($sysRAM)).")"."<br/>";
+	$page .= "<strong>".t('default_index_storage')."</strong>".$sysStorageFree.t('default_index_storage_free').' / '.$sysStorageTotal.t('default_index_storage_total')."<br/>";
 
 	return(array('type'=>'render','page'=>$page));
 }
