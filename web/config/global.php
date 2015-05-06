@@ -1,8 +1,9 @@
 <?php
 //global.php
-$cdistro_conf = "/etc/cdistro.conf";
+$CLOUDY_CONF_DIR = "/etc/cloudy/";
+$CLOUDY_CONF_FILE = "cloudy.conf";
 
-$conf = parse_ini_file($cdistro_conf);
+$conf = parse_ini_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
 list($wi_ip, $wi_port) = explode(":", $_SERVER['HTTP_HOST']);
 $protocol="http";
 

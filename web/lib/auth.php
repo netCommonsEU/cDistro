@@ -1,7 +1,7 @@
 <?php
 
 // lib/auth.php
-$auth_file = "/etc/cdistro.conf";
+$auth_file = "/etc/cloudy/cloudy.conf";
 $post_login = false;
 
 function checkUser($login,$pass){

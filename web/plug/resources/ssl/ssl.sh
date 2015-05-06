@@ -6,7 +6,7 @@ PORTSSL=7443
 PORTCDISTRO=7000
 APACHEHOME=/etc/apache2/sites-available/
 APACHESITE="cdistro-ssl.conf"
-CDISTROCONF=/etc/cdistro.conf
+CDISTROCONF=/etc/cloudy/cloudy.conf
 CERTHOME=/etc/cloudy/cert
 
 
@@ -61,7 +61,7 @@ Listen $PORTSSL
 EOF
 	}
 
-	# change cdistro.conf
+	# change cloudy.conf
 	sed -i -e 's/BINDIP="0.0.0.0"/BINDIP="127.0.0.1"/' $CDISTROCONF
 
 	fgrep -q PORT_SSL $CDISTROCONF || {
