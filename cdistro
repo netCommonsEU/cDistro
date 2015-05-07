@@ -11,7 +11,7 @@
 ### END INIT INFO
 
 NAME=cdistro
-CONFFILE="/etc/$NAME.conf"
+CONFFILE="/etc/cloudy/cloudy.conf"
 PIDFILE="/var/run/cdistro.pid"
 PIDDAEMON="/var/run/cdistrod.pid"
 DAEMON="/usr/sbin/cdistrod"
