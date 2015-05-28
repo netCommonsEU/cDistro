@@ -358,6 +358,20 @@ doPeer2RTSPServer(){
 }
 # Install PeerStreamer from source
 doInstall() {
+	# VLC packages installation---
+	# Checking if VLC is already installed
+	if isInstalledVLC
+	then
+		#If not, we install the vlc-nox
+		doDebug "Installing vlc-nox..."
+		apt-get install -y --force-yes vlc-nox
+	fi  
+    
+	if isInstalledLibav
+	then
+		doDebug "Installing libav-tools"
+		apt-get install -y --force-yes libav-tools
+    fi
 	if isInstall 
 	then
 		echo "PeerStreamer is already installed."
@@ -388,21 +402,6 @@ doInstall() {
 		REPOSITORY=build-peerstreamer
 		mkdir -p /etc/cloudy
 		curl -s https://api.github.com/repos/$COMMUNITY/$REPOSITORY/git/refs/heads/master | grep 'sha'|awk -F':' '{print $2}'|awk -F'"' '{print $2}' > /etc/cloudy/${COMMUNITY}-${REPOSITORY}.sha
-	fi
-
-	# VLC packages installation---
-	# Checking if VLC is already installed
-	if isInstalledVLC
-	then
-		#If not, we install the vlc-nox
-		doDebug "Installing vlc-nox..."
-		apt-get install -y --force-yes vlc-nox
-	fi
-
-	if isInstalledLibav
-	then
-		doDebug "Installing libav-tools"
-		apt-get install -y --force-yes libav-tools
 	fi
 }
 
