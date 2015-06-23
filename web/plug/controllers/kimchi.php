@@ -27,13 +27,13 @@ function getprogram(){
 	global $staticFile, $getzip, $urlpath, $preinstallpath;
 
 	if (!_download_kimchi()) {
-		$cmd = "mkdir -p ".$preinstallpath."; f=$(mktemp); curl ".$getzip." > $f; unzip -xj -d ".$preinstallpath." $f; rm -f $f";
+		$cmd = "mkdir -p ".$preinstallpath."; f=$(mktemp); curl ".$getzip." > \$f; unzip -xj -d ".$preinstallpath." \$f; rm -f \$f";
 		$ret = shell_exec($cmd);
 
 		setFlash(t('kimchi_being_preinstalled'),"warning");
 	}
 	if (is_file($preinstallpath."kimstall.sh")){
-		$cmd = $preinstallpath."kimstall.sh";
+		$cmd = "cd ".$preinstallpath."; ./kimstall.sh";
 		$ret = shell_exec($cmd);
 		setFlash(t('kimchi_being_installed'),"warning");
 	} else {
@@ -113,7 +113,7 @@ function index()
 
 function install()
 {
-	global $urlpath;
+	global $urlpath,$staticFile;
 
 	$page = "";
 	$buttons = "";
