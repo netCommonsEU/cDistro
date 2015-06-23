@@ -310,6 +310,13 @@ function check_arch($list_arch = null){
 
 }
 
+function has_virtualization_extensions(){
+	$cmd = "egrep '(vmx|svm)' /proc/cpuinfo|wc -l";
+	$ret = execute_program_shell($cmd);
+	$vtx = rtrim($ret['output']);
+	return($vtx != "0");
+}
+
 function add_quotes($dates){
 
 	foreach($dates as $k=>$v){
