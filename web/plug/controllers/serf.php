@@ -267,7 +267,7 @@ function getprogram(){
 		$page = package_not_install($serf_deps,$serf_deps_desc);
 		return(array('type'=>'render','page'=> $page ) ) ;
 	}
-  $cmd = "cd /tmp && curl ".$serfgeturl."| sh -";
+  $cmd = "cd /tmp && curl -k ".$serfgeturl."| sh -";
   $ret = execute_shell($cmd);
 
 	setFlash(t("serf_flash_installed"),"success");

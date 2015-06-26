@@ -89,7 +89,7 @@ function download_get() {
 	execute_program_shell(
 		"mkdir -p $sc_dirpath $sc_cfgpath $sc_repospath && " .
 		"cd $sc_dirpath && " .
-		"curl -L -s $url -o $name.tar.gz && " .
+		"curl -L -ks $url -o $name.tar.gz && " .
 		"tar -xf $name.tar.gz && " .
 		"mv $name/syncthing syncthing && " .
 		"rm -rf $name.tar.gz $name && " .

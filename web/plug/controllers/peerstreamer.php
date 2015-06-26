@@ -385,7 +385,7 @@ function getprogram(){
 	$geturlfile=$ghpath.$machine_path."/".$psprogram;
 	$savefile=$pspath.$psprogram;
 
-	$output=execute_program($curlprogram." '".$geturlfile."' -o ".$savefile);
+	$output=execute_program($curlprogram." -k '".$geturlfile."' -o ".$savefile);
 
 	$ret = ptxt(implode("\n", $output['output']));
 	chmod($savefile, 755);

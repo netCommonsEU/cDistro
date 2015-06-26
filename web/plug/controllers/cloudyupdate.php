@@ -127,7 +127,7 @@ function getYourVersion($user, $repo){
 function getGitMaster($user, $repo){
 	$github = "https://api.github.com/repos/" . $user . "/" . $repo . "/git/refs/heads/master";
 
-	$sha = execute_program("curl -s $github | grep 'sha'|awk -F':' '{print $2}'|awk -F'\"' '{print $2}'");
+	$sha = execute_program("curl -ks $github | grep 'sha'|awk -F':' '{print $2}'|awk -F'\"' '{print $2}'");
 
 	return($sha['output'][0]);
 }
@@ -275,7 +275,7 @@ function update(){
 		$packet = $Parameters[0];
 		if (isset($list_packages[$packet])) {
 			$info_packet = $list_packages[$packet];
-			$cmd = "mkdir -p /tmp/dir_tmp; cd /tmp/dir_tmp; curl -s " . $info_packet['script'] . "| sh - ; cd /tmp; rm -rf /tmp/dir_tmp";
+			$cmd = "mkdir -p /tmp/dir_tmp; cd /tmp/dir_tmp; curl -ks " . $info_packet['script'] . "| sh - ; cd /tmp; rm -rf /tmp/dir_tmp";
 			$ret = execute_program($cmd);
 			$page .= ptxt(implode("\n",$ret['output']));
 		}
