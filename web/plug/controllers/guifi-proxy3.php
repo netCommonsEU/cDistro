@@ -236,10 +236,6 @@ function install_post() {
 	return(array('type' => 'render','page' => $page));
 }
 
-
-
-
-
 function proxy3_generate_form($file){
 	global $staticFile, $GUIFI_PROXY3_DEFAULTS,$GUIFI_WEB, $GUIFI_CONF_DIR, $GUIFI_CONF_FILE,$services_types;
 
@@ -266,8 +262,12 @@ function Proxy3IsRunning() {
 	$cmd = "/etc/init.d/squid3 status";
 	$cmdResult = execute_program($cmd);
 
-	if (isPackageInstall($GUIFI_PROXY3_PKGNAME) && file_exists($SQUID3_PID_FILE) && isset($cmdResult['output']) && isset($cmdResult['output'][0]) && strpos($cmdResult['output'][0],'is running') !== false)
-		return true;
+	if (isPackageInstall($GUIFI_PROXY3_PKGNAME) && file_exists($SQUID3_PID_FILE) && isset($cmdResult['output'])) {
+		// Debian Wheezy (init system)
+		if (isset($cmdResult['output'][0]) && strpos($cmdResult['output'][0],'is running') !== false) return true;
+		// Debian Jessie (systemd)
+		if (isset($cmdResult['output'][2]) && strpos($cmdResult['output'][2],'running') !== false) return true;
+		}
 	return false;
 }
 
