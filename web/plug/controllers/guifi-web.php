@@ -154,6 +154,7 @@ function selectnode_post(){
 		$GUIFI=load_conffile($GUIFI_CONF_DIR.$GUIFI_CONF_FILE);
 
 		$url = $GUIFI_WEB."/guifi/cnml/".$_POST['NODE_ID']."/node";
+		echo $url;
 		$resposta = _getHttp($url);
 		$output = new SimpleXMLElement($resposta);
 
@@ -627,7 +628,11 @@ function _getNodeInformation($nodeid, $deviceid, $username){
 	$page = '';
 	$buttons = '';
 
-	$url = $GUIFI_WEB.'/'.t("guifi-web_common_lang")."/guifi/cnml/".$nodeid."/node";
+	if (t("guifi-web_common_lang") == "guifi-web_common_lang") 
+		$url = $GUIFI_WEB.'/en/guifi/cnml/'.$nodeid."/node";
+	else 
+		$url = $GUIFI_WEB.'/'.t("guifi-web_common_lang")."/guifi/cnml/".$nodeid."/node";
+
 	$resposta = _getHttp($url);
 	$output = new SimpleXMLElement($resposta);
 
