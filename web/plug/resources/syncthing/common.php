@@ -48,10 +48,8 @@ function nameForArch($arch) {
 		$urlarch = "386";
 		break;
 	case "armv6l":
-		$urlarch = "armv6";
-		break;
 	case "armv7l":
-		$urlarch = "armv7";
+		$urlarch = "arm";
 		break;
 	}
 	return "syncthing-linux-$urlarch-v$sc_version";
