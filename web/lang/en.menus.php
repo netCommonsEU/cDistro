@@ -35,6 +35,7 @@ addS ("menus_guifi_web","Guifi.net integration");
 addS ("menus_guifi_proxy3","Proxy3");
 addS ("menus_guifi_snpservices","SNPServices");
 addS ("menus_guifi_dnsservices","DNSServices");
+addS ("menus_guifi_nmservices","NMServices");
 
 
 //GVoD
