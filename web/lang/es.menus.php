@@ -49,6 +49,10 @@ addS ("menus_lang_english","Inglés");
 addS ("menus_lang_spanish","Castellano");
 
 
+//Settings
+addS ("menus_cloudy_settings","Configuración");
+
+
 //Tahoe-LAFS
 addS ("menus_tahoe_clommunity","Community");
 addS ("menus_tahoe_tahoe","Tahoe-LAFS");
