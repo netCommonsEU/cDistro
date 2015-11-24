@@ -1,8 +1,7 @@
 <?php
-// plug/lang/*.menu.php
+// plug/lang/es.menu.php
 
 //Avahi
-
 addS ("menus_avahi_search","Buscar servicios en &mu;cloud");
 addS ("menus_avahi_avahi","Buscar");
 
@@ -22,6 +21,12 @@ addS ("menus_cloudy_system","Sistema");
 addS ("menus_cloudy_updates","Actualizaciones");
 addS ("menus_cloudy_sshkeys","Añadir claves SSH de desarrolladores");
 addS ("menus_cloudy_logout","Salir");
+
+
+//Etcd
+addS ("menu_etcd", "Buscar");
+addS ("etcd_setup", "Configurar Etcd");
+addS ("etcd_lookfor", "Buscar Servicos con Etcd");
 
 
 //Getinconf
@@ -49,8 +54,24 @@ addS ("menus_lang_english","Inglés");
 addS ("menus_lang_spanish","Castellano");
 
 
+//Serf
+addS ("menu_serf", "Buscar");
+addS ("serf_setup", "Configurar Serf");
+addS ("serf_lookfor", "Buscar Servicos con Serf");
+
+
 //Settings
 addS ("menus_cloudy_settings","Configuración");
+
+
+//Sweep
+addS ("menus_sweep_sweep", "Sweep");
+addS ("menus_sweep_clommunity", "Community");
+
+
+//Syncthing
+addS ("menus_syncthing_server", "Syncthing");
+addS ("menus_syncthing_clommunity", "Community");
 
 
 //Tahoe-LAFS
@@ -61,26 +82,4 @@ addS ("menus_tahoe_tahoe","Tahoe-LAFS");
 //WebDAV
 addS ("menus_webdav_server", "Servidor WebDAV");
 addS ("menus_webdav_clommunity", "Community");
-
-
-//Syncthing
-addS ("menus_syncthing_server", "Syncthing");
-addS ("menus_syncthing_clommunity", "Community");
-
-
-//Etcd
-addS ("menu_etcd", "Buscar");
-addS ("etcd_setup", "Configurar Etcd");
-addS ("etcd_lookfor", "Buscar Servicos con Etcd");
-
-
-//Serf
-addS ("menu_serf", "Buscar");
-addS ("serf_setup", "Configurar Serf");
-addS ("serf_lookfor", "Buscar Servicos con Serf");
-
-
-//Sweep
-addS ("menus_sweep_sweep", "Sweep");
-addS ("menus_sweep_clommunity", "Community");
 ?>
