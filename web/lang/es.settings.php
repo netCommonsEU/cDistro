@@ -8,9 +8,9 @@ addS ("settings_alert_","");
 
 
 //buttons
-addS ("settings_button_hostname","Cambia el nombre del dispositivo");
+addS ("settings_button_hostname","Cambiar el nombre del dispositivo");
 addS ("settings_button_back","Volver");
-addS ("settings_button_shostname","Guarda el nombre del dispositivo");
+addS ("settings_button_shostname","Guardar el nombre del dispositivo");
 addS ("settings_button_","");
 
 
