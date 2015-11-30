@@ -16,6 +16,10 @@ addS ("menu_caracalapi", "Community");
 addS ("caracalapi_manage", "CaracalDB REST API");
 
 
+//Categories
+addS ("menus_community","Community");
+
+
 //Cloudy
 addS ("menus_cloudy_system","System");
 addS ("menus_cloudy_updates","Updates");
@@ -52,6 +56,10 @@ addS ("menus_lang_language","Language");
 addS ("menus_lang_catalan","Catalan");
 addS ("menus_lang_english","English");
 addS ("menus_lang_spanish","Spanish");
+
+
+//ownCloud
+addS ("menus_owncloud","ownCloud");
 
 
 //Serf
