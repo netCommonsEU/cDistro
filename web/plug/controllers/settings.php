@@ -7,6 +7,9 @@ $PKG_HOSTNAME = "hostname";
 $HREGEX = "^([a-zA-Z0-9]|[a-zA-Z0-9]+[a-zA-Z0-9\-]*[a-zA-Z0-9])[a-zA-Z0-9]*";
 $HPREGEX = "/".$HREGEX."/";
 
+$SOURCES_MAIN = "/etc/apt/sources.list";
+$SOURCESD_PATH = "/etc/apt/sources.list.d";
+
 
 function index() {
 
@@ -20,12 +23,21 @@ function index() {
 
 	$page .= par(t("settings_index_description"));
 
-
 	$page .= hlc(t("settings_hostname_title"),2);
 	$page .= txt(t("settings_hostname_current"));
 	$page .= ptxt(gethostname());
+	$buttons = addButton(array('label'=>t("settings_button_hostname"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/hostname'));
 
-	$buttons .= addButton(array('label'=>t("settings_button_hostname"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/hostname'));
+	$page .= $buttons;
+
+
+	list($page_t, $buttons_t) = indexSources();
+	$page .= $page_t;
+	$page .= $buttons_t;
+
+	$buttons = addButton(array('label'=>t("settings_button_back"),'class'=>'btn btn-default', 'href'=>$staticPath));
+
+	$page .= par(" ");
 	$page .= $buttons;
 
 	return(array('type'=>'render','page'=>$page));
@@ -84,5 +96,26 @@ function setHostname($newhostname){
 	return(array('type'=>'redirect','url'=>$staticPath.$urlpath));
 }
 
+function indexSources() {
+
+	global $urlpath, $staticPath, $SOURCES_MAIN, $SOURCESD_PATH;
+
+	$page = "";
+	$buttons = "";
+
+	$page .= hlc(t("settings_sources_title"),2);
+	$page .= txt(t("settings_sources_main_pre")."<em>".$SOURCES_MAIN."</em>".t("settings_sources_main_post"));
+	$page .= ptxt(file_get_contents($SOURCES_MAIN),str_replace(".","",str_replace("/","",$SOURCES_MAIN)));
+	//$buttons .= addButton(array('label'=>t("settings_button_sources_pre").$SOURCES_MAIN.t("settings_button_sources_post"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/sources'));
+
+	foreach (scandir($SOURCESD_PATH) as $key => $value)
+		if ($value != '.' && $value != '..' ) {
+			$page .= txt(t("settings_sources_file_pre")."<em>".$SOURCESD_PATH.'/'.$value."</em>".t("settings_sources_file_post"));
+			$page .= ptxt(file_get_contents($SOURCESD_PATH.'/'.$value),str_replace(".","",$value));
+			//$buttons .= addButton(array('label'=>t("settings_button_sources_pre").$value.t("settings_button_sources_post"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/sources'));
+		}
+
+	return array($page,$buttons);
+}
 
 ?>
