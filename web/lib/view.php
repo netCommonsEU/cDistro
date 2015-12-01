@@ -31,15 +31,26 @@ function spar($text=null){
 	}
 }
 
-function ptxt($text=null){
+function ptxt($text=null, $id){
 	if (!is_null($text)){
-		return ("<div><pre>".$text."</pre></div>");
+		if (!is_null($id)){
+			return ("<div id=".'"'.$id.'"'."><pre>".$text."</pre></div>");
+		}
+		else{
+			return ("<div><pre>".$text."</pre></div>");
+		}
 	}
 }
 
-function txt($text=null){
+
+function txt($text=null, $id){
 	if (!is_null($text)){
-		return ("<div>".$text."</div>");
+		if (!is_null($id)){
+			return ("<div id=".'"'.$id.'"'.">".$text."</div>");
+		}
+		else{
+			return ("<div>".$text."</div>");
+		}
 	}
 }
 
