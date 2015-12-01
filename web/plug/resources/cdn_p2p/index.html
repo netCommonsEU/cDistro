@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="http://cdn.clappr.io/j/vendor/jquery.min.js"></script>
+  <script src="http://cdn.clappr.io/j/vendor/underscore-min.js"></script>
+  <script src="http://cdn.clappr.io/0.0.62/clappr.min.js"></script>
+  <script src="http://cdn.clappr.io/bemtv/latest/p2phls.min.js"></script>
+  <script src="http://cdn.clappr.io/bemtv/latest/p2phlsstats.min.js"></script>
+  <title>Test Page</title>
+  <script type="text/javascript" charset="utf-8">
+  var DEBUG = false;
+
+  var QueryString = function () {
+    // This function is anonymous, is executed immediately and
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0;i<vars.length;i++) {
+      var pair = vars[i].split("=");
+          // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = decodeURIComponent(pair[1]);
+          // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+        query_string[pair[0]] = arr;
+          // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(decodeURIComponent(pair[1]));
+      }
+    }
+      return query_string;
+  };
+
+window.onload = function() {
+  // Example sources...
+  //    source: 'http://s69362.cdn.ngenix.net/live/_definst_/Stream1/chunklist.m3u8',
+  //    source: "http://hdiosstv-f.akamaihd.net/i/servustvhd_1@51229/master.m3u8",
+  //    source: "http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:tv3cat_web/playlist.m3u8",
+  //    source: "http://ccma-tva-int-abertis-live.hls.adaptive.level3.net/int/ngrp:324_web/playlist.m3u8",
+
+  qs=QueryString();
+  if (qs.debug) {
+    DEBUG = true;
+  }
+  if (DEBUG) { console.log(qs) };
+
+  if (qs.title) {
+    qs.title = decodeURI(qs.title);
+    document.title = qs.title;
+    $('#title').text(qs.title);
+  }
+  if (!qs.source) {
+    //Has not got stream source.
+    $("#player-wrapper").text("No stream source!");
+    return
+  }
+  options = { source: decodeURI(qs.source), maxBufferLength: 60,plugins: {playback: [P2PHLS], container: [P2PHLSStats]} }
+
+  if (qs.tracker) {
+    qs.tracker = decodeURI(qs.tracker);
+    options.bemtvTracker = qs.tracker
+  }
+
+  if (DEBUG) { console.log(options); }
+
+  player = new Clappr.Player(options);
+
+  var playerElement = $("#player-wrapper");
+  player.attachTo(playerElement);
+  if (DEBUG) {
+    player.core.containers[0].getPlugin('p2phlsstats').show();
+  }
+}
+
+  </script>
+</head>
+<body>
+  <div id="header">
+    <h1 id="title" style="text-align: center;"></h1>
+  </div>
+  <div align=center style="">
+    <div id="player-wrapper"></div>
+  </div>
+</body>
+</html>
