@@ -2,19 +2,21 @@
 // plug/lang/*.menu.php
 
 //Avahi
-
 addS ("menus_avahi_search","Look for services in &mu;cloud");
-addS ("menus_avahi_avahi","Search");
 
 
 //CaracalDB
-addS ("menu_caracal", "Community");
 addS ("caracal_manage", "CaracalDB");
 
 
 //CaracalDB API
-addS ("menu_caracalapi", "Community");
 addS ("caracalapi_manage", "CaracalDB REST API");
+
+
+//Categories
+addS ("menus_cloud_a_search", "Search");
+addS ("menus_cloud_community", "Community cloud");
+addS ("menus_cloud_personal", "Personal cloud");
 
 
 //Cloudy
@@ -25,7 +27,6 @@ addS ("menus_cloudy_logout","Log out");
 
 
 //Getinconf
-addS ("menus_getinconf_clommunity","Community");
 addS ("menus_getinconf_getinconf","Getinconf");
 
 
@@ -39,7 +40,6 @@ addS ("menus_guifi_dnsservices","DNSServices");
 
 //GVoD
 addS ("menus_gvod_gvod", "GVoD");
-addS ("menus_gvod_clommunity", "Community");
 
 
 //Language

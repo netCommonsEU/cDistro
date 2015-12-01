@@ -1,3 +1,3 @@
 <?php
 //peerstreamer.menu.php
-addMenu('PeerStreamer','peerstreamer','Community');
+addMenu('PeerStreamer','peerstreamer',t("menus_cloud_community"));
