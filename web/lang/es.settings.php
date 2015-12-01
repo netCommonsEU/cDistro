@@ -11,12 +11,18 @@ addS ("settings_alert_","");
 addS ("settings_button_hostname","Cambiar el nombre del dispositivo");
 addS ("settings_button_back","Volver");
 addS ("settings_button_shostname","Guardar el nombre del dispositivo");
+addS ("settings_button_disable","Desactivar");
+addS ("settings_button_enable","Activar");
+addS ("settings_button_source_add","Añadir una línea nueva");
+addS ("settings_button_sources_pre","Gestionar ");
+addS ("settings_button_sources_post","");
 addS ("settings_button_","");
 
 
 //common
 addS ("settings_common_title","Configuración del dispositivo");
 addS ("settings_common_subtitle","Gestión de la configuración y los parámetros del dispositivo");
+addS ("settings_common_error","Ha habido un error:");
 addS ("settings_common_","");
 
 
@@ -40,5 +46,22 @@ addS ("settings_hostname_empty","(vacío)");
 //index
 addS ("settings_index_description","Esta página le muestra diferentes parámetros del sistema y le permite modificarlos.");
 addS ("settings_index_","");
+
+
+//sources
+addS ("settings_sources_title","Fuentes de paquetes");
+addS ("settings_sources_subtitle","Gestión de las fuentes de paquetes");
+addS ("settings_sources_main_pre","Fichero principal ");
+addS ("settings_sources_main_post",":");
+addS ("settings_sources_file_pre","Fichero ");
+addS ("settings_sources_file_post",":");
+addS ("settings_sources_fileinvalid_pre","El fichero ");
+addS ("settings_sources_fileinvalid_post"," especificado no es un fichero de fuentes de paquetes válido");
+addS ("settings_sources_description1","Este es el contenido del fichero ");
+addS ("settings_sources_description2",".");
+addS ("settings_sources_description3","Use los botones a continuación para activar, desactivar, añadir o borrar fuentes de paquetes del fichero.");
+addS ("settings_sources_header1","Núm. línea");
+addS ("settings_sources_header2","Contenido");
+addS ("settings_sources_header3","Acciones");
 
 ?>
