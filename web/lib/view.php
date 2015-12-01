@@ -31,7 +31,7 @@ function spar($text=null){
 	}
 }
 
-function ptxt($text=null, $id){
+function ptxt($text=null, $id=null){
 	if (!is_null($text)){
 		if (!is_null($id)){
 			return ("<div id=".'"'.$id.'"'."><pre>".$text."</pre></div>");
@@ -43,7 +43,7 @@ function ptxt($text=null, $id){
 }
 
 
-function txt($text=null, $id){
+function txt($text=null, $id=null){
 	if (!is_null($text)){
 		if (!is_null($id)){
 			return ("<div id=".'"'.$id.'"'.">".$text."</div>");
