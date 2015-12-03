@@ -55,6 +55,10 @@ addS ("menus_lang_english","Inglés");
 addS ("menus_lang_spanish","Castellano");
 
 
+//ownCloud
+addS ("menus_owncloud","ownCloud");
+
+
 //Serf
 addS ("menu_serf", "Buscar");
 addS ("serf_setup", "Configurar Serf");
