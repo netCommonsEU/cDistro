@@ -1,4 +1,4 @@
 <?php
 //menu/serf.menu.php
 
-addMenu(t('serf_setup'),'serf',t('menu_serf'));
+addMenu(t('serf_setup'),'serf',t('menus_cloud_a_search'));

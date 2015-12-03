@@ -1,5 +1,5 @@
 <?php
 //menu/kimchi.menu.php
 
-if (has_virtualization_extensions()) { addMenu(t('Kimchi'),'kimchi',t('Community')); }
+if (has_virtualization_extensions()) { addMenu(t('Kimchi'),'kimchi',t('menus_cloud_personal')); }
 

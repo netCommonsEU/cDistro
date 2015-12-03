@@ -3,17 +3,20 @@
 
 //Avahi
 addS ("menus_avahi_search","Buscar servicios en &mu;cloud");
-addS ("menus_avahi_avahi","Buscar");
 
 
 //CaracalDB
-addS ("menu_caracal", "Community");
 addS ("caracal_manage", "CaracalDB");
 
 
 //CaracalDB API
-addS ("menu_caracalapi", "Community");
 addS ("caracalapi_manage", "CaracalDB REST API");
+
+
+//Categories
+addS ("menus_cloud_a_search", "Búsqueda de servicios");
+addS ("menus_cloud_community", "Nube de comunes");
+addS ("menus_cloud_personal", "Nube personal");
 
 
 //Cloudy
@@ -30,7 +33,6 @@ addS ("etcd_lookfor", "Buscar Servicos con Etcd");
 
 
 //Getinconf
-addS ("menus_getinconf_clommunity","Community");
 addS ("menus_getinconf_getinconf","Getinconf");
 
 
@@ -44,7 +46,6 @@ addS ("menus_guifi_dnsservices","DNSServices");
 
 //GVoD
 addS ("menus_gvod_gvod", "GVoD");
-addS ("menus_gvod_clommunity", "Community");
 
 
 //Language
