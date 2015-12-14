@@ -69,13 +69,13 @@ addS ("menus_syncthing_clommunity", "Community");
 
 
 //Etcd
-addS ("menu_etcd", "Buscar");
+addS ("menu_etcd", "Búsqueda de servicios");
 addS ("etcd_setup", "Configurar Etcd");
 addS ("etcd_lookfor", "Buscar Servicos con Etcd");
 
 
 //Serf
-addS ("menu_serf", "Buscar");
+addS ("menu_serf", "Búsqueda de servicios");
 addS ("serf_setup", "Configurar Serf");
 addS ("serf_lookfor", "Buscar Servicos con Serf");
 
