@@ -74,6 +74,10 @@ addS ("etcd_setup", "Setup Etcd");
 addS ("etcd_lookfor", "Look for Services with Etcd");
 
 
+//LXC
+addS ("menus_lxc", "Linux Containers");
+
+
 //Serf
 addS ("menu_serf", "Search");
 addS ("serf_setup", "Setup Serf");
