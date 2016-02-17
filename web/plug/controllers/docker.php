@@ -1,13 +1,14 @@
 <?php
 $urlpath="$staticFile/docker";
+$docker_pkg = "docker.io";
 
 function index() {
-	global $title, $urlpath, $sc_webui_user, $sc_webui_pass, $sc_webui_port;
+	global $title, $urlpath, $docker_pkg;
 
 	$page = hlc(t("docker_title"));
 	$page .= hl(t("docker_desc"), 4);
 
-	if (!isInstalled()) {
+	if (!isPackageInstall($docker_pkg)) {
 		$page .= "<div class='alert alert-error text-center'>".t("docker_not_installed")."</div>\n";
 		$page .= addButton(array('label'=>t("syncthing_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
 		return array('type'=>'render','page'=>$page);
@@ -27,4 +28,10 @@ function index() {
 
 		return array('type' => 'render','page' => $page);
 	}
+}
+function isConfigured() {
+  return true;
+}
+function isRunning(){
+  return true;
 }
