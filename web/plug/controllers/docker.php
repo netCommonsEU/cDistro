@@ -36,6 +36,8 @@ function isRunning(){
   return true;
 }
 function install(){
-  $page = package_not_install($webdav_pkg,$webdav_desc);
+  global $title, $urlpath, $docker_pkg;
+
+  $page = package_not_install($docker_pkg,t("docker_desc"));
   return array('type' => 'render','page' => $page);
 }
