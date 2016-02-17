@@ -10,7 +10,7 @@ function index() {
 
 	if (!isPackageInstall($docker_pkg)) {
 		$page .= "<div class='alert alert-error text-center'>".t("docker_not_installed")."</div>\n";
-		$page .= addButton(array('label'=>t("syncthing_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+		$page .= addButton(array('label'=>t("docker_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
 		return array('type'=>'render','page'=>$page);
 	} elseif (!isConfigured()) {
 		$page .= "<div class='alert alert-error text-center'>".t("docker_not_configured")."</div>\n";
@@ -34,4 +34,8 @@ function isConfigured() {
 }
 function isRunning(){
   return true;
+}
+function install(){
+  $page = package_not_install($webdav_pkg,$webdav_desc);
+  return array('type' => 'render','page' => $page);
 }
