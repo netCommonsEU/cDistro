@@ -83,4 +83,11 @@ addS ("serf_lookfor", "Look for Services with Serf");
 //Sweep
 addS ("menus_sweep_sweep", "Sweep");
 addS ("menus_sweep_clommunity", "Community");
+
+//Docker
+addS ("menus_docker_server", "Docker");
+
+//Enterprise
+addS ("menus_cloud_enterprise", "Enterprise cloud");
+
 ?>
