@@ -52,7 +52,7 @@ function stop() {
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 function info_docker(){
-	global $dev
+	global $dev;
 
 	$cmd = "/sbin/ip addr show dev $dev";
 	$ret = execute_program($cmd);
