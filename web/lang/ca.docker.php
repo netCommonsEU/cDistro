@@ -2,8 +2,7 @@
 
 //Common
 addS ("docker_title","Docker");
-addS ("docker_desc",'Docker es un proyecto de código abierto que automatiza el despliegue de aplicaciones dentro de contenedores de software, proporcionando una capa adicional de abstracción y automatización de Virtualización a nivel de sistema operativo.');
-addS ("docker_desc","Docker és un projecte de codi obert que automatitza el desplegament d'aplicacions dintre de contenidors de programari, proporcionant una capa adicional de abastracció i automatització de Virtualització a nivell de sistema operatiun.")
+addS ("docker_desc","Docker és un projecte de codi obert que automatitza el desplegament d'aplicacions dintre de contenidors de programari, proporcionant una capa adicional de abastracció i automatització de Virtualització a nivell de sistema operatiun.");
 
 
 addS ("docker_not_installed","Docker.io no est&agrave; instal·lat.");
