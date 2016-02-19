@@ -25,7 +25,7 @@ function index() {
 	}
 }
 function isRunning(){
-	$cmd = "/usr/bin/docker ps &>/dev/null"
+	$cmd = "/usr/bin/docker ps &>/dev/null";
 	$ret = shell_exec($cmd);
   return($ret['return'] ==  0 );
 }
