@@ -1,9 +1,10 @@
 <?php
 $urlpath="$staticFile/docker";
 $docker_pkg = "docker.io";
+$dev = "docker0";
 
 function index() {
-	global $title, $urlpath, $docker_pkg;
+	global $title, $urlpath, $docker_pkg, $staticFile;
 
 	$page = hlc(t("docker_title"));
 	$page .= hl(t("docker_desc"), 4);
@@ -18,6 +19,7 @@ function index() {
 		$page .= addButton(array('label'=>t('docker_remove'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$docker_pkg));
 		return array('type'=>'render','page'=>$page);
 	} else {
+		$page .= ptxt(info_docker());
 		$page .= "<div class='alert alert-success text-center'>".t("docker_running")."</div>\n";
 		$page .= addButton(array('label'=>t("docker_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
@@ -45,7 +47,15 @@ function start() {
 function stop() {
 	global $urlpath;
 
-	execute_program_detached("service docker start");
+	execute_program_detached("service docker stop");
 	setFlash(t('docker_stop'),"success");
 	return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+function info_docker(){
+	global $dev
+
+	$cmd = "/sbin/ip addr show dev $dev";
+	$ret = execute_program($cmd);
+  return ( implode("\n", $ret['output']) );
+
 }
