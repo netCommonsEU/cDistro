@@ -25,9 +25,9 @@ function index() {
 	}
 }
 function isRunning(){
-	$cmd = "/usr/bin/docker ps &>/dev/null";
-	$ret = shell_exec($cmd);
-  return($ret['return'] ==  0 );
+	$cmd = "/usr/bin/docker ps";
+	$ret = execute_program($cmd);
+  return ( $ret['return'] ==  0 );
 }
 function install(){
   global $title, $urlpath, $docker_pkg;
@@ -36,8 +36,16 @@ function install(){
   return array('type' => 'render','page' => $page);
 }
 function start() {
+	globals $staticFile,$urlpath;
+
 	execute_program_detached("service docker start");
+	setFlash(t('docker_start'),"success");
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
 function stop() {
+	globals $staticFile,$urlpath;
+
 	execute_program_detached("service docker start");
+	setFlash(t('docker_stop'),"success");
+	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
 }
