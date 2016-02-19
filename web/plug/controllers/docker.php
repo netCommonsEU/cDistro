@@ -41,14 +41,14 @@ function start() {
 	global $urlpath;
 
 	execute_program_detached("service docker start");
-	setFlash(t('docker_start'),"success");
+	setFlash(t('docker_start_message'),"success");
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 function stop() {
 	global $urlpath;
 
 	execute_program_detached("service docker stop");
-	setFlash(t('docker_stop'),"success");
+	setFlash(t('docker_stop_message'),"success");
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 function info_docker(){
