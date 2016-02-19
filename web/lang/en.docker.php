@@ -7,9 +7,9 @@ addS ("docker_desc",'Docker is an open-source project that automates the deploym
 addS ("docker_not_installed","Docker.io is not installed");
 addS ("docker_install","Docker.io is installed.");
 addS ("docker_not_running","Docker.io is stop.");
-addS ("docker_start","Start Docker.io.");
-addS ("docker_remove","Remove Docker.io.");
-addS ("docker_running","Docker is running.");
-addS ("docker_stop","Stop Docker.io.");
+addS ("docker_start","Start Docker.io");
+addS ("docker_remove","Remove Docker.io");
+addS ("docker_running","Docker is running");
+addS ("docker_stop","Stop Docker.io");
 addS ("docker_start_message","Docer.io is running.");
 addS ("docker_stop_message","Docker.io in not running.");
