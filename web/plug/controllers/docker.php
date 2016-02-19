@@ -36,16 +36,16 @@ function install(){
   return array('type' => 'render','page' => $page);
 }
 function start() {
-	globals $staticFile,$urlpath;
+	globals $urlpath;
 
 	execute_program_detached("service docker start");
 	setFlash(t('docker_start'),"success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 function stop() {
-	globals $staticFile,$urlpath;
+	globals $urlpath;
 
 	execute_program_detached("service docker start");
 	setFlash(t('docker_stop'),"success");
-	return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
+	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
