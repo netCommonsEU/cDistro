@@ -19,7 +19,10 @@ function index() {
 		$page .= addButton(array('label'=>t('docker_remove'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$docker_pkg));
 		return array('type'=>'render','page'=>$page);
 	} else {
-		$page .= ptxt(info_docker());
+		$page .= t("docker_info");
+		$page .= ptxt(docker_info());
+		$page .= t("docker_interface");
+		$page .= ptxt(docker_network_interface());
 		$page .= "<div class='alert alert-success text-center'>".t("docker_running")."</div>\n";
 		$page .= addButton(array('label'=>t("docker_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
@@ -29,13 +32,13 @@ function index() {
 function isRunning(){
 	$cmd = "/usr/bin/docker ps";
 	$ret = execute_program($cmd);
-  return ( $ret['return'] ==  0 );
+	return ( $ret['return'] ==  0 );
 }
 function install(){
-  global $title, $urlpath, $docker_pkg;
+	global $title, $urlpath, $docker_pkg;
 
-  $page = package_not_install($docker_pkg,t("docker_desc"));
-  return array('type' => 'render','page' => $page);
+	$page = package_not_install($docker_pkg,t("docker_desc"));
+	return array('type' => 'render','page' => $page);
 }
 function start() {
 	global $urlpath;
@@ -51,11 +54,15 @@ function stop() {
 	setFlash(t('docker_stop_message'),"success");
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
-function info_docker(){
+function docker_info(){
+	$cmd = "/usr/bin/docker info";
+	$ret = execute_program($cmd);
+	return ( implode("\n", $ret['output']) );
+}
+function docker_network_interface(){
 	global $dev;
 
 	$cmd = "/sbin/ip addr show dev $dev";
 	$ret = execute_program($cmd);
-  return ( implode("\n", $ret['output']) );
-
+	return ( implode("\n", $ret['output']) );
 }

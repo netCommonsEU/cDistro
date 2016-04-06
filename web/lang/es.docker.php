@@ -13,3 +13,5 @@ addS ("docker_running","Docker.io en funcionamiento.");
 addS ("docker_stop","Desactivar Docker.io.");
 addS ("docker_start_message","Docker.io arrancado.");
 addS ("docker_stop_message","Docker.io parado.");
+addS ("docker_info","Docker info:");
+addS ("docker_interface","Docker interfaz de red:");

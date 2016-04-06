@@ -13,3 +13,5 @@ addS ("docker_running","Docker.io en funcionament.");
 addS ("docker_stop","Desactivar Docker.io.");
 addS ("docker_start_message","Docker.io arrancat.");
 addS ("docker_stop_message","Docker.io aturat.");
+addS ("docker_info","Docker info:");
+addS ("docker_interface","Docker interf&iacute;cie de xarxa:");

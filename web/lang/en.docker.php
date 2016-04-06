@@ -13,3 +13,5 @@ addS ("docker_running","Docker.io is running.");
 addS ("docker_stop","Stop Docker.io.");
 addS ("docker_start_message","Docker.io started.");
 addS ("docker_stop_message","Docker.io stopped.");
+addS ("docker_info","Docker info:");
+addS ("docker_interface","Docker network interface:");
