@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Pub=No" >> /var/local/cDistro/plug/resources/docker/containers/$1
+

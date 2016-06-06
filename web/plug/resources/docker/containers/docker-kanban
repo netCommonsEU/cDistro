@@ -1,0 +1,6 @@
+Name=Kanban
+Run=docker run -d -p 8084:80 mkodockx/docker-kanban
+Id=ndef
+Port=8084
+Img=docker-kanban
+Pub=No

@@ -1,0 +1,6 @@
+Name=MongoDB
+Run=docker run --name db -d mongo --smallfiles
+Id=ndef
+Port=0
+Img=mongo
+Pub=No

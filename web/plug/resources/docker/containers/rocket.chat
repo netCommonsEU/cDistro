@@ -1,0 +1,6 @@
+Name=Rocket.chat
+Run=docker run --name rocketchat -p 3000:3000 --env ROOT_URL=http://localhost --link db:db -d rocket.chat
+Id=ndef
+Port=3000
+Img=rocket.chat
+Pub=No

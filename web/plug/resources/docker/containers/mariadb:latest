@@ -1,0 +1,6 @@
+Name=MariaDB
+Run=docker run --name mariadb -e MYSQL_ROOT_PASSWORD=1234 -d mariadb:latest
+Id=ndef
+Port=0
+Img=mariadb:latest
+Pub=No
