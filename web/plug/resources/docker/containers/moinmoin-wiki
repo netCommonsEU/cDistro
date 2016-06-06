@@ -1,5 +1,5 @@
 Name=Wiki
-Run=docker run -it -p 8085:443 -p 8086:80 --name my_wiki olavgg/moinmoin-wiki
+Run=docker run -d -p 8085:443 -p 8086:80 --name my_wiki olavgg/moinmoin-wiki
 Port=8085
 Img=moinmoin-wiki
 Pub=Yes
