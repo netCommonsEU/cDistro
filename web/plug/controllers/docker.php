@@ -75,7 +75,7 @@ function info_docker(){
 //Funcions Principals//
 //-------------------//
 
-//Funció que crea la taula amb la informació a mostrar i els botons 
+//Funció que crea la taula amb la informació a mostrar i els botons
 //associats a cada contenidor
 function docker_Admin($page_tmp){
         global $dev,$urlpath;
@@ -234,7 +234,7 @@ function botonPublish($cInfo,$cDocker){
 	global $dev,$urlpath;
 	if($cDocker['status']=="Running" && $cInfo['pub']=="No"){
 		return(addButton(array('label'=>"Publish",'class'=>'btn btn-info', 'href'=>"$urlpath/containerPublish/".$cInfo['img'])));
-	}else if($cDocker['status']=="Running" && $cInfo['pub']=="Yes"){ 
+	}else if($cDocker['status']=="Running" && $cInfo['pub']=="Yes"){
                 return(addButton(array('label'=>"Unpubli",'class'=>'btn btn-info', 'href'=>"$urlpath/containerUnpublish/".$cInfo['img'])));
 	}else{
 		return(addButton(array('label'=>"Publish",'class'=>'btn btn-default disabled')));
@@ -242,12 +242,14 @@ function botonPublish($cInfo,$cDocker){
 }
 function botonApp($cInfo,$cDocker){
         //obtenim el hostname
-        $cmd="hostname -f";
-        $hostname=execute_program($cmd);
+        //$cmd="hostname -f";
+        //$hostname=execute_program($cmd);
+        // Millor agafar la IP de la funció getCommunityIP
 
+        $address = getCommunityIP()['output'][0];
         //Si el contenidor està en execució, mostrem el botó
         if($cDocker['status']=="Running"){
-                return(addButton(array('label'=>"Enter App",'class'=>'btn btn-info', 'href'=>"http://".$hostname['output'][0].":".$cInfo['port'])));
+                return(addButton(array('label'=>"Enter App",'class'=>'btn btn-info', 'href'=>"http://".$address.":".$cInfo['port'])));
         }else{
                 return(addButton(array('label'=>"Enter App",'class'=>'btn btn-default disabled')));
         }
@@ -388,7 +390,7 @@ function containerUnpublish() {
 function removeConfig() {
         global $urlpath,$Parameters;
         $respath="/var/local/cDistro/plug/resources/docker/";
-	
+
         //Obtenim el contenidor a Publicar (Paràmetre de la funció)
         $con = $Parameters[0];
         //Obtenim informació associada al contenidor
@@ -399,7 +401,7 @@ function removeConfig() {
 
         setFlash("Container Removed. ","success");
         return(array('type'=> 'redirect', 'url' => $urlpath));
-	
+
 }
 
 function containerInstall() {
