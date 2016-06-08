@@ -120,7 +120,7 @@ function docker_Admin($page_tmp){
 		}else{  //Si no ho està, es dona l'opció de instal·lar-lo
 			if($cInfo['id']=="Installing"){
 				//Si s'està instal·lant
-				$taula_notinstalled .= addTableRow(array($cInfo['name'],"Installing..."," "," ","Wait please..."));
+				$taula_notinstalled .= addTableRow(array($cInfo['name'],"Installing..."," "," ","Wait please...", $bDelete));
 			}else{
 				//Si no ho està, es dona l'opció de instal·lar-lo
 				$taula_notinstalled .= addTableRow(array($cInfo['name'],"Not installed",$cInfo['pub'],$bInstall,"",$bEdit.$bRemove));
