@@ -1,0 +1,6 @@
+#!/bin/bash
+#Es rep el port com a paràmetre: $1
+#Esperem mentre el port està obert
+nc -k localhost $1
+#Si deixa d'estar obert, despubliquem el servei
+/usr/sbin/avahi-ps unpublish Docker $1

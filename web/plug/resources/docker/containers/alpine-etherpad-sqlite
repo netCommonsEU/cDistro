@@ -1,0 +1,6 @@
+Name=Etherpad
+Run=docker run -d -p 9001:9001 -e ADMIN_USER
+Port=9001
+Img=alpine-etherpad-sqlite
+Pub=No
+Id=ndef

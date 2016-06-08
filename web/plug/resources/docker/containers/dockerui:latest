@@ -1,0 +1,6 @@
+Name=DockerUI
+Run=docker run -d -p 9000:9000 -v /var/run/docker.sock:/docker.sock --name dockerui abh1nav/dockerui:latest -e="/docker.sock"
+Id=ndef
+Port=9000
+Img=dockerui:latest
+Pub=No

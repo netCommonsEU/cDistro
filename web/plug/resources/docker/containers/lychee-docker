@@ -1,0 +1,6 @@
+Name=Lychee
+Run=docker run -d -p 8118:80 --link mariadb:mysql --name lychee kdelfour/lychee-docker
+Port=8118
+Img=lychee-docker
+Pub=No
+Id=ndef

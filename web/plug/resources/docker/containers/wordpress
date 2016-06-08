@@ -1,0 +1,6 @@
+Name=WordPress
+Run=docker run --name Wordpress --link mariadb:mysql -p 8087:80 -d wordpress
+Id=ndef
+Port=8087
+Img=wordpress
+Pub=No

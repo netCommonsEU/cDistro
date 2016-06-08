@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Id=ndef" >> /var/local/cDistro/plug/resources/docker/containers/$1
+echo "Pub=No" >> /var/local/cDistro/plug/resources/docker/containers/$1

@@ -1,0 +1,14 @@
+#!/bin/bash
+#Espera com a paràmetre la comanda a executar
+path="/var/local/cDistro/plug/resources/docker/install.log"
+
+echo ""  >> $path
+echo PROCÉS INSTAL·LACIÓ NOU CONTENIDOR >> $path
+echo Comanda: "          " $* >> $path
+echo Data inici: "       " `date` >> $path
+echo ""  >> $path
+
+$* >> $path
+
+echo ""  >> $path
+echo Data fi: "          " `date` >> $path
