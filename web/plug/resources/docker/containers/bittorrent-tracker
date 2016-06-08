@@ -1,0 +1,6 @@
+Name=Bittorrentracker
+Run=docker run --name bittorrent-tracker -d -p 8100:8000 henkel/bittorrent-tracker
+Port=8100
+Img=bittorrent-tracker
+Pub=Yes
+Id=ndef
