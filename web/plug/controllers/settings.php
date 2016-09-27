@@ -115,6 +115,8 @@ function indexSources() {
 			$buttons .= addButton(array('label'=>t("settings_button_sources_pre").$value.t("settings_button_sources_post"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/sourceManage?file='.$SOURCESD_PATH.'/'.$value));
 		}
 
+	$buttons .= addButton(array('label'=>t("settings_button_sources_addfile"),'class'=>'btn btn-info', 'href'=>$staticPath.$urlpath.'/addSourceFile'));
+
 	return array($page,$buttons);
 }
 
@@ -153,7 +155,7 @@ function sourceManage() {
 
 		//if ( isset ($_GET['add']))
 		//else
-		//	$buttons .= addButton(array('label'=>t("settings_button_source_add"),'class'=>'btn btn-info', 'href'=>"?file=".$_GET['file']."&add=".true));
+		//	$buttons .= addButton(array('label'=>t("settings_button_source_addline"),'class'=>'btn btn-info', 'href'=>"?file=".$_GET['file']."&add=".true));
 
 	}
 
@@ -192,6 +194,66 @@ function sourceLineButton ($content, $file, $line) {
 	return;
 }
 
+function addSourceFile() {
+
+	global $urlpath, $staticPath, $SOURCESD_PATH;
+	$sample_content = '### Add your repository sources here';
+
+	$page = "";
+	$buttons = "";
+
+	$page .= hlc(t("settings_sources_title"));
+	$page .= hl(t("settings_sources_add_subtitle"),4);
+
+	if (empty($_POST) || empty($_POST['FILENAME']) || empty($_POST['CONTENT'])) {
+
+		if (!empty($_POST) && empty($_POST['FILENAME'])) {
+			$page .= txt(t("settings_sources_add_form_error"));
+			$page .= "<div class='alert alert-error text-center'>".t("settings_sources_add_form_error_filename")."</div>\n";
+		}
+
+		if (!empty($_POST) && empty($_POST['CONTENT'])) {
+			$page .= txt(t("settings_sources_add_form_error"));
+			$page .= "<div class='alert alert-error text-center'>".t("settings_sources_add_form_error_content")."</div>\n";
+		}
+
+		$page .= par(t("settings_sources_add_desc"));
+
+		if (!empty($_POST['CONTENT']))
+			$sample_content = $_POST['CONTENT'];
+
+		$page .= createForm(array('class'=>'form-horizontal'));
+		$page .= addInput('FILENAME', t('settings_sources_add_form_filename'),$_POST['FILENAME'],array('type'=>'text', 'pattern'=>'[A-Za-z0-9_\-\s\.]+.*(?!list)','required'=>'true'),'false',t('settings_sources_add_form_filename_tooltip'));
+		$page .= addTextArea('CONTENT', t('settings_sources_add_form_content'),$sample_content, array('rows'=>10, 'cols'=>"80", 'required'=>'true'),'style="width: 600px"',t('settings_sources_add_form_content_tooltip'));
+
+		$buttons .= addButton(array('label'=>t("settings_button_back"),'class'=>'btn btn-default', 'href'=>$staticPath.$urlpath));
+		$buttons .= addSubmit(array('label'=>t("settings_sources_add_form_submit"),'class'=>'btn btn-success','divOptions'=>array('class'=>'btn-group')));
+	}
+
+	else {
+		$file = $SOURCESD_PATH.'/'.$_POST['FILENAME'].'.list';
+
+		addSource($file, $_POST['CONTENT']);
+
+		$buttons .= addButton(array('label'=>t("settings_button_back"),'class'=>'btn btn-default', 'href'=>$staticPath.$urlpath));
+
+		if (!validSourceFile($file)) {
+			$page .= txt(t("settings_sources_add_contents_pre").$file.t("settings_sources_add_contents_post"));
+			$page .= ptxt(file_get_contents($file),str_replace(".","",$value));
+		}
+
+		else {
+			$page .= txt(t("settings_sources_add_form_error"));
+			$page .= "<div class='alert alert-error text-center'>".t("settings_sources_add_form_error_file")."</div>\n";
+			$buttons .= addButton(array('label'=>t("settings_button_retry"),'class'=>'btn btn-warning', 'href'=>$staticPath.$urlpath.'/addSourceFile'));
+		}
+
+	}
+
+			$page .= $buttons;
+			return(array('type'=>'render','page'=>$page));
+}
+
 function toggleSource ($file, $line) {
 
 	$sfile = file ($file);
@@ -207,20 +269,16 @@ function toggleSource ($file, $line) {
 
 function addSource ($file, $content) {
 
-	$sfile = file ($file);
+	if (validSourceFile($file))
+		$content = "\n".$content;
 
-	if ( strpos(trim($sfile[$line]), '#') !== false )
-			$sfile[$line] = trim(trim($sfile[$line]), '#')."\n";
-		else
-			$sfile[$line] = '#'.$sfile[$line];
-
-	file_put_contents($file, $sfile);
+	file_put_contents($file, $content, $flags = FILE_APPEND);
 
 	return;
 }
 
 function validSourceFile($file) {
-	if (file_exists($file) && strpos($file,'/etc/apt/') == 0) {
+	if (file_exists($file) && ((substr($file, 0, strlen('/etc/apt/sources.list')) === '/etc/apt/sources.list') || (substr($file, 0, strlen('/etc/apt/sources.list.d/')) === '/etc/apt/sources.list.d/'))) {
 		$finfo = new finfo(FILEINFO_MIME);
 		if (strpos($finfo->buffer($file),'text/plain') !== false)
 			return true;
