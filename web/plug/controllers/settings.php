@@ -220,7 +220,7 @@ function addSource ($file, $content) {
 }
 
 function validSourceFile($file) {
-	if (file_exists($file) && strpos($file,'/etc/apt/') == 0) {
+	if (file_exists($file) && ((substr($file, 0, strlen('/etc/apt/sources.list')) === '/etc/apt/sources.list') || (substr($file, 0, strlen('/etc/apt/sources.list.d/')) === '/etc/apt/sources.list.d/'))) {
 		$finfo = new finfo(FILEINFO_MIME);
 		if (strpos($finfo->buffer($file),'text/plain') !== false)
 			return true;
