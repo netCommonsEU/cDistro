@@ -22,7 +22,7 @@ function index() {
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('Name',"Name",$con['name'],array('type'=>'text','required'=>''),"","Container display name");
 	$page .= addInput('Run',"Command",$con['run'],array('type'=>'text','size'=>200,'required'=>''),"","Container execution command");
-	$page .= addInput('Port',"Port",$con['port'],array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),"","The port on which the App will publish de service");
+	$page .= addInput('Port',"Port",$con['port'],array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),"","The port on which the App will publish the service");
 	$page .= addInput('Img',"Image",$con['img'],array('type'=>'text','required'=>''),"","Container Image");
 	if($con['pub']=="Yes"){
 		$page .= addCheckbox2('Pub',"Publish",array("Yes","No"),array('type'=>'text','required'=>''),"","Determine if the App will be published on Serf");
