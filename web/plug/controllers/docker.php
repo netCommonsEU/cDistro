@@ -6,22 +6,30 @@ $dev = "docker0";
 function index() {
         global $title, $urlpath, $docker_pkg, $staticFile;
 
-        $page = hlc(t("docker_title"));
-        $page .= hl(t("docker_desc"), 4);
+        $page = "";
+        $buttons = "";
+
+        $page .= hlc(t("docker_title"));
+        $page .= hl(t("docker_subtitle"),4);
+
+        $page .= par(t("docker_desc"));
+
+        $page .= txt(t("docker_status"));
+
 
         if (!isPackageInstall($docker_pkg)) {
-                $page .= "<div class='alert alert-error text-center'>".t("docker_not_installed")."</div>\n";
-                $page .= addButton(array('label'=>t("docker_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+                $page .= "<div class='alert alert-error text-center'>".t("docker_alert_not_installed")."</div>\n";
+                $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
                 return array('type'=>'render','page'=>$page);
         } elseif (!isRunning()) {
-                $page .= "<div class='alert alert-error text-center'>".t("docker_not_running")."</div>\n";
-                $page .= addButton(array('label'=>t("docker_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
-                $page .= addButton(array('label'=>t('docker_remove'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$docker_pkg));
+                $page .= "<div class='alert alert-error text-center'>".t("docker_alert_not_running")."</div>\n";
+                $page .= addButton(array('label'=>t("docker_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
+                $page .= addButton(array('label'=>t('docker_button_uninstall'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$docker_pkg));
                 return array('type'=>'render','page'=>$page);
         } else {
                 //$page .= ptxt(info_docker());
-                $page .= "<div class='alert alert-success text-center'>".t("docker_running")."</div>\n";
-                $page .= addButton(array('label'=>t("docker_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
+                $page .= "<div class='alert alert-success text-center'>".t("docker_alert_running")."</div>\n";
+                $page .= addButton(array('label'=>t("docker_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
 		//Codi modificat: Docker GUI
 		$page = docker_Admin($page);
@@ -45,14 +53,14 @@ function start() {
         global $urlpath;
 
         execute_program_detached("service docker start");
-        setFlash(t('docker_start_message'),"success");
+        setFlash(t('docker_alert_start_message'),"success");
         return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 function stop() {
         global $urlpath;
 
         execute_program_detached("service docker stop");
-        setFlash(t('docker_stop_message'),"success");
+        setFlash(t('docker_alert_stop_message'),"success");
         return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 function info_docker(){
