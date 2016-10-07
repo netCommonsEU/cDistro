@@ -197,7 +197,6 @@ function sourceLineButton ($content, $file, $line) {
 function addSourceFile() {
 
 	global $urlpath, $staticPath, $SOURCESD_PATH;
-	$sample_content = '### Add your repository sources here';
 
 	$page = "";
 	$buttons = "";
@@ -224,7 +223,7 @@ function addSourceFile() {
 
 		$page .= createForm(array('class'=>'form-horizontal'));
 		$page .= addInput('FILENAME', t('settings_sources_add_form_filename'),$_POST['FILENAME'],array('type'=>'text', 'pattern'=>'[A-Za-z0-9_\-\s\.]+.*(?!list)','required'=>'true'),'false',t('settings_sources_add_form_filename_tooltip'));
-		$page .= addTextArea('CONTENT', t('settings_sources_add_form_content'),$sample_content, array('rows'=>10, 'cols'=>"80", 'required'=>'true'),'style="width: 600px"',t('settings_sources_add_form_content_tooltip'));
+		$page .= addTextArea('CONTENT', t('settings_sources_add_form_content'),t('settings_sources_add_form_content_placeholder'), array('rows'=>10, 'cols'=>"80", 'required'=>'true'),'style="width: 600px"',t('settings_sources_add_form_content_tooltip'));
 
 		$buttons .= addButton(array('label'=>t("settings_button_back"),'class'=>'btn btn-default', 'href'=>$staticPath.$urlpath));
 		$buttons .= addSubmit(array('label'=>t("settings_sources_add_form_submit"),'class'=>'btn btn-success','divOptions'=>array('class'=>'btn-group')));
