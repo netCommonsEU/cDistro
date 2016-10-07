@@ -30,7 +30,7 @@ addS ("settings_button_shostname","Save hostname");
 addS ("settings_button_disable","Disable");
 addS ("settings_button_enable","Enable");
 addS ("settings_button_retry","Retry");
-addS ("settings_button_sources_addfile","Add a new file");
+addS ("settings_button_sources_addfile","Add a new sources file");
 addS ("settings_button_sources_addline","Add a new source line");
 addS ("settings_button_sources_pre","Manage ");
 addS ("settings_button_sources_post","");
