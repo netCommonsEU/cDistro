@@ -7,16 +7,35 @@
 addS ("settings_alert_","");
 
 
+//addSourceFile
+addS ("settings_sources_add_subtitle","Añadir un nuevo fichero de repositorios");
+addS ("settings_sources_add_contents_pre","Contenido del fichero de repositorios <strong>");
+addS ("settings_sources_add_contents_post","</strong>:");
+addS ("settings_sources_add_desc","Use los campos a continuación para crear un nuevo fichero de fuentes de paquetes y añada los repositorios:");
+addS ("settings_sources_add_form_filename","Nombre de fichero");
+addS ("settings_sources_add_form_filename_tooltip",'El fichero se guardará en el directorio /etc/apt/sources.list.d/. La extensión ".list" se añadirá automáticamente.');
+addS ("settings_sources_add_form_content","Contenido");
+addS ("settings_sources_add_form_content_placeholder","### Añada sus repositorios aquí");
+addS ("settings_sources_add_form_content_tooltip","Añada los repositorios de paquetes aquí, uno por línea.");
+addS ("settings_sources_add_form_error","Ha ocurrido un error:");
+addS ("settings_sources_add_form_error_file","El fichero de repositorios no se ha podido crear");
+addS ("settings_sources_add_form_error_filename","El nombre de fichero no puede estar en blanco");
+addS ("settings_sources_add_form_error_content","El contenido del fichero no puede estar en blanco");
+addS ("settings_sources_add_form_submit","Guardar el nuevo fichero de repositorios");
+
+
 //buttons
 addS ("settings_button_hostname","Cambiar el nombre del dispositivo");
 addS ("settings_button_back","Volver");
 addS ("settings_button_shostname","Guardar el nombre del dispositivo");
 addS ("settings_button_disable","Desactivar");
 addS ("settings_button_enable","Activar");
-addS ("settings_button_source_add","Añadir una línea nueva");
+addS ("settings_button_retry","Reintentar");
+addS ("settings_button_sources_addfile","Añadir un fichero de fuentes nuevo");
+addS ("settings_button_sources_addline","Añadir una línea nueva");
 addS ("settings_button_sources_pre","Gestionar ");
 addS ("settings_button_sources_post","");
-addS ("settings_button_","");
+
 
 
 //common

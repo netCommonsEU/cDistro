@@ -15,6 +15,7 @@ addS ("settings_sources_add_desc","Fill in the form below to create a new source
 addS ("settings_sources_add_form_filename","Filename");
 addS ("settings_sources_add_form_filename_tooltip",'The file will be saved to the /etc/apt/sources.list.d/ directory. The ".list" extension will be automatically appended.');
 addS ("settings_sources_add_form_content","Content");
+addS ("settings_sources_add_form_content_placeholder","### Add your repository sources here");
 addS ("settings_sources_add_form_content_tooltip","Add the package repository sources here, one per line.");
 addS ("settings_sources_add_form_error","An error occurred:");
 addS ("settings_sources_add_form_error_file","The sources file could not be created");
@@ -30,7 +31,7 @@ addS ("settings_button_shostname","Save hostname");
 addS ("settings_button_disable","Disable");
 addS ("settings_button_enable","Enable");
 addS ("settings_button_retry","Retry");
-addS ("settings_button_sources_addfile","Add a new file");
+addS ("settings_button_sources_addfile","Add a new sources file");
 addS ("settings_button_sources_addline","Add a new source line");
 addS ("settings_button_sources_pre","Manage ");
 addS ("settings_button_sources_post","");

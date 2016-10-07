@@ -7,13 +7,32 @@
 addS ("settings_alert_","");
 
 
+//addSourceFile
+addS ("settings_sources_add_subtitle","Afegir un nou arxiu de repositori de paquets");
+addS ("settings_sources_add_contents_pre","Continguts del arxiu de repositoris <strong>");
+addS ("settings_sources_add_contents_post","</strong>:");
+addS ("settings_sources_add_desc","Empreu els camps de sota per crear un nou arxiu de fonts de paquets i afegiu-hi els repositoris:");
+addS ("settings_sources_add_form_filename","Nom d'arxiu");
+addS ("settings_sources_add_form_filename_tooltip",'L\'arxiu es desarà al directori /etc/apt/sources.list.d/. L\'extensió ".list" s\'afegirà automàticament.');
+addS ("settings_sources_add_form_content","Contingut");
+addS ("settings_sources_add_form_content_placeholder","### Afegiu els vostres repositoris aquí");
+addS ("settings_sources_add_form_content_tooltip","Afegiu els repositoris de paquets aquí, un per línia.");
+addS ("settings_sources_add_form_error","Hi ha hagut un error:");
+addS ("settings_sources_add_form_error_file","No s'ha pogut crear l'arxiu de repositoris");
+addS ("settings_sources_add_form_error_filename","El nom de l'arxiu no pot estar en blanc");
+addS ("settings_sources_add_form_error_content","El contingut de l'arxiu no pot estar en blanc");
+addS ("settings_sources_add_form_submit","Desar el nou arxiu de repositoris");
+
+
 //buttons
 addS ("settings_button_hostname","Canvia el nom del dispositiu");
 addS ("settings_button_back","Enrere");
 addS ("settings_button_shostname","Desa el nom del dispositiu");
 addS ("settings_button_disable","Desactiva");
 addS ("settings_button_enable","Activa");
-addS ("settings_button_source_add","Afegeix una nova línia");
+addS ("settings_button_retry","Reintenta-ho");
+addS ("settings_button_sources_addfile","Afegeix un nou fitxer de fonts");
+addS ("settings_button_sources_addline","Afegeix una nova línia");
 addS ("settings_button_sources_pre","Gestiona ");
 addS ("settings_button_sources_post","");
 addS ("settings_button_","");
