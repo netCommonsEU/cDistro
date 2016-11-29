@@ -1,6 +1,5 @@
 <?php
 $urlpath="$staticFile/docker";
-$docker_pkg = "docker.io";
 $dev = "docker0";
 
 function index() {
