@@ -41,7 +41,7 @@ function index(){
 	} else {
 		$page .= "<div class='alert alert-success text-center'>".t("PeerStreamer installed")."</div>\n";
 		$page .= _listPSProcs();
-		
+
 		$page .= addButton(array('label'=>t('Connect to Peer'),'href'=>$staticFile.'/peerstreamer/connect'));
 		$page .= addButton(array('label'=>t('Publish a video stream'),'href'=>$staticFile.'/peerstreamer/publish'));
 		$page .= "<div class=text-right>";
@@ -75,7 +75,7 @@ function connect_get(){
 	$page .= addInput('ip',t('IP Address'),$peerip);
 	$page .= addInput('port',t('Port Address'),$peerport);
 	$page .= t('You:');
-	$page .= addCheckbox('type', t('Server Type'), array('RTSP'=>t('Create RTSP Server'),'UDP'=>t('Send to UDP Server')));
+	$page .= addSelect('type', t('Server Type'), array('RTSP'=>t('Create RTSP Server'),'UDP'=>t('Send to UDP Server')));
 	$page .= addInput('myport',t('Port'));
 	$page .= addSubmit(array('label'=>t('Connect'),'class'=>'btn btn-primary'));
 	$page .= addButton(array('label'=>t('Cancel'),'href'=>$staticFile.'/peerstreamer'));
@@ -104,7 +104,7 @@ function connect_post(){
 function uninstall(){
 	global $psutils;
 	global $staticFile;
-	
+
 	$cmd = $psutils." uninstall";
 	execute_program_detached($cmd);
 
