@@ -3,6 +3,7 @@
 // Config files
 require "config/global.php";
 require "core.php";
+require "lib/docker.php";
 require "lib/session.php";
 require "lib/lang.php";
 require "lib/form.php";

@@ -38,6 +38,8 @@ addS ("docker_search_form_search",'Search text');
 addS ("docker_search_form_search_tooltip",'Type the name (or part of it) of a Docker container, a repository or an application to search for it.');
 
 
+//main
+addS ("docker_title_containers", "Available Docker containers:");
 
 addS ("docker_info","Docker info:");
 addS ("docker_interface","Docker network interface:");

@@ -26,13 +26,15 @@ function index() {
                 $page .= addButton(array('label'=>t('docker_button_uninstall'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$docker_pkg));
                 return array('type'=>'render','page'=>$page);
         } else {
-                //$page .= ptxt(info_docker());
                 $page .= "<div class='alert alert-success text-center'>".t("docker_alert_running")."</div>\n";
-                $page .= addButton(array('label'=>t("docker_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
+                $buttons .= addButton(array('label'=>t("docker_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
+
+    $page .= docker_ps()[0];
+
 
 		//Codi modificat: Docker GUI
+    $page .= $buttons;
 		$page = docker_Admin($page);
-
                 return array('type' => 'render','page' => $page);
         }
 }
@@ -70,6 +72,45 @@ function info_docker(){
   return ( implode("\n", $ret['output']) );
 
 }
+
+
+function docker_ps(){
+  global $dev, $title, $urlpath, $docker_pkg, $staticFile;
+
+  $page = "";
+  $buttons = "";
+
+  $page .= txt(t("docker_title_containers"));
+
+  $ret = execute_program_shell('docker ps -n=-1 -a');
+
+  $retarray = explode(PHP_EOL,$ret['output']);
+
+  $headers = get_fancyheaders_from_string($retarray[0]);
+  $headers[] = t('Action');
+  $headerspos = get_headers_position_in_string($retarray[0]);
+
+  $table = "";
+
+  $table .= addTableHeader($headers);
+  foreach($retarray as $key => $value){
+    if ($key > 0) {
+      $fields = get_fields_in_string($value, $headerspos);
+
+      if ($fields[0] != "") {
+        $fields[] = addButton(array('label'=>t("default_button_dummy"),'class'=>'btn btn-default'));
+        $table .= addTableRow($fields);
+      }
+    }
+  }
+  $table .= addTableFooter();
+
+  $page .= $table;
+
+  return array($page, $buttons);
+
+}
+
 
 
 /////////////////////////////////////////////////////////////////////////
