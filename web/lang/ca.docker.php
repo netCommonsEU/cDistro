@@ -5,7 +5,8 @@ addS ("docker_title","Docker");
 addS ("docker_desc","Docker &eacute;s un projecte de codi obert que automatitza el desplegament d'aplicacions dintre de contenidors de programari, proporcionant una capa addicional d'abstracci&oacute; i automatitzaci&oacute; de virtualitzaci&oacute; a nivell de sistema operatiu.");
 
 addS ("docker_not_installed","Docker.io no est&agrave; instal·lat.");
-addS ("docker_install","Docker.io est&agrave; instal·lat.");
+addS ("docker_installed","Docker.io est&agrave; instal·lat.");
+addS ("docker_button_install","Instal·la Docker (docker.io)");
 addS ("docker_not_running","Docker.io est&agrave; parat.");
 addS ("docker_start","Activar Docker.io.");
 addS ("docker_remove","Desintal·lar Docker.io.");

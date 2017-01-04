@@ -11,7 +11,7 @@ function index() {
 
         if (!isPackageInstall($docker_pkg)) {
                 $page .= "<div class='alert alert-error text-center'>".t("docker_not_installed")."</div>\n";
-                $page .= addButton(array('label'=>t("docker_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+                $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
                 return array('type'=>'render','page'=>$page);
         } elseif (!isRunning()) {
                 $page .= "<div class='alert alert-error text-center'>".t("docker_not_running")."</div>\n";
