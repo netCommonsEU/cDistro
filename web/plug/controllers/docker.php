@@ -29,7 +29,11 @@ function index() {
                 $page .= "<div class='alert alert-success text-center'>".t("docker_alert_running")."</div>\n";
                 $buttons .= addButton(array('label'=>t("docker_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
 
-    $page .= docker_ps()[0];
+    $page .= docker_ps_running()["page"];
+    
+    $page .= docker_ps_stopped()["page"];
+    
+    $page .= docker_img()["page"];
 
 
 		//Codi modificat: Docker GUI
@@ -74,42 +78,10 @@ function info_docker(){
 }
 
 
-function docker_ps(){
-  global $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
-  $page = "";
-  $buttons = "";
 
-  $page .= txt(t("docker_title_containers"));
 
-  $ret = execute_program_shell('docker ps -n=-1 -a');
 
-  $retarray = explode(PHP_EOL,$ret['output']);
-
-  $headers = get_fancyheaders_from_string($retarray[0]);
-  $headers[] = t('Action');
-  $headerspos = get_headers_position_in_string($retarray[0]);
-
-  $table = "";
-
-  $table .= addTableHeader($headers);
-  foreach($retarray as $key => $value){
-    if ($key > 0) {
-      $fields = get_fields_in_string($value, $headerspos);
-
-      if ($fields[0] != "") {
-        $fields[] = addButton(array('label'=>t("default_button_dummy"),'class'=>'btn btn-default'));
-        $table .= addTableRow($fields);
-      }
-    }
-  }
-  $table .= addTableFooter();
-
-  $page .= $table;
-
-  return array($page, $buttons);
-
-}
 
 
 
@@ -468,5 +440,68 @@ function containerInstall() {
 	execute_program_detached($respath."installing ".$conInfo['img']);
 
 	setFlash("Installing Container... ".$conInfo['run'],"success");
+	return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+
+function container() {
+  global $Parameters, $dev, $title, $urlpath, $docker_pkg, $staticFile;
+
+  switch ($Parameters[0]) {
+    case "rm":
+      if (isset($Parameters[1]))
+        if (isset($Parameters[2]))
+          return _dockercontainerrm($Parameters[1], $Parameters[2]);
+        return _dockercontainerrm($Parameters[1]);
+	    break;
+    case "stop":
+      if (isset($Parameters[1]))
+        if (isset($Parameters[2]))
+          return _dockercontainerstop($Parameters[1], $Parameters[2]);
+        return _dockercontainerstop($Parameters[1]);
+	    break;
+    case "pull":
+      if (isset($Parameters[1]))
+        if (isset($Parameters[2]))
+          return _dockercontainerpull($Parameters[1] . "/" . $Parameters[2]);
+        return _dockercontainerpull($Parameters[1]);
+	    break;
+
+    default:
+      return(array('type'=> 'redirect', 'url' => $urlpath));
+  }
+}
+
+function _dockercontainerrm($id, $name) {
+  global $Parameters, $urlpath, $staticFile;
+
+  execute_program_detached("docker stop " . $id . " && docker rm " . $id);
+  sleep (1);
+
+  setFlash( t("docker_flash_rm_pre") . $name . t("docker_flash_rm_mid") . $id . t("docker_flash_rm_post"));
+
+	return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+
+
+function _dockercontainerpull($name) {
+  global $Parameters, $urlpath, $staticFile;
+
+  execute_program_detached("docker pull " . $name);
+  sleep (1);
+
+  setFlash( t("docker_flash_pull_pre") . "<b>" . $name . "</b>" . t("docker_flash_pull_post"));
+
+	return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+
+
+function _dockercontainerstop($id, $name) {
+  global $Parameters, $urlpath, $staticFile;
+
+  execute_program_detached("docker stop " . $id);
+
+  setFlash( t("docker_flash_stop_pre") . $name . t("docker_flash_stop_mid") . $id . t("docker_flash_stop_post"));
+  sleep(2);
+
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }

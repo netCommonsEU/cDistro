@@ -17,6 +17,19 @@ addS ("docker_button_search","Search Docker containers");
 addS ("docker_button_start","Start Docker");
 addS ("docker_button_stop","Stop Docker");
 addS ("docker_button_uninstall","Uninstall Docker (docker.io)");
+addS ("docker_button_container_stop","Stop");
+
+
+
+//flash
+addS ("docker_flash_rm_pre","Removing container ");
+addS ("docker_flash_rm_mid"," (ID: ");
+addS ("docker_flash_rm_post",") in the background. This may take some seconds...");
+addS ("docker_flash_pull_pre","Pulling container ");
+addS ("docker_flash_pull_post"," in the background. This may take some seconds...");
+addS ("docker_flash_stop_pre","Stopping container ");
+addS ("docker_flash_stop_mid"," (ID: ");
+addS ("docker_flash_stop_post",") in the background. This may take some seconds...");
 
 
 
@@ -36,10 +49,19 @@ addS ("docker_search_form_automated",'Automated');
 addS ("docker_search_form_automated_tooltip",'Search only for <a href="https://docs.docker.com/docker-cloud/builds/automated-build/">automatically built</a> Docker images.');
 addS ("docker_search_form_search",'Search text');
 addS ("docker_search_form_search_tooltip",'Type the name (or part of it) of a Docker container, a repository or an application to search for it.');
+addS ("docker_search_header_name",'Name');
+addS ("docker_search_header_description",'Description');
+addS ("docker_search_header_stars",'Stars');
+addS ("docker_search_header_official",'Official');
+addS ("docker_search_header_automated",'Automated');
+addS ("docker_search_header_action",'Action');
+addS ("docker_search_yes",'Yes');
+
 
 
 //main
-addS ("docker_title_containers", "Available Docker containers:");
-
 addS ("docker_info","Docker info:");
 addS ("docker_interface","Docker network interface:");
+addS ("docker_title_containers", "Running Docker containers:");
+addS ("docker_title_images", "Available Docker images:");
+

@@ -56,20 +56,21 @@ function index_post(){
   }
 
   $headers = get_fancyheaders_from_string($retarray[0]);
-  $headers[] = t('Action');
+  $headers[] = t('docker_search_header_action');
   $headerspos = get_headers_position_in_string($retarray[0]);
-
 
 
   $table = "";
 
   $table .= addTableHeader($headers);
   foreach($retarray as $key => $value){
+    $value = str_replace('[OK]', t("docker_search_yes"), $value);
     if ($key > 0) {
       $fields = get_fields_in_string($value, $headerspos);
 
       if ($fields[0] != "") {
-        $fields[] = addButton(array('label'=>t("default_button_dummy"),'class'=>'btn btn-default'));
+        $fields[0] = preg_replace('/\s+/', '', $fields[0]);
+        $fields[] = addButton(array('label'=>t("docker_button_container_pull"),'class'=>'btn btn-primary', 'href'=>"docker/container/pull/".$fields[0]));
         $table .= addTableRow($fields);
       }
     }
