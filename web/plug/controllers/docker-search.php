@@ -12,12 +12,12 @@ function index() {
 
   $page .= par(t("docker_search_desc"));
 
-  $buttons .= addButton(array('label'=>t("default_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath/docker"));
+  $buttons .= addButton(array('label'=>t("default_button_back"),'class'=>'btn btn-default', 'href'=>"$staticFile/docker"));
 
 
 	//Formulari
 	$page .= createForm(array('class'=>'form-horizontal'));
-	$page .= addInput('search',t("docker_search_form_search"),$con['search'],array('type'=>'text','required'=>true,'placeholder'=>'etherpad','pattern'=>"[a-z0-9_-\.]+"),"",t("docker_search_form_search_tooltip"));
+	$page .= addInput('search',t("docker_search_form_search"),$con['search'],array('type'=>'text','required'=>true,'placeholder'=>'etherpad','pattern'=>"^[a-z0-9\-]+$"),"",t("docker_search_form_search_tooltip"));
   $page .= addCheckbox('automated',t("docker_search_form_automated"),$con['automated'],array('type'=>'checkbox'),"",t("docker_search_form_automated_tooltip"));
 	$buttons .= addSubmit(array('label'=>t("docker_button_search"),'class'=>'btn btn-success','divOptions'=>array('class'=>'btn-group')));
 

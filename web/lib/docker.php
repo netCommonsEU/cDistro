@@ -13,24 +13,27 @@ function docker_img(){
 
   $retarray = explode(PHP_EOL,$ret['output']);
 
-  $headers = get_fancyheaders_from_string($retarray[0]);
-  $headers[] = t('Action');
-  $headerspos = get_headers_position_in_string($retarray[0]);
-
-  $table = "";
-
-  $table .= addTableHeader($headers);
-  foreach($retarray as $key => $value){
-    if ($key > 0) {
-      $fields = get_fields_in_string($value, $headerspos);
-
-      if ($fields[0] != "") {
-        $fields[] = addButton(array('label'=>t("default_button_dummy"),'class'=>'btn btn-default'));
-        $table .= addTableRow($fields);
+  if ( array_key_exists(2, $retarray )) {
+    $table = "";
+    $headers = get_fancyheaders_from_string($retarray[0]);
+    $headers[] = t('Actions');
+    $headerspos = get_headers_position_in_string($retarray[0]);
+    $table .= addTableHeader($headers);
+    foreach($retarray as $key => $value){
+      if ($key > 0) {
+        $fields = get_fields_in_string($value, $headerspos);
+        if ($fields[0] != "") {
+          $fields[] = addButton(array('label'=>t("docker_button_image_rmi"),'class'=>'btn btn-danger', 'href'=>"$urlpath/image/rmi/".trim($fields[0])."/".$fields[6]));
+          $fields[] = addButton(array('label'=>t("docker_button_image_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/image/run/".trim($fields[0])."/".$fields[6]));
+          $table .= addTableRow($fields);
+        }
       }
     }
+    $table .= addTableFooter();
   }
-  $table .= addTableFooter();
+  else {
+    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_img_not_available")."</div>\n";
+  }
 
   $page .= $table;
 
@@ -50,28 +53,33 @@ function docker_ps_running(){
 
   $retarray = explode(PHP_EOL,$ret['output']);
 
-  $headers = get_fancyheaders_from_string($retarray[0]);
-  $headers[] = t('Action');
-  $headerspos = get_headers_position_in_string($retarray[0]);
+  if ( array_key_exists(2, $retarray )) {
+    $table = "";
+    $headers = get_fancyheaders_from_string($retarray[0]);
+    $headers[] = t('Action');
+    $headerspos = get_headers_position_in_string($retarray[0]);
+    $table .= addTableHeader($headers);
+    foreach($retarray as $key => $value){
+      if ($key > 0) {
+        $fields = get_fields_in_string($value, $headerspos);
 
-  $table = "";
-
-  $table .= addTableHeader($headers);
-  foreach($retarray as $key => $value){
-    if ($key > 0) {
-      $fields = get_fields_in_string($value, $headerspos);
-
-      if ($fields[0] != "") {
-        $fields[0] = preg_replace('/\s+/', '', $fields[0]);
-        $fields[6] = preg_replace('/\s+/', '', $fields[6]);
-        $fields[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$fields[0]."/".$fields[6]));
-        $table .= addTableRow($fields);
+        if ($fields[0] != "") {
+          $fields[0] = preg_replace('/\s+/', '', $fields[0]);
+          $fields[6] = preg_replace('/\s+/', '', $fields[6]);
+          $fields[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$fields[0]."/".$fields[6]));
+          $table .= addTableRow($fields);
+        }
       }
     }
+    $table .= addTableFooter();
+    $page .= $table;
   }
-  $table .= addTableFooter();
+  
+  else {
+    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_ps_not_running")."</div>\n";
+  }
 
-  $page .= $table;
+  
 
   return ["page" => $page, "buttons" => $buttons];
 }
@@ -89,28 +97,31 @@ function docker_ps_stopped(){
 
   $retarray = explode(PHP_EOL,$ret['output']);
 
-  $headers = get_fancyheaders_from_string($retarray[0]);
-  $headers[] = t('Action');
-  $headerspos = get_headers_position_in_string($retarray[0]);
+  if ( array_key_exists(2, $retarray )) {
+    $table = "";
+    $headers = get_fancyheaders_from_string($retarray[0]);
+    $headers[] = t('Actions');
+    $headerspos = get_headers_position_in_string($retarray[0]);
+    $table .= addTableHeader($headers);
+    foreach($retarray as $key => $value){
+      if ($key > 0) {
+        $fields = get_fields_in_string($value, $headerspos);
 
-  $table = "";
-
-  $table .= addTableHeader($headers);
-  foreach($retarray as $key => $value){
-    if ($key > 0) {
-      $fields = get_fields_in_string($value, $headerspos);
-
-      if ($fields[0] != "") {
-        $fields[0] = preg_replace('/\s+/', '', $fields[0]);
-        $fields[6] = preg_replace('/\s+/', '', $fields[6]);
-        $fields[] = addButton(array('label'=>t("docker_button_container_rm"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/rm/".$fields[0]."/".$fields[6]));
-        $table .= addTableRow($fields);
+        if ($fields[0] != "") {
+          $fields[0] = preg_replace('/\s+/', '', $fields[0]);
+          $fields[6] = preg_replace('/\s+/', '', $fields[6]);
+          $fields[] = addButton(array('label'=>t("docker_button_container_rm"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/rm/".$fields[0]."/".$fields[6]));
+          $fields[] = addButton(array('label'=>t("docker_button_container_restart"),'class'=>'btn btn-success', 'href'=>"$urlpath/container/restart/".$fields[0]."/".$fields[6]));
+          $table .= addTableRow($fields);
+        }
       }
     }
+    $table .= addTableFooter();
+    $page .= $table;
   }
-  $table .= addTableFooter();
-
-  $page .= $table;
+  else{
+    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_ps_not_stopped")."</div>\n";
+  }
 
   return ["page" => $page, "buttons" => $buttons];
 }
