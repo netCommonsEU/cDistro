@@ -224,9 +224,8 @@ function softwareinstalled() {
 	return( file_exists($pspath . $psprogram) && file_exists($vlcpath . $vlcprogram) );
 }
 
-function _isInstalled() {
-
-	return( file_exists(pspath . psprogram) );
+function _peerstreamer_isInstalled() {
+    return( file_exists(pspath . psprogram) );
 }
 
 function _psviewer($url){

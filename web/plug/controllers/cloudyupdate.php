@@ -3,12 +3,44 @@
 // Example serf preinstall:
 // 'serf'=>array('user'=>'Clommunity', 'repo'=>'package-serf','type'=>'preinstall','controller'=>'serf', 'function-check'=>'_isInstalled', 'script'=>'https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub')
 
-$list_packages = array('cDistro'=>array('user'=>'Clommunity', 'repo'=>'cDistro','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot'),
-					   'avahi-ps'=>array('user'=>'Clommunity', 'repo'=>'avahi-ps','type'=>'manual','script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot'),
-					   'serf'=>array('user'=>'Clommunity', 'repo'=>'package-serf','type'=>'manual','controller'=>'serf', 'script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/serf.chroot'),
-					   'peerstreamer'=>array('user'=>'Clommunity', 'repo'=>'build-peerstreamer','type'=>'preinstall','controller'=>'peerstreamer', 'function-check'=>'_isInstalled', 'script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/peerstreamer.chroot')
-			// 'peerstreamer'=>array('user'=>'Clommunity', 'repo'=>'build-peerstreamer','type'=>'manual','controller'=>'peerstreamer', 'script'=>'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/peerstreamer.chroot')
-					   );
+    $list_packages = array(
+                      'cDistro' => array(
+                                         'user'           => 'Clommunity',
+                                         'repo'           => 'cDistro',
+                                         'type'           => 'manual',
+                                         'script'         => 'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/cDistro.chroot',
+                                         ),
+                      'avahi-ps' => array(
+                                         'user'           => 'Clommunity',
+                                         'repo'           => 'avahi-ps',
+                                         'type'           => 'manual',
+                                         'script'         => 'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/avahi-ps.chroot',
+                                         ),
+                      'docker-compose' => array(
+                                         'user'           => 'Clommunity',
+                                         'repo'           => 'package-docker-compose',
+                                         'type'           => 'preinstall',
+                                         'controller'     => 'docker-compose',
+                                         'function-check' => '_dockercompose_isInstalled',
+                                         'script'         => 'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/docker-compose.chroot',
+                                         ),
+                      'serf' => array(
+                                         'user'           => 'Clommunity',
+                                         'repo'           => 'package-serf',
+                                         'type'           => 'manual',
+                                         'controller'     => 'serf',
+                                         'script'         => 'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/serf.chroot',
+                                         ),
+                      'peerstreamer' => array(
+                                         'user'           => 'Clommunity',
+                                         'repo'           => 'build-peerstreamer',
+                                         'type'           => 'preinstall',
+                                         'controller'     => 'peerstreamer',
+                                         'function-check' => '_peerstreamer_isInstalled',
+                                         'script'         => 'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/peerstreamer.chroot',
+                                         ),
+                      );
+
 $dir_configs="/etc/cloudy";
 
 function index_get()
@@ -66,9 +98,10 @@ function getCloudyUpdateTable(){
 		$buttons = "";
 		$installed_version = getYourVersion($package['user'],$package['repo']);
 		$last_version = getGitMaster($package['user'],$package['repo']);
-		if ($installed_version != $last_version) {
+		if ($installed_version == t('cloudyupdate_getYourVersion_none'))
+			$buttons = addButton(array('label'=>t("cloudyupdate_button_install"),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
+		elseif ($installed_version != $last_version)
 			$buttons = addButton(array('label'=>t("cloudyupdate_button_upgrade"),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
-		}
 		$table .= addTableRow(array($pname, $installed_version, $last_version, $buttons));
 	}
 	$table .= addTableFooter();
@@ -118,7 +151,7 @@ function getYourVersion($user, $repo){
 	}
 	$configfile = $dir_configs."/".$user."-".$repo.".sha";
 	if (!file_exists($configfile))
-		return (t('unknown'));
+		return (t('cloudyupdate_getYourVersion_none'));
 	else
 		return (str_replace("\n", "",str_replace("\r", "",file_get_contents($configfile))));
 
