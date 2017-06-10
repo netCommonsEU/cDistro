@@ -19,9 +19,9 @@
                       'docker-compose' => array(
                                          'user'           => 'Clommunity',
                                          'repo'           => 'package-docker-compose',
-                                         'type'           => 'preinstall',
+                                         'type'           => 'automatic',
                                          'controller'     => 'docker-compose',
-                                         'function-check' => '_dockercompose_isInstalled',
+                                         'function-check' => '_docker_compose_isInstalled',
                                          'script'         => 'https://raw.githubusercontent.com/Clommunity/lbmake/master/hooks/docker-compose.chroot',
                                          ),
                       'serf' => array(
@@ -143,19 +143,6 @@ function getDebianUpdateTable(){
 	return(array('type'=>'ajax','page'=>$table));
 }
 
-function getYourVersion($user, $repo){
-	global $dir_configs;
-
-	if (!is_dir($dir_configs)) {
-    	mkdir($dir_configs);
-	}
-	$configfile = $dir_configs."/".$user."-".$repo.".sha";
-	if (!file_exists($configfile))
-		return (t('cloudyupdate_getYourVersion_none'));
-	else
-		return (str_replace("\n", "",str_replace("\r", "",file_get_contents($configfile))));
-
-}
 
 function getGitMaster($user, $repo){
 	$github = "https://api.github.com/repos/" . $user . "/" . $repo . "/git/refs/heads/master";

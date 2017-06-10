@@ -1,6 +1,6 @@
 <?php
 $urlpath="$staticFile/docker-search";
-$docker_pkg = "docker.io";
+$docker_pkg = "docker-ce";
 $dev = "docker0";
 
 function index() {

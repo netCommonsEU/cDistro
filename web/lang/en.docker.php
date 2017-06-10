@@ -14,12 +14,12 @@ addS ("docker_alert_stop_message","Docker has been stopped");
 
 
 //buttons
-addS ("docker_button_install","Install Docker (docker.io)");
+addS ("docker_button_install","Install Docker (docker-ce)");
 addS ("docker_button_restart","Restart Docker");
 addS ("docker_button_search","Search Docker containers");
 addS ("docker_button_start","Start Docker");
 addS ("docker_button_stop","Stop Docker");
-addS ("docker_button_uninstall","Uninstall Docker (docker.io)");
+addS ("docker_button_uninstall","Uninstall Docker (docker-ce)");
 addS ("docker_button_container_pull","Pull image");
 addS ("docker_button_container_stop","Stop container");
 addS ("docker_button_container_rm","Remove container");
@@ -56,6 +56,8 @@ addS ("docker_title","Docker");
 addS ("docker_desc",'Docker is an open-source project that automates the deployment of applications inside software containers, by providing an additional layer of abstraction and automation of operating-system-level virtualization.');
 addS ("docker_status","Docker status:");
 addS ("docker_subtitle","Automated deployment of Linux applications inside software containers");
+addS ("docker_container_stopped","stopped");
+addS ("docker_container_running","running");
 
 
 
@@ -83,4 +85,3 @@ addS ("docker_interface","Docker network interface:");
 addS ("docker_title_containers_running", "Running Docker containers:");
 addS ("docker_title_containers_stopped", "Stopped Docker containers:");
 addS ("docker_title_images", "Available Docker images:");
-

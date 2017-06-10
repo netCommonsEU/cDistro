@@ -41,13 +41,12 @@ function docker_img(){
 }
 
 
-function docker_ps_running(){
+function docker_ps_running_table($dock_filter = null){
   global $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
   $page = "";
   $buttons = "";
-
-  $page .= txt(t("docker_title_containers_running"));
+  $dock_count = 0;
 
   $ret = execute_program_shell('docker ps -n=-1');
 
@@ -67,31 +66,32 @@ function docker_ps_running(){
           $fields[0] = preg_replace('/\s+/', '', $fields[0]);
           $fields[6] = preg_replace('/\s+/', '', $fields[6]);
           $fields[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$fields[0]."/".$fields[6]));
-          $table .= addTableRow($fields);
+          if (($dock_filter === null) || ( strpos($fields[6], $dock_filter.'_') !== false))
+            {
+            $table .= addTableRow($fields);
+            $dock_count++;
+        }
         }
       }
     }
     $table .= addTableFooter();
-    $page .= $table;
-  }
-  
-  else {
-    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_ps_not_running")."</div>\n";
   }
 
-  
+  if ($dock_count > 0)
+      $page .= $table;
+  else
+    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_ps_not_running")."</div>\n";
 
   return ["page" => $page, "buttons" => $buttons];
 }
 
 
-function docker_ps_stopped(){
+function docker_ps_stopped_table($dock_filter = null){
   global $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
   $page = "";
   $buttons = "";
-
-  $page .= txt(t("docker_title_containers_stopped"));
+  $dock_count = 0;
 
   $ret = execute_program_shell('docker ps -a -n=-1 -f status=exited');
 
@@ -112,16 +112,20 @@ function docker_ps_stopped(){
           $fields[6] = preg_replace('/\s+/', '', $fields[6]);
           $fields[] = addButton(array('label'=>t("docker_button_container_rm"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/rm/".$fields[0]."/".$fields[6]));
           $fields[] = addButton(array('label'=>t("docker_button_container_restart"),'class'=>'btn btn-success', 'href'=>"$urlpath/container/restart/".$fields[0]."/".$fields[6]));
-          $table .= addTableRow($fields);
+          if (($dock_filter === null) || ( strpos($fields[6], $dock_filter.'_') !== false)) {
+              $table .= addTableRow($fields);
+              $dock_count++;
+          }
         }
       }
     }
     $table .= addTableFooter();
-    $page .= $table;
-  }
-  else{
-    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_ps_not_stopped")."</div>\n";
-  }
+    }
+
+    if ($dock_count > 0)
+        $page .= $table;
+    else
+        $page .= "<div class='alert alert-info text-center'>".t("docker_alert_ps_not_stopped")."</div>\n";
 
   return ["page" => $page, "buttons" => $buttons];
 }
@@ -178,4 +182,57 @@ function get_headers_position_in_string($headerstring){
       $headerspos[] = $key;
 
   return $headerspos;
+}
+
+function docker_ps_running(){
+    global $dev, $title, $urlpath, $docker_pkg, $staticFile;
+
+    $dock_run = array();
+    $ret = execute_program_shell('docker ps -n=-1');
+
+    $retarray = explode(PHP_EOL,$ret['output']);
+
+    if ( array_key_exists(2, $retarray )) {
+      $headers = get_fancyheaders_from_string($retarray[0]);
+      $headerspos = get_headers_position_in_string($retarray[0]);
+
+      foreach($retarray as $key => $value){
+        if ($key > 0) {
+          $fields = get_fields_in_string($value, $headerspos);
+
+          if ($fields[0] != "") {
+            $fields[0] = preg_replace('/\s+/', '', $fields[0]);
+            $fields[6] = preg_replace('/\s+/', '', $fields[6]);
+            array_push($dock_run, $fields[6]);
+          }
+        }
+      }
+    }
+    return ($dock_run);
+}
+
+function docker_ps_stopped(){
+    global $dev, $title, $urlpath, $docker_pkg, $staticFile;
+
+    $dock_stop = array();
+    $ret = execute_program_shell('docker ps -a -n=-1 -f status=exited');
+
+    $retarray = explode(PHP_EOL,$ret['output']);
+
+    if ( array_key_exists(2, $retarray )) {
+      $headers = get_fancyheaders_from_string($retarray[0]);
+      $headerspos = get_headers_position_in_string($retarray[0]);
+
+      foreach($retarray as $key => $value){
+        if ($key > 0) {
+          $fields = get_fields_in_string($value, $headerspos);
+
+          if ($fields[0] != "") {
+            $fields[6] = preg_replace('/\s+/', '', $fields[6]);
+            array_push($dock_stop, $fields[6]);
+          }
+        }
+      }
+    }
+    return ($dock_stop);
 }
