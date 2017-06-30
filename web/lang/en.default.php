@@ -8,6 +8,7 @@ addS ("default_common_description","A Community Network Cloud in a box");
 
 //Buttons
 addS ("default_button_back","Back");
+addS ("default_button_dummy","Dummy");
 addS ("default_button_home","Home");
 
 //index

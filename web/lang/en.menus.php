@@ -86,6 +86,8 @@ addS ("menus_sweep_clommunity", "Community");
 
 //Docker
 addS ("menus_docker_server", "Docker");
+addS ("menus_docker_compose_server", "Docker Compose");
+
 
 //Enterprise
 addS ("menus_cloud_enterprise", "Enterprise cloud");

@@ -1,6 +1,6 @@
 <?php
 $urlpath="$staticFile/docker";
-$docker_pkg = "docker.io";
+$docker_pkg = "docker-ce";
 $dev = "docker0";
 
 function index() {
@@ -22,12 +22,12 @@ function index() {
 	$page .= createForm(array('class'=>'form-horizontal'));
 	$page .= addInput('Name',"Name",$con['name'],array('type'=>'text','required'=>''),"","Container display name");
 	$page .= addInput('Run',"Command",$con['run'],array('type'=>'text','size'=>200,'required'=>''),"","Container execution command");
-	$page .= addInput('Port',"Port",$con['port'],array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),"","The port on which the App will publish de service");
+	$page .= addInput('Port',"Port",$con['port'],array('type'=>'number', 'min' => '1024', 'max' => '65535', 'required'=>''),"","The port on which the App will publish the service");
 	$page .= addInput('Img',"Image",$con['img'],array('type'=>'text','required'=>''),"","Container Image");
 	if($con['pub']=="Yes"){
-		$page .= addCheckbox2('Pub',"Publish",array("Yes","No"),array('type'=>'text','required'=>''),"","Determine if the App will be published on Serf");
+		$page .= addSelect2('Pub',"Publish",array("Yes","No"),array('type'=>'text','required'=>''),"","Determine if the App will be published on Serf");
 	}else{
-		$page .= addCheckbox2('Pub',"Publish",array("No","Yes"),array('type'=>'text','required'=>''),"","Determine if the App will be published on Serf");
+		$page .= addSelect2('Pub',"Publish",array("No","Yes"),array('type'=>'text','required'=>''),"","Determine if the App will be published on Serf");
         }
 	$page .= addInput('Id',"Container ID","ndef",array('type'=>'text','size'=>'200'),"readonly","Container ID. Not Editable");
 	//$page .= addInput('SERF_RPC_ADDR',t('serf_index_form_rpc'),$con['name'],array('type'=>'text', 'pattern'=>'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{1,5}','required'=>''),$readonly,t('serf_index_form_rpc_tooltip'));
@@ -95,9 +95,9 @@ function get_container_info($image){
         return(array('name'=>$name,'run'=>$run,'id'=>$id,'port'=>$port,'img'=>$img,'pub'=>$pub));
 }
 
-//Redefinim la funció  addCheckbox de la llibreria lib/form.php
+//Redefinim la funció  addSelect de la llibreria lib/form.php
 //L'objectiu és canviar el valor de cada option
-function addCheckbox2($name=null, $label= null, $value = null, $options = null, $attributes = null, $tooltip = null, $nobr = null){
+function addSelect2($name=null, $label= null, $value = null, $options = null, $attributes = null, $tooltip = null, $nobr = null){
         if (!is_null($name)){
                 $options['name'] = $name;
         }

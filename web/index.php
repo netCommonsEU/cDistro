@@ -3,6 +3,7 @@
 // Config files
 require "config/global.php";
 require "core.php";
+require "lib/docker.php";
 require "lib/session.php";
 require "lib/lang.php";
 require "lib/form.php";
@@ -11,6 +12,8 @@ require "lib/errors.php";
 require "lib/utilio.php";
 require "lib/auth.php";
 require "lib/guifi_api.php";
+require "lib/package.php";
+//require "lib/docker-compose.php";
 
 if (isset($user)) {
 	require "lib/menus.php";
@@ -20,6 +23,7 @@ if (isset($user)) {
 $css = array('bootstrap.min','bootstrap-responsive.min', 'jquery.dataTables','main');
 $js = array('jquery-1.11.0.min','jquery.dataTables.min','bootstrap.min');
 $js_end = array('main');
+$dir_configs="/etc/cloudy";
 
 
 if (isset($user) && !$post_login) {
