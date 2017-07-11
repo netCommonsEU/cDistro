@@ -111,7 +111,7 @@ function set_primary_interface ($interface) {
 	global $CLOUDY_CONF_FILE, $CLOUDY_CONF_DIR, $staticPath, $urlpath;
 
 	$dataSave['PRIMARYINTERFACE'] = '"'.$interface.'"';
-	print_r($dataSave);
+
 	write_merge_conffile($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE, $dataSave);
 
 	if (getnetworkprimary() == $interface ) {
