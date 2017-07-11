@@ -30,25 +30,27 @@ addS ("settings_button_back","Enrere");
 addS ("settings_button_shostname","Desa el nom del dispositiu");
 addS ("settings_button_disable","Desactiva");
 addS ("settings_button_enable","Activa");
+addS ("settings_button_network_configure","Configura la interfície principal");
+addS ("settings_button_network_modify","Canvia la interfície principal");
+addS ("settings_button_network_setprimary","Desa la interfície principal");
 addS ("settings_button_retry","Reintenta-ho");
 addS ("settings_button_sources_addfile","Afegeix un nou fitxer de fonts");
 addS ("settings_button_sources_addline","Afegeix una nova línia");
 addS ("settings_button_sources_pre","Gestiona ");
 addS ("settings_button_sources_post","");
-addS ("settings_button_","");
 
 
 //common
 addS ("settings_common_title","Configuració del dispositiu");
 addS ("settings_common_subtitle","Gestió de la configuració i els paràmetres del dispositiu");
 addS ("settings_common_error","Hi ha hagut un error:");
-addS ("settings_common_","");
 
 
 //flash
 addS ("settings_flash_hostname","Nom del dispositiu modificat correctament");
 addS ("settings_flash_hostnamefail","Ha fallat el canvi de nom del dispositiu");
-addS ("settings_flash_","");
+addS ("settings_flash_network_primaryint_success", "S'ha desat satisfactòriament la interfície de xarxa principal");
+addS ("settings_flash_network_primaryint_fail", "No s'ha pogut desar la interfície de xarxa principal");
 
 
 //hostname
@@ -63,9 +65,21 @@ addS ("settings_hostname_invalid","Nom de dispositiu invàlid:");
 addS ("settings_hostname_empty","(buit)");
 
 
+//network
+addS ("settings_network_title","Xarxa");
+addS ("settings_network_subtitle","Paràmetres i configuració de xarxa");
+addS ("settings_network_description","Empreu aquesta pàgina per administrar els paràmetres i la configuració de la xarxa.");
+addS ("settings_network_primaryint","Interfície principal:");
+addS ("settings_network_primaryint_invalid", "La interfície principal que heu seleccionat no és vàlida:");
+addS ("settings_network_primaryint_empty", "(no s'ha seleccionat cap interfície de xarxa)");
+addS ("settings_network_form_primaryint","Interfície principal");
+addS ("settings_network_form_primaryint_tooltip","Escolliu la interfície de xarxa principal d'aquest dispositiu Cloudy, o bé aquella que el connecta a la Xarxa Comunitària.");
+addS ("settings_network_title","Xarxa");
+addS ("settings_network_empty","(buit)");
+
+
 //index
 addS ("settings_index_description","Aquesta pàgina us mostra diferents paràmetres del sistema i us permet modificar-los.");
-addS ("settings_index_","");
 
 
 //sources
