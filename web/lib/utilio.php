@@ -72,17 +72,37 @@ function write_conffile($file,$dates,$preinfo="",$postinfo=""){
 		notWriteFile($file);
 	}
 }
+
 function write_merge_conffile($file,$dates){
 	global $debug;
 
-	if ($debug) { echo "<pre>";}
-	foreach($dates as $k=>$v){
-		$cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k." = ".$v."|g' ".$file;
-		if ($debug) { echo $cmd;}
-		shell_exec($cmd);
-	}
-	if ($debug) { echo "</pre>";}
+	if (file_exists($file)) {
+		$conf = parse_ini_file($file);
+		$str = "";
+
+		if ($debug)
+			echo "<pre>";
+
+			foreach($dates as $k=>$v) {
+				if ( array_key_exists($k, $conf)) {
+					$cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k." = ".$v."|g' ".$file;
+
+					if ($debug)
+						echo $cmd;
+
+					shell_exec($cmd);
+				}
+				else
+					$str .="$k=$v\n";
+			}
+			if ($debug)
+				echo "</pre>";
+
+		if ($str != "")
+			file_put_contents($file, $str, FILE_APPEND);
+		}
 }
+
 
 function exec_user($cmd,$user){
 	$cmd = "/bin/su ".$user." -c '" . addslashes($cmd) . "'";
