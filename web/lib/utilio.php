@@ -77,7 +77,7 @@ function write_merge_conffile($file,$dates){
 
 	if ($debug) { echo "<pre>";}
 	foreach($dates as $k=>$v){
-		$cmd = "sed -i -e 's|".$k." *= *[^;]*;|".$k." = ".$v.";|g' ".$file;
+		$cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k." = ".$v."|g' ".$file;
 		if ($debug) { echo $cmd;}
 		shell_exec($cmd);
 	}
