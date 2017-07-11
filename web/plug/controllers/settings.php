@@ -27,7 +27,16 @@ function index() {
 	$page .= txt(t("settings_hostname_current"));
 	$page .= ptxt(gethostname());
 	$buttons = addButton(array('label'=>t("settings_button_hostname"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/hostname'));
+	$page .= $buttons;
 
+
+	$page .= hlc(t("settings_network_title"),2);
+	$page .= txt(t("settings_network_primary"));
+	$page .= ptxt(getnetworkprimaryhr());
+	if (getnetworkprimary())
+		$buttons = addButton(array('label'=>t("settings_button_network_modify"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/network'));
+	else
+		$buttons = addButton(array('label'=>t("settings_button_network_configure"),'class'=>'btn btn-success', 'href'=>$staticPath.$urlpath.'/network'));
 	$page .= $buttons;
 
 
@@ -94,6 +103,59 @@ function setHostname($newhostname){
 
 	setFlash(t('settings_flash_hostnamefail'),"error");
 	return(array('type'=>'redirect','url'=>$staticPath.$urlpath));
+}
+
+
+function set_primary_interface ($interface) {
+
+	global $CLOUDY_CONF_FILE, $CLOUDY_CONF_DIR, $staticPath, $urlpath;
+
+	write_conffile($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE, array('PRIMARY_INTERFACE'=> "$interface"),"","",'"');
+
+	if (getnetworkprimary() == $interface ) {
+		setFlash(t('settings_flash_network_primaryint_success'),"success");
+		return(array('type'=>'redirect','url'=>$staticPath.$urlpath));
+	}
+	else {
+		setFlash(t('settings_flash_network_primaryint_fail'),"error");
+		return(array('type'=>'redirect','url'=>$staticPath.$urlpath));
+	}
+}
+
+
+function network() {
+
+	global $staticPath, $urlpath, $PKG_HOSTNAME, $HREGEX, $HPREGEX;
+
+	$page = "";
+	$buttons = "";
+
+	$page .= hlc(t("settings_network_title"),1);
+	$page .= hl(t("settings_network_subtitle"),4);
+
+	$page .= par(t("settings_network_description"));
+
+	if (isset ($_POST['PRIMARYINT'])) {
+		if ( is_valid_network_interface($_POST['PRIMARYINT']))
+			return set_primary_interface($_POST['PRIMARYINT']);
+		else {
+			$page .= txt(t("settings_network_primaryint_invalid"));
+			if (strlen($_POST['PRIMARYINT']))
+				$page .= "<div class='alert alert-error text-center'>".'"'.$_POST['PRIMARYINT'].'"'."</div>\n";
+			else
+				$page .= "<div class='alert alert-error text-center'>".t("settings_network_primaryint_empty")."</div>\n";
+		}
+	}
+
+	$page .= createForm(array('class'=>'form-horizontal'));
+	$page .= addSelect('PRIMARYINT', t("settings_network_form_primaryint"), getnetworkinterfaces(), array('type'=>'text','required'=>'true', 'selected'=>getnetworkprimary()), '', t("settings_network_form_primaryint_tooltip"), null, getnetworkprimary());
+
+	$buttons = addButton(array('label'=>t("settings_button_back"),'class'=>'btn btn-default', 'href'=>$staticPath.$urlpath));
+	$buttons .= addSubmit(array('label'=>t('settings_button_network_setprimary'),'class'=>'btn btn-success'));
+
+	$page .= $buttons;
+	return(array('type' => 'render','page' => $page));
+
 }
 
 function indexSources() {
@@ -282,6 +344,51 @@ function validSourceFile($file) {
 		if (strpos($finfo->buffer($file),'text/plain') !== false)
 			return true;
 	}
+	return false;
+}
+
+function getnetworkinterfaces() {
+
+	$interfaces;
+
+	if (is_dir('/sys/class/net')) {
+
+	}
+		foreach (scandir ('/sys/class/net') as $k=>$v ) {
+			if ( $v !== '.' && $v !== '..' )
+				$interfaces[$v] = $v;
+		}
+
+	return $interfaces;
+}
+
+
+function getnetworkprimary() {
+	global $CLOUDY_CONF_FILE, $CLOUDY_CONF_DIR;
+
+	if (file_exists($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE)) {
+		$conf = parse_ini_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
+
+		if (isset($conf['PRIMARY_INTERFACE']) && $conf['PRIMARY_INTERFACE'] !== "")
+			return ($conf['PRIMARY_INTERFACE']);
+	}
+}
+
+function getnetworkprimaryhr() {
+	$gnp = getnetworkprimary();
+
+	if ($gnp !== null)
+		return $gnp;
+	else
+		return t("settings_network_empty");
+}
+
+function is_valid_network_interface($interface = null) {
+
+	foreach (getnetworkinterfaces() as $k=>$v)
+		if ($interface === $v)
+			return true;
+
 	return false;
 }
 
