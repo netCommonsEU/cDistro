@@ -30,6 +30,9 @@ addS ("settings_button_back","Volver");
 addS ("settings_button_shostname","Guardar el nombre del dispositivo");
 addS ("settings_button_disable","Desactivar");
 addS ("settings_button_enable","Activar");
+addS ("settings_button_network_configure","Configurar la interfaz principal");
+addS ("settings_button_network_modify","Cambiar la interfaz principal");
+addS ("settings_button_network_setprimary","Guardar la interfaz principal");
 addS ("settings_button_retry","Reintentar");
 addS ("settings_button_sources_addfile","Añadir un fichero de fuentes nuevo");
 addS ("settings_button_sources_addline","Añadir una línea nueva");
@@ -37,18 +40,17 @@ addS ("settings_button_sources_pre","Gestionar ");
 addS ("settings_button_sources_post","");
 
 
-
 //common
 addS ("settings_common_title","Configuración del dispositivo");
 addS ("settings_common_subtitle","Gestión de la configuración y los parámetros del dispositivo");
 addS ("settings_common_error","Ha habido un error:");
-addS ("settings_common_","");
 
 
 //flash
 addS ("settings_flash_hostname","Nombre del dispositivo modificado correctamente");
 addS ("settings_flash_hostnamefail","Ha ocurrido un error al cambiar el nombre del dispositivo");
-addS ("settings_flash_","");
+addS ("settings_flash_network_primaryint_success", "La interfaz de red principal se ha guardado correctamente");
+addS ("settings_flash_network_primaryint_fail", "Ha ocurrido un error al guardar la interfaz de red principal");
 
 
 //hostname
@@ -61,6 +63,20 @@ addS ("settings_hostname_ftooltip","Escriba el nombre del nuevo dispositivo usan
 addS ("settings_hostname_fplaceholder","Introduzca un nombre de dispositivo válido");
 addS ("settings_hostname_invalid","Nombre de dispositivo inválido:");
 addS ("settings_hostname_empty","(vacío)");
+
+
+//network
+addS ("settings_network_title","Red");
+addS ("settings_network_subtitle","Parámetros y configuración de red");
+addS ("settings_network_description","Use esta página para administrar los parámetros y la configuración de la red.");
+addS ("settings_network_primaryint","Interfaz principal:");
+addS ("settings_network_primaryint_invalid", "La interfaz principal que ha seleccionado no es válida:");
+addS ("settings_network_primaryint_empty", "(no se ha seleccionado ninguna interfaz de red)");
+addS ("settings_network_form_primaryint","Interfaz principal");
+addS ("settings_network_form_primaryint_tooltip","Escoja la interfaz principal de este dispositivo Cloudy, o bien aquella que lo conecta a la Red Comunitaria.");
+addS ("settings_network_title","Red");
+addS ("settings_network_empty","(vacío)");
+
 
 //index
 addS ("settings_index_description","Esta página le muestra diferentes parámetros del sistema y le permite modificarlos.");
