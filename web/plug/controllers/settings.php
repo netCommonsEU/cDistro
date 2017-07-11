@@ -31,7 +31,7 @@ function index() {
 
 
 	$page .= hlc(t("settings_network_title"),2);
-	$page .= txt(t("settings_network_primary"));
+	$page .= txt(t("settings_network_primaryint"));
 	$page .= ptxt(getnetworkprimaryhr());
 	if (getnetworkprimary())
 		$buttons = addButton(array('label'=>t("settings_button_network_modify"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/network'));
