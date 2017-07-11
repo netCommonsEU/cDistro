@@ -30,25 +30,27 @@ addS ("settings_button_back","Back");
 addS ("settings_button_shostname","Save hostname");
 addS ("settings_button_disable","Disable");
 addS ("settings_button_enable","Enable");
+addS ("settings_button_network_configure","Configure primary interface");
+addS ("settings_button_network_modify","Modify primary interface");
+addS ("settings_button_network_setprimary","Set primary interface");
 addS ("settings_button_retry","Retry");
 addS ("settings_button_sources_addfile","Add a new sources file");
 addS ("settings_button_sources_addline","Add a new source line");
 addS ("settings_button_sources_pre","Manage ");
 addS ("settings_button_sources_post","");
-addS ("settings_button_","");
 
 
 //common
 addS ("settings_common_title","System settings");
 addS ("settings_common_subtitle","System settings management and configuration");
 addS ("settings_common_error","An error occurred:");
-addS ("settings_common_","");
 
 
 //flash
 addS ("settings_flash_hostname","Hostname successfully changed");
 addS ("settings_flash_hostnamefail","Hostname change failed");
-addS ("settings_flash_","");
+addS ("settings_flash_network_primaryint_success", "Primary network interface successfully saved");
+addS ("settings_flash_network_primaryint_fail", "Primary network interface couldn't be saved");
 
 
 //hostname
@@ -63,9 +65,21 @@ addS ("settings_hostname_invalid","Invalid hostname:");
 addS ("settings_hostname_empty","(empty)");
 
 
+//network
+addS ("settings_network_title","Network");
+addS ("settings_network_subtitle","Network settings and configuration");
+addS ("settings_network_description","Use this page to manage network-related settings and configuration. ");
+addS ("settings_network_primaryint","Primary network interface:");
+addS ("settings_network_primaryint_invalid", "The selected primary interface is not valid:");
+addS ("settings_network_primaryint_empty", "(no primary network interface selected)");
+addS ("settings_network_form_primaryint","Primary interface");
+addS ("settings_network_form_primaryint_tooltip","Select the primary network interface of this Cloudy device, or the one connected to the Community Network.");
+addS ("settings_network_title","Network");
+addS ("settings_network_empty","(empty)");
+
+
 //index
 addS ("settings_index_description","This page shows different system settings and lets you modify them.");
-addS ("settings_index_","");
 
 
 //sources
