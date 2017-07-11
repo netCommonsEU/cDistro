@@ -110,7 +110,9 @@ function set_primary_interface ($interface) {
 
 	global $CLOUDY_CONF_FILE, $CLOUDY_CONF_DIR, $staticPath, $urlpath;
 
-	write_conffile($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE, array('PRIMARY_INTERFACE'=> "$interface"),"","",'"');
+	$dataSave['PRIMARYINTERFACE'] = '"'.$interface.'"';
+	print_r($dataSave);
+	write_merge_conffile($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE, $dataSave);
 
 	if (getnetworkprimary() == $interface ) {
 		setFlash(t('settings_flash_network_primaryint_success'),"success");
@@ -369,8 +371,8 @@ function getnetworkprimary() {
 	if (file_exists($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE)) {
 		$conf = parse_ini_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
 
-		if (isset($conf['PRIMARY_INTERFACE']) && $conf['PRIMARY_INTERFACE'] !== "")
-			return ($conf['PRIMARY_INTERFACE']);
+		if (isset($conf['PRIMARYINTERFACE']) && $conf['PRIMARYINTERFACE'] !== "")
+			return ($conf['PRIMARYINTERFACE']);
 	}
 }
 
