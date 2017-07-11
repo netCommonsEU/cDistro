@@ -176,7 +176,7 @@ function addButton($options=null){
 	return $str;
 }
 
-function addSelect($name=null, $label= null, $value = null, $options = null, $attributes = null, $tooltip = null, $nobr = null){
+function addSelect($name=null, $label= null, $value = null, $options = null, $attributes = null, $tooltip = null, $nobr = null, $selected = null){
 	if (!is_null($name)){
 		$options['name'] = $name;
 	}
@@ -196,7 +196,10 @@ function addSelect($name=null, $label= null, $value = null, $options = null, $at
 	$str .= ">\n";
 
 	foreach ($value as $k => $v) {
-		$str .= "<option value='".$k."'>".$v."</option>";
+		if ($selected && $selected == $k)
+			$str .= "<option selected value='".$k."'>".$v."</option>";
+		else
+			$str .= "<option value='".$k."'>".$v."</option>";
 	}
 
 	$str .= "</select>";
