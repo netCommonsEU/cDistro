@@ -6,6 +6,7 @@ function docker_img(){
 
   $page = "";
   $buttons = "";
+  $table = "";
 
   $page .= txt(t("docker_title_images"));
 
@@ -14,7 +15,6 @@ function docker_img(){
   $retarray = explode(PHP_EOL,$ret['output']);
 
   if ( array_key_exists(2, $retarray )) {
-    $table = "";
     $headers = get_fancyheaders_from_string($retarray[0]);
     $headers[] = t('Actions');
     $headerspos = get_headers_position_in_string($retarray[0]);

@@ -63,7 +63,7 @@ function addInput($name=null, $label= null, $value = null, $options = null, $att
 
 function addTextArea($name=null, $label= null, $value = null, $options = null, $attributes = null, $tooltip = null, $nobr = null){
 
-	$str .= "<div class='control-group'>\n";
+	$str = "<div class='control-group'>\n";
 	$str .="<label class='control-label'>$label:</label>\n";
 	$str .="<div class='controls'>\n";
 	$str .= "<textarea ";
