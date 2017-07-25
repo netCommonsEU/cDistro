@@ -20,7 +20,7 @@ function index() {
     if (!isPackageInstall($docker_pkg)) {
         $page .= txt(t("docker_status"));
         $page .= "<div class='alert alert-error text-center'>".t("docker_alert_not_installed")."</div>\n";
-        $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+        $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$staticFile/docker/install"));
     }
     //Check if Docker Compose is installed
     elseif (!_docker_compose_isInstalled()) {
@@ -63,7 +63,7 @@ function create_post() {
     $page = "";
     $buttons = "";
     $errors = "";
-    
+
     $form_error = -1;
 
     $page .= hlc(t("docker_compose_title"));
@@ -183,7 +183,7 @@ volumes:
     $page .= $buttons;
 
     return array('type' => 'render','page' => $page);
-    
+
 }
 
 function delete() {
@@ -212,12 +212,12 @@ if (true){
                 return(array('type'=> 'redirect', 'url' => $urlpath));
             }
         }
-    
+
 
         else{
             $page .= hlc(t("docker_compose_title"));
             $page .= hl(t("docker_compose_subtitle"),4);
-    
+
             $page .= txt(t("docker_compose_down_desc_pre")."<strong>$Parameters[0]</strong>".t("docker_compose_down_desc_post"));
             $page .= docker_ps_running_table($Parameters[0])["page"];
 
@@ -262,7 +262,7 @@ function down() {
         else{
             $page .= hlc(t("docker_compose_title"));
             $page .= hl(t("docker_compose_subtitle"),4);
-    
+
             $page .= txt(t("docker_compose_down_desc_pre")."<strong>$Parameters[0]</strong>".t("docker_compose_down_desc_post"));
             $page .= docker_ps_running_table($Parameters[0])["page"];
 
@@ -397,7 +397,7 @@ function _docker_compose_list_projects(){
         $docks_in_proj = array();
         $docks_in_proj_run = array();
         $docks_in_proj_stop = array();
-        
+
         $button_start = false;
         $button_stop = false;
         $button_delete = false;
