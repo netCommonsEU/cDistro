@@ -2,10 +2,13 @@
 
 
 //alerts
+addS ("docker_addsources_available", "Docker is available for installation");
+addS ("docker_addsources_not_available", "Docker is not available for installation");
 addS ("docker_alert_installed","Docker is installed");
 addS ("docker_alert_not_installed","Docker is not installed");
 addS ("docker_alert_not_running","Docker is stopped");
 addS ("docker_alert_img_not_available","No Docker images available");
+addS ("docker_alert_no_sources","Missing APT sources file for Docker package");
 addS ("docker_alert_ps_not_running","No running Docker containers");
 addS ("docker_alert_ps_not_stopped","No stopped Docker containers");
 addS ("docker_alert_running","Docker is running");
@@ -14,6 +17,9 @@ addS ("docker_alert_stop_message","Docker has been stopped");
 
 
 //buttons
+addS ("docker_button_add_sources","Add Docker APT sources file");
+addS ("docker_button_add_sources_retry","Retry adding Docker APT sources file");
+addS ("docker_button_back","Back");
 addS ("docker_button_install","Install Docker (docker-ce)");
 addS ("docker_button_restart","Restart Docker");
 addS ("docker_button_search","Search Docker containers");
@@ -92,7 +98,17 @@ addS ("docker_not_running","Docker is stopped.");
 addS ("docker_start","Start Docker.");
 addS ("docker_remove","Remove Docker.");
 addS ("docker_running","Docker is running.");
+addS ("docker_sources_manual", 'The APT sources file for the Docker package is missing. Click on the button below to add it automatically or follow the instructions at <a href="https://docs.docker.com/engine/installation/linux/docker-ce/debian/">https://docs.docker.com/engine/installation/linux/docker-ce/debian/</a> to do it manually.');
 addS ("docker_stop","Stop Docker.");
 addS ("docker_start_message","Docker started.");
 addS ("docker_stop_message","Docker stopped.");
 
+
+//addsources
+addS ("docker_addsources_update", "Updating package list...");
+addS ("docker_addsources_install_https", "Installing HTTPS transport for APT and other required packages...");
+addS ("docker_addsources_dockerlist_pre", "Adding Docker packages repository to ");
+addS ("docker_addsources_dockerlist_post", ":");
+addS ("docker_addsources_aptkey", "Importing Docker's official GPG key to the local keyring:");
+addS ("docker_addsources_update_again", "Updating package list again...");
+addS ("docker_addsources_result", "Process result:");
