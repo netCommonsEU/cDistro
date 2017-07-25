@@ -330,25 +330,6 @@ function toggleSource ($file, $line) {
 	return;
 }
 
-function addSource ($file, $content) {
-
-	if (validSourceFile($file))
-		$content = "\n".$content;
-
-	file_put_contents($file, $content, $flags = FILE_APPEND);
-
-	return;
-}
-
-function validSourceFile($file) {
-	if (file_exists($file) && ((substr($file, 0, strlen('/etc/apt/sources.list')) === '/etc/apt/sources.list') || (substr($file, 0, strlen('/etc/apt/sources.list.d/')) === '/etc/apt/sources.list.d/'))) {
-		$finfo = new finfo(FILEINFO_MIME);
-		if (strpos($finfo->buffer($file),'text/plain') !== false)
-			return true;
-	}
-	return false;
-}
-
 function getnetworkinterfaces() {
 
 	$interfaces;
