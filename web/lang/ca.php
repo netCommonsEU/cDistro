@@ -39,9 +39,6 @@ addS ("lib-view_button_back","Torna");
 addS ("lib-view_button_install_pre","Instal·la el paquet ");
 addS ("lib-view_button_install_post","");
 addS ("lib-view_common_package_manager_title","Gestor de paquets");
-addS ("lib-view_common_package_manager_subtitle","Instal·lador y desinstal·lador automatitzat de paquetes de Cloudy");
+addS ("lib-view_common_package_manager_subtitle","Instal·lador i desinstal·lador automatitzat de paquets de Cloudy");
 addS ("lib-view_package_not_installed_to_install","S'instal·larà el següent paquet:");
 addS ("lib-view_package_not_installed_text","Feu clic al botó per procedir amb la instal·lació. Les dependències del paquet s'instal·laran automàticament.");
-
-
-

@@ -61,7 +61,7 @@ function realInstall(){
 		}
 
 		else {
-			$page .= "<div class='alert alert-success text-center'>".t("default_realInstall_not_installed_pre").$pkg.t("default_realInstall_not_installed_post")."</div>\n";
+			$page .= "<div class='alert alert-success text-center'>".t("default_realInstall_installed_pre").$pkg.t("default_realInstall_installed_post")."</div>\n";
 		}
 	}
 	$page .= "<a class='btn btn-default' href='".$staticFile."'>".t("default_button_back")."</a>";
