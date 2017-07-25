@@ -1,9 +1,10 @@
 <?php
 $urlpath="$staticFile/docker";
 $dev = "docker0";
+$sourceslistdfile="/etc/apt/sources.list.d/docker.list";
 
 function index() {
-    global $title, $urlpath, $docker_pkg, $staticFile;
+    global $title, $urlpath, $docker_pkg, $staticFile, $sourceslistdfile;
 
     $page = "";
     $buttons = "";
@@ -13,7 +14,12 @@ function index() {
     $page .= par(t("docker_desc"));
     $page .= txt(t("docker_status"));
 
-    if (!isPackageInstall($docker_pkg)) {
+    if (!validSourceFile($sourceslistdfile)) {
+        $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_sources")."</div>\n";
+        $page .= par(t("docker_sources_manual"));
+        $page .= addButton(array('label'=>t("docker_button_add_sources"),'class'=>'btn btn-success', 'href'=>"$urlpath/addsources"));
+    }
+    elseif (!isPackageInstall($docker_pkg)) {
         $page .= "<div class='alert alert-error text-center'>".t("docker_alert_not_installed")."</div>\n";
         $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
     }
@@ -145,4 +151,57 @@ function image() {
         default:
             return(array('type'=> 'redirect', 'url' => $urlpath));
     }
+}
+
+
+function addsources(){
+
+  global $title, $urlpath, $docker_pkg, $staticFile, $sourceslistdfile;
+
+  $page = "";
+  $buttons = "";
+
+  $page .= hlc(t("docker_title"));
+  $page .= hl(t("docker_subtitle"),4);
+
+
+  $page .= txt(t("docker_addsources_update"));
+  $page .= ptxt(execute_program_shell('apt-get update')['output']);
+  $page .= txt(t("docker_addsources_install_https"));
+
+  $page .= ptxt(execute_program_shell('apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common')['output']);
+
+  $docker_list = "deb [arch=".aptArch()."] https://download.docker.com/linux/debian ".aptRelease()." stable";
+  addSource($sourceslistdfile, $docker_list);
+
+  $page .= txt(t("docker_addsources_dockerlist_pre").$sourceslistdfile.t("docker_addsources_dockerlist_post"));
+  $page .= ptxt(file_get_contents($sourceslistdfile),str_replace(".","",str_replace("/","",$sourceslistdfile)));
+
+  $page .= txt(t("docker_addsources_aptkey"));
+  $keycmd = execute_program_shell('curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -');
+  $page .= ptxt($keycmd['output']);
+  $page .= ptxt(execute_program_shell('apt-key list | grep -A1 -B1 -i docker')['output']);
+
+  $page .= txt(t("docker_addsources_update_again"));
+  $page .= ptxt(execute_program_shell('apt-get update')['output']);
+
+  $page .= txt(t("docker_addsources_result"));
+  $pkgsearch = execute_program_shell('apt-cache search ' . $docker_pkg)['output'];
+
+  if (strpos($pkgsearch, $docker_pkg) !== FALSE) {
+    $page .= "<div class='alert alert-success text-center'>".t("docker_addsources_available")."</div>\n";
+    $page .= ptxt($pkgsearch);
+    $page .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+    $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+  }
+  else {
+    $page .= "<div class='alert alert-error text-center'>".t("docker_addsources_not_available")."</div>\n";
+    $page .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+    $page .= addButton(array('label'=>t("docker_button_add_sources_retry"),'class'=>'btn btn-warning', 'href'=>"$urlpath/addsources"));
+  }
+
+
+  $page .= $buttons;
+
+  return array('type' => 'render','page' => $page);
 }
