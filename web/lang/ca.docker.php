@@ -1,18 +1,108 @@
 <?php
 
-//Common
-addS ("docker_title","Docker");
-addS ("docker_desc","Docker &eacute;s un projecte de codi obert que automatitza el desplegament d'aplicacions dintre de contenidors de programari, proporcionant una capa addicional d'abstracci&oacute; i automatitzaci&oacute; de virtualitzaci&oacute; a nivell de sistema operatiu.");
 
-addS ("docker_not_installed","Docker no est&agrave; instal·lat.");
-addS ("docker_installed","Docker est&agrave; instal·lat.");
+//alerts
+addS ("docker_addsources_available", "Docker està disponible per ser instal·lat");
+addS ("docker_addsources_not_available", "Docker està disponible per ser instal·lat");
+addS ("docker_alert_installed","Docker està instal·lat");
+addS ("docker_alert_not_installed","Docker no està instal·lat");
+addS ("docker_alert_not_running","Docker està aturat");
+addS ("docker_alert_img_not_available","No hi ha imatges de Docker disponibles");
+addS ("docker_alert_no_sources","Falta el fitxer de fonts APT per al paquet de Docker");
+addS ("docker_alert_ps_not_running","No hi ha contenidors Docker engegats");
+addS ("docker_alert_ps_not_stopped","No hi ha contenidors Docker aturats");
+addS ("docker_alert_running","S'està engegat Docker");
+addS ("docker_alert_start_message","S'ha engegat Docker");
+addS ("docker_alert_stop_message","S'ha aturat Docker");
+
+
+//buttons
+addS ("docker_button_add_sources","Afegeix el fitxer de fonts APT per a Docker");
+addS ("docker_button_add_sources_retry","Reintenta afegir el fitxer de fonts APT per a Docker");
+addS ("docker_button_back","Enrere");
+addS ("docker_button_install","Instal·la Docker (docker-ce)");
+addS ("docker_button_restart","Reinicia Docker");
+addS ("docker_button_search","Cerca imatges de Docker");
+addS ("docker_button_start","Engega Docker");
+addS ("docker_button_stop","Atura Docker");
+addS ("docker_button_uninstall","Desinstal·la Docker (docker-ce)");
+addS ("docker_button_container_pull","Obtingues la image");
+addS ("docker_button_container_stop","Atura el contenidor");
+addS ("docker_button_container_rm","Esborra el contenidor");
+addS ("docker_button_container_restart","Reinicia contenidor");
+addS ("docker_button_image_rmi","Esborra la imatge");
+addS ("docker_button_image_run","Engega la imatge");
+
+
+//flash
+addS ("docker_flash_restart_pre","S'està reiniciant el contenidor ");
+addS ("docker_flash_restart_mid"," (ID: ");
+addS ("docker_flash_restart_post",") en segon pla. Pot trigar uns segons...");
+addS ("docker_flash_rm_pre","S'està esborrant el contenidor ");
+addS ("docker_flash_rm_mid"," (ID: ");
+addS ("docker_flash_rm_post",") en segon pla. Pot trigar uns segons...");
+addS ("docker_flash_rmi_pre","S'està esborrant la imatge ");
+addS ("docker_flash_rmi_mid","");
+addS ("docker_flash_rmi_post"," en segon pla. Pot trigar uns segons...");
+addS ("docker_flash_run_pre","S'està engegant la imatge ");
+addS ("docker_flash_run_mid","");
+addS ("docker_flash_run_post"," en segon pla. Pot trigar uns segons...");
+addS ("docker_flash_pull_pre","S'està obtenint la imatge  ");
+addS ("docker_flash_pull_post"," en segon pla. Pot trigar uns segons...");
+addS ("docker_flash_stop_pre","S'està aturant el contenidor ");
+addS ("docker_flash_stop_mid"," (ID: ");
+addS ("docker_flash_stop_post",") en segon pla. Pot trigar uns segons...");
+
+
+//Common
+addS ("docker_title", "Docker");
+addS ("docker_desc", "Docker és un projecte de codi obert que automatitza el desplegament d'aplicacions dins de contenidors de programari, proporcionant una capa addicional d'abstracció i automatització de virtualització a nivell de sistema operatiu.");
+addS ("docker_status","Estat de Docker:");
+addS ("docker_subtitle","Desplegament automatitzat d'aplicacions Linux en contenidors de programari");
+addS ("docker_container_stopped","aturat");
+addS ("docker_container_running","engegat");
+
+
+//search
+addS ("docker_search_subtitle","Cercar i instal·lar imatges de contenidors Docker");
+addS ("docker_search_desc",'Empreu el formulari de sota per cercar imatges de contenidors Docker disponibles a <a href="https://hub.docker.com/">Docker Hub</a> i desplegar-los. La cerca es fa directament a Docker Hub.');
+addS ("docker_search_form_automated",'Automatitzat');
+addS ("docker_search_form_automated_tooltip",'Cerca només imatges Docker amb <a href="https://docs.docker.com/docker-cloud/builds/automated-build/">compilació automàtica</a>.');
+addS ("docker_search_form_search",'Text de cerca');
+addS ("docker_search_form_search_tooltip","Escriviu el nom (o una part) d'una imatge de contenidor Docker, un repositori o una aplicació per cercar-lo. Empreu només lletres minúscules i números.");
+addS ("docker_search_header_name","Nom");
+addS ("docker_search_header_description",'Descripció');
+addS ("docker_search_header_stars",'Puntuació');
+addS ("docker_search_header_official",'Oficial');
+addS ("docker_search_header_automated",'Automatitzat');
+addS ("docker_search_header_action",'Acció');
+addS ("docker_search_yes",'Sí');
+
+
+//main
+addS ("docker_info","Informació de Docker:");
+addS ("docker_interface","Interfície de xarxa de Docker:");
+addS ("docker_title_containers_running", "contenidors Docker engegats:");
+addS ("docker_title_containers_stopped", "contenidors Docker aturats:");
+addS ("docker_title_images", "Imatges Docker disponibles:");
+addS ("docker_not_installed","Docker no està instal·lat.");
+addS ("docker_installed","Docker està instal·lat.");
 addS ("docker_button_install","Instal·la Docker (Community Edition)");
-addS ("docker_not_running","Docker est&agrave; parat.");
-addS ("docker_start","Activar Docker.");
-addS ("docker_remove","Desintal·lar Docker.");
-addS ("docker_running","Docker en funcionament.");
-addS ("docker_stop","Desactivar Docker.");
-addS ("docker_start_message","Docker arrancat.");
-addS ("docker_stop_message","Docker aturat.");
-addS ("docker_info","Docker info:");
-addS ("docker_interface","Docker interf&iacute;cie de xarxa:");
+addS ("docker_not_running","Docker està aturat.");
+addS ("docker_start","Inicia Docker.");
+addS ("docker_remove","Elimina Docker.");
+addS ("docker_running","Docker està engegat.");
+addS ("docker_sources_manual", 'Falta el fitxer de fonts APT per al paquet de Docker. Feu clic al botó de sota per afegir-lo automàticament o seguiu les instruccions de <a href="https://docs.docker.com/engine/installation/linux/docker-ce/debian/">https://docs.docker.com/engine/installation/linux/docker-ce/debian/</a> per fer-ho manualment.');
+addS ("docker_stop","Atura Docker.");
+addS ("docker_start_message","S'ha engegat Docker.");
+addS ("docker_stop_message","S'ha aturat Docker.");
+
+
+//addsources
+addS ("docker_addsources_update", "S'està actualitzant la llista de paquets...");
+addS ("docker_addsources_install_https", "S'està instal·lant el suport per al transport HTTPS d'APT i els altres paquets requerits...");
+addS ("docker_addsources_dockerlist_pre", "S'està afegint el repositori de paquets Docker a ");
+addS ("docker_addsources_dockerlist_post", ":");
+addS ("docker_addsources_aptkey", "S'està important la clau GPG oficial de Docker al clauer local:");
+addS ("docker_addsources_update_again", "Actualizant de nou la llista de paquets...");
+addS ("docker_addsources_result", "Resultat del procés:");
