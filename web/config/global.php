@@ -3,7 +3,7 @@
 $CLOUDY_CONF_DIR = "/etc/cloudy/";
 $CLOUDY_CONF_FILE = "cloudy.conf";
 
-$conf = parse_ini_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
+$conf = parse_bash_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
 list($wi_ip, $wi_port) = explode(":", $_SERVER['HTTP_HOST']);
 $protocol="http";
 
@@ -62,5 +62,33 @@ $services_types = array('snpservices' => array('name' => 'SNPgraphs', 'prenick'=
 						'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'guifi-dnss/install'),
 						'guifi-proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi-proxy3/install')
 				);
+
+function parse_bash_file($file){
+
+	if (file_exists($file)) {
+		$lines = file($file);
+		$config = array();
+
+		foreach ($lines as $line_num=>$line) {
+			if ( ! preg_match("/#.*/", $line) ) {
+				if ( preg_match("/\S/", $line) ) {
+					list( $key, $value ) = explode( "=", trim( $line ), 2);
+          $key = trim($key);
+          $value = trim($value);
+          // Remove leading double quotes
+          if(strpos($value,'"')===0)
+            $value=substr($value,1,(strlen($value)-1));
+          // if the last char is a " then remove it
+          if(strrpos($value,'"')===(strlen($value)-1))
+            $value=substr($value,0,-1);
+					$config[$key] = $value;
+				}
+			}
+		}
+		return $config;
+	}
+
+	return FALSE;
+}
 
 ?>
