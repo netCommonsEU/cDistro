@@ -350,7 +350,7 @@ function getnetworkprimary() {
 	global $CLOUDY_CONF_FILE, $CLOUDY_CONF_DIR;
 
 	if (file_exists($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE)) {
-		$conf = parse_ini_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
+		$conf = parse_bash_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
 
 		if (isset($conf['PRIMARYINTERFACE']) && $conf['PRIMARYINTERFACE'] !== "")
 			return ($conf['PRIMARYINTERFACE']);
