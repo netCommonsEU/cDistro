@@ -75,7 +75,7 @@ function docker_predefined_containers_table(){
         $options .= $okey."=".$ovalue;
       }
       $fields[] = $options;
-s
+
       $links = "";
       foreach ($jcontent["links"] as $lkey => $lvalue) {
         if ($links !== "")
