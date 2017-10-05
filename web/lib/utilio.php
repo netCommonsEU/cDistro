@@ -366,4 +366,13 @@ function _delTree($dir) {
     }
     return rmdir($dir);
   }
+
+	function endsWith($haystack, $needle)
+	//From https://stackoverflow.com/a/834355
+	{
+	    $length = strlen($needle);
+
+	    return $length === 0 ||
+	    (substr($haystack, -$length) === $needle);
+	}
 ?>
