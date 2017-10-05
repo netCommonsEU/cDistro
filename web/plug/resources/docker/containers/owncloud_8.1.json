@@ -1,0 +1,8 @@
+{
+  "appname": "ownCloud (8.1)",
+  "description": "A self-hosted file sync and share server (version 8.1)",
+  "image": "owncloud:8.1",
+  "ports": {
+    "9810": "80"
+  }
+}

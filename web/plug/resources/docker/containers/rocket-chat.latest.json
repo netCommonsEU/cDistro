@@ -1,0 +1,14 @@
+{
+  "appname": "Rocket.Chat (latest)",
+  "description": "From group messages and video calls to helpdesk",
+  "image": "owncloud:latest",
+  "ports": {
+    "9999": "80"
+  },
+  "options": {
+    "ROOT_URL": "http://localhost"
+  },
+  "links": [
+    "mongodb"
+  ]
+}
