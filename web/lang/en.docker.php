@@ -62,6 +62,12 @@ addS ("docker_subtitle","Automated deployment of Linux applications inside softw
 addS ("docker_container_stopped","stopped");
 addS ("docker_container_running","running");
 
+//add
+addS ("docker_add_subtitle","Add and launch new Docker containers");
+addS ("docker_search_desc",'Use one fothe form below to search at <a href="https://hub.docker.com/">Docker Hub</a> for available Docker containers and deploy them. The search is performed on-line at Docker Hub.');
+addS ("docker_search_form_automated",'Automated');
+
+
 
 //search
 addS ("docker_search_subtitle","Search and install Docker container images");
