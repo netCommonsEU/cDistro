@@ -299,3 +299,32 @@ function _dockerimagerun($id, $name) {
 
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
+
+function _dockerrun($name = null, $ports = null, $options = null, $links = null, $image ) {
+    global $Parameters, $urlpath, $staticFile;
+
+    $command = "docker run ";
+
+    if ($name !== null)
+      $command .= "--name ".$name." ";
+
+    foreach ($ports as $pkey => $pvalue) {
+      $command .= "-p ".$pvalue.":".$pkey." ";
+    }
+
+    foreach ($options as $okey => $ovalue) {
+      $command .= "-e ".$okey."=".$ovalue." ";
+    }
+
+    foreach ($links as $lkey => $lvalue) {
+      $command .= "--link ".$lvalue." ";
+    }
+
+    $command .= "-d ".$image;
+
+    execute_program_detached($command);
+    setFlash( $command);
+    //setFlash( t("docker_flash_run_pre") . $image . t("docker_flash_run_mid"));
+
+	return(array('type'=> 'redirect', 'url' => $urlpath));
+}
