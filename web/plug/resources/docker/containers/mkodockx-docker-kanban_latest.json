@@ -1,0 +1,9 @@
+{
+  "appname": "Kanban (latest)",
+  "name": "kanban",
+  "description": "A scheduling system for lean manufacturing and just-in-time manufacturing",
+  "image": "mkodockx/docker-kanban:latest",
+  "ports": {
+    "8084": "80"
+  }
+}

@@ -3,7 +3,7 @@
   "description": "From group messages and video calls to helpdesk",
   "image": "rocket.chat:latest",
   "ports": {
-    "9999": "80"
+    "4938": "80"
   },
   "options": {
     "ROOT_URL": "http://localhost"

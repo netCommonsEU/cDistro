@@ -1,0 +1,9 @@
+{
+  "appname": "Lychee (latest)",
+  "name": "lychee",
+  "description": "A free photo-management tool",
+  "image": "kdelfour/lychee-docker:latest",
+  "ports": {
+    "9636": "80"
+  }
+}

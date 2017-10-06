@@ -1,0 +1,13 @@
+{
+  "appname": "Etherpad (latest)",
+  "name": "etherpad",
+  "description": "A highly customizable online editor providing collaborative editing in real-time",
+  "image": "chorn/alpine-etherpad-sqlite:latest",
+  "ports": {
+    "9001": "9001"
+  },
+  "options": {
+    "ADMIN_USER": "admin",
+    "ADMIN_PASS": "1234"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "appname": "Mosquitto (latest)",
+  "description": "A message broker that implements MQTT",
+  "image": "eclipse-mosquitto:latest",
+  "ports": {
+    "1883": "1883",
+    "9001": "9001"
+  }
+}
