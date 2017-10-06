@@ -23,8 +23,8 @@ function docker_img(){
       if ($key > 0) {
         $fields = get_fields_in_string($value, $headerspos);
         if ($fields[0] != "") {
-          $fields[] = addButton(array('label'=>t("docker_button_image_rmi"),'class'=>'btn btn-danger', 'href'=>"$urlpath/image/rmi/".trim($fields[0])."/".$fields[6]));
-          $fields[] = addButton(array('label'=>t("docker_button_image_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/image/run/".trim($fields[0])."/".$fields[6]));
+          $fields[] = addButton(array('label'=>t("docker_button_image_rmi"),'class'=>'btn btn-danger', 'href'=>"$urlpath/image/rmi/".trim($fields[0])));
+          $fields[] = addButton(array('label'=>t("docker_button_image_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/image/run/".trim($fields[0])));
           $table .= addTableRow($fields);
         }
       }
