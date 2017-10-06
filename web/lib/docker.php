@@ -93,7 +93,7 @@ function docker_ps_stopped_table($dock_filter = null){
   $buttons = "";
   $dock_count = 0;
 
-  $ret = execute_program_shell('docker ps -a -n=-1 -f status=exited');
+  $ret = execute_program_shell('docker ps -a -n=-1 -f status=exited -f status=created');
 
   $retarray = explode(PHP_EOL,$ret['output']);
 
