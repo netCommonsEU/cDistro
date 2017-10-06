@@ -2,9 +2,5 @@
   "appname": "MongoDB (latest)",
   "description": "MongoDB is an open source database that uses a document-oriented data model",
   "image": "mongo:latest --smallfiles",
-  "ports": {
-    "9916": "80",
-    "9911": "81"
-  },
   "name": "mongodb"
 }
