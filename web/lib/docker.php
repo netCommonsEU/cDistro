@@ -23,8 +23,8 @@ function docker_img(){
       if ($key > 0) {
         $fields = get_fields_in_string($value, $headerspos);
         if ($fields[0] != "") {
-          $fields[] = addButton(array('label'=>t("docker_button_image_rmi"),'class'=>'btn btn-danger', 'href'=>"$urlpath/image/rmi/".trim($fields[0])));
-          $fields[] = addButton(array('label'=>t("docker_button_image_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/image/run/".trim($fields[0])));
+          $fields[] = addButton(array('label'=>t("docker_button_image_rmi"),'class'=>'btn btn-danger', 'href'=>"$urlpath/image/rmi/".trim($fields[2])."/".$fields[0]));
+          $fields[] = addButton(array('label'=>t("docker_button_image_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/image/run/".trim($fields[2])."/".$fields[0]));
           $table .= addTableRow($fields);
         }
       }
@@ -305,7 +305,7 @@ function _dockerrun($name = null, $ports = null, $options = null, $links = null,
 
     $command = "docker run ";
 
-    if ($name !== null)
+    if ($name !== null && $name !== "")
       $command .= "--name ".$name." ";
 
     foreach ($ports as $pkey => $pvalue) {
@@ -323,8 +323,8 @@ function _dockerrun($name = null, $ports = null, $options = null, $links = null,
     $command .= "-d ".$image;
 
     execute_program_detached($command);
-    setFlash( $command);
-    //setFlash( t("docker_flash_run_pre") . $image . t("docker_flash_run_mid"));
+
+    setFlash( t("docker_flash_run_pre") . $image . t("docker_flash_run_post"));
 
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }

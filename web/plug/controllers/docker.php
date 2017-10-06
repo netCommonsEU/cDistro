@@ -31,6 +31,7 @@ function index() {
     else {
         $page .= "<div class='alert alert-success text-center'>".t("docker_alert_running")."</div>\n";
         $buttons .= addButton(array('label'=>t("docker_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
+        $buttons .= addButton(array('label'=>t("docker_button_addpd"),'class'=>'btn btn-info', 'href'=>"$staticFile/docker-add"));
         $buttons .= addButton(array('label'=>t("docker_button_search"),'class'=>'btn btn-info', 'href'=>"$staticFile/docker-search"));
         $page .= txt(t("docker_title_containers_running"));
         $page .= docker_ps_running_table()["page"];
