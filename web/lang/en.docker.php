@@ -17,6 +17,7 @@ addS ("docker_alert_stop_message","Docker has been stopped");
 
 
 //buttons
+addS ("docker_button_addpd","Add predefined Docker images");
 addS ("docker_button_add_sources","Add Docker APT sources file");
 addS ("docker_button_add_sources_retry","Retry adding Docker APT sources file");
 addS ("docker_button_back","Back");
@@ -32,6 +33,9 @@ addS ("docker_button_container_rm","Remove container");
 addS ("docker_button_container_restart","Restart container");
 addS ("docker_button_image_rmi","Remove image");
 addS ("docker_button_image_run","Run image");
+addS ("docker_button_pdcontainer_config","Configure");
+addS ("docker_button_pdcontainer_run","Launch");
+addS ("docker_button_pdform_run","Launch");
 
 
 //flash
@@ -63,10 +67,27 @@ addS ("docker_container_stopped","stopped");
 addS ("docker_container_running","running");
 
 //add
-addS ("docker_add_subtitle","Add and launch new Docker containers");
-addS ("docker_search_desc",'Use one fothe form below to search at <a href="https://hub.docker.com/">Docker Hub</a> for available Docker containers and deploy them. The search is performed on-line at Docker Hub.');
-addS ("docker_search_form_automated",'Automated');
-
+addS ("docker_add_config_desc", "Use the form below to customize the predefined template settings and launch the image.");
+addS ("docker_add_subtitle","Predefined templates for launching Docker containers");
+addS ("docker_add_desc",'The table below provides you a list of predefined Docker images, tested and ready to launch. Use the corresponding buttons to configure them before launching, or to launch them directly.');
+addS ("docker_add_header_appname",'Application');
+addS ("docker_add_header_description",'Description');
+addS ("docker_add_header_ports",'Ports');
+addS ("docker_add_header_options",'Options');
+addS ("docker_add_header_links",'Links');
+addS ("docker_add_header_actions",'Actions');
+addS ("docker_add_pdform_image", "Docker image");
+addS ("docker_add_pdform_image_tooltip", "The image to pull from the Docker repository.");
+addS ("docker_add_pdform_name", "Container name");
+addS ("docker_add_pdform_name_tooltip", "Type the name for this Docker container, or leave blank to get a random one.");
+addS ("docker_add_pdform_port", "Bind port ");
+addS ("docker_add_pdform_port_tooltip_pre", "Expose the container's TCP port ");
+addS ("docker_add_pdform_port_tooltip_post", " through a specified port in the host.");
+addS ("docker_add_pdform_option", "");
+addS ("docker_add_pdform_option_tooltip_pre", "Configure the value for the ");
+addS ("docker_add_pdform_option_tooltip_post", " option.");
+addS ("docker_add_pdform_link", "Link");
+addS ("docker_add_pdform_link_tooltip", "Link this container with another one.");
 
 
 //search
