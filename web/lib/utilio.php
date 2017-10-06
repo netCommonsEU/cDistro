@@ -367,12 +367,19 @@ function _delTree($dir) {
     return rmdir($dir);
   }
 
-	function endsWith($haystack, $needle)
 	//From https://stackoverflow.com/a/834355
+	function endsWith($haystack, $needle)
 	{
 	    $length = strlen($needle);
 
 	    return $length === 0 ||
 	    (substr($haystack, -$length) === $needle);
 	}
+
+	//From https://stackoverflow.com/a/834355
+	function startsWith($haystack, $needle)
+	{
+     $length = strlen($needle);
+     return (substr($haystack, 0, $length) === $needle);
+	 }
 ?>
