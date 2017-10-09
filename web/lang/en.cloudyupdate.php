@@ -8,6 +8,7 @@ addS ("cloudyupdate_alert_unspecified","No package was specified for upgrade");
 addS ("cloudyupdate_button_back","Back to Cloudy updates manager");
 addS ("cloudyupdate_button_continue","Continue to Cloudy updates manager");
 addS ("cloudyupdate_button_install","Install");
+addS ("cloudyupdate_button_na","Package not available");
 addS ("cloudyupdate_button_no_back","No, go back to Cloudy updates manager");
 addS ("cloudyupdate_button_update_debian","Update Debian packages list");
 addS ("cloudyupdate_button_upgrade","Upgrade");
@@ -55,9 +56,12 @@ addS ("cloudyupdate_index_subtitle","A tool for updating your Cloudy device");
 
 //getCloudyUpdateTable
 addS ("cloudyupdate_getCloudyUpdateTable_action", "Action");
+addS ("cloudyupdate_getCloudyUpdateTable_date", "Last update");
+addS ("cloudyupdate_getCloudyUpdateTable_na", "N/A");
 addS ("cloudyupdate_getCloudyUpdateTable_new", "Last version");
 addS ("cloudyupdate_getCloudyUpdateTable_package", "Package");
 addS ("cloudyupdate_getCloudyUpdateTable_version", "Installed version");
+addS ("cloudyupdate_getYourVersion_none", "Not installed");
 
 //getDebianUpdateTable
 addS ("cloudyupdate_getDebianUpdateTable_action", "Action");
@@ -67,8 +71,5 @@ addS ("cloudyupdate_getDebianUpdateTable_package", "Package");
 addS ("cloudyupdate_getDebianUpdateTable_status", "Debian packages status:");
 addS ("cloudyupdate_getDebianUpdateTable_version", "Installed version");
 addS ("cloudyupdate_getDebianUpdateTable_updates", "There are Debian packages updates available");
-
-//getCloudyUpdateTable
-addS ("cloudyupdate_getYourVersion_none", "Not installed");
 
 ?>

@@ -7,6 +7,9 @@ addS ("cloudyupdate_alert_unspecified","No s'ha especificat cap paquet per actua
 //buttons
 addS ("cloudyupdate_button_back","Torna al Gestor d'actualitzacions de Cloudy");
 addS ("cloudyupdate_button_continue","Vés al Gestor d'actualitzacions de Cloudy");
+addS ("cloudyupdate_button_install","Instal·la el paquet");
+addS ("cloudyupdate_button_na","Paquet no disponible");
+addS ("cloudyupdate_button_nu","Paquet sense actualitzacions");
 addS ("cloudyupdate_button_no_back","No, torna al Gestor d'actualitzacions de Cloudy");
 addS ("cloudyupdate_button_update_debian","Actualitza la llista de paquets de Debian");
 addS ("cloudyupdate_button_upgrade","Actualitza'l");
@@ -54,9 +57,12 @@ addS ("cloudyupdate_index_subtitle","Una eina per actualitzar el vostre disposit
 
 //getCloudyUpdateTable
 addS ("cloudyupdate_getCloudyUpdateTable_action", "Acció");
+addS ("cloudyupdate_getCloudyUpdateTable_date", "Darrera actualització");
+addS ("cloudyupdate_getCloudyUpdateTable_na", "N/D");
 addS ("cloudyupdate_getCloudyUpdateTable_new", "Última versió");
 addS ("cloudyupdate_getCloudyUpdateTable_package", "Paquet");
 addS ("cloudyupdate_getCloudyUpdateTable_version", "Versió instal·lada");
+addS ("cloudyupdate_getYourVersion_none", "No instal·lat");
 
 //getDebianUpdateTable
 addS ("cloudyupdate_getDebianUpdateTable_action", "Acció");

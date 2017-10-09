@@ -19,8 +19,13 @@ DAEMON="/usr/sbin/cdistrod"
 test -f $CONFFILE && . $CONFFILE || exit 0
 
 start() {
-  $SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &
-  echo $! > $PIDFILE
+  if [ $DEMO -eq 1 ]; then
+    su - nobody -c "$SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &" > /dev/null 2>&1
+    echo $(pidof php) > $PIDFILE
+  else
+    $SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &
+    echo $! > $PIDFILE
+  fi
   $DAEMON >/dev/null 2>&1 &
   echo $! > $PIDDAEMON
 }

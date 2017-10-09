@@ -65,7 +65,7 @@ function index_get()
 
 	$page .= hlc(t("cloudyupdate_index_debian_packages"),3);
 
-	if ($_GET["debupdate"]) {
+	if ( isset($_GET["debupdate"])) {
 		$page .= ajaxStr('dPackages',t("cloudyupdate_flash_loading_debian") );
 		$page .= "<script>\n";
 		$page .= "$('#dPackages').load('".$staticFile."/cloudyupdate/getDebianUpdateTable');\n";
@@ -86,8 +86,15 @@ function getCloudyUpdateTable(){
 
 	$table = "";
 
-	$table .= addTableHeader(array(t('cloudyupdate_getCloudyUpdateTable_package'), t('cloudyupdate_getCloudyUpdateTable_version') , t('cloudyupdate_getCloudyUpdateTable_new'),  t('cloudyupdate_getCloudyUpdateTable_action')));
-	foreach($list_packages as $pname => $package){
+  $headers = array();
+  $headers[] = t('cloudyupdate_getCloudyUpdateTable_package');
+  $headers[] = t('cloudyupdate_getCloudyUpdateTable_version');
+  $headers[] = t('cloudyupdate_getCloudyUpdateTable_new');
+  $headers[] = t('cloudyupdate_getCloudyUpdateTable_date');
+  $headers[] = t('cloudyupdate_getCloudyUpdateTable_action');
+	$table .= addTableHeader($headers);
+
+  foreach($list_packages as $pname => $package){
 		if ($package['type'] == 'preinstall') {
 			require $documentPath.$plugs_controllers.$package['controller'].".php";
 			if (! $package['function-check']()) {
@@ -97,12 +104,33 @@ function getCloudyUpdateTable(){
 		}
 		$buttons = "";
 		$installed_version = getYourVersion($package['user'],$package['repo']);
-		$last_version = getGitMaster($package['user'],$package['repo']);
-		if ($installed_version == t('cloudyupdate_getYourVersion_none'))
+
+    $installed_version_short = substr($installed_version,0,7);
+
+    $github_info = getGitMaster($package['user'],$package['repo']);
+
+    $last_version = $github_info["master"]["object"]["sha"];
+    $last_version_short = substr($last_version,0,7);
+
+    $last_datetime = $github_info["commit"]["author"]["date"];
+    $last_date = substr($last_datetime,0,strpos($last_datetime, "T"));
+    $last_time = substr($last_datetime,strpos($last_datetime, "T")+1,strpos($last_datetime, "Z")-1);
+
+    if ($last_version == "")
+      $last_version = t("cloudyupdate_getCloudyUpdateTable_na");
+
+    if ($last_date == "")
+      $last_date = t("cloudyupdate_getCloudyUpdateTable_na");
+
+    if ($installed_version == t('cloudyupdate_getYourVersion_none') && $last_version != t("cloudyupdate_getCloudyUpdateTable_na"))
 			$buttons = addButton(array('label'=>t("cloudyupdate_button_install"),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
-		elseif ($installed_version != $last_version)
+		elseif ($installed_version != $last_version && $last_version != t("cloudyupdate_getCloudyUpdateTable_na") )
 			$buttons = addButton(array('label'=>t("cloudyupdate_button_upgrade"),'href'=>$staticFile.'/cloudyupdate/update/'.$pname));
-		$table .= addTableRow(array($pname, $installed_version, $last_version, $buttons));
+    elseif ($installed_version != t('cloudyupdate_getYourVersion_none') && $installed_version == $last_version && $last_version != t("cloudyupdate_getCloudyUpdateTable_na"))
+      $buttons = addButton(array('label'=>t("cloudyupdate_button_nu"), 'class'=>'btn btn-default disabled'));
+    else
+  		$buttons = addButton(array('label'=>t("cloudyupdate_button_na"), 'class'=>'btn btn-default disabled'));
+		$table .= addTableRow(array($pname, $installed_version_short, $last_version_short, $last_date . " " . $last_time, $buttons));
 	}
 	$table .= addTableFooter();
 
@@ -145,11 +173,15 @@ function getDebianUpdateTable(){
 
 
 function getGitMaster($user, $repo){
-	$github = "https://api.github.com/repos/" . $user . "/" . $repo . "/git/refs/heads/master";
+	$github_master = "https://api.github.com/repos/" . $user . "/" . $repo . "/git/refs/heads/master";
+	$github = execute_program_shell("curl -sk $github_master");
+  $github_json = json_decode($github["output"], true);
 
-	$sha = execute_program("curl -k $github | grep 'sha'|awk -F':' '{print $2}'|awk -F'\"' '{print $2}'");
+  $github_commit = "https://api.github.com/repos/" . $user . "/" . $repo . "/git/commits/" . $github_json["object"]["sha"];
+  $last_commit = execute_program_shell("curl -sk $github_commit");
+  $last_commit_json = json_decode($last_commit["output"], true);
 
-	return($sha['output'][0]);
+	return(["master" => $github_json, "commit" => $last_commit_json]);
 }
 
 function debupdate() {
