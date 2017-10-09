@@ -9,6 +9,7 @@ addS ("cloudyupdate_button_back","Back to Cloudy updates manager");
 addS ("cloudyupdate_button_continue","Continue to Cloudy updates manager");
 addS ("cloudyupdate_button_install","Install");
 addS ("cloudyupdate_button_na","Package not available");
+addS ("cloudyupdate_button_nu","No updates available");
 addS ("cloudyupdate_button_no_back","No, go back to Cloudy updates manager");
 addS ("cloudyupdate_button_update_debian","Update Debian packages list");
 addS ("cloudyupdate_button_upgrade","Upgrade");
