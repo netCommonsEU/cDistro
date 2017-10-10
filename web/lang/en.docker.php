@@ -9,6 +9,8 @@ addS ("docker_alert_not_installed","Docker is not installed");
 addS ("docker_alert_not_running","Docker is stopped");
 addS ("docker_alert_img_not_available","No Docker images available");
 addS ("docker_alert_no_sources","Missing APT sources file for Docker package");
+addS ("docker_alert_no_template_pre","The Docker template ");
+addS ("docker_alert_no_template_post"," could not be found");
 addS ("docker_alert_ps_not_running","No running Docker containers");
 addS ("docker_alert_ps_not_stopped","No stopped Docker containers");
 addS ("docker_alert_running","Docker is running");
@@ -66,6 +68,7 @@ addS ("docker_subtitle","Automated deployment of Linux applications inside softw
 addS ("docker_container_stopped","stopped");
 addS ("docker_container_running","running");
 
+
 //add
 addS ("docker_add_config_desc", "Use the form below to customize the predefined template settings and launch the image.");
 addS ("docker_add_subtitle","Predefined templates for launching Docker containers");
@@ -76,6 +79,7 @@ addS ("docker_add_header_ports",'Ports');
 addS ("docker_add_header_options",'Options');
 addS ("docker_add_header_links",'Links');
 addS ("docker_add_header_actions",'Actions');
+addS ("docker_add_error_no_template",'An error occurred:');
 addS ("docker_add_pdform_image", "Docker image");
 addS ("docker_add_pdform_image_tooltip", "The image to pull from the Docker repository.");
 addS ("docker_add_pdform_name", "Container name");
