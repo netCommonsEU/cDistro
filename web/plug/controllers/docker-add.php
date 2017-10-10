@@ -38,9 +38,9 @@ function config() {
   $page .= hl(t("docker_add_subtitle"),4);
 
   if (!file_exists($predDir.$Parameters[0])) {
-    $page .= txt(t("error_text"));
-    $page .= "<div class='alert alert-error text-center'>".t("docker_addsources_available")."</div>\n";
-    $buttons .= addButton(array('label'=>t("error"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+    $page .= txt(t('docker_add_error_no_template'));
+    $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_template_pre") . $Parameters[0] . t("docker_alert_no_template_post") . "</div>\n";
+    $buttons .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
   }
 
   else {
@@ -118,6 +118,48 @@ function config_post() {
 
     _dockerrun($name, $ports, $options, $links, $image );
     return(array('type'=> 'redirect', 'url' => $returnpath));
+  }
+
+  $page .= $buttons;
+  return array('type' => 'render','page' => $page);
+}
+
+function launch() {
+  global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir, $returnpath;
+
+  $page = "";
+  $buttons = "";
+
+  if (!file_exists($predDir.$Parameters[0])) {
+    $page .= hlc(t("docker_title"));
+    $page .= hl(t("docker_add_subtitle"),4);
+    $page .= txt(t('docker_add_error_no_template'));
+    $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_template_pre") . $Parameters[0] . t("docker_alert_no_template_post") . "</div>\n";
+    $buttons .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+  }
+
+  else {
+    $fcontent = file_get_contents($predDir.$Parameters[0]);
+    $jcontent = json_decode($fcontent, true);
+
+    if (isset ($jcontent["ports"])) {
+      foreach ($jcontent["ports"] as $pkey => $pvalue) {
+        $ports[$pkey] = $pvalue;
+      }
+    }
+    if (isset ($jcontent["options"])) {
+      foreach ($jcontent["options"] as $okey => $ovalue) {
+        $options[$okey] = $ovalue;
+      }
+    }
+    if (isset ($jcontent["links"])) {
+      foreach ($jcontent["links"] as $lkey => $lvalue) {
+        $options[$lkey] = $lvalue;
+      }
+    }
+
+  _dockerrun($jcontent["name"], $ports, $options, $links, $jcontent["image"] );
+  return(array('type'=> 'redirect', 'url' => $returnpath));
   }
 
   $page .= $buttons;
