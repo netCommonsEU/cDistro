@@ -1,6 +1,5 @@
 <?php
 
-
 //alerts
 addS ("docker_addsources_available", "Docker està disponible per ser instal·lat");
 addS ("docker_addsources_not_available", "Docker està disponible per ser instal·lat");
@@ -16,6 +15,7 @@ addS ("docker_alert_ps_not_stopped","No hi ha contenidors Docker aturats");
 addS ("docker_alert_running","S'està engegat Docker");
 addS ("docker_alert_start_message","S'ha engegat Docker");
 addS ("docker_alert_stop_message","S'ha aturat Docker");
+addS ("docker_alert_vol_none", "No hi ha volums de Docker disponibles");
 
 
 //buttons
@@ -38,6 +38,8 @@ addS ("docker_button_image_run","Engega la imatge");
 addS ("docker_button_pdcontainer_config","Configura");
 addS ("docker_button_pdcontainer_run","Inicia");
 addS ("docker_button_pdform_run","Inicia");
+addS ("docker_button_volume_inspect","Inspecciona el volum");
+addS ("docker_button_volume_rm","Esborra volume");
 
 
 //flash
@@ -58,6 +60,8 @@ addS ("docker_flash_pull_post"," en segon pla. Pot trigar uns segons...");
 addS ("docker_flash_stop_pre","S'està aturant el contenidor ");
 addS ("docker_flash_stop_mid"," (ID: ");
 addS ("docker_flash_stop_post",") en segon pla. Pot trigar uns segons...");
+addS ("docker_flash_vol_rm_pre","S'està esborrant el volum ");
+addS ("docker_flash_vol_rm_post"," en segon pla. Això pot trigar uns segons...");
 
 
 //Common
@@ -113,9 +117,10 @@ addS ("docker_search_yes",'Sí');
 //main
 addS ("docker_info","Informació de Docker:");
 addS ("docker_interface","Interfície de xarxa de Docker:");
-addS ("docker_title_containers_running", "contenidors Docker engegats:");
-addS ("docker_title_containers_stopped", "contenidors Docker aturats:");
+addS ("docker_title_containers_running", "Contenidors Docker engegats:");
+addS ("docker_title_containers_stopped", "Contenidors Docker aturats:");
 addS ("docker_title_images", "Imatges Docker disponibles:");
+addS ("docker_title_volume", "Volums Docker disponibles:");
 addS ("docker_not_installed","Docker no està instal·lat.");
 addS ("docker_installed","Docker està instal·lat.");
 addS ("docker_button_install","Instal·la Docker (Community Edition)");
