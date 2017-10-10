@@ -160,26 +160,32 @@ function docker_predefined_containers_table(){
       $fields[] = $jcontent["description"];
 
       $ports = "";
-      foreach ($jcontent["ports"] as $pkey => $pvalue) {
-        if ($ports !== "")
-          $ports .= "<br>";
-        $ports .= $pvalue."=>".$pkey;
+      if (isset($jcontent["ports"])) {
+        foreach ($jcontent["ports"] as $pkey => $pvalue) {
+          if ($ports !== "")
+            $ports .= "<br>";
+          $ports .= $pvalue."=>".$pkey;
+        }
       }
       $fields[] = $ports;
 
       $options = "";
-      foreach ($jcontent["options"] as $okey => $ovalue) {
-        if ($options !== "")
-          $options .= "<br>";
-        $options .= $okey."=".$ovalue;
+      if (isset($jcontent["options"])) {
+        foreach ($jcontent["options"] as $okey => $ovalue) {
+          if ($options !== "")
+            $options .= "<br>";
+          $options .= $okey."=".$ovalue;
+        }
       }
       $fields[] = $options;
 
       $links = "";
-      foreach ($jcontent["links"] as $lkey => $lvalue) {
-        if ($links !== "")
-          $links .= ", ";
-        $links .= $lvalue;
+      if (isset($jcontent["links"])) {
+        foreach ($jcontent["links"] as $lkey => $lvalue) {
+          if ($links !== "")
+            $links .= ", ";
+          $links .= $lvalue;
+        }
       }
       $fields[] = $links;
 
