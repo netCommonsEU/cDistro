@@ -89,4 +89,3 @@ if (!isSesionValue("user")) {
 } else {
 	$user = unserialize(getSessionValue("user"));
 }
-
