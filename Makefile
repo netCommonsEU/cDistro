@@ -13,7 +13,7 @@ install:
 	mkdir -p $(INSTALLDIR)/etc/cloudy/
 	@echo "Installing files"
 	install -m 0755 cdistro $(INSTALLDIR)/etc/init.d/
-	$(if test -s $(INSTALLDIR)/etc/cloudy/cloudy.conf, @echo "Not overwriting cloudy.conf...", install -m 0644 cloudy.conf $(INSTALLDIR)/etc/cloudy/)
+	cp -nv cloudy.conf /etc/cloudy/
 	install -m 0700 cdistrod $(INSTALLDIR)/usr/sbin/
 	cp -dR web/* $(INSTALLDIR)/var/local/cDistro/
 
