@@ -9,6 +9,8 @@ addS ("docker_alert_not_installed","Docker no está instalado");
 addS ("docker_alert_not_running","Docker está parado");
 addS ("docker_alert_img_not_available","No hay imágenes de Docker disponibles");
 addS ("docker_alert_no_sources","Falta el fichero de fuentes APT para el paquete de Docker");
+addS ("docker_alert_no_template_pre","No se ha encontrado la plantilla de Docker ");
+addS ("docker_alert_no_template_post","");
 addS ("docker_alert_ps_not_running","No hay contenedores Docker en ejecución");
 addS ("docker_alert_ps_not_stopped","No hay contenedores Docker parados");
 addS ("docker_alert_running","Docker está ejecutándose");
@@ -17,6 +19,7 @@ addS ("docker_alert_stop_message","Docker se ha parado");
 
 
 //buttons
+addS ("docker_button_addpd","Imágenes Docker predefinidas");
 addS ("docker_button_add_sources","Añadir el fichero de fuentes APT para Docker");
 addS ("docker_button_add_sources_retry","Reintentar añadir el fichero de fuentes APT para Docker");
 addS ("docker_button_back","Volver");
@@ -32,6 +35,9 @@ addS ("docker_button_container_rm","Borrar contenedor");
 addS ("docker_button_container_restart","Reiniciar contenedor");
 addS ("docker_button_image_rmi","Borrar imagen");
 addS ("docker_button_image_run","Iniciar imagen");
+addS ("docker_button_pdcontainer_config","Configurar");
+addS ("docker_button_pdcontainer_run","Iniciar");
+addS ("docker_button_pdform_run","Iniciar");
 
 
 //flash
@@ -61,6 +67,31 @@ addS ("docker_status","Estado de Docker:");
 addS ("docker_subtitle","Despliegue automatizado de aplicaciones Linux en contenedores software");
 addS ("docker_container_stopped","parado");
 addS ("docker_container_running","en ejecución");
+
+
+//add
+addS ("docker_add_config_desc", "Use el formulario que hay a continuación para configurar las opciones por defecto de la plantilla e iniciar la imagen.");
+addS ("docker_add_subtitle","Plantillas predefinidas para iniciar contenedores Docker");
+addS ("docker_add_desc",'La tabla que hay a continuación le ofrece una lista de imágenes Docker predefinidas, probadas y listas para iniciar. Use los botones correspondientes para configurarlas antes de iniciarlas, o para arrancarlas directamente.');
+addS ("docker_add_header_appname",'Aplicación');
+addS ("docker_add_header_description",'Descripción');
+addS ("docker_add_header_ports",'Puertos');
+addS ("docker_add_header_options",'Opciones');
+addS ("docker_add_header_links",'Enlaces');
+addS ("docker_add_header_actions",'Acciones');
+addS ("docker_add_error_no_template",'Ha ocurrido un error:');
+addS ("docker_add_pdform_image", "Imagen Docker");
+addS ("docker_add_pdform_image_tooltip", "La imagen que se descargará del repositorio de Docker.");
+addS ("docker_add_pdform_name", "Nombre del contenedor");
+addS ("docker_add_pdform_name_tooltip", "Escriba el nombre para este contenedor Docker, o déjelo en blanco para que reciba un nombre al azar.");
+addS ("docker_add_pdform_port", "Abrir puerto ");
+addS ("docker_add_pdform_port_tooltip_pre", "Abrir el puerto TCP ");
+addS ("docker_add_pdform_port_tooltip_post", " del contendor a través del puerto del anfitrión especificado.");
+addS ("docker_add_pdform_option", "");
+addS ("docker_add_pdform_option_tooltip_pre", "Configure el valor para la opción ");
+addS ("docker_add_pdform_option_tooltip_post", " .");
+addS ("docker_add_pdform_link", "Enlace");
+addS ("docker_add_pdform_link_tooltip", "Enlazar este contenedor con otro.");
 
 
 //search
