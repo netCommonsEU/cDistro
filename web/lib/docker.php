@@ -348,8 +348,10 @@ function _dockerrun($name = null, $ports = null, $options = null, $links = null,
     if ($name !== null && $name !== "")
       $command .= "--name ".$name." ";
 
-    foreach ($ports as $pkey => $pvalue) {
-      $command .= "-p ".$pvalue.":".$pkey." ";
+    if (isset ($ports)) {
+      foreach ($ports as $pkey => $pvalue) {
+        $command .= "-p ".$pvalue.":".$pkey." ";
+      }
     }
 
     foreach ($options as $okey => $ovalue) {
