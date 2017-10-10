@@ -9,6 +9,8 @@ addS ("docker_alert_not_installed","Docker no està instal·lat");
 addS ("docker_alert_not_running","Docker està aturat");
 addS ("docker_alert_img_not_available","No hi ha imatges de Docker disponibles");
 addS ("docker_alert_no_sources","Falta el fitxer de fonts APT per al paquet de Docker");
+addS ("docker_alert_no_template_pre","No s'ha trobat la plantilla de Docker ");
+addS ("docker_alert_no_template_post","");
 addS ("docker_alert_ps_not_running","No hi ha contenidors Docker engegats");
 addS ("docker_alert_ps_not_stopped","No hi ha contenidors Docker aturats");
 addS ("docker_alert_running","S'està engegat Docker");
@@ -17,6 +19,7 @@ addS ("docker_alert_stop_message","S'ha aturat Docker");
 
 
 //buttons
+addS ("docker_button_addpd","Imatges Docker predefinides");
 addS ("docker_button_add_sources","Afegeix el fitxer de fonts APT per a Docker");
 addS ("docker_button_add_sources_retry","Reintenta afegir el fitxer de fonts APT per a Docker");
 addS ("docker_button_back","Enrere");
@@ -32,6 +35,9 @@ addS ("docker_button_container_rm","Esborra el contenidor");
 addS ("docker_button_container_restart","Reinicia contenidor");
 addS ("docker_button_image_rmi","Esborra la imatge");
 addS ("docker_button_image_run","Engega la imatge");
+addS ("docker_button_pdcontainer_config","Configura");
+addS ("docker_button_pdcontainer_run","Inicia");
+addS ("docker_button_pdform_run","Inicia");
 
 
 //flash
@@ -61,6 +67,31 @@ addS ("docker_status","Estat de Docker:");
 addS ("docker_subtitle","Desplegament automatitzat d'aplicacions Linux en contenidors de programari");
 addS ("docker_container_stopped","aturat");
 addS ("docker_container_running","engegat");
+
+
+//add
+addS ("docker_add_config_desc", "Empreu el formulari de sota per configurar les opcions per defecto de la plantilla i arrencar la imatge.");
+addS ("docker_add_subtitle","Plantilles predefinides per iniciar contenidors Docker");
+addS ("docker_add_desc","La tabla de sota us mostra una llista d'imatges Docker predefinides, provades i llestes per arrencar. Empreu els botons corresponents per configurar-les abans d'iniciar-les o per engegar-les directament.");
+addS ("docker_add_header_appname",'Aplicació');
+addS ("docker_add_header_description",'Descripció');
+addS ("docker_add_header_ports",'Ports');
+addS ("docker_add_header_options",'Opcions');
+addS ("docker_add_header_links",'Enllaços');
+addS ("docker_add_header_actions",'Accions');
+addS ("docker_add_error_no_template","S'ha produït un error:");
+addS ("docker_add_pdform_image", "Imatge Docker");
+addS ("docker_add_pdform_image_tooltip", "La imatge que es descarregarà del repositori de Docker.");
+addS ("docker_add_pdform_name", "Nom del contenidor");
+addS ("docker_add_pdform_name_tooltip", "Escriviu un nom per a aquest contenidor, o deixeu-ho en blanc per tal que se li assigni un nom a l'atzar.");
+addS ("docker_add_pdform_port", "Obrir port ");
+addS ("docker_add_pdform_port_tooltip_pre", "Obrir el port TCP ");
+addS ("docker_add_pdform_port_tooltip_post", " del contindor a través del port de l'amfitrió especificat.");
+addS ("docker_add_pdform_option", "");
+addS ("docker_add_pdform_option_tooltip_pre", "Configureu el valor per a l'opció ");
+addS ("docker_add_pdform_option_tooltip_post", " .");
+addS ("docker_add_pdform_link", "Enllaç");
+addS ("docker_add_pdform_link_tooltip", "Enllaça aquest contenidr amb un altre.");
 
 
 //search
