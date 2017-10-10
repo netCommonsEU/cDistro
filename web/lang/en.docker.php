@@ -1,6 +1,5 @@
 <?php
 
-
 //alerts
 addS ("docker_addsources_available", "Docker is available for installation");
 addS ("docker_addsources_not_available", "Docker is not available for installation");
@@ -16,6 +15,7 @@ addS ("docker_alert_ps_not_stopped","No stopped Docker containers");
 addS ("docker_alert_running","Docker is running");
 addS ("docker_alert_start_message","Docker has been started");
 addS ("docker_alert_stop_message","Docker has been stopped");
+addS ("docker_alert_vol_none", "No Docker volumes available");
 
 
 //buttons
@@ -38,6 +38,8 @@ addS ("docker_button_image_run","Run image");
 addS ("docker_button_pdcontainer_config","Configure");
 addS ("docker_button_pdcontainer_run","Launch");
 addS ("docker_button_pdform_run","Launch");
+addS ("docker_button_volume_inspect","Inspect volume");
+addS ("docker_button_volume_rm","Remove volume");
 
 
 //flash
@@ -58,6 +60,8 @@ addS ("docker_flash_pull_post"," in the background. This may take some seconds..
 addS ("docker_flash_stop_pre","Stopping container ");
 addS ("docker_flash_stop_mid"," (ID: ");
 addS ("docker_flash_stop_post",") in the background. This may take some seconds...");
+addS ("docker_flash_vol_rm_pre","Removing volume ");
+addS ("docker_flash_vol_rm_post"," in the background. This may take some seconds...");
 
 
 //Common
@@ -116,6 +120,7 @@ addS ("docker_interface","Docker network interface:");
 addS ("docker_title_containers_running", "Running Docker containers:");
 addS ("docker_title_containers_stopped", "Stopped Docker containers:");
 addS ("docker_title_images", "Available Docker images:");
+addS ("docker_title_volume", "Available Docker volumes:");
 addS ("docker_not_installed","Docker is not installed.");
 addS ("docker_installed","Docker is installed.");
 addS ("docker_button_install","Install Docker (Community Edition)");
