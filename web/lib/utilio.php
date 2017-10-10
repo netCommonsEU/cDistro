@@ -17,7 +17,7 @@ function load_conffile($file,$default = null){
 		if (is_array($variables)){return($variables);}
 		notFileExist($file);
 	}
-	if(($v = parse_ini_file($file)) == FALSE) {
+	if(($v = parse_ini_file_hash($file)) == FALSE) {
 		if (is_array($variables)){return($variables);}
 		notReadFile($file);
 	}
@@ -77,7 +77,7 @@ function write_merge_conffile($file,$dates){
 	global $debug;
 
 	if (file_exists($file)) {
-		$conf = parse_ini_file($file);
+		$conf = parse_ini_file_hash($file);
 		$str = "";
 
 		if ($debug)
