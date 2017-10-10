@@ -131,6 +131,46 @@ function docker_ps_stopped_table($dock_filter = null){
 }
 
 
+function docker_volume(){
+  global $dev, $title, $urlpath, $docker_pkg, $staticFile;
+
+  $page = "";
+  $buttons = "";
+  $table = "";
+
+  $page .= txt(t("docker_title_volume"));
+
+  $ret = execute_program_shell('docker volume ls');
+
+  $retarray = explode(PHP_EOL,$ret['output']);
+
+  if ( array_key_exists(2, $retarray )) {
+    $headers = get_fancyheaders_from_string($retarray[0]);
+    $headers[] = t('Actions');
+    $headerspos = get_headers_position_in_string($retarray[0]);
+    $table .= addTableHeader($headers);
+    foreach($retarray as $key => $value){
+      if ($key > 0) {
+        $fields = get_fields_in_string($value, $headerspos);
+        if ($fields[0] != "") {
+          $fields[] = addButton(array('label'=>t("docker_button_volume_inspect"),'class'=>'btn btn-default', 'href'=>"$urlpath/volume/inspect/".trim($fields[1])));
+          $fields[] = addButton(array('label'=>t("docker_button_volume_rm"),'class'=>'btn btn-danger', 'href'=>"$urlpath/volume/rm/".trim($fields[1])));
+          $table .= addTableRow($fields);
+        }
+      }
+    }
+    $table .= addTableFooter();
+  }
+  else {
+    $page .= "<div class='alert alert-info text-center'>".t("docker_alert_vol_none")."</div>\n";
+  }
+
+  $page .= $table;
+
+  return ["page" => $page, "buttons" => $buttons];
+}
+
+
 function get_fancyheaders_from_string($headerstring){
   foreach (get_headers_from_string($headerstring) as $key => $value)
     $fancyheaderstring[] = preg_replace('/\s+/', '', ucwords(strtolower($value)));
@@ -327,4 +367,13 @@ function _dockerrun($name = null, $ports = null, $options = null, $links = null,
     setFlash( t("docker_flash_run_pre") . $image . t("docker_flash_run_post"));
 
 	return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+
+function _dockervolumerm($volumename) {
+    global $Parameters, $urlpath, $staticFile;
+
+    execute_program_detached("docker volume rm " . $volumename);
+    setFlash( t("docker_flash_vol_rm_pre") . $volumename . t("docker_flash_vol_rm_post"));
+
+    return(array('type'=> 'redirect', 'url' => $urlpath));
 }

@@ -38,6 +38,7 @@ function index() {
         $page .= txt(t("docker_title_containers_stopped"));
         $page .= docker_ps_stopped_table()["page"];
         $page .= docker_img()["page"];
+        $page .= docker_volume()["page"];
     }
 
     $page .= $buttons;
@@ -148,6 +149,24 @@ function image() {
                     return _dockerimagerun($Parameters[1], $Parameters[2]);
                 return _dockerimagerun($Parameters[1]);
             break;
+
+        default:
+            return(array('type'=> 'redirect', 'url' => $urlpath));
+    }
+}
+
+
+function volume() {
+    global $Parameters, $dev, $title, $urlpath, $docker_pkg, $staticFile;
+
+    switch ($Parameters[0]) {
+        case "rm":
+            if (isset($Parameters[1]))
+                return _dockervolumerm($Parameters[1]);
+            break;
+
+        case "inspect":
+            return(array('type'=> 'redirect', 'url' => $urlpath));
 
         default:
             return(array('type'=> 'redirect', 'url' => $urlpath));
