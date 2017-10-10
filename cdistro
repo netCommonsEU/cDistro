@@ -16,6 +16,8 @@ PIDFILE="/var/run/cdistro.pid"
 PIDDAEMON="/var/run/cdistrod.pid"
 DAEMON="/usr/sbin/cdistrod"
 
+DEMO=0
+
 test -f $CONFFILE && . $CONFFILE || exit 0
 
 start() {
