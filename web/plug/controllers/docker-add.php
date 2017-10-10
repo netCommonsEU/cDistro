@@ -142,23 +142,36 @@ function launch() {
     $fcontent = file_get_contents($predDir.$Parameters[0]);
     $jcontent = json_decode($fcontent, true);
 
+    $name = ( isset ($jcontent["name"]) && $jcontent["name"] !== null && $jcontent["name"] !== "" ? $jcontent["name"] : null );
+
     if (isset ($jcontent["ports"])) {
       foreach ($jcontent["ports"] as $pkey => $pvalue) {
-        $ports[$pkey] = $pvalue;
+        $ports[$pvalue] = $pkey;
       }
     }
+    else {
+      $ports = null;
+    }
+
     if (isset ($jcontent["options"])) {
       foreach ($jcontent["options"] as $okey => $ovalue) {
         $options[$okey] = $ovalue;
       }
     }
-    if (isset ($jcontent["links"])) {
-      foreach ($jcontent["links"] as $lkey => $lvalue) {
-        $options[$lkey] = $lvalue;
-      }
+    else {
+      $options = null;
     }
 
-  _dockerrun($jcontent["name"], $ports, $options, $links, $jcontent["image"] );
+    if (isset ($jcontent["links"])) {
+      foreach ($jcontent["links"] as $lkey => $lvalue) {
+        $links[$lkey] = $lvalue;
+      }
+    }
+    else {
+      $links = null;
+    }
+
+  _dockerrun($name, $ports, $options, $links, $jcontent["image"] );
   return(array('type'=> 'redirect', 'url' => $returnpath));
   }
 

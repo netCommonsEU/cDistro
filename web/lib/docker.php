@@ -354,12 +354,16 @@ function _dockerrun($name = null, $ports = null, $options = null, $links = null,
       }
     }
 
-    foreach ($options as $okey => $ovalue) {
-      $command .= "-e ".$okey."=".$ovalue." ";
+    if (isset ($options)) {
+      foreach ($options as $okey => $ovalue) {
+        $command .= "-e ".$okey."=".$ovalue." ";
+      }
     }
 
-    foreach ($links as $lkey => $lvalue) {
-      $command .= "--link ".$lvalue." ";
+    if (isset ($links)) {
+      foreach ($links as $lkey => $lvalue) {
+        $command .= "--link ".$lvalue." ";
+      }
     }
 
     $command .= "-d ".$image;
