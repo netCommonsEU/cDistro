@@ -112,6 +112,12 @@ function container() {
                 return _dockercontainerstop($Parameters[1]);
             break;
 
+        case "publish":
+            if (isset($Parameters[1]))
+                if (isset($Parameters[2]) && !endsWith($Parameters[2], "_public"))
+                    return _dockercontainerrename($Parameters[1], $Parameters[2] . "_public");
+            break;
+
         case "pull":
             if (isset($Parameters[1]))
                 if (isset($Parameters[2]))
@@ -124,6 +130,12 @@ function container() {
                 if (isset($Parameters[2]))
                     return _dockercontainerrestart($Parameters[1], $Parameters[2]);
                 return _dockercontainerrestart($Parameters[1]);
+            break;
+
+        case "unpublish":
+            if (isset($Parameters[1]))
+                if (isset($Parameters[2]) && endsWith($Parameters[2], "_public"))
+                    return _dockercontainerrename($Parameters[1], preg_replace('/_public$/', '', $Parameters[2]));
             break;
 
         default:

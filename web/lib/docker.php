@@ -55,20 +55,30 @@ function docker_ps_running_table($dock_filter = null){
   if ( array_key_exists(2, $retarray )) {
     $table = "";
     $headers = get_fancyheaders_from_string($retarray[0]);
-    $headers[] = t('Action');
+    $headers[] = t('Actions');
     $headerspos = get_headers_position_in_string($retarray[0]);
     $table .= addTableHeader($headers);
     foreach($retarray as $key => $value){
       if ($key > 0) {
         $fields = get_fields_in_string($value, $headerspos);
-
+        $buttons = array();
         if ($fields[0] != "") {
-          $fields[0] = preg_replace('/\s+/', '', $fields[0]);
-          $fields[6] = preg_replace('/\s+/', '', $fields[6]);
-          $fields[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$fields[0]."/".$fields[6]));
-          if (($dock_filter === null) || ( strpos($fields[6], $dock_filter.'_') !== false))
+          $cid = preg_replace('/\s+/', '', $fields[0]);
+          $cname = preg_replace('/\s+/', '', $fields[6]);
+          $cnametr =  preg_replace('/_public$/', '', $cname);
+
+          if ( endsWith($cname, "_public" ))
+          {
+            $buttons[] = addButton(array('label'=>t("docker_button_container_unpublish"),'class'=>'btn btn-warning', 'href'=>"$urlpath/container/unpublish/".$cid."/".$cname));
+          }
+          else
+          {
+            $buttons[] = addButton(array('label'=>t("docker_button_container_publish"),'class'=>'btn btn-info', 'href'=>"$urlpath/container/publish/".$cid."/".$cname));
+          }
+          $buttons[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$cid."/".$cname));
+          if (($dock_filter === null) || ( strpos($cname, $dock_filter.'_') !== false))
             {
-            $table .= addTableRow($fields);
+            $table .= addTableRow( array_merge ( array($cid, $fields[1], $fields[2], $fields[3], $fields[4], $fields[5], $cnametr), $buttons));
             $dock_count++;
         }
         }
@@ -292,6 +302,15 @@ function _dockercontainerpull($name) {
 
     execute_program_detached("docker pull " . $name);
     setFlash( t("docker_flash_pull_pre") . "<b>" . $name . "</b>" . t("docker_flash_pull_post"));
+
+    return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+
+
+function _dockercontainerrename($id, $newname) {
+    global $Parameters, $urlpath, $staticFile;
+
+    execute_program_detached("docker rename " . $id . " " . $newname);
 
     return(array('type'=> 'redirect', 'url' => $urlpath));
 }
