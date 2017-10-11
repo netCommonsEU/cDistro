@@ -359,6 +359,21 @@ function _dockerimagerun($id, $name) {
 	return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 
+
+function _dockerinspectcontainer ($id)
+{
+    $docker_inspect_errors = array("Cannot connect to the Docker daemon", "No such container");
+
+    $cinspect = execute_program_shell("docker container inspect " . $id);
+
+    foreach ($docker_inspect_errors as $ekey => $evalue)
+        if ( strpos($cinspect["output"], $evalue) !== FALSE )
+            return null;
+
+    return json_decode($cinspect["output"], true)[0];
+}
+
+
 function _dockerrun($name = null, $ports = null, $options = null, $links = null, $image ) {
     global $Parameters, $urlpath, $staticFile;
 
