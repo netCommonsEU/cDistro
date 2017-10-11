@@ -57,6 +57,8 @@ addS ("docker_flash_rmi_post"," in the background. This may take some seconds...
 addS ("docker_flash_run_pre","Launching image ");
 addS ("docker_flash_run_mid","");
 addS ("docker_flash_run_post"," in the background. This may take some seconds...");
+addS ("docker_flash_publish_error_pre","Unable to publish Docker container ");
+addS ("docker_flash_publish_error_post","");
 addS ("docker_flash_pull_pre","Pulling image ");
 addS ("docker_flash_pull_post"," in the background. This may take some seconds...");
 addS ("docker_flash_stop_pre","Stopping container ");
