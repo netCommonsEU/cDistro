@@ -39,6 +39,7 @@ function index() {
         $page .= docker_ps_stopped_table()["page"];
         $page .= docker_img()["page"];
         $page .= docker_volume()["page"];
+
     }
 
     $page .= $buttons;
@@ -115,7 +116,10 @@ function container() {
         case "publish":
             if (isset($Parameters[1]))
                 if (isset($Parameters[2]) && !endsWith($Parameters[2], "_public"))
-                    return _dockercontainerrename($Parameters[1], $Parameters[2] . "_public");
+                {
+                    _dockercontainerrename($Parameters[1], $Parameters[2] . "_public");
+                    return _dockercontainerpublish($Parameters[1]);
+                }
             break;
 
         case "pull":

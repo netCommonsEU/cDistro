@@ -296,6 +296,33 @@ function _dockercontainerrm($id, $name) {
   return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 
+//Imported from Miquel Moreno's PFC code
+function _dockercontainerpublish($cname)
+{
+    global $Parameters, $urlpath, $staticFile;
+
+    $cinspect = _dockerinspectcontainer($cname);
+
+    if ( $cinspect === NULL )
+    {
+        setFlash(t("docker_flash_publish_error_pre") . $cname . t("docker_flash_publish_error_post"), "error");
+        return(array('type'=> 'redirect', 'url' => $urlpath));
+    }
+
+    setFlash(t("docker_flash_publish_pre") . $cname . t("docker_flash_publish_post"), "success");
+    if ( gettype($cinspect["HostConfig"]["PortBindings"]) == "array" )
+    {
+        foreach ( $cinspect["HostConfig"]["PortBindings"] as $pkey => $pvalue )
+        {
+            avahi_publish( 'Docker', $cinspect["Config"]["Image"] . "_" . ltrim( preg_replace('/_public$/', '', $cinspect["Name"]), "/"), $pvalue[0]["HostPort"], "");
+        }
+    }
+    else {
+        avahi_publish( 'Docker', $cinspect["Config"]["Image"] . "_" . ltrim( preg_replace('/_public$/', '', $cinspect["Name"]), "/"), "", "");
+    }
+
+    return(array('type'=> 'redirect', 'url' => $urlpath));
+}
 
 function _dockercontainerpull($name) {
     global $Parameters, $urlpath, $staticFile;
