@@ -5,8 +5,11 @@ SERVICEDIR="services/"
 LOGFILE="/dev/null"
 IPFSUSER="nobody"
 IPFSFILE="ipfs.info"
-INITLOG="thingcalledloginit"
-DAEMONLOG="thingcalledlog"
+CONFIG="config"
+TMPCONFIG="tmpconfig"
+IPFSLOG="ipfs-daemon.log"
+BOOTSTRAP="/ip4/10.139.40.99/tcp/4001/ipfs/QmU2m75ucoNgRHufwpnLTJEDzgyAJ8RvhdZWsmfgQyFe5u"
+
 doInstall() {
 	if isInstalled
 	then
@@ -21,10 +24,20 @@ doInstall() {
 	ipfstarball=go-ipfs.tar.gz
 	wget -O $ipfstarball https://dist.ipfs.io/go-ipfs/v0.4.10/go-ipfs_v0.4.10_linux-amd64.tar.gz
 	tar xvfz $ipfstarball
-	#mv go-ipfs/ipfs ipfs
 	chmod +x go-ipfs/ipfs
-	$IPFSPATH$IPFSPROG init > $IPFSPATH$INITLOG 2>&1
+	$IPFSPATH$IPFSPROG init > $IPFSPATH$IPFSLOG 2>&1
+	clearBootstrap && addBootstrapNode $BOOTSTRAP
 	cd -
+}
+
+clearBootstrap(){
+	jq '.Bootstrap |= []' $IPFSPATH$CONFIG > $IPFSPATH$TMPCONFIG
+	mv $IPFSPATH$TMPCONFIG $IPFSPATH$CONFIG
+}
+
+addBootstrapNode() {
+	jq '.Bootstrap += ["'$BOOTSTRAP'"]' $IPFSPATH$CONFIG > $IPFSPATH$TMPCONFIG
+	mv $IPFSPATH$TMPCONFIG $IPFSPATH$CONFIG
 }
 
 doInit() {
@@ -47,7 +60,7 @@ doServer(){
    # chmod 777 "/var/local/ipfs" && cd "/var/local/ipfs"
     cd $IPFSPATH
     # Running ipfs
-    $IPFSPATH$IPFSPROG daemon > $IPFSPATH$DAEMONLOG 2>&1 &
+    $IPFSPATH$IPFSPROG daemon > $IPFSPATH$IPFSLOG 2>&1 &
     pidipfs=$!
   #  cmd='su '$IPFSUSER' -c "{ '$IPFSPATH$IPFSPROG' daemon > 'thingcalledlog' 2>&1 & }; echo \$!"'
   #  pidipfs=$(eval $cmd)          # keeping PID for future needs...
@@ -98,7 +111,7 @@ case $1 in
         doServer $@
         ;;
     "stop")
-	shift
-	doStop $@
-	;;
+				shift
+				doStop $@
+				;;
 esac
