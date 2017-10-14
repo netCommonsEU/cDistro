@@ -27,11 +27,17 @@ doInstall() {
 	chmod +x go-ipfs/ipfs
 	$IPFSPATH$IPFSPROG init > $IPFSPATH$IPFSLOG 2>&1
 	clearBootstrap && addBootstrapNode $BOOTSTRAP
+	clearMDNSDiscovery
 	cd -
 }
 
 clearBootstrap(){
 	jq '.Bootstrap |= []' $IPFSPATH$CONFIG > $IPFSPATH$TMPCONFIG
+	mv $IPFSPATH$TMPCONFIG $IPFSPATH$CONFIG
+}
+
+clearMDNSDiscovery(){
+	jq '.Discovery.MDNS.Enabled |= false' $IPFSPATH$CONFIG > $IPFSPATH$TMPCONFIG
 	mv $IPFSPATH$TMPCONFIG $IPFSPATH$CONFIG
 }
 
