@@ -367,6 +367,31 @@ function _dockercontainerrestart($id, $name) {
 }
 
 
+function _dockercontainerunpublish($cname)
+{
+    global $Parameters, $urlpath, $staticFile;
+
+    $cinspect = _dockerinspectcontainer($cname);
+
+    if ( $cinspect === NULL )
+    {
+        setFlash(t("docker_flash_unpublish_error_pre") . $cname . t("docker_flash_unpublish_error_post"), "error");
+        return(array('type'=> 'redirect', 'url' => $urlpath));
+    }
+
+    setFlash(t("docker_flash_unpublish_pre") . $cname . t("docker_flash_unpublish_post"), "success");
+    if ( gettype($cinspect["HostConfig"]["PortBindings"]) == "array" )
+    {
+        foreach ( $cinspect["HostConfig"]["PortBindings"] as $pkey => $pvalue )
+        {
+            avahi_unpublish( 'Docker', $pvalue[0]["HostPort"]);
+        }
+    }
+
+    return(array('type'=> 'redirect', 'url' => $urlpath));
+}
+
+
 function _dockerimagermi($id, $name) {
     global $Parameters, $urlpath, $staticFile;
 
