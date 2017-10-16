@@ -67,13 +67,19 @@ function docker_ps_running_table($dock_filter = null){
           $cname = preg_replace('/\s+/', '', $fields[6]);
           $cnametr =  preg_replace('/_public$/', '', $cname);
 
+          $cinspect = _dockerinspectcontainer($cid);
+
           if ( endsWith($cname, "_public" ))
           {
             $buttons[] = addButton(array('label'=>t("docker_button_container_unpublish"),'class'=>'btn btn-warning', 'href'=>"$urlpath/container/unpublish/".$cid."/".$cname));
           }
-          else
+          elseif ( gettype($cinspect["HostConfig"]["PortBindings"]) == "array" && sizeof($cinspect["HostConfig"]["PortBindings"]) )
           {
             $buttons[] = addButton(array('label'=>t("docker_button_container_publish"),'class'=>'btn btn-info', 'href'=>"$urlpath/container/publish/".$cid."/".$cname));
+          }
+          else
+          {
+            $buttons[] = addButton(array('label'=>t("docker_button_container_publish"),'class'=>'btn btn-default disabled', ""));
           }
           $buttons[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$cid."/".$cname));
           if (($dock_filter === null) || ( strpos($cname, $dock_filter.'_') !== false))
