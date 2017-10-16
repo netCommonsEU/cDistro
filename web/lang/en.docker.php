@@ -61,9 +61,13 @@ addS ("docker_flash_publish_error_pre","Unable to publish Docker container ");
 addS ("docker_flash_publish_error_post","");
 addS ("docker_flash_pull_pre","Pulling image ");
 addS ("docker_flash_pull_post"," in the background. This may take some seconds...");
+addS ("docker_flash_publish_pre","Publishing container ");
+addS ("docker_flash_publish_post","");
 addS ("docker_flash_stop_pre","Stopping container ");
 addS ("docker_flash_stop_mid"," (ID: ");
 addS ("docker_flash_stop_post",") in the background. This may take some seconds...");
+addS ("docker_flash_unpublish_error_pre","Unable to unpublish Docker container ");
+addS ("docker_flash_unpublish_error_post","");
 addS ("docker_flash_vol_rm_pre","Removing volume ");
 addS ("docker_flash_vol_rm_post"," in the background. This may take some seconds...");
 
