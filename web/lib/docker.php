@@ -84,7 +84,7 @@ function docker_ps_running_table($dock_filter = null){
           $buttons[] = addButton(array('label'=>t("docker_button_container_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/container/stop/".$cid."/".$cname));
           if (($dock_filter === null) || ( strpos($cname, $dock_filter.'_') !== false))
             {
-            $table .= addTableRow( array_merge ( array($cid, $fields[1], $fields[2], $fields[3], $fields[4], $fields[5], $cnametr), $buttons));
+            $table .= addTableRow( array_merge ( array($cid, $fields[1], $fields[2], $fields[3], $fields[4], preg_replace('/^0.0.0.0:/', '', $fields[5]), $cnametr), $buttons));
             $dock_count++;
         }
         }
