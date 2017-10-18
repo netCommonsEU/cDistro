@@ -31,7 +31,7 @@ addS ("docker_button_stop","Atura Docker");
 addS ("docker_button_uninstall","Desinstal·la Docker (docker-ce)");
 addS ("docker_button_container_publish","Publica");
 addS ("docker_button_container_pull","Obtingues la image");
-addS ("docker_button_container_stop","Atura el contenidor");
+addS ("docker_button_container_stop","Atura");
 addS ("docker_button_container_rm","Esborra el contenidor");
 addS ("docker_button_container_restart","Reinicia contenidor");
 addS ("docker_button_container_unpublish","Despublica");
