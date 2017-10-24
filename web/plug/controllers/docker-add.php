@@ -27,7 +27,108 @@ function index() {
   return array('type' => 'render','page' => $page);
 }
 
-function config() {
+function image() {
+  global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir, $returnpath;
+
+  $page = "";
+  $buttons = "";
+
+  //Capçalera
+	$page .= hlc(t("docker_title"));
+  $page .= hl(t("docker_add_subtitle"),4);
+
+  $iimage = _dockerinspectimage($Parameters[0]);
+
+  if ( is_null($iimage) ) {
+    $page .= txt(t('docker_add_error_no_image'));
+    $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_image_pre") . $Parameters[0] . t("docker_alert_no_image_post") . "</div>\n";
+    $buttons .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$returnpath"));
+  }
+
+  else {
+    $page .= par(t("docker_add_config_desc"));
+
+    $page .= ptxt(print_r($iimage,1));
+
+    $image = $iimage["RepoTags"][0];
+    $name = explode(':',explode('/',$image)[sizeof(explode('/',$image))-1])[0];
+
+    $buttons .= addButton(array('label'=>t("default_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+
+    $page .= createForm(array('class'=>'form-horizontal'));
+    $page .= addInput('image',t("docker_add_pdform_image"),$image,array('type'=>'text','readonly'=>'true','placeholder'=>$image),"",t("docker_add_pdform_image_tooltip"));
+    $page .= addInput('name',t("docker_add_pdform_name"),$name,array('type'=>'text','placeholder'=>$name,'pattern'=>"^[a-z0-9\-]+$"),"",t("docker_add_pdform_name_tooltip"));
+
+    if (isset ($iimage["Config"]["ExposedPorts"]) && is_array($iimage["Config"]["ExposedPorts"]) && !empty($iimage["Config"]["ExposedPorts"]) ) {
+      foreach ($iimage["Config"]["ExposedPorts"] as $pvalue => $pkey) {
+        $protocol = explode('/',$pvalue)[1];
+        $portnumb = explode('/',$pvalue)[0];
+        $page .= addInput('port_'.$pvalue,t("docker_add_pdform_port").strtoupper($protocol)." ".$portnumb,$pkey,array('type'=>'number','placeholder'=>rand(49152, 65535),'min'=>0,'max'=>65535),"",t("docker_add_pdform_port_tooltip_pre").strtoupper($protocol)." ".$portnumb.t("docker_add_pdform_port_tooltip_post"));
+      }
+    }
+
+    if (isset ($jcontent["options"])) {
+      foreach ($jcontent["options"] as $okey => $ovalue) {
+        $page .= addInput('option_'.$okey,t("docker_add_pdform_option").$okey,$ovalue,array('type'=>'text','placeholder'=>$ovalue),"",t("docker_add_pdform_option_tooltip_pre").$okey.t("docker_add_pdform_option_tooltip_post"));
+      }
+    }
+
+    if (isset ($jcontent["links"])) {
+      foreach ($jcontent["links"] as $lkey => $lvalue) {
+        $page .= addInput('link_'.$lkey,t("docker_add_pdform_link"),$lvalue,array('type'=>'text','placeholder'=>$lvalue),"",t("docker_add_pdform_link_tooltip"));
+      }
+    }
+
+    $buttons .= addSubmit(array('label'=>t("docker_button_pdform_run"),'class'=>'btn btn-success','divOptions'=>array('class'=>'btn-group')));
+  }
+  $page .= $buttons;
+
+  return array('type' => 'render','page' => $page);
+}
+
+function image_post() {
+  global $title, $returnpath, $docker_pkg, $staticFile, $Parameters, $predDir;
+
+  $page = "";
+  $buttons = "";
+
+  //Capçalera
+	$page .= hlc(t("docker_title"));
+  $page .= hl(t("docker_add_subtitle"),4);
+
+  if (isset($_POST) && isset($_POST["image"])){
+
+    $page .= ptxt (print_r($_POST,1));
+
+    $image = $_POST["image"];
+
+    $name = ( isset ($_POST["name"]) ? $_POST["name"] : null);
+
+    $ports = null;
+    $options = null;
+    $links = null;
+
+    foreach ($_POST as $key => $value) {
+      if ( startsWith($key,'port_')){
+        $ports[str_replace("port_","",$key)] = $value;
+      }
+      if ( startsWith($key,'option_')){
+        $options[str_replace("option_","",$key)] = $value;
+      }
+      if ( startsWith($key,'link_')){
+        $links[] = $value;
+      }
+    }
+
+    _dockerrun($name, $ports, $options, $links, $image );
+    return(array('type'=> 'redirect', 'url' => $returnpath));
+  }
+
+  $page .= $buttons;
+  return array('type' => 'render','page' => $page);
+}
+
+function template() {
   global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir;
 
   $page = "";
@@ -82,7 +183,7 @@ function config() {
   return array('type' => 'render','page' => $page);
 }
 
-function config_post() {
+function template_post() {
   global $title, $returnpath, $docker_pkg, $staticFile, $Parameters, $predDir;
 
   $page = "";
@@ -244,7 +345,8 @@ function docker_predefined_containers_table(){
       }
       $fields[] = $links;
 
-      $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/config/".$fvalue)).addButton(array('label'=>t("docker_button_pdcontainer_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/launch/".$fvalue));
+      $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/template/".$fvalue));
+      $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/launch/".$fvalue));
       $table .= addTableRow($fields);
     }
     $table .= addTableFooter();

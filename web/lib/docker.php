@@ -24,7 +24,7 @@ function docker_img(){
         $fields = get_fields_in_string($value, $headerspos);
         if ($fields[0] != "") {
           $fields[] = addButton(array('label'=>t("docker_button_image_rmi"),'class'=>'btn btn-danger', 'href'=>"$urlpath/image/rmi/".trim($fields[2])."/".$fields[0]));
-          $fields[] = addButton(array('label'=>t("docker_button_image_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/image/run/".trim($fields[2])."/".$fields[0]));
+          $fields[] = addButton(array('label'=>t("docker_button_image_confrun"),'class'=>'btn btn-primary', 'href'=>"docker-add/image/".trim($fields[2])));
           $table .= addTableRow($fields);
         }
       }
@@ -418,9 +418,23 @@ function _dockerimagerun($id, $name) {
 }
 
 
+function _dockerinspectimage ($id)
+{
+    $docker_inspect_errors = array("Cannot connect to the Docker daemon", "No such image", "requires at least 1 argument");
+
+    $iinspect = execute_program_shell("docker image inspect " . $id);
+
+    foreach ($docker_inspect_errors as $ekey => $evalue)
+        if ( strpos($iinspect["output"], $evalue) !== FALSE )
+            return null;
+
+    return json_decode($iinspect["output"], true)[0];
+}
+
+
 function _dockerinspectcontainer ($id)
 {
-    $docker_inspect_errors = array("Cannot connect to the Docker daemon", "No such container");
+    $docker_inspect_errors = array("Cannot connect to the Docker daemon", "No such container", "requires at least 1 argument");
 
     $cinspect = execute_program_shell("docker container inspect " . $id);
 
