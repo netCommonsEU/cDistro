@@ -80,6 +80,9 @@ addS("serf_setup", "Configurar Serf");
 addS("serf_lookfor", "Buscar Servicos con Serf");
 
 
+//IPFS
+addS("ipfs_setup", "Configurar IPFS");
+
 //Sweep
 addS("menus_sweep_sweep", "Sweep");
 addS("menus_sweep_clommunity", "Community");
