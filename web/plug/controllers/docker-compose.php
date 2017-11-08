@@ -6,14 +6,15 @@ $package['repo'] = "package-docker-compose";
 $docker_compose_pkg = "docker-compose";
 $proj_dir = "/etc/cloudy/docker-compose/projects";
 
-function index() {
+function index()
+{
     global $title, $urlpath, $docker_pkg, $docker_compose_pkg, $staticFile, $package;
 
     $page = "";
     $buttons = "";
 
     $page .= hlc(t("docker_compose_title"));
-    $page .= hl(t("docker_compose_subtitle"),4);
+    $page .= hl(t("docker_compose_subtitle"), 4);
     $page .= par(t("docker_compose_desc"));
 
     //Check if Docker is installed
@@ -31,7 +32,7 @@ function index() {
     //Docker and Docker Compose are installed
     else {
         //No Docker Compose projects
-        if (sizeof(_docker_compose_get_projects()) < 1 ) {
+        if (sizeof(_docker_compose_get_projects()) < 1) {
             $page .= txt(t("docker_compose_status"));
             $page .= "<div class='alert alert-warning text-center'>".t("docker_compose_alert_no_projects")."</div>\n";
         }
@@ -49,11 +50,13 @@ function index() {
 }
 
 
-function create() {
+function create()
+{
     return create_post();
 }
 
-function create_post() {
+function create_post()
+{
     global $Parameters, $title, $urlpath, $docker_pkg, $docker_compose_pkg, $staticFile, $package, $proj_dir;
 
     //Regex for name field: only alphanumeric characters with dashes between
@@ -67,7 +70,7 @@ function create_post() {
     $form_error = -1;
 
     $page .= hlc(t("docker_compose_title"));
-    $page .= hl(t("docker_compose_subtitle"),4);
+    $page .= hl(t("docker_compose_subtitle"), 4);
     $page .= par(t("docker_compose_create_desc"));
 
     $projname = "";
@@ -99,27 +102,25 @@ services:
 volumes:
     db_data:";
 
-    if ( !empty($_POST) ) {
+    if (!empty($_POST)) {
         $form_error++;
         if (isset($_POST['name'])) {
             $projname = $_POST['name'];
-            if ( $projname == "") {
+            if ($projname == "") {
                 $form_error++;
                 $errors .= "<div class='alert alert-warning text-center'>".t("docker_compose_alert_form_name_blank")."</div>\n";
-            }
-            elseif ( !preg_match($name_preg, $projname) ) {
+            } elseif (!preg_match($name_preg, $projname)) {
                 $form_error++;
                 $errors .= "<div class='alert alert-warning text-center'>".t("docker_compose_alert_form_name_invalid")."</div>\n";
             }
-        }
-        else {
+        } else {
             $form_error++;
             $errors .= "<div class='alert alert-error text-center'>".t("docker_compose_alert_form_name_empty")."</div>\n";
         }
 
         if (isset($_POST['dcy'])) {
             $projdcy = $_POST['dcy'];
-            if ( $projdcy == "") {
+            if ($projdcy == "") {
                 $form_error++;
                 $errors .= "<div class='alert alert-warning text-center'>".t("docker_compose_alert_form_dcy_blank")."</div>\n";
             }
@@ -128,31 +129,27 @@ volumes:
             //     $form_error++;
             //     $errors .= "<div class='alert alert-warning text-center'>".t("docker_compose_alert_form_dcy_invalid")."</div>\n";
             // }
-        }
-        else {
+        } else {
             $form_error++;
             $errors .= "<div class='alert alert-error text-center'>".t("docker_compose_alert_form_dcy_empty")."</div>\n";
         }
     }
 
-    if ($form_error == 0){
-        if ( is_dir($proj_dir."/".$projname) || is_file($proj_dir."/".$projname) ) {
+    if ($form_error == 0) {
+        if (is_dir($proj_dir."/".$projname) || is_file($proj_dir."/".$projname)) {
             $form_error++;
             $errors .= "<div class='alert alert-error text-center'>".t("docker_compose_alert_form_name_inuse")."</div>\n";
-        }
-        else {
-            if ( mkdir($proj_dir."/".$projname) ) {
-                $fpc_res = file_put_contents ($proj_dir."/".$projname."/docker-compose.yml",  $projdcy);
-                if ( $fpc_res === false || $fpc_res == 0 ) {
+        } else {
+            if (mkdir($proj_dir."/".$projname)) {
+                $fpc_res = file_put_contents($proj_dir."/".$projname."/docker-compose.yml", $projdcy);
+                if ($fpc_res === false || $fpc_res == 0) {
                     $form_error++;
                     $errors .= "<div class='alert alert-error text-center'>".t("docker_compose_alert_form_dcy_put_fail_pre").$proj_dir."/".$projname."/docker-compose.yml".t("docker_compose_alert_form_dcy_put_fail_post")."</div>\n";
-                }
-                else {
-                    setFlash(t("docker_compose_alert_form_project_pre").$projname.t("docker_compose_alert_form_project_post"),"success");
+                } else {
+                    setFlash(t("docker_compose_alert_form_project_pre").$projname.t("docker_compose_alert_form_project_post"), "success");
                     return(array('type'=> 'redirect', 'url' => $urlpath));
                 }
-            }
-            else{
+            } else {
                 $form_error++;
                 $errors .= "<div class='alert alert-error text-center'>".t("docker_compose_alert_form_name_mkdir_fail_pre").$proj_dir."/".$projname.t("docker_compose_alert_form_name_mkdir_fail_post")."</div>\n";
             }
@@ -174,8 +171,8 @@ volumes:
 
     //Form
     $page .= createForm(array('class'=>'form-horizontal'));
-    $page .= addInput('name',t("docker_compose_create_form_name"),$projname,array('type'=>'text','required'=>true,'placeholder'=>'compose_project','pattern'=>$name_regex),"",t("docker_compose_create_form_name_tooltip"));
-    $page .= addTextArea('dcy', t('docker_compose_create_form_dcy'), $projdcy, array('rows'=>10, 'cols'=>"80", 'required'=>'true'),'style="width: 600px"',t('docker_compose_create_form_dcy_tooltip'));
+    $page .= addInput('name', t("docker_compose_create_form_name"), $projname, array('type'=>'text','required'=>true,'placeholder'=>'compose_project','pattern'=>$name_regex), "", t("docker_compose_create_form_name_tooltip"));
+    $page .= addTextArea('dcy', t('docker_compose_create_form_dcy'), $projdcy, array('rows'=>10, 'cols'=>"80", 'required'=>'true'), 'style="width: 600px"', t('docker_compose_create_form_dcy_tooltip'));
 
     $buttons .= addButton(array('label'=>t("docker_compose_button_back"),'class'=>'btn btn-default', 'href'=>$urlpath));
     $buttons .= addSubmit(array('label'=>t("docker_compose_button_create"),'class'=>'btn btn-success','divOptions'=>array('class'=>'btn-group')));
@@ -183,48 +180,41 @@ volumes:
     $page .= $buttons;
 
     return array('type' => 'render','page' => $page);
-
 }
 
-function delete() {
+function delete()
+{
     global $Parameters, $title, $urlpath, $docker_pkg, $docker_compose_pkg, $staticFile, $package, $proj_dir;
 
     $page = "";
     $buttons = "";
 
 //    if (isset($Parameters[0]) && $Parameters[0] != null && is_dir($proj_dir."/".$Parameters[0]) && !is_file($proj_dir."/".$Parameters[0])) {
-if (true){
+    if (true) {
         $projname = $Parameters[0];
         $docks_in_proj_run = array();
         foreach (docker_ps_running() as $l => $w) {
-            if ( (strpos(str_replace("-", "", $w), str_replace("-", "", $projname.'_')) === 0) && ( strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $projname)))) {
+            if ((strpos(str_replace("-", "", $w), str_replace("-", "", $projname.'_')) === 0) && (strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $projname)))) {
                 array_push($docks_in_proj_run, $w);
             }
         }
 
-        if ( sizeof($docks_in_proj_run) == 0 ) {
-            if (_delTree ($proj_dir."/".$projname)) {
-                setFlash( t("docker_compose_flash_delete_pre") . $projname . t("docker_compose_flash_delete_post"), "success");
+        if (sizeof($docks_in_proj_run) == 0) {
+            if (_delTree($proj_dir."/".$projname)) {
+                setFlash(t("docker_compose_flash_delete_pre") . $projname . t("docker_compose_flash_delete_post"), "success");
+                return(array('type'=> 'redirect', 'url' => $urlpath));
+            } else {
+                setFlash(t("docker_compose_flash_delete_error_pre")."<strong>".$proj_dir."/".$projname."</strong>".t("docker_compose_flash_delete_error_post"), "error");
                 return(array('type'=> 'redirect', 'url' => $urlpath));
             }
-            else {
-                setFlash( t("docker_compose_flash_delete_error_pre")."<strong>".$proj_dir."/".$projname."</strong>".t("docker_compose_flash_delete_error_post"),"error" );
-                return(array('type'=> 'redirect', 'url' => $urlpath));
-            }
-        }
-
-
-        else{
+        } else {
             $page .= hlc(t("docker_compose_title"));
-            $page .= hl(t("docker_compose_subtitle"),4);
+            $page .= hl(t("docker_compose_subtitle"), 4);
 
             $page .= txt(t("docker_compose_down_desc_pre")."<strong>$Parameters[0]</strong>".t("docker_compose_down_desc_post"));
             $page .= docker_ps_running_table($Parameters[0])["page"];
-
         }
-    }
-
-    else{
+    } else {
         //return(array('type'=> 'redirect', 'url' => $urlpath));
     }
 
@@ -236,7 +226,8 @@ if (true){
 }
 
 
-function down() {
+function down()
+{
     global $Parameters, $title, $urlpath, $docker_pkg, $docker_compose_pkg, $staticFile, $package, $proj_dir;
 
     $page = "";
@@ -246,30 +237,25 @@ function down() {
         $projname = $Parameters[0];
         $docks_in_proj_run = array();
         foreach (docker_ps_running() as $l => $w) {
-            if ( (strpos(str_replace("-", "", $w), str_replace("-", "", $projname.'_')) === 0) && ( strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $projname)))) {
+            if ((strpos(str_replace("-", "", $w), str_replace("-", "", $projname.'_')) === 0) && (strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $projname)))) {
                 array_push($docks_in_proj_run, $w);
             }
         }
 
-        if ( sizeof($docks_in_proj_run) > 0 ) {
+        if (sizeof($docks_in_proj_run) > 0) {
             foreach ($docks_in_proj_run as $k => $v) {
                 execute_program_detached("docker stop " . $v);
-                setFlash( t("docker_compose_flash_down_pre") . $projname . t("docker_compose_flash_down_post"));
+                setFlash(t("docker_compose_flash_down_pre") . $projname . t("docker_compose_flash_down_post"));
             }
             return(array('type'=> 'redirect', 'url' => $urlpath));
-        }
-
-        else{
+        } else {
             $page .= hlc(t("docker_compose_title"));
-            $page .= hl(t("docker_compose_subtitle"),4);
+            $page .= hl(t("docker_compose_subtitle"), 4);
 
             $page .= txt(t("docker_compose_down_desc_pre")."<strong>$Parameters[0]</strong>".t("docker_compose_down_desc_post"));
             $page .= docker_ps_running_table($Parameters[0])["page"];
-
         }
-    }
-
-    else{
+    } else {
         return(array('type'=> 'redirect', 'url' => $urlpath));
     }
 
@@ -281,7 +267,8 @@ function down() {
 }
 
 
-function up() {
+function up()
+{
     global $Parameters, $title, $urlpath, $docker_pkg, $docker_compose_pkg, $staticFile, $package, $proj_dir;
 
     $page = "";
@@ -291,29 +278,24 @@ function up() {
         $projname = $Parameters[0];
         $docks_in_proj_run = array();
         foreach (docker_ps_running() as $l => $w) {
-            if ( (strpos(str_replace("-", "", $w), str_replace("-", "", $projname.'_')) === 0) && ( strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $projname)))) {
+            if ((strpos(str_replace("-", "", $w), str_replace("-", "", $projname.'_')) === 0) && (strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $projname)))) {
                 array_push($docks_in_proj_run, $w);
             }
         }
 
-        if ( sizeof($docks_in_proj_run) == 0 ) {
+        if (sizeof($docks_in_proj_run) == 0) {
             execute_program_detached("cd ".$proj_dir."/".$projname." && "."docker-compose up -d");
-            setFlash( t("docker_compose_flash_up_pre") . $projname . t("docker_compose_flash_up_post"), "info");
+            setFlash(t("docker_compose_flash_up_pre") . $projname . t("docker_compose_flash_up_post"), "info");
             return(array('type'=> 'redirect', 'url' => $urlpath));
-        }
-
-        else{
+        } else {
             $page .= hlc(t("docker_compose_title"));
-            $page .= hl(t("docker_compose_subtitle"),4);
+            $page .= hl(t("docker_compose_subtitle"), 4);
 
             $page .= txt(t("docker_compose_up_desc_pre")."<strong>$Parameters[0]</strong>".t("docker_compose_up_desc_post"));
             $page .= docker_ps_stopped_table($Parameters[0])["page"];
             $page .= docker_ps_running_table($Parameters[0])["page"];
-
         }
-    }
-
-    else{
+    } else {
         return(array('type'=> 'redirect', 'url' => $urlpath));
     }
 
@@ -325,14 +307,15 @@ function up() {
 }
 
 
-function manage() {
+function manage()
+{
     global $Parameters, $title, $urlpath, $docker_pkg, $docker_compose_pkg, $staticFile, $package, $proj_dir;
 
     $page = "";
     $buttons = "";
 
     $page .= hlc(t("docker_compose_title"));
-    $page .= hl(t("docker_compose_subtitle"),4);
+    $page .= hl(t("docker_compose_subtitle"), 4);
 
     if (isset($Parameters[0]) && $Parameters[0] != null) {
         $page .= par(t("docker_compose_manage_desc_pre")."<strong>$Parameters[0]</strong>".t("docker_compose_manage_desc_post"));
@@ -342,19 +325,20 @@ function manage() {
         $page .= docker_ps_stopped_table($Parameters[0])["page"];
 
         $page .= txt(t("docker_compose_manage_files"));
-        foreach (scandir($proj_dir.'/'.$Parameters[0]) as $key => $value)
-            if (($value != '.' ) && ($value != '..') && (!is_dir($proj_dir.'/'.$Parameters[0].'/'.$value))) {
+        foreach (scandir($proj_dir.'/'.$Parameters[0]) as $key => $value) {
+            if (($value != '.') && ($value != '..') && (!is_dir($proj_dir.'/'.$Parameters[0].'/'.$value))) {
                 $page .= txt($value);
                 $file5 = implode("", array_slice(file($proj_dir.'/'.$Parameters[0].'/'.$value), 0, 5));
                 $file6 = implode("", array_slice(file($proj_dir.'/'.$Parameters[0].'/'.$value), 0, 6));
-                if ($file5 == $file6)
+                if ($file5 == $file6) {
                     $page .= ptxt($file5);
-                else
+                } else {
                     $page .= ptxt($file6."[...]");
+                }
                 //$buttons .= addButton(array('label'=>t("settings_button_sources_pre").$value.t("settings_button_sources_post"),'class'=>'btn btn-primary', 'href'=>$staticPath.$urlpath.'/sourceManage?file='.$SOURCESD_PATH.'/'.$value));
             }
-    }
-    else {
+        }
+    } else {
         return(array('type'=> 'redirect', 'url' => $urlpath));
     }
 
@@ -366,21 +350,25 @@ function manage() {
 }
 
 
-function _docker_compose_get_projects() {
+function _docker_compose_get_projects()
+{
     global $Parameters, $urlpath, $staticFile, $proj_dir;
 
     $projs = array();
 
-    foreach (scandir($proj_dir) as $k => $v)
-        if ( is_dir($proj_dir.'/'.$v) && ( ($v != '.') && ($v != '..')))
+    foreach (scandir($proj_dir) as $k => $v) {
+        if (is_dir($proj_dir.'/'.$v) && (($v != '.') && ($v != '..'))) {
             array_push($projs, $v);
+        }
+    }
 
     return $projs;
 }
 
 
 
-function _docker_compose_list_projects(){
+function _docker_compose_list_projects()
+{
     global $dev, $title, $urlpath, $docker_pkg, $staticFile, $proj_dir;
 
     $page = "";
@@ -393,7 +381,7 @@ function _docker_compose_list_projects(){
     $table .= addTableHeader($headers);
 
 
-    foreach($projects as $k => $v){
+    foreach ($projects as $k => $v) {
         $docks_in_proj = array();
         $docks_in_proj_run = array();
         $docks_in_proj_stop = array();
@@ -408,33 +396,39 @@ function _docker_compose_list_projects(){
         $fields[] = $v;
 
         foreach (docker_ps_running() as $l => $w) {
-            if ( (strpos(str_replace("-", "", $w), str_replace("-", "", $v.'_')) === 0) && ( strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $v)))) {
+            if ((strpos(str_replace("-", "", $w), str_replace("-", "", $v.'_')) === 0) && (strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $v)))) {
                 array_push($docks_in_proj, $w.' ('.t('docker_container_running').')');
                 array_push($docks_in_proj_run, $w);
             }
         }
         foreach (docker_ps_stopped() as $l => $w) {
-            if ( (strpos(str_replace("-", "", $w), str_replace("-", "", $v.'_')) === 0) && ( strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $v)))) {
+            if ((strpos(str_replace("-", "", $w), str_replace("-", "", $v.'_')) === 0) && (strlen(str_replace("-", "", $w)) > strlen(str_replace("-", "", $v)))) {
                 array_push($docks_in_proj, $w.' ('.t('docker_container_stopped').')');
                 array_push($docks_in_proj_stop, $w);
             }
         }
-        $fields[] = implode(", \n",$docks_in_proj);
+        $fields[] = implode(", \n", $docks_in_proj);
 
-        if (sizeof($docks_in_proj_stop) == 0 && sizeof($docks_in_proj_run) == 0 )
+        if (sizeof($docks_in_proj_stop) == 0 && sizeof($docks_in_proj_run) == 0) {
             $button_delete = true;
-        if (sizeof($docks_in_proj_run) == 0 )
-                $button_start = true;
-        if (sizeof($docks_in_proj_run) > 0 )
+        }
+        if (sizeof($docks_in_proj_run) == 0) {
+            $button_start = true;
+        }
+        if (sizeof($docks_in_proj_run) > 0) {
             $button_stop = true;
+        }
 
         $fields[] = addButton(array('label'=>t("docker_compose_button_manage"),'class'=>'btn btn-primary', 'href'=>"$urlpath/manage/".$fields[0]));
-        if ($button_start)
+        if ($button_start) {
             $fields[] = addButton(array('label'=>t("docker_compose_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/up/".$fields[0]));
-        if ($button_stop)
+        }
+        if ($button_stop) {
             $fields[] = addButton(array('label'=>t("docker_compose_button_stop"),'class'=>'btn btn-basic', 'href'=>"$urlpath/down/".$fields[0]));
-        if ($button_delete)
+        }
+        if ($button_delete) {
             $fields[] = addButton(array('label'=>t("docker_compose_button_delete"),'class'=>'btn btn-danger', 'href'=>"$urlpath/delete/".$fields[0]));
+        }
 
         $table .= addTableRow($fields);
     }
@@ -445,39 +439,49 @@ function _docker_compose_list_projects(){
     return $page;
 }
 
-function _docker_compose_isInstalled() {
-    return( file_exists( "/usr/local/bin/docker-compose") );
+function _docker_compose_isInstalled()
+{
+    return(file_exists("/usr/local/bin/docker-compose"));
 }
 
-function container() {
+function container()
+{
     global $Parameters, $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
     switch ($Parameters[0]) {
         case "rm":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerrm($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockercontainerrm($Parameters[1]);
             break;
 
         case "stop":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerstop($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockercontainerstop($Parameters[1]);
             break;
 
         case "pull":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerpull($Parameters[1] . "/" . $Parameters[2]);
+                }
+            }
                 return _dockercontainerpull($Parameters[1]);
             break;
 
         case "restart":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerrestart($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockercontainerrestart($Parameters[1]);
             break;
 

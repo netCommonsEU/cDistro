@@ -1,23 +1,23 @@
 <?php
-	//menu.php
+    //menu.php
 
-function printMenu($menu){
-
-	global $staticFile;
-	foreach($menu as $km=>$vm){
-		if (is_array($vm)) {
-			echo '<li class="dropdown">';
-			echo '<a href="#" id="id'.$km.'" role="button" class="dropdown-toggle" data-toggle="dropdown">'.$km.'</a>';
-			echo '	<ul class="dropdown-menu" role="menu" aria-labelledby="id'.$km.'">';
-			printMenu($vm);
-			echo '  </ul>';
-			echo '</li>';
-		} else {
-			echo '<li>';
-			echo '<a href="'.$staticFile."/".$vm.'">'.$km.'</a>';
-			echo '</li>';
-		}
-	}
+function printMenu($menu)
+{
+    global $staticFile;
+    foreach ($menu as $km=>$vm) {
+        if (is_array($vm)) {
+            echo '<li class="dropdown">';
+            echo '<a href="#" id="id'.$km.'" role="button" class="dropdown-toggle" data-toggle="dropdown">'.$km.'</a>';
+            echo '	<ul class="dropdown-menu" role="menu" aria-labelledby="id'.$km.'">';
+            printMenu($vm);
+            echo '  </ul>';
+            echo '</li>';
+        } else {
+            echo '<li>';
+            echo '<a href="'.$staticFile."/".$vm.'">'.$km.'</a>';
+            echo '</li>';
+        }
+    }
 }
 ?>
 
@@ -31,20 +31,22 @@ function printMenu($menu){
 			</a>
 			<a href="<?php echo $appURL; ?>" class="brand"><img src=/images/clommunity-logo.png><?php echo $appName; ?></a>
 			<div class="nav-collapse">
-				<?php if (isset($menu['left'])) { ?>
+				<?php if (isset($menu['left'])) {
+    ?>
 				<ul class="nav">
 					<?php
-						printMenu($menu['left']);
-					?>
+                        printMenu($menu['left']); ?>
 				</ul>
-				<?php } ?>
-				<?php if (isset($menu['right'])) { ?>
+				<?php
+} ?>
+				<?php if (isset($menu['right'])) {
+                            ?>
 				<ul class="nav pull-right">
 					<?php
-						printMenu($menu['right']);
-					?>
+                        printMenu($menu['right']); ?>
 				</ul>
-				<?php } ?>
+				<?php
+                        } ?>
 			</div>
 		</div>
 	</div>

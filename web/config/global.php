@@ -8,11 +8,11 @@ list($wi_ip, $wi_port) = explode(":", $_SERVER['HTTP_HOST']);
 $protocol="http";
 
 if (isset($conf['PORT_SSL'])) {
-        if (($wi_port != $conf['PORT_SSL']) || ($_SERVER['REMOTE_ADDR'] != "127.0.0.1")){
-                header('Location: https://'.$wi_ip.':'.$conf['PORT_SSL']);
-        } else {
-                $protocol="https";
-        }
+    if (($wi_port != $conf['PORT_SSL']) || ($_SERVER['REMOTE_ADDR'] != "127.0.0.1")) {
+        header('Location: https://'.$wi_ip.':'.$conf['PORT_SSL']);
+    } else {
+        $protocol="https";
+    }
 }
 
 // You can change PATH files.
@@ -59,36 +59,36 @@ $GUIFI_WEB_API=$GUIFI_WEB."/api";
 $GUIFI_WEB_API_AUTH=$GUIFI_WEB."/api/auth";
 
 $services_types = array('snpservices' => array('name' => 'SNPgraphs', 'prenick'=>'snp', 'function'=>$staticPath.'guifi-snps/install'),
-						'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'guifi-dnss/install'),
-						'guifi-proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi-proxy3/install')
-				);
+                        'dnsservices' => array('name' => 'DNS', 'prenick'=>'dns', 'function'=>$staticPath.'guifi-dnss/install'),
+                        'guifi-proxy3' => array('name' => 'Proxy', 'prenick'=>'prx', 'function'=>$staticPath.'guifi-proxy3/install')
+                );
 
-function parse_bash_file($file){
+function parse_bash_file($file)
+{
+    if (file_exists($file)) {
+        $lines = file($file);
+        $config = array();
 
-	if (file_exists($file)) {
-		$lines = file($file);
-		$config = array();
+        foreach ($lines as $line_num=>$line) {
+            if (! preg_match("/#.*/", $line)) {
+                if (preg_match("/\S/", $line)) {
+                    list($key, $value) = explode("=", trim($line), 2);
+                    $key = trim($key);
+                    $value = trim($value);
+                    // Remove leading double quotes
+                    if (strpos($value, '"')===0) {
+                        $value=substr($value, 1, (strlen($value)-1));
+                    }
+                    // if the last char is a " then remove it
+                    if (strrpos($value, '"')===(strlen($value)-1)) {
+                        $value=substr($value, 0, -1);
+                    }
+                    $config[$key] = $value;
+                }
+            }
+        }
+        return $config;
+    }
 
-		foreach ($lines as $line_num=>$line) {
-			if ( ! preg_match("/#.*/", $line) ) {
-				if ( preg_match("/\S/", $line) ) {
-					list( $key, $value ) = explode( "=", trim( $line ), 2);
-          $key = trim($key);
-          $value = trim($value);
-          // Remove leading double quotes
-          if(strpos($value,'"')===0)
-            $value=substr($value,1,(strlen($value)-1));
-          // if the last char is a " then remove it
-          if(strrpos($value,'"')===(strlen($value)-1))
-            $value=substr($value,0,-1);
-					$config[$key] = $value;
-				}
-			}
-		}
-		return $config;
-	}
-
-	return FALSE;
+    return false;
 }
-
-?>

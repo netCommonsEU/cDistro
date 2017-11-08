@@ -1,10 +1,11 @@
 <?php
 // plug/avahi/getinconf.avahi.php
 
-addAvahi('tincvpn','ftincvpn');
+addAvahi('tincvpn', 'ftincvpn');
 
-function ftincvpn($dates){
-	global $staticFile;
+function ftincvpn($dates)
+{
+    global $staticFile;
 
-	return ("<a class='btn' href='".$staticFile."/getinconf/nothing/".$dates['ip']."/".$dates['port']."'>View</a>");
+    return ("<a class='btn' href='".$staticFile."/getinconf/nothing/".$dates['ip']."/".$dates['port']."'>View</a>");
 }

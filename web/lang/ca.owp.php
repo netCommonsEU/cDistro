@@ -20,4 +20,3 @@ addS("owp_default_login", "Les credencials d'inici de sessió per defecte són:<
 addS("owp_button_back", "Torna a OpenVZ Web Panel");
 addS("owp_button_understand_install", "Entenc aquesta advertència i vull procedir amb la instal·lació");
 addS("owp_being_installed", "S'està instal·lant OpenVZ Web Panel. Si us plau, espereu uns minuts fins que la màquina es reiniciï...");
-?>

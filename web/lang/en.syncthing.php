@@ -27,5 +27,3 @@ addS("syncthing_remove_running", "Cannot remove syncthing since it's running");
 
 addS("syncthing_connected_node", "Successfully connected to node");
 addS("syncthing_disconnected_node", "Successfully disconnected from node");
-
-?>

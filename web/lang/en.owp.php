@@ -20,4 +20,3 @@ addS("owp_default_login", "The default login credentials are:</br>user: admin</b
 addS("owp_button_back", "Back to OpenVZ Web Panel");
 addS("owp_button_understand_install", "I understand the warning and I want to proceed with the installation");
 addS("owp_being_installed", "OpenVZ Web Panel is being installed. Please wait a few minutes until the machine reboots...");
-?>

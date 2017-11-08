@@ -3,14 +3,15 @@ $urlpath="$staticFile/docker";
 $dev = "docker0";
 $sourceslistdfile="/etc/apt/sources.list.d/docker.list";
 
-function index() {
+function index()
+{
     global $title, $urlpath, $docker_pkg, $staticFile, $sourceslistdfile;
 
     $page = "";
     $buttons = "";
 
     $page .= hlc(t("docker_title"));
-    $page .= hl(t("docker_subtitle"),4);
+    $page .= hl(t("docker_subtitle"), 4);
     $page .= par(t("docker_desc"));
     $page .= txt(t("docker_status"));
 
@@ -18,17 +19,14 @@ function index() {
         $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_sources")."</div>\n";
         $page .= par(t("docker_sources_manual"));
         $page .= addButton(array('label'=>t("docker_button_add_sources"),'class'=>'btn btn-success', 'href'=>"$urlpath/addsources"));
-    }
-    elseif (!isPackageInstall($docker_pkg)) {
+    } elseif (!isPackageInstall($docker_pkg)) {
         $page .= "<div class='alert alert-error text-center'>".t("docker_alert_not_installed")."</div>\n";
         $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
-    }
-    elseif (!isRunning()) {
+    } elseif (!isRunning()) {
         $page .= "<div class='alert alert-error text-center'>".t("docker_alert_not_running")."</div>\n";
         $page .= addButton(array('label'=>t("docker_button_start"),'class'=>'btn btn-success', 'href'=>"$urlpath/start"));
         $page .= addButton(array('label'=>t('docker_button_uninstall'),'class'=>'btn btn-danger', 'href'=>$staticFile.'/default/uninstall/'.$docker_pkg));
-    }
-    else {
+    } else {
         $page .= "<div class='alert alert-success text-center'>".t("docker_alert_running")."</div>\n";
         $buttons .= addButton(array('label'=>t("docker_button_stop"),'class'=>'btn btn-danger', 'href'=>"$urlpath/stop"));
         $buttons .= addButton(array('label'=>t("docker_button_addpd"),'class'=>'btn btn-info', 'href'=>"$staticFile/docker-add"));
@@ -39,7 +37,6 @@ function index() {
         $page .= docker_ps_stopped_table()["page"];
         $page .= docker_img()["page"];
         $page .= docker_volume()["page"];
-
     }
 
     $page .= $buttons;
@@ -48,101 +45,115 @@ function index() {
 }
 
 
-function isRunning(){
+function isRunning()
+{
     $cmd = "/usr/bin/docker ps";
     $ret = execute_program($cmd);
 
-    return ( $ret['return'] ==  0 );
+    return ($ret['return'] ==  0);
 }
 
 
-function install(){
+function install()
+{
     global $title, $urlpath, $docker_pkg;
 
-    $page = package_not_install($docker_pkg,t("docker_desc"));
+    $page = package_not_install($docker_pkg, t("docker_desc"));
 
     return array('type' => 'render','page' => $page);
 }
 
 
-function start() {
+function start()
+{
     global $urlpath;
 
     execute_program_detached("service docker start");
-    setFlash(t('docker_alert_start_message'),"success");
+    setFlash(t('docker_alert_start_message'), "success");
 
     return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 
 
-function stop() {
+function stop()
+{
     global $urlpath;
 
     execute_program_detached("service docker stop");
-    setFlash(t('docker_alert_stop_message'),"success");
+    setFlash(t('docker_alert_stop_message'), "success");
 
     return(array('type'=> 'redirect', 'url' => $urlpath));
 }
 
 
-function info_docker(){
+function info_docker()
+{
     global $dev;
 
     $cmd = "/sbin/ip addr show dev $dev";
     $ret = execute_program($cmd);
 
-    return ( implode("\n", $ret['output']) );
+    return (implode("\n", $ret['output']));
 }
 
 
-function container() {
+function container()
+{
     global $Parameters, $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
     switch ($Parameters[0]) {
         case "rm":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerrm($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockercontainerrm($Parameters[1]);
             break;
 
         case "stop":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerstop($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockercontainerstop($Parameters[1]);
             break;
 
         case "publish":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]) && !endsWith($Parameters[2], "_public"))
-                {
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2]) && !endsWith($Parameters[2], "_public")) {
                     _dockercontainerrename($Parameters[1], $Parameters[2] . "_public");
                     return _dockercontainerpublish($Parameters[1]);
                 }
+            }
             break;
 
         case "pull":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerpull($Parameters[1] . "/" . $Parameters[2]);
+                }
+            }
                 return _dockercontainerpull($Parameters[1]);
             break;
 
         case "restart":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockercontainerrestart($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockercontainerrestart($Parameters[1]);
             break;
 
         case "unpublish":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]) && endsWith($Parameters[2], "_public"))
-                {
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2]) && endsWith($Parameters[2], "_public")) {
                     _dockercontainerunpublish($Parameters[1]);
                     return _dockercontainerrename($Parameters[1], preg_replace('/_public$/', '', $Parameters[2]));
                 }
+            }
             break;
 
         default:
@@ -151,21 +162,26 @@ function container() {
 }
 
 
-function image() {
+function image()
+{
     global $Parameters, $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
     switch ($Parameters[0]) {
         case "rmi":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockerimagermi($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockerimagermi($Parameters[1]);
             break;
 
         case "run":
-            if (isset($Parameters[1]))
-                if (isset($Parameters[2]))
+            if (isset($Parameters[1])) {
+                if (isset($Parameters[2])) {
                     return _dockerimagerun($Parameters[1], $Parameters[2]);
+                }
+            }
                 return _dockerimagerun($Parameters[1]);
             break;
 
@@ -175,13 +191,15 @@ function image() {
 }
 
 
-function volume() {
+function volume()
+{
     global $Parameters, $dev, $title, $urlpath, $docker_pkg, $staticFile;
 
     switch ($Parameters[0]) {
         case "rm":
-            if (isset($Parameters[1]))
+            if (isset($Parameters[1])) {
                 return _dockervolumerm($Parameters[1]);
+            }
             break;
 
         case "inspect":
@@ -193,54 +211,53 @@ function volume() {
 }
 
 
-function addsources(){
+function addsources()
+{
+    global $title, $urlpath, $docker_pkg, $staticFile, $sourceslistdfile;
 
-  global $title, $urlpath, $docker_pkg, $staticFile, $sourceslistdfile;
+    $page = "";
+    $buttons = "";
 
-  $page = "";
-  $buttons = "";
-
-  $page .= hlc(t("docker_title"));
-  $page .= hl(t("docker_subtitle"),4);
-
-
-  $page .= txt(t("docker_addsources_update"));
-  $page .= ptxt(execute_program_shell('apt-get update')['output']);
-  $page .= txt(t("docker_addsources_install_https"));
-
-  $page .= ptxt(execute_program_shell('apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common')['output']);
-
-  $docker_list = "deb [arch=".aptArch()."] https://download.docker.com/linux/debian ".aptRelease()." stable";
-  addSource($sourceslistdfile, $docker_list);
-
-  $page .= txt(t("docker_addsources_dockerlist_pre").$sourceslistdfile.t("docker_addsources_dockerlist_post"));
-  $page .= ptxt(file_get_contents($sourceslistdfile),str_replace(".","",str_replace("/","",$sourceslistdfile)));
-
-  $page .= txt(t("docker_addsources_aptkey"));
-  $keycmd = execute_program_shell('curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -');
-  $page .= ptxt($keycmd['output']);
-  $page .= ptxt(execute_program_shell('apt-key list | grep -A1 -B1 -i docker')['output']);
-
-  $page .= txt(t("docker_addsources_update_again"));
-  $page .= ptxt(execute_program_shell('apt-get update')['output']);
-
-  $page .= txt(t("docker_addsources_result"));
-  $pkgsearch = execute_program_shell('apt-cache search ' . $docker_pkg)['output'];
-
-  if (strpos($pkgsearch, $docker_pkg) !== FALSE) {
-    $page .= "<div class='alert alert-success text-center'>".t("docker_addsources_available")."</div>\n";
-    $page .= ptxt($pkgsearch);
-    $page .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
-    $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
-  }
-  else {
-    $page .= "<div class='alert alert-error text-center'>".t("docker_addsources_not_available")."</div>\n";
-    $page .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
-    $page .= addButton(array('label'=>t("docker_button_add_sources_retry"),'class'=>'btn btn-warning', 'href'=>"$urlpath/addsources"));
-  }
+    $page .= hlc(t("docker_title"));
+    $page .= hl(t("docker_subtitle"), 4);
 
 
-  $page .= $buttons;
+    $page .= txt(t("docker_addsources_update"));
+    $page .= ptxt(execute_program_shell('apt-get update')['output']);
+    $page .= txt(t("docker_addsources_install_https"));
 
-  return array('type' => 'render','page' => $page);
+    $page .= ptxt(execute_program_shell('apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common')['output']);
+
+    $docker_list = "deb [arch=".aptArch()."] https://download.docker.com/linux/debian ".aptRelease()." stable";
+    addSource($sourceslistdfile, $docker_list);
+
+    $page .= txt(t("docker_addsources_dockerlist_pre").$sourceslistdfile.t("docker_addsources_dockerlist_post"));
+    $page .= ptxt(file_get_contents($sourceslistdfile), str_replace(".", "", str_replace("/", "", $sourceslistdfile)));
+
+    $page .= txt(t("docker_addsources_aptkey"));
+    $keycmd = execute_program_shell('curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -');
+    $page .= ptxt($keycmd['output']);
+    $page .= ptxt(execute_program_shell('apt-key list | grep -A1 -B1 -i docker')['output']);
+
+    $page .= txt(t("docker_addsources_update_again"));
+    $page .= ptxt(execute_program_shell('apt-get update')['output']);
+
+    $page .= txt(t("docker_addsources_result"));
+    $pkgsearch = execute_program_shell('apt-cache search ' . $docker_pkg)['output'];
+
+    if (strpos($pkgsearch, $docker_pkg) !== false) {
+        $page .= "<div class='alert alert-success text-center'>".t("docker_addsources_available")."</div>\n";
+        $page .= ptxt($pkgsearch);
+        $page .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+        $page .= addButton(array('label'=>t("docker_button_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+    } else {
+        $page .= "<div class='alert alert-error text-center'>".t("docker_addsources_not_available")."</div>\n";
+        $page .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
+        $page .= addButton(array('label'=>t("docker_button_add_sources_retry"),'class'=>'btn btn-warning', 'href'=>"$urlpath/addsources"));
+    }
+
+
+    $page .= $buttons;
+
+    return array('type' => 'render','page' => $page);
 }

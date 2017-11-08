@@ -13,15 +13,15 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
 <?php
-	if (is_array($css)){
-		foreach($css as $c){
-			echo '<link rel="stylesheet" href="'.$staticPath.'css/'.$c.'.css">';
-		}
-	}
-  if (is_array($js)){
-    foreach($js as $j){
-      echo '<script src="'.$staticPath.'js/'.$j.'.js"></script>';
+    if (is_array($css)) {
+        foreach ($css as $c) {
+            echo '<link rel="stylesheet" href="'.$staticPath.'css/'.$c.'.css">';
+        }
     }
+  if (is_array($js)) {
+      foreach ($js as $j) {
+          echo '<script src="'.$staticPath.'js/'.$j.'.js"></script>';
+      }
   }
 ?>
 <body>

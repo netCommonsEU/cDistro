@@ -20,4 +20,3 @@ addS("owp_default_login", "Las credenciales de inicio de sesión por defecto son
 addS("owp_button_back", "Volver a OpenVZ Web Panel");
 addS("owp_button_understand_install", "Entiendo esta advertencia y quiero proceder con la instalación");
 addS("owp_being_installed", "OpenVZ Web Panel está siendo instalado. Por favor, espere unos minutos hasta que la máquina se reinicie...");
-?>
