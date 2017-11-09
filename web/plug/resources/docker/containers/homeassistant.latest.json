@@ -4,5 +4,8 @@
   "image": "homeassistant/home-assistant:latest",
   "ports": {
     "8123": "8123"
+  },
+  "misc": {
+    "net": "host"
   }
 }

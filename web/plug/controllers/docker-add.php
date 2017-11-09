@@ -259,6 +259,22 @@ function launch()
             $options = null;
         }
 
+        if (isset($jcontent["volumes"])) {
+            foreach ($jcontent["volumes"] as $vkey => $vvalue) {
+                $vols[$vkey] = $vvalue;
+            }
+        } else {
+            $vols = null;
+        }
+
+        if (isset($jcontent["misc"])) {
+            foreach ($jcontent["misc"] as $mkey => $mvalue) {
+                $misc[$mkey] = $mvalue;
+            }
+        } else {
+            $misc = null;
+        }
+
         if (isset($jcontent["links"])) {
             foreach ($jcontent["links"] as $lkey => $lvalue) {
                 $links[$lkey] = $lvalue;
@@ -267,7 +283,8 @@ function launch()
             $links = null;
         }
 
-        _dockerrun($name, $ports, $options, $links, $jcontent["image"]);
+        //_dockerrun($name, $ports, $options, $links, $jcontent["image"]);
+        _dockerrun2($name, $ports, $options, $misc, $vols, $links, $jcontent["image"]);
         return(array('type'=> 'redirect', 'url' => $returnpath));
     }
 
