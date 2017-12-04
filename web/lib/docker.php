@@ -460,7 +460,7 @@ function _dockerinspectcontainer($id)
 
 function _dockerrun($name = null, $ports = null, $options = null, $links = null, $image)
 {
-   _dockerrun2($name, $ports, $options, null, null, $links, $image)
+    _dockerrun2($name, $ports, $options, null, null, $links, $image);
 }
 
 function _dockerrun2($name = null, $ports = null, $options = null, $misc = null, $volumes = null, $links = null, $image)
