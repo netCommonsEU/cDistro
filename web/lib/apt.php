@@ -25,7 +25,7 @@ function aptArch()
             $apt_arch = "amd64";
             break;
         case "armv6l":
-        case "armv67":
+        case "armv7l":
             $apt_arch = "armhf";
             break;
     }
