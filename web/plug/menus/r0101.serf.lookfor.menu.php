@@ -1,0 +1,3 @@
+<?php
+
+addMenu(t('serf_lookfor'), 'serf/search', t('menus_cloud_a_search'));
