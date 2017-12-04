@@ -228,7 +228,7 @@ function addsources()
 
     $page .= ptxt(execute_program_shell('apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common')['output']);
 
-    $docker_list = "deb [arch=".aptArch()."] https://download.docker.com/linux/debian ".aptRelease()." stable";
+    $docker_list = "deb [arch=".aptArch()."] https://download.docker.com/linux/debian ".aptRelease()." stable\n";
     addSource($sourceslistdfile, $docker_list);
 
     $page .= txt(t("docker_addsources_dockerlist_pre").$sourceslistdfile.t("docker_addsources_dockerlist_post"));
