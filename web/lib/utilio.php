@@ -77,6 +77,7 @@ function load_singlevalue($file, $varis)
 
     return($v);
 }
+
 function write_conffile($file, $dates, $preinfo="", $postinfo="")
 {
     //Prepare file
@@ -85,6 +86,12 @@ function write_conffile($file, $dates, $preinfo="", $postinfo="")
         $str .="$k=$v\n";
     }
     $str .= $postinfo;
+
+    if (!file_exists($file)) {
+        if (!is_dir(dirname($file))) {
+            mkdir(dirname($file), 0755, true);
+        }
+    }
 
     if ((file_put_contents($file, $str)) == false) {
         notWriteFile($file);
@@ -123,6 +130,8 @@ function write_merge_conffile($file, $dates)
         if ($str != "") {
             file_put_contents($file, $str, FILE_APPEND);
         }
+    } else {
+        write_conffile($file, $dates);
     }
 }
 
