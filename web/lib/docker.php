@@ -460,6 +460,11 @@ function _dockerinspectcontainer($id)
 
 function _dockerrun($name = null, $ports = null, $options = null, $links = null, $image)
 {
+   _dockerrun2($name, $ports, $options, null, null, $links, $image)
+}
+
+function _dockerrun2($name = null, $ports = null, $options = null, $misc = null, $volumes = null, $links = null, $image)
+{
     global $Parameters, $urlpath, $staticFile;
 
     $command = "docker run ";
@@ -477,6 +482,18 @@ function _dockerrun($name = null, $ports = null, $options = null, $links = null,
     if (isset($options)) {
         foreach ($options as $okey => $ovalue) {
             $command .= "-e ".$okey."=".$ovalue." ";
+        }
+    }
+
+    if (isset($volumes)) {
+        foreach ($volumes as $vkey => $vvalue) {
+            $command .= "-v ".$vkey.":".$vvalue." ";
+        }
+    }
+
+    if (isset($misc)) {
+        foreach ($misc as $mkey => $mvalue) {
+            $command .= "--".$mkey."=".$mvalue." ";
         }
     }
 

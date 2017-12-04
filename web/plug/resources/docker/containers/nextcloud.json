@@ -1,0 +1,8 @@
+{
+  "appname": "nextCloud (latest)",
+  "description": "A self-hosted file sync and share server (latest version)",
+  "image": "wonderfall/nextcloud",
+  "ports": {
+    "8880": "8888"
+  }
+}

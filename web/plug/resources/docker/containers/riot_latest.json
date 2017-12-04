@@ -1,0 +1,11 @@
+{
+  "appname": "Riot.im Instant Messaging",
+  "description": "Dockerfile for installation of riot.im for matrix open federated Instant Messaging and VoIP communication server",
+  "image": "silviof/matrix-riot-docker",
+  "ports": {
+    "8765": "8765"
+  },
+  "volumes": {
+    "/tmp/data": "/data"
+  }
+}
