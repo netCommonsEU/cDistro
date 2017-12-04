@@ -48,8 +48,6 @@ function image()
     } else {
         $page .= par(t("docker_add_config_desc"));
 
-        $page .= ptxt(print_r($iimage, 1));
-
         $image = $iimage["RepoTags"][0];
         $name = explode(':', explode('/', $image)[sizeof(explode('/', $image))-1])[0];
 
