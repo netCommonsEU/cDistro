@@ -1,6 +1,6 @@
 <?php
 $configFile="/etc/cloudy/cloudy.conf";
-$sslShell=dirname(__FILE__)."/../resources/ssl/ssl.sh";
+$sslShell=dirname(__FILE__)."/../resources/https/https.sh";
 $urlpath=$staticFile."/https";
 $sslPort=7443;
 $httpPort=7000;
@@ -33,9 +33,11 @@ function isInstalled()
 {
     global $configFile;
 
-    $check = "/bin/fgrep 'PORT_SSL' ".$configFile." | wc -l";
-    $ret = intval(execute_program_shell($check)['output']);
-    return ($ret == 1);
+    if (isset(parse_ini_file($configFile)['PORT_SSL'])) {
+        return true;
+    }
+
+    return false;
 }
 
 function install()

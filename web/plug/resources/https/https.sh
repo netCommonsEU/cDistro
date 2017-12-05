@@ -86,7 +86,7 @@ EOF
 
 Remove(){
 	# Stop services
-	service apache stop
+	service apache2 stop
 
 	# Disable site
 	a2dissite ${APACHESITE}
@@ -109,7 +109,7 @@ Remove(){
 	a2dismod proxy_http proxy ssl
 
 	# Active apache
-	service apache start
+	service apache2 start
 
 	# Execute /etc/rc.local to rebuild /etc/issue
 	/etc/rc.local
