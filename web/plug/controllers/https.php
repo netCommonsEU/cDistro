@@ -1,7 +1,7 @@
 <?php
 $configFile="/etc/cloudy/cloudy.conf";
 $sslShell=dirname(__FILE__)."/../resources/ssl/ssl.sh";
-$urlpath=$staticFile."/ssl";
+$urlpath=$staticFile."/https";
 $sslPort=7443;
 $httpPort=7000;
 
@@ -9,15 +9,21 @@ function index()
 {
     global $urlpath;
 
-    $page = hlc(t("ssl_title"));
-    $page .= hl(t("ssl_desc"), 4);
+    $page = hlc(t("https_title"));
+    $page .= hl(t("https_subtitle"), 4);
+    $page .= par(t("https_desc"));
 
+    $page .= txt(t("https_status"));
     if (!isInstalled()) {
         $page .= "<div class='alert alert-error text-center'>".t("https_is_not_installed")."</div>\n";
-        $page .= addButton(array('label'=>t("ssl_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+        $page .= txt(t("https_recommend"));
+        $page .= "<div class='alert alert-warning text-center'>".t("https_recommendation")."</div>\n";
+        $page .= par(t("https_enable"));
+        $page .= addButton(array('label'=>t("https_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
     } else {
-        $page .= "<div class='alert alert-succes text-center'>".t("https_is_installed")."</div>\n";
-        $page .= addButton(array('label'=>t("ssl_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/uninstall"));
+        $page .= "<div class='alert alert-success text-center'>".t("https_is_installed")."</div>\n";
+        $page .= par(t("https_disable"));
+        $page .= addButton(array('label'=>t("https_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/uninstall"));
     }
 
     return array('type' => 'render','page' => $page);
@@ -37,7 +43,7 @@ function install()
     global $sslShell, $urlpath, $sslPort, $appHost;
 
     if (isInstalled()) {
-        setFlash(t('ssl_is_installed_yet'), "error");
+        setFlash(t('https_already_enabled'), "error");
         return(array('type'=> 'redirect', 'url' => $urlpath));
     }
 
@@ -52,7 +58,7 @@ function uninstall()
     global $sslShell, $urlpath, $httpPort, $appHost;
 
     if (!isInstalled()) {
-        setFlash(t('ssl_is_not_installed_yet'), "error");
+        setFlash(t('https_not_enabled_yet'), "error");
         return(array('type'=> 'redirect', 'url' => $urlpath));
     }
 
