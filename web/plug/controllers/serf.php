@@ -68,22 +68,24 @@ function ajaxsearch()
 
     $nServices = array();
 
-    foreach ($gService as $dates_machine) {
-        $serv_new['type'] = $dates_machine->s;
-        $serv_new['description'] = $dates_machine->d;
-        $serv_new['host'] = $dates_machine->m;
-        $serv_new['ip'] = $dates_machine->i;
-        $serv_new['port'] = $dates_machine->p;
-        $serv_new['microcloud'] = $dates_machine->e;
-        $serv_new['txt'] = $dates_machine->t;
-        $serv_new['node_id']= $dates_machine->node_id;
-        $serv_new['action'] = checkAvahi($serv_new['type'], array($serv_new));
-        unset($serv_new['txt']);
-        $type=$serv_new['type'];
-        if (!is_array($nServices[$type])) {
-            $nServices[$type]=array();
+    if (!empty($gService)) {
+        foreach ($gService as $dates_machine) {
+            $serv_new['type'] = $dates_machine->s;
+            $serv_new['description'] = $dates_machine->d;
+            $serv_new['host'] = $dates_machine->m;
+            $serv_new['ip'] = $dates_machine->i;
+            $serv_new['port'] = $dates_machine->p;
+            $serv_new['microcloud'] = $dates_machine->e;
+            $serv_new['txt'] = $dates_machine->t;
+            $serv_new['node_id']= $dates_machine->node_id;
+            $serv_new['action'] = checkAvahi($serv_new['type'], array($serv_new));
+            unset($serv_new['txt']);
+            $type=$serv_new['type'];
+            if (!is_array($nServices[$type])) {
+                $nServices[$type]=array();
+            }
+            $nServices[$type][] = $serv_new;
         }
-        $nServices[$type][] = $serv_new;
     }
     ksort($nServices);
 
