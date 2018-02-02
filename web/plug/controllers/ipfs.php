@@ -51,10 +51,10 @@ function index()
 function stop()
 {
     // Stops ipfs server
-    global $ipfspath,$ipfsprogram,$title,$ipfsutils,$avahi_type,$port;
+    global $ipfspath,$ipfsprogram,$title,$ipfsutils,$avahi_type,$port, $staticFile;
     $page = "";
     $cmd = $ipfsutils." stop ";
-    execute_program_detached($cmd);
+    execute_program($cmd);
     $temp = avahi_unpublish($avahi_type, $port);
     $flash = ptxt($temp);
     setFlash($flash);
@@ -132,9 +132,11 @@ function initialize()
 
 function startDaemon()
 {
-    global $ipfsutils,$staticFile;
-    $ret = execute_program($ipfsutils." startDaemon");
-    $output = ptxt(implode("\n", $ret['output']));
+    global $ipfsutils,$staticFile, $avahi_type, $port;
+    $ret = execute_program_detached($ipfsutils." startDaemon $port $avahi_type");
+    //$output = ptxt(" ". print_r($ret['output'][0],1));
+    $temp = avahi_publish($avahi_type, "IPFS", $port, "");
+    $output = ptxt("Publishing service: " . $temp);
     setFlash($output);
     return(array('type'=>'redirect','url'=>$staticFile.'/ipfs'));
 }
