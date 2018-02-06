@@ -4,5 +4,6 @@
   "image": "wonderfall/nextcloud",
   "ports": {
     "8880": "8888"
-  }
+  },
+  "arch": "amd64"
 }

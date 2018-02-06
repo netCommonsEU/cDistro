@@ -4,5 +4,6 @@
   "image": "owncloud:8.1",
   "ports": {
     "9810": "80"
-  }
+  },
+  "arch": "amd64"
 }
