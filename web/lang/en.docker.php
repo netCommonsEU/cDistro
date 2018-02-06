@@ -10,6 +10,8 @@ addS("docker_alert_img_not_available", "No Docker images available");
 addS("docker_alert_no_sources", "Missing APT sources file for Docker package");
 addS("docker_alert_no_image_pre", "The Docker image ");
 addS("docker_alert_no_image_post", " could not be found locally");
+addS("docker_alert_no_predef_arch_pre", "There are no predefined Docker containers for the ");
+addS("docker_alert_no_predef_arch_post", " architecture");
 addS("docker_alert_no_template_pre", "The Docker template ");
 addS("docker_alert_no_template_post", " could not be found");
 addS("docker_alert_ps_not_running", "No running Docker containers");
