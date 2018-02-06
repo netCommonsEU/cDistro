@@ -10,6 +10,8 @@ addS("docker_alert_img_not_available", "No hi ha imatges de Docker disponibles")
 addS("docker_alert_no_sources", "Falta el fitxer de fonts APT per al paquet de Docker");
 addS("docker_alert_no_image_pre", "No s'ha trobat la imatge de Docker ");
 addS("docker_alert_no_image_post", " al repositori local");
+addS("docker_alert_no_predef_arch_pre", "No hi ha contenidors Docker predefinits per a l'arquitectura ");
+addS("docker_alert_no_predef_arch_post", "");
 addS("docker_alert_no_template_pre", "No s'ha trobat la plantilla de Docker ");
 addS("docker_alert_no_template_post", "");
 addS("docker_alert_ps_not_running", "No hi ha contenidors Docker engegats");
