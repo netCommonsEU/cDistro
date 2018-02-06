@@ -21,6 +21,7 @@ DEMO=0
 test -f $CONFFILE && . $CONFFILE || exit 0
 
 start() {
+  echo "Starting cDistro"
   if [ $DEMO -eq 1 ]; then
     su - nobody -c "$SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &" > /dev/null 2>&1
     echo $(pidof php) > $PIDFILE
@@ -31,15 +32,22 @@ start() {
   $DAEMON >/dev/null 2>&1 &
   echo $! > $PIDDAEMON
 }
+
 stop() {
-  kill -9 $(cat $PIDFILE)
-  rm $PIDFILE
-  kill -9 $(cat $PIDDAEMON)
-  rm $PIDDAEMON
+  [ -f $PIDFILE ] && echo "Stopping cDistro. Sending terminate signal to process $(cat $PIDFILE)..." && kill -15 $(cat $PIDFILE) && sleep 1
+  $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && echo "Stopping cDistro. Sending interrupt signal to process $(cat $PIDFILE)..." && kill -2 $(cat $PIDFILE) && sleep 1
+  $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && echo "Stopping cDistro. Sending kill signal to process $(cat $PIDFILE)..." && kill -9 $(cat $PIDFILE) && sleep 1
+  ! $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && [ -f $PIDFILE ] && rm $PIDFILE
+
+  [ -f $PIDDAEMON ] && echo "Stopping cDistro. Sending terminate signal to process $(cat $PIDDAEMON)..." && kill -15 $(cat $PIDDAEMON) && sleep 1
+  [ -f $PIDDAEMON ] && kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && echo "Stopping cDistro. Sending interrupt signal to process $(cat $PIDDAEMON)..." && kill -2 $(cat $PIDDAEMON) && sleep 1
+  [ -f $PIDDAEMON ] && kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && echo "Stopping cDistro. Sending kill signal to process $(cat $PIDDAEMON)..." && kill -9 $(cat $PIDDAEMON) && sleep 1
+  [ -f $PIDDAEMON ] && ! kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && [ -f $PIDDAEMON ] && rm $PIDDAEMON
 }
+
 restart() {
   stop
-  sleep 0.5
+  sleep 1
   start
 }
 
