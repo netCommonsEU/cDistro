@@ -112,7 +112,7 @@ function write_merge_conffile($file, $dates)
 
         foreach ($dates as $k=>$v) {
             if (array_key_exists($k, $conf)) {
-                $cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k." = ".$v."|g' ".$file;
+                $cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k."=".$v."|g' ".$file;
 
                 if ($debug) {
                     echo $cmd;
