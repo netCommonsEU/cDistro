@@ -20,8 +20,29 @@ function index()
 
     $page .= par(t("docker_add_desc"));
 
-    $page .= docker_predefined_containers_table("default", $def_templates_dir)['page'];
-    $page .= docker_predefined_containers_table("user", $user_templates_dir)['page'];
+    $page .= ajaxStr('tableDefaultTemplatesAjax', t("Searching for the default templates, please wait a moment..."));
+    $page .= "<div id='tableDefaultTemplates' style='display:none'></div>";
+    $page .= "<script>\n";
+    $page .= "$('#tableDefaultTemplates').load('".$staticFile."/docker-add/default_templates_table',function(){\n";
+    $page .= "	$('#tableDefaultTemplatesAjax').hide();";
+    $page .= "	$('#tableDefaultTemplates').css({'display':'block'});";
+    $page .= "	$('#tags').tab();\n";
+    $page .= "  tservice = $('.table-data');";
+    $page .= "});\n";
+    $page .= "</script>\n";
+
+    $page .= ajaxStr('tableUserTemplatesAjax', t("Searching for the user templates, please wait a moment..."));
+    $page .= "<div id='tableUserTemplates' style='display:none'></div>";
+    $page .= "<script>\n";
+    $page .= "$('#tableUserTemplates').load('".$staticFile."/docker-add/user_templates_table',function(){\n";
+    $page .= "	$('#tableUserTemplatesAjax').hide();";
+    $page .= "	$('#tableUserTemplates').css({'display':'block'});";
+    $page .= "	$('#tags').tab();\n";
+    $page .= "  tservice = $('.table-data').DataTable( ";
+    $page .= '		{ "language": { "url": "/lang/"+LANG+".table.json"} }';
+    $page .= "	);";
+    $page .= "});\n";
+    $page .= "</script>\n";
 
     $buttons .= addButton(array('label'=>t("default_button_back"),'class'=>'btn btn-default', 'href'=>"$staticFile/docker"));
 
@@ -301,7 +322,21 @@ function launch()
     return array('type' => 'render','page' => $page);
 }
 
-function docker_predefined_containers_table($ttype = "default", $templatesdir)
+function default_templates_table()
+{
+    global $def_templates_dir;
+
+    return templates_table("default", $def_templates_dir);
+}
+
+function user_templates_table()
+{
+    global $user_templates_dir;
+
+    return templates_table("user", $user_templates_dir);
+}
+
+function templates_table($ttype, $templatesdir)
 {
     global $dev, $title, $urlpath, $docker_pkg, $staticFile, $def_templates_dir, $user_templates_dir;
 
@@ -326,7 +361,7 @@ function docker_predefined_containers_table($ttype = "default", $templatesdir)
         $headers[] = t('docker_add_header_links');
         $headers[] = t('docker_add_header_actions');
         $headers[] = "";
-        $table .= addTableHeader($headers);
+        $table .= addTableHeader($headers, array('class'=>'table table-striped table-data'));
 
         foreach ($files as $fkey => $fvalue) {
             $fcontent = file_get_contents($templatesdir . '/' . $fvalue);
@@ -385,5 +420,5 @@ function docker_predefined_containers_table($ttype = "default", $templatesdir)
     else {
         $page .= "<div class='alert alert-warning text-center'>".t("docker_alert_no_predef_arch_pre") . aptArch() . t("docker_alert_no_predef_arch_post") . "</div>\n";
     }
-    return ["page" => $page, "buttons" => $buttons];
+    return(array('type'=>'ajax','page'=>$page));
 }
