@@ -37,3 +37,7 @@ addS("default_realUninstall_installed_pre", "Package ");
 addS("default_realUninstall_installed_post", " is installed");
 addS("default_realUninstall_not_installed_pre", "Package ");
 addS("default_realUninstall_not_installed_post", " is not installed");
+
+//HTTP(S)
+addS("default_http_https_pre", "HTTPS is enabled. You can browse the Cloudy interface securely at: ");
+addS("default_http_https_post", "");
