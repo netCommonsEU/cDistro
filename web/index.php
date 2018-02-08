@@ -67,7 +67,7 @@ if (isset($user) && !$post_login) {
 
     if (isset($conf['PORT_SSL']) && $wi_port != $conf['PORT_SSL'] && isset ($conf['ALLOWHTTP']) && $conf['ALLOWHTTP'] === "1" ){
         $https_url = 'https://'.$wi_ip.':'.$conf['PORT_SSL'];
-        $https_alert = "<div class='alert alert-warning text-center'>".t("default_http_https_pre") . "</br>". "<a href=$https_url>$https_url</a>" . t("default_http_https_post") . "</div>\n";
+        $https_alert = "<div class='alert alert-warning text-center'>".t("https_http_pre") . "</br>". "<a href=$https_url>$https_url</a>" . t("https_http_post") . "</div>\n";
         if (isset ($cb['page']) ){
             $cb['page'] = $https_alert . $cb['page'];
         }
