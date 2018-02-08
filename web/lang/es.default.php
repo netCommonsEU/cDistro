@@ -8,6 +8,7 @@ addS("default_common_description", "La nube para redes comunitarias a tu alcance
 
 //Buttons
 addS("default_button_back", "Volver");
+addS("default_button_dummy", "Un botón");
 addS("default_button_home", "Inicio");
 
 //index
@@ -19,7 +20,6 @@ addS("default_index_ram", "Memoria RAM: ");
 addS("default_index_storage", "Almacenamiento: ");
 addS("default_index_storage_free", "libres");
 addS("default_index_storage_total", "total");
-
 
 addS("default_generic_I_U_pre_Install", "Instalando el paquete ");
 addS("default_generic_I_U_post_Install", ", por favor, espere...");

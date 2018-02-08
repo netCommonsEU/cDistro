@@ -7,6 +7,8 @@ addS("https_desc", "Use this page to configure the security settings of your Clo
 addS("https_status", "Web interface status:");
 addS("https_recommend", "Suggestion:");
 addS("https_recommendation", "Use HTTPS instead of HTTP whenever you can ;)");
+addS("https_http_pre", "HTTPS is enabled. You can browse the Cloudy interface more securely at: ");
+addS("https_http_post", "");
 addS("https_is_not_installed", "HTTPS is not enabled");
 addS("https_install", "Enable HTTPS only (recommended)");
 addS("https_install_both", "Enable both HTTP and HTTPS");
