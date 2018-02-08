@@ -24,3 +24,7 @@ footer a {
 	text-decoration: underline;
 
 }
+
+.dataTables_wrapper{
+	font-size: medium;
+}
