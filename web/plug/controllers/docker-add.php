@@ -4,11 +4,12 @@ $urlpath="$staticFile/docker-add";
 $returnpath="$staticFile/docker";
 $docker_pkg = "docker-ce";
 $dev = "docker0";
-$predDir=$conf['DOCROOT']."/plug/resources/docker/containers/";
+$def_templates_dir=$conf['DOCROOT']."/plug/resources/docker/containers/";
+$user_templates_dir="/etc/cloudy/docker/templates/";
 
 function index()
 {
-    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir;
+    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $def_templates_dir, $user_templates_dir;
 
     $page = "";
     $buttons = "";
@@ -19,7 +20,8 @@ function index()
 
     $page .= par(t("docker_add_desc"));
 
-    $page .= docker_predefined_containers_table()['page'];
+    $page .= docker_predefined_containers_table("default", $def_templates_dir)['page'];
+    $page .= docker_predefined_containers_table("user", $user_templates_dir)['page'];
 
     $buttons .= addButton(array('label'=>t("default_button_back"),'class'=>'btn btn-default', 'href'=>"$staticFile/docker"));
 
@@ -30,7 +32,7 @@ function index()
 
 function image()
 {
-    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir, $returnpath;
+    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $def_templates_dir, $returnpath;
 
     $page = "";
     $buttons = "";
@@ -86,7 +88,7 @@ function image()
 
 function image_post()
 {
-    global $title, $returnpath, $docker_pkg, $staticFile, $Parameters, $predDir;
+    global $title, $returnpath, $docker_pkg, $staticFile, $Parameters, $def_templates_dir;
 
     $page = "";
     $buttons = "";
@@ -128,23 +130,28 @@ function image_post()
 
 function template()
 {
-    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir;
+    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $def_templates_dir, $user_templates_dir;
 
     $page = "";
     $buttons = "";
+
+
+    $templates_dir = $def_templates_dir;
+    if ($Parameters[0] == "user")
+        $templates_dir = $user_templates_dir;
 
     //Capçalera
     $page .= hlc(t("docker_title"));
     $page .= hl(t("docker_add_subtitle"), 4);
 
-    if (!file_exists($predDir.$Parameters[0])) {
+    if (!file_exists($templates_dir.$Parameters[1])) {
         $page .= txt(t('docker_add_error_no_template'));
-        $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_template_pre") . $Parameters[0] . t("docker_alert_no_template_post") . "</div>\n";
+        $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_template_pre") . $Parameters[1] . t("docker_alert_no_template_post") . "</div>\n";
         $buttons .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
     } else {
         $page .= par(t("docker_add_config_desc"));
 
-        $fcontent = file_get_contents($predDir.$Parameters[0]);
+        $fcontent = file_get_contents($templates_dir.$Parameters[1]);
         $jcontent = json_decode($fcontent, true);
 
         $name = (isset($jcontent["name"]) ? $jcontent["name"] : "");
@@ -182,7 +189,7 @@ function template()
 
 function template_post()
 {
-    global $title, $returnpath, $docker_pkg, $staticFile, $Parameters, $predDir;
+    global $title, $returnpath, $docker_pkg, $staticFile, $Parameters, $def_templates_dir;
 
     $page = "";
     $buttons = "";
@@ -224,19 +231,23 @@ function template_post()
 
 function launch()
 {
-    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $predDir, $returnpath;
+    global $title, $urlpath, $docker_pkg, $staticFile, $Parameters, $def_templates_dir, $user_templates_dir, $returnpath;
 
     $page = "";
     $buttons = "";
 
-    if (!file_exists($predDir.$Parameters[0])) {
+    $templates_dir = $def_templates_dir;
+    if ($Parameters[0] == "user")
+        $templates_dir = $user_templates_dir;
+
+    if (!file_exists($templates_dir.$Parameters[1])) {
         $page .= hlc(t("docker_title"));
         $page .= hl(t("docker_add_subtitle"), 4);
         $page .= txt(t('docker_add_error_no_template'));
-        $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_template_pre") . $Parameters[0] . t("docker_alert_no_template_post") . "</div>\n";
+        $page .= "<div class='alert alert-error text-center'>".t("docker_alert_no_template_pre") . $Parameters[1] . t("docker_alert_no_template_post") . "</div>\n";
         $buttons .= addButton(array('label'=>t("docker_button_back"),'class'=>'btn btn-default', 'href'=>"$urlpath"));
     } else {
-        $fcontent = file_get_contents($predDir.$Parameters[0]);
+        $fcontent = file_get_contents($templates_dir.$Parameters[1]);
         $jcontent = json_decode($fcontent, true);
 
         $name = (isset($jcontent["name"]) && $jcontent["name"] !== null && $jcontent["name"] !== "" ? $jcontent["name"] : null);
@@ -290,16 +301,15 @@ function launch()
     return array('type' => 'render','page' => $page);
 }
 
-function docker_predefined_containers_table()
+function docker_predefined_containers_table($ttype = "default", $templatesdir)
 {
-    global $dev, $title, $urlpath, $docker_pkg, $staticFile, $predDir;
+    global $dev, $title, $urlpath, $docker_pkg, $staticFile, $def_templates_dir, $user_templates_dir;
 
     $page = "";
     $buttons = "";
     $predef_count = 0;
 
-
-    $allfiles = array_diff(scandir($predDir), array('.','..'));
+    $allfiles = array_diff(scandir($templatesdir), array('.','..'));
 
     foreach ($allfiles as $key => $value) {
         if (endsWith($value, '.json')) {
@@ -319,7 +329,7 @@ function docker_predefined_containers_table()
         $table .= addTableHeader($headers);
 
         foreach ($files as $fkey => $fvalue) {
-            $fcontent = file_get_contents($predDir."/".$fvalue);
+            $fcontent = file_get_contents($templatesdir . '/' . $fvalue);
             $jcontent = json_decode($fcontent, true);
 
             if ( isset($jcontent["arch"]) && $jcontent['arch'] == aptArch() ) {
@@ -360,8 +370,8 @@ function docker_predefined_containers_table()
                 }
                 $fields[] = $links;
 
-                $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/template/".$fvalue));
-                $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/launch/".$fvalue));
+                $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/template/".$ttype.'/'.$fvalue));
+                $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/launch/".$ttype.'/'.$fvalue));
                 $table .= addTableRow($fields);
                 $predef_count++;
             }
