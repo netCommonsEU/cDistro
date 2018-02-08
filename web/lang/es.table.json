@@ -1,6 +1,6 @@
 {
 	"sEmptyTable":   	"No hay datos que mostrar.",
-	"sInfo":         	"_TOTAL_ elementos",
+	"sInfo":         	"Mostrando _TOTAL_ elementos",
 	"sInfoEmpty":    	"Ningún elemento",
 	"sInfoFiltered": 	"(se han filtrado _MAX_ elementos)",
 	"sInfoPostFix":  	"",

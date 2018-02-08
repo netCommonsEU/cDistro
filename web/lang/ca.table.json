@@ -1,11 +1,11 @@
 {
 	"sEmptyTable":   	"No hi ha dades per mostrar.",
-	"sInfo":         	"Mostrar: _TOTAL_",
+	"sInfo":         	"Mostrant _TOTAL_ elements",
 	"sInfoEmpty":    	"Cap element",
 	"sInfoFiltered": 	"(_MAX_ registres filtrats)",
 	"sInfoPostFix":  	"",
 	"sInfoThousands":  	".",
-	"sLengthMenu":   	"Mostrar _MENU_",
+	"sLengthMenu":   	"Mostrar: _MENU_",
 	"sLoadingRecords": 	"Carregant...",
 	"sProcessing":   	"Processant...",
 	"sSearch":       	"Cerca als elements mostrats:",

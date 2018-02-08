@@ -1,6 +1,6 @@
 {
 	"sEmptyTable":   	"Empty table",
-	"sInfo":         	"_TOTAL_ records",
+	"sInfo":         	"Showing _TOTAL_ records",
 	"sInfoEmpty":    	"No records ",
 	"sInfoFiltered": 	"(_MAX_ records filtered)",
 	"sInfoPostFix":  	"",
