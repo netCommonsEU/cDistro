@@ -269,3 +269,103 @@ function disable()
 
     return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 }
+
+function ipfs_search()
+{
+    $ret = execute_program("SEARCH_ONLY=ipfs /usr/sbin/avahi-ps search");
+    return($ret['output']);
+}
+
+function search()
+{
+    global $staticFile,$staticPath;
+
+    $page = "";
+
+    $page .= ajaxStr('tableIPFSAjax', t("Searching for published services, please wait a moment..."));
+    $page .= "<div id='tableIPFS' style='display:none'></div>";
+    $page .= "<script>\n";
+    $page .= "$('#tableIPFS').load('".$staticFile."/ipfs/ajaxsearch',function(){\n";
+    $page .= "	$('#tableIPFSAjax').hide();";
+    $page .= "	$('#tableIPFS').css({'display':'block'});";
+    $page .= "	$('#tags').tab();\n";
+    $page .= "  tservice = $('.table-data').DataTable( ";
+    $page .= '		{ "language": { "url": "/lang/"+LANG+".table.json"} }';
+    $page .= "	);";
+    $page .= "});\n";
+    $page .= "</script>\n";
+    //$page .=  addButton(array('label'=>t("ipfs_search_quality"), 'class'=>'btn', 'onclick'=>'SQoS("'.$staticFile.'/ipfs/ajaxquality")'));
+
+    return(array('type'=>'render','page'=>$page));
+}
+
+function ajaxsearch()
+{
+    $aServices = ipfs_search();
+
+    $gService = json_decode($aServices[0]);
+
+    $nServices = array();
+
+    if (!empty($gService)) {
+        foreach ($gService as $dates_machine) {
+            $serv_new['type'] = $dates_machine->s;
+            $serv_new['description'] = $dates_machine->d;
+            $serv_new['host'] = $dates_machine->m;
+            $serv_new['ip'] = $dates_machine->i;
+            $serv_new['port'] = $dates_machine->p;
+            $serv_new['microcloud'] = $dates_machine->e;
+            $serv_new['txt'] = $dates_machine->t;
+            $serv_new['node_id']= $dates_machine->node_id;
+            $serv_new['action'] = checkAvahi($serv_new['type'], array($serv_new));
+            unset($serv_new['txt']);
+            $type=$serv_new['type'];
+            if (!is_array($nServices[$type])) {
+                $nServices[$type]=array();
+            }
+            $nServices[$type][] = $serv_new;
+        }
+    }
+    ksort($nServices);
+
+    $page = "";
+    $page .= "<ul id='tabs' class='nav nav-tabs' data-tabs='tabs'>\n";
+    $active = "";
+    foreach ($nServices as $k => $v) {
+        if ($active == "") {
+            $active = $k;
+        }
+        $page .= "	<li";
+        if ($active == $k) {
+            $page .= " class='active'";
+        }
+        $page .= "><a href='#".$k."' data-toggle='tab'>".$k."</a></li>\n";
+    }
+    $page .= "</ul>\n";
+    $page .= "<div id='my-tab-content' class='tab-content'>\n";
+    $services = "";
+    foreach ($nServices as $k => $v) {
+        $services .= "	<div class='tab-pane";
+        if ($active == $k) {
+            $services .= " active";
+        }
+        $services .= "' id='".$k."'>";
+
+        $services .= addTableHeader(array(t('%'),t('Description'),t('Host'),t('IP'),t('Port'),t('&mu;cloud'),t('Action')), array('class'=>'table table-striped table-data'));
+        foreach ($v as $serv) {
+            unset($serv['type']);
+            $node_id=$serv['node_id'];
+            unset($serv['node_id']);
+            $servarray=array(0 => '', 1 => $serv['description'], 2 => $serv['host'], 3 => $serv['ip'], 4 => $serv['port'], 5 => $serv['microcloud'], 6 => $serv['action'] );
+            $services .= addTableRow($servarray, array('class'=>"node-".$node_id), array( 0 => array('class'=>'scan')));
+        }
+        $services .= addTableFooter();
+        $services .= " 	</div>";
+    }
+    if ($services == "") {
+        $services .=t("No services.");
+    }
+    $page .= $services;
+    $page .= "</div>";
+    return(array('type'=>'ajax','page'=>$page));
+}
