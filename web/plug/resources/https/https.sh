@@ -62,15 +62,16 @@ EOF
 	}
 
 	# change cloudy.conf
-	sed -i -e 's/BINDIP="0.0.0.0"/BINDIP="127.0.0.1"/' $CDISTROCONF
+  # Changing the PHP binding address is not needed, as the port 7000 is redirected
+	# sed -i -e 's/BINDIP="0.0.0.0"/BINDIP="127.0.0.1"/' $CDISTROCONF
 
 	fgrep -q PORT_SSL $CDISTROCONF || {
 		echo -e "\nPORT_SSL=$PORTSSL" >> $CDISTROCONF
 	}
 
-	# Restart cdistro
-	/etc/init.d/cdistro stop
-	/etc/init.d/cdistro start
+	# Restarting cDistro is not needed anymore
+	# /etc/init.d/cdistro stop
+	# /etc/init.d/cdistro start
 
 	# Enable site
 	a2ensite ${APACHESITE}
@@ -93,9 +94,11 @@ Remove(){
 
 	# Change cdistro remove PORT_SSL variable
 	sed -i -e 's/^PORT_SSL=.*$//' $CDISTROCONF
+
+  # This is not needed anymore, but it is kept for backwards compatibility
 	sed -i -e 's/BINDIP="127.0.0.1"/BINDIP="0.0.0.0"/' $CDISTROCONF
 
-	# Reload cdistro
+	# Reloading cDistro is not needed anymore, but it is kept for backwards compatibility
 	/etc/init.d/cdistro stop
 	/etc/init.d/cdistro start
 

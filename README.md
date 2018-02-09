@@ -1,3 +1,4 @@
-*Cloudy GNU/Linux Distribution* 
+# Cloudy - cDistro [![Build Status](https://travis-ci.org/Clommunity/cDistro.svg?branch=master)](https://travis-ci.org/Clommunity/cDistro)
 
-A community networking cloud in a box.
+### About
+The *Cloudy GNU/Linux Distribution* turns your embedded, barebone or mini computer into a *community networking cloud in a box*.

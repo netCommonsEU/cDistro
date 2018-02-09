@@ -2,5 +2,6 @@
   "appname": "MongoDB (latest)",
   "description": "MongoDB is an open source database that uses a document-oriented data model",
   "image": "mongo:latest --smallfiles",
-  "name": "mongodb"
+  "name": "mongodb",
+  "arch": "amd64"
 }

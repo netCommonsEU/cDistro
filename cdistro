@@ -21,25 +21,102 @@ DEMO=0
 test -f $CONFFILE && . $CONFFILE || exit 0
 
 start() {
-  if [ $DEMO -eq 1 ]; then
-    su - nobody -c "$SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &" > /dev/null 2>&1
-    echo $(pidof php) > $PIDFILE
-  else
-    $SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &
-    echo $! > $PIDFILE
+  STARTPHP=true
+  STARTPHPSUCCESS=false
+  STARTCDISTRO=true
+  STARTCDISTROSUCCESS=false
+
+  # First, check for a previously started PHP server
+  if [ -f "$PIDFILE" ]; then
+    # Server has been started previously. Check if it is still running
+    if $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN); then
+      echo "cDistro PHP server is already running."
+      STARTPHP=false
+    else
+      echo "cDistro PHP server was already started but crashed. Restarting it..."
+    fi
   fi
-  $DAEMON >/dev/null 2>&1 &
-  echo $! > $PIDDAEMON
+
+  if [ $STARTPHP = true ]; then
+    echo "Starting cDistro PHP server..."
+    if [ $DEMO -eq 1 ]; then
+      echo "cDistro is in demo mode."
+      su - nobody -c "$SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &" > /dev/null 2>&1
+      echo $(pidof php) > $PIDFILE
+    else
+      $SERVER $OPTS -S $BINDIP:$PORT -t $DOCROOT >/dev/null 2>&1 &
+      echo $! > $PIDFILE
+    fi
+
+    # Check if the daemon has been started properly (wait up to 5 seconds)
+    for i in $(seq 1 5); do
+      sleep 1
+      [ -f $PIDFILE ] && $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) \
+        && kill -0  $(cat $PIDFILE) >/dev/null 2>&1 && echo "cDistro PHP server successfully started." \
+        && STARTPHPSUCCESS=true && break
+    done
+  fi
+
+  $STARTPHP && ! $STARTPHPSUCCESS && echo "cDistro PHP server did not start successfully." && exit 1
+
+  # First, check for a previously started cDistro daemon
+  if [ -f "$PIDDAEMON" ]; then
+    # Server has been started previously. Check if it is still running
+    if kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1; then
+      echo "cDistro daemon is already running."
+        STARTCDISTRO=false
+    else
+        echo "cDistro daemon was already started but crashed. Restarting it..."
+    fi
+  fi
+
+
+  if [ $STARTCDISTRO = true ]; then
+    echo "Starting cDistro daemon..."
+      $DAEMON >/dev/null 2>&1 &
+      echo $! > $PIDDAEMON
+
+    # Check if the daemon has been started properly (wait up to 5 seconds)
+    for i in $(seq 1 5); do
+      sleep 1
+      [ -f $PIDDAEMON ] && kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 \
+        && echo "cDistro daemon server successfully started." \
+        && STARTCDISTROSUCCESS=true && break
+    done
+
+  fi
+
+  $STARTCDISTRO && ! $STARTCDISTROSUCCESS && echo "cDistro daemon server did not start successfully." && exit 1
 }
+
 stop() {
-  kill -9 $(cat $PIDFILE)
-  rm $PIDFILE
-  kill -9 $(cat $PIDDAEMON)
-  rm $PIDDAEMON
+  # Stop cDistro PHP server
+  [ -f $PIDFILE ] && $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && \
+    echo "Stopping cDistro PHP server..." && echo "Sending terminate signal to process $(cat $PIDFILE)..." && kill -15 $(cat $PIDFILE) && sleep 1
+
+  [ -f $PIDFILE ] && $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && \
+    echo "Sending interrupt signal to process $(cat $PIDFILE)..." && kill -2 $(cat $PIDFILE) && sleep 1
+
+  [ -f $PIDFILE ] && $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && \
+    echo "Sending kill signal to process $(cat $PIDFILE)..." && kill -9 $(cat $PIDFILE) && sleep 1
+
+  ! $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) && [ -f $PIDFILE ] && rm $PIDFILE
+
+  # Stop cDistro daemon
+  [ -f $PIDDAEMON ] && kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && echo "Stopping cDistro daemon..." && echo "Sending terminate signal to process $(cat $PIDDAEMON)..." && kill -15 $(cat $PIDDAEMON) && sleep 1
+  [ -f $PIDDAEMON ] && kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && echo "Sending interrupt signal to process $(cat $PIDDAEMON)..." && kill -2 $(cat $PIDDAEMON) && sleep 1
+  [ -f $PIDDAEMON ] && kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && echo "Sending kill signal to process $(cat $PIDDAEMON)..." && kill -9 $(cat $PIDDAEMON) && sleep 1
+  [ -f $PIDDAEMON ] && ! kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 && [ -f $PIDDAEMON ] && rm $PIDDAEMON
+
+  # Check that everything is stopped
+  { ! [ -f $PIDFILE ] && ! $(netstat -ant|grep ${BINDIP}|grep ${PORT}|grep -q LISTEN) \
+    && ! { [ -f $PIDDAEMON ] && ! kill -0  $(cat $PIDDAEMON) >/dev/null 2>&1 ;} \
+    && echo "cDistro daemon stopped." && return 0; } || { echo "cDistro daemon was not successfully stopped. Quitting..." && exit 1; }
 }
+
 restart() {
   stop
-  sleep 0.5
+  sleep 1
   start
 }
 

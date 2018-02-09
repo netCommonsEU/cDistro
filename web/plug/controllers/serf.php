@@ -9,7 +9,7 @@ $avahips_config="/etc/avahi-ps.conf";
 $avahipsetc_config="/etc/avahi-ps-serf.conf";
 $urlpath='/serf';
 $serfgeturl='https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub';
-$serfmenu=dirname(__FILE__)."/../menus/serf.lookfor.menu.php";
+$serfmenu=dirname(__FILE__)."/../menus/r0101.serf.lookfor.menu.php";
 $avahipsetc_data=array(
                     'SERF_RPC_ADDR'=> array('default'=>'127.0.0.1:7373'),
                     'SERF_BIND'=> array('default'=>'5000'),

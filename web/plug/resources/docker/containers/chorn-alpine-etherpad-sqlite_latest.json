@@ -9,5 +9,6 @@
   "options": {
     "ADMIN_USER": "admin",
     "ADMIN_PASS": "1234"
-  }
+  },
+  "arch": "amd64"
 }

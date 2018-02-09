@@ -7,5 +7,6 @@
   },
   "misc": {
     "net": "host"
-  }
+  },
+  "arch": "amd64"
 }

@@ -7,7 +7,7 @@ $httpPort=7000;
 
 function index()
 {
-    global $urlpath;
+    global $urlpath, $conf;
 
     $page = hlc(t("https_title"));
     $page .= hl(t("https_subtitle"), 4);
@@ -20,10 +20,15 @@ function index()
         $page .= "<div class='alert alert-warning text-center'>".t("https_recommendation")."</div>\n";
         $page .= par(t("https_enable"));
         $page .= addButton(array('label'=>t("https_install"),'class'=>'btn btn-success', 'href'=>"$urlpath/install"));
+        $page .= addButton(array('label'=>t("https_install_both"),'class'=>'btn btn-warning', 'href'=>"$urlpath/install_both"));
     } else {
         $page .= "<div class='alert alert-success text-center'>".t("https_is_installed")."</div>\n";
         $page .= par(t("https_disable"));
         $page .= addButton(array('label'=>t("https_remove"),'class'=>'btn btn-danger', 'href'=>"$urlpath/uninstall"));
+
+        list($wi_ip, $wi_port) = explode(":", $_SERVER['HTTP_HOST']);
+        if ( $wi_port != $conf['PORT_SSL'] && $conf["ALLOWHTTP" === "0"] )
+            $page .= addButton(array('label'=>t("https_install_both"),'class'=>'btn btn-warning', 'href'=>"$urlpath/install_both"));
     }
 
     return array('type' => 'render','page' => $page);
@@ -42,7 +47,10 @@ function isInstalled()
 
 function install()
 {
-    global $sslShell, $urlpath, $sslPort, $appHost;
+    global $configFile, $sslShell, $urlpath, $sslPort, $appHost;
+
+    $dataSave['ALLOWHTTP'] = '"0"';
+    write_merge_conffile($configFile, $dataSave);
 
     if (isInstalled()) {
         setFlash(t('https_already_enabled'), "error");
@@ -53,6 +61,24 @@ function install()
 
     execute_program_detached($sslShell." install");
     return(array('type'=> 'redirect', 'url' => "https://".$appAddress.":".$sslPort));
+}
+
+function install_both()
+{
+    global $configFile, $sslShell, $urlpath, $sslPort, $appHost, $httpPort;
+
+    $dataSave['ALLOWHTTP'] = '"1"';
+    write_merge_conffile($configFile, $dataSave);
+
+    if (isInstalled()) {
+        setFlash(t('https_already_enabled'), "error");
+        return(array('type'=> 'redirect', 'url' => $urlpath));
+    }
+
+    $appAddress = explode(":", $appHost)[0];
+
+    execute_program_detached($sslShell." install");
+    return(array('type'=> 'redirect', 'url' => "http://".$appAddress.":".$httpPort));
 }
 
 function uninstall()

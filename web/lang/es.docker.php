@@ -10,6 +10,8 @@ addS("docker_alert_img_not_available", "No hay imágenes de Docker disponibles")
 addS("docker_alert_no_sources", "Falta el fichero de fuentes APT para el paquete de Docker");
 addS("docker_alert_no_template_pre", "No se ha encontrado la imagen de Docker ");
 addS("docker_alert_no_template_post", " en el repositorio local");
+addS("docker_alert_no_predef_arch_pre", "No hay contenedores Docker predefinidos para la arquitectura ");
+addS("docker_alert_no_predef_arch_post", "");
 addS("docker_alert_no_template_pre", "No se ha encontrado la plantilla de Docker ");
 addS("docker_alert_no_template_post", "");
 addS("docker_alert_ps_not_running", "No hay contenedores Docker en ejecución");

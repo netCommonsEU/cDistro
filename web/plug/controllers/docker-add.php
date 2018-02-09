@@ -296,7 +296,8 @@ function docker_predefined_containers_table()
 
     $page = "";
     $buttons = "";
-    $dock_count = 0;
+    $predef_count = 0;
+
 
     $allfiles = array_diff(scandir($predDir), array('.','..'));
 
@@ -305,8 +306,6 @@ function docker_predefined_containers_table()
             $files[] = $value;
         }
     }
-
-    print_r($files, 1);
 
     if (sizeof($files) > 0) {
         $table = "";
@@ -323,50 +322,58 @@ function docker_predefined_containers_table()
             $fcontent = file_get_contents($predDir."/".$fvalue);
             $jcontent = json_decode($fcontent, true);
 
-            $fields = "";
-            $fields[] = $jcontent["appname"];
-            $fields[] = $jcontent["description"];
+            if ( isset($jcontent["arch"]) && $jcontent['arch'] == aptArch() ) {
+                $fields = "";
+                $fields[] = $jcontent["appname"];
+                $fields[] = $jcontent["description"];
 
-            $ports = "";
-            if (isset($jcontent["ports"])) {
-                foreach ($jcontent["ports"] as $pkey => $pvalue) {
-                    if ($ports !== "") {
-                        $ports .= "<br>";
+                $ports = "";
+                if (isset($jcontent["ports"])) {
+                    foreach ($jcontent["ports"] as $pkey => $pvalue) {
+                        if ($ports !== "") {
+                            $ports .= "<br>";
+                        }
+                        $ports .= $pvalue."=>".$pkey;
                     }
-                    $ports .= $pvalue."=>".$pkey;
                 }
-            }
-            $fields[] = $ports;
+                $fields[] = $ports;
 
-            $options = "";
-            if (isset($jcontent["options"])) {
-                foreach ($jcontent["options"] as $okey => $ovalue) {
-                    if ($options !== "") {
-                        $options .= "<br>";
+                $options = "";
+                if (isset($jcontent["options"])) {
+                    foreach ($jcontent["options"] as $okey => $ovalue) {
+                        if ($options !== "") {
+                            $options .= "<br>";
+                        }
+                        $options .= $okey."=".$ovalue;
                     }
-                    $options .= $okey."=".$ovalue;
                 }
-            }
-            $fields[] = $options;
+                $fields[] = $options;
 
-            $links = "";
-            if (isset($jcontent["links"])) {
-                foreach ($jcontent["links"] as $lkey => $lvalue) {
-                    if ($links !== "") {
-                        $links .= ", ";
+                $links = "";
+                if (isset($jcontent["links"])) {
+                    foreach ($jcontent["links"] as $lkey => $lvalue) {
+                        if ($links !== "") {
+                            $links .= ", ";
+                        }
+                        $links .= $lvalue;
                     }
-                    $links .= $lvalue;
                 }
-            }
-            $fields[] = $links;
+                $fields[] = $links;
 
-            $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/template/".$fvalue));
-            $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/launch/".$fvalue));
-            $table .= addTableRow($fields);
+                $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_config"),'class'=>'btn btn-info', 'href'=>"$urlpath/template/".$fvalue));
+                $fields[] = addButton(array('label'=>t("docker_button_pdcontainer_run"),'class'=>'btn btn-success', 'href'=>"$urlpath/launch/".$fvalue));
+                $table .= addTableRow($fields);
+                $predef_count++;
+            }
         }
         $table .= addTableFooter();
     }
 
-    $page .= $table;
+    if ( $predef_count > 0 ) {
+        $page .= $table;
+    }
+    else {
+        $page .= "<div class='alert alert-warning text-center'>".t("docker_alert_no_predef_arch_pre") . aptArch() . t("docker_alert_no_predef_arch_post") . "</div>\n";
+    }
     return ["page" => $page, "buttons" => $buttons];
 }
