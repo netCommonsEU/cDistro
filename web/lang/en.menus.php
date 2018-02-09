@@ -81,7 +81,9 @@ addS("serf_lookfor", "Look for services with Serf");
 
 
 //IPFS
+addS("menu_ipfs", "Search");
 addS("ipfs_setup", "Setup IPFS");
+addS("ipfs_lookfor", "Look for services with IPFS");
 
 //Sweep
 addS("menus_sweep_sweep", "Sweep");
