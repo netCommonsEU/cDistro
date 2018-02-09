@@ -218,6 +218,7 @@ function enable()
         if (strpos($aps_cfg['DATABASE'], 'ipfs') === false) {
             $aps_cfg['DATABASE'] = trim($aps_cfg['DATABASE']." ipfs");
         }
+        $aps_cfg['DATABASE'] = trim(str_replace("none", "", $aps_cfg['DATABASE']));
     } else {
         $aps_cfg['DATABASE'] = "ipfs";
     }
@@ -255,6 +256,11 @@ function disable()
     // Remove IPFS as a backend database for publication
     if (isset($aps_cfg['DATABASE'])) {
         $aps_cfg['DATABASE'] = trim(str_replace("ipfs", "", $aps_cfg['DATABASE']));
+    }
+
+    // If there are no backends remaining, set it to "none"
+    if ((isset($aps_cfg['DATABASE']) && trim($aps_cfg['DATABASE']) === "") || !isset($aps_cfg['DATABASE'])) {
+        $aps_cfg['DATABASE'] = "none";
     }
 
     // Save Avahi-PS configuration file

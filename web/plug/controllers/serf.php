@@ -357,6 +357,11 @@ function removeserf()
         $aps_cfg['DATABASE'] = trim(str_replace("serf", "", $aps_cfg['DATABASE']));
     }
 
+    // If there are no backends remaining, set it to "none"
+    if ((isset($aps_cfg['DATABASE']) && trim($aps_cfg['DATABASE']) === "") || !isset($aps_cfg['DATABASE'])) {
+        $aps_cfg['DATABASE'] = "none";
+    }
+
     // Save Avahi-PS configuration file
     write_conffile($avahips_config, $aps_cfg, null, null);
 
@@ -382,6 +387,7 @@ function selectserf()
         if (strpos($aps_cfg['DATABASE'], 'serf') === false) {
             $aps_cfg['DATABASE'] = trim($aps_cfg['DATABASE']." serf");
         }
+        $aps_cfg['DATABASE'] = trim(str_replace("none", "", $aps_cfg['DATABASE']));
     } else {
         $aps_cfg['DATABASE'] = "serf";
     }
