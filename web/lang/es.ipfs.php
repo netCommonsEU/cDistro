@@ -12,3 +12,6 @@ addS("ipfs_flash_publish_disabled", "Se ha desactivado la publicación de servic
 addS("ipfs_flash_publish_not_disabled", "No se ha podido desactivar la publicación de servicios mediante IPFS");
 addS("ipfs_flash_publish_enabled", "Se ha activado la publicación de servicios mediante IPFS");
 addS("ipfs_flash_publish_not_enabled", "No se ha podido activar la publicación de servicios mediante IPFS");
+addS("ipfs_flash_publish", "Anunciando esta instancia de IPFS en la nube:");
+addS("ipfs_flash_stopping", "Parando IPFS:");
+addS("ipfs_flash_unpublish", "Borrando el anuncio de esta instancia de IPFS de la nube:");
