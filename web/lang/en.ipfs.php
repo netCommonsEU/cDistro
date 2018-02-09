@@ -5,7 +5,7 @@
 
 //buttons
 addS("ipfs_button_publish_disable", "Disable services publication via IPFS");
-addS("ipfs_button_publish_disable", "Enable services publication via IPFS");
+addS("ipfs_button_publish_enable", "Enable services publication via IPFS");
 
 //flash
 addS("ipfs_flash_publish_disabled", "Publication via IPFS has been disabled");
