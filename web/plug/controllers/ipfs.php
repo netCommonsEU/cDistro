@@ -9,8 +9,11 @@ $ipfsbin="ipfs";
 $ipfspath="/etc/cloudy/ipfs/";
 $ipfsinfo="ipfs.info";
 $ipfsconfig="config";
-$port="5001";
+
 $avahi_type="ipfs";
+$avahi_desc="Local_IPFS_instance";
+$avahi_port="5001";
+
 $ipfsutils=dirname(__FILE__)."/../resources/ipfs/ipfscontroller";
 
 $urlpath='/ipfs';
@@ -46,12 +49,10 @@ function index()
         } else {
             if (isRunning()) {
                 $page .= "<div class='alert alert-success text-center'>".t("IPFS is running")."</div>\n";
-                // See https://github.com/Clommunity/cDistro/issues/52
-                //$page .= addButton(array('label'=>t('Go to node'),'href'=>'http://'. getCommunityIP()['output'][0] .':'. $port));
                 $buttons .= addButton(array('label'=>t('Stop node'),'href'=>$staticFile.'/ipfs/stop'));
             } else {
                 $page .= "<div class='alert alert-error text-center'>".t("IPFS is not running")."</div>\n";
-                $buttons .= addButton(array('label'=>t('Start IPFS daemon'),'href'=>$staticFile.'/ipfs/startDaemon'));
+                $buttons .= addButton(array('label'=>t('Start IPFS daemon'),'href'=>$staticFile.'/ipfs/start'));
             }
 
             if (isEnabled()) {
@@ -67,17 +68,24 @@ function index()
     return(array('type' => 'render','page' => $page));
 }
 
+// Stop the IPFS daemon
 function stop()
 {
-    // Stops ipfs server
-    global $ipfspath,$ipfsprogram,$title,$ipfsutils,$avahi_type,$port, $staticFile;
-    $page = "";
+    global $ipfsutils, $avahi_type, $avahi_port, $staticFile, $urlpath;
+
+    // Stop the daemon
     $cmd = $ipfsutils." stop ";
-    execute_program($cmd);
-    $temp = avahi_unpublish($avahi_type, $port);
-    $flash = ptxt($temp);
-    setFlash($flash);
-    return(array('type'=>'redirect','url'=>$staticFile.'/ipfs'));
+    $cmd_res = execute_program($cmd);
+
+    // Un-announce the IPFS instance to the community cloud via any of the
+    // available methods -including IPFS itself, if enabled-
+    $unpub_res = avahi_unpublish($avahi_type, $avahi_port);
+
+    $flash_content = txt(t('ipfs_flash_stopping')) . ptxt($cmd_res['output'][0]);
+    $flash_content .= txt(t('ipfs_flash_unpublish')) . ptxt($unpub_res);
+
+    setFlash($flash_content);
+    return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 }
 
 function isRunning()
@@ -87,30 +95,30 @@ function isRunning()
     return(file_exists($ipfspath.$ipfsinfo));
 }
 
-function publish_get()
-{
-    global $ipfspath, $title;
-    global $staticFile;
-
-    $page = hlc(t($title));
-    $page .= hlc(t('Publish IPFS server'), 2);
-    $page .= par(t("Write the port to publish your IPFS service"));
-    $page .= createForm(array('class'=>'form-horizontal'));
-    $page .= addInput('description', t('Describe this server'));
-    $page .= addSubmit(array('label'=>t('Publish')));
-    $page .= addButton(array('label'=>t('Cancel'), 'href'=>$staticFile.'/ipfs'));
-    return(array('type' => 'render', 'page' => $page));
-}
-
-function publish_post()
-{
-    $description = $_POST['description'];
-    $ip = "";
-    $page = "<pre>";
-    $page .= _ipfssource($description);
-    $page .= "</pre>";
-    return(array('type' => 'render','page' => $page));
-}
+// function publish_get()
+// {
+//     global $ipfspath, $title;
+//     global $staticFile;
+//
+//     $page = hlc(t($title));
+//     $page .= hlc(t('Publish IPFS server'), 2);
+//     $page .= par(t("Write the port to publish your IPFS service"));
+//     $page .= createForm(array('class'=>'form-horizontal'));
+//     $page .= addInput('description', t('Describe this server'));
+//     $page .= addSubmit(array('label'=>t('Publish')));
+//     $page .= addButton(array('label'=>t('Cancel'), 'href'=>$staticFile.'/ipfs'));
+//     return(array('type' => 'render', 'page' => $page));
+// }
+//
+// function publish_post()
+// {
+//     $description = $_POST['description'];
+//     $ip = "";
+//     $page = "<pre>";
+//     $page .= _ipfssource($description);
+//     $page .= "</pre>";
+//     return(array('type' => 'render','page' => $page));
+// }
 
 function isIPFSInstalled()
 {
@@ -149,15 +157,19 @@ function initialize()
     return(array('type'=>'redirect','url'=>$staticFile.'/ipfs'));
 }
 
-function startDaemon()
+// Start the IPFS daemon
+function start()
 {
-    global $ipfsutils,$staticFile, $avahi_type, $port;
-    $ret = execute_program_detached($ipfsutils." startDaemon $port $avahi_type");
+    global $ipfsutils, $staticFile, $urlpath, $avahi_type, $avahi_port, $avahi_desc;
+    $ret = execute_program_detached($ipfsutils." startDaemon $avahi_port $avahi_type");
     //$output = ptxt(" ". print_r($ret['output'][0],1));
-    $temp = avahi_publish($avahi_type, "IPFS", $port, "");
-    $output = ptxt("Publishing service: " . $temp);
-    setFlash($output);
-    return(array('type'=>'redirect','url'=>$staticFile.'/ipfs'));
+
+    // Announce the IPFS instance to the community cloud via any of the
+    // available methods -including IPFS itself, if enabled-
+    $pub_res = avahi_publish($avahi_type, $avahi_desc, $avahi_port, null);
+
+    setFlash(txt(t('ipfs_flash_publish')) . ptxt($pub_res));
+    return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 }
 
 /**
