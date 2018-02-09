@@ -340,25 +340,78 @@ function stopprogram()
 
 function removeserf()
 {
-    global $avahips_config,$urlpath,$staticFile;
+    global $avahips_config, $urlpath, $staticFile;
 
-    $var_avahi = load_conffile($avahips_config);
-    $var_avahi['DATABASE'] = 'none';
-    write_conffile($avahips_config, $var_avahi, "", "", '"');
+    // Load Avahi-PS configuration file
+    $aps_cfg = load_conffile($avahips_config);
 
-    setFlash(t('serf_flash_unpublishing'), "info");
+    // Remove Serf as a backend database for publication
+    if (isset($aps_cfg['DATABASE'])) {
+        $aps_cfg['DATABASE'] = trim(str_replace("serf", "", $aps_cfg['DATABASE']));
+    }
+
+    // Save Avahi-PS configuration file
+    write_conffile($avahips_config, $aps_cfg, "", "", '"');
+
+    // Check if Serf was actually disabled and set a flash message before return
+    if (! isEnabled()) {
+        setFlash(t('serf_flash_unpublishing'), "success");
+    } else {
+        setFlash(t('serf_flash_unpublishing_error'), "error");
+    }
+
     return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 }
 
 function selectserf()
 {
-    global $avahips_config,$urlpath,$staticFile;
+    global $avahips_config, $urlpath, $staticFile;
 
+    // Load Avahi-PS configuration file
+    $aps_cfg = load_conffile($avahips_config);
 
-    $var_avahi = load_conffile($avahips_config);
-    $var_avahi['DATABASE'] = 'serf';
-    write_conffile($avahips_config, $var_avahi, "", "", '"');
+    // Add Serf as a backend database for publication
+    if (isset($aps_cfg['DATABASE'])) {
+        if (strpos($aps_cfg['DATABASE'], 'serf') === false) {
+            $aps_cfg['DATABASE'] = trim($aps_cfg['DATABASE']." serf");
+        }
+    } else {
+        $aps_cfg['DATABASE'] = "serf";
+    }
 
-    setFlash(t('serf_flash_publishing'), "info");
+    // Save Avahi-PS configuration file
+    write_conffile($avahips_config, $aps_cfg, "", "", '"');
+
+    // Check if Serf was actually enabled and set a flash message before return
+    if (isEnabled()) {
+        setFlash(t('serf_flash_publishing'), "success");
+    } else {
+        setFlash(t('serf_flash_publishing_error'), "error");
+    }
+
     return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
+}
+
+/**
+ * function isEnabled(): check if Serf is enabled as a publication mechanism
+ *
+ * This function checks if Serf is enabled as a mechanism to publish local
+ * services to the community cloud.
+ *
+ * @param none
+ *
+ * @return bool
+ */
+function isEnabled()
+{
+    global $avahips_config;
+
+    // Load Avahi-PS configuration file
+    $aps_cfg = load_conffile($avahips_config);
+
+    // Check for Serf as a backend database for publication
+    if (isset($aps_cfg['DATABASE']) && strpos($aps_cfg['DATABASE'], 'serf') !== false) {
+        return true;
+    }
+    return false;
 }
