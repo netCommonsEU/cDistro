@@ -223,7 +223,7 @@ function enable()
     }
 
     // Save Avahi-PS configuration file
-    write_conffile($avahips_config, $aps_cfg, "", "", '"');
+    write_conffile($avahips_config, $aps_cfg, null, null);
 
     // Check if IPFS was actually enabled and set a flash message before return
     if (isEnabled()) {
@@ -258,7 +258,7 @@ function disable()
     }
 
     // Save Avahi-PS configuration file
-    write_conffile($avahips_config, $aps_cfg, "", "", '"');
+    write_conffile($avahips_config, $aps_cfg, null, null);
 
     // Check if IPFS was actually disabled and set a flash message before return
     if (! isEnabled()) {

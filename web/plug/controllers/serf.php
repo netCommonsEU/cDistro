@@ -28,6 +28,13 @@ function serf_search()
     return($ret['output']);
 }
 
+function raw_serf_search()
+{
+    $ret = execute_program("SEARCH_ONLY=serf /usr/sbin/avahi-ps search");
+    $page = ptxt(print_r($ret, 1));
+    return(array('type'=>'render','page'=>$page));
+}
+
 function search()
 {
     global $staticFile,$staticPath;
@@ -223,7 +230,7 @@ function index_post()
     foreach ($_POST as $key => $value) {
         $datesToSave[$key] = $value;
     }
-    write_conffile($avahipsetc_config, $datesToSave, "", "", '"');
+    write_conffile($avahipsetc_config, $datesToSave, null, null);
 
     setFlash(t('serf_flash_saving'), "info");
     return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
@@ -250,7 +257,7 @@ function createDefaultAvahiFile()
 {
     global $avahips_config;
 
-    write_conffile($avahips_config, array('ERRORS_PLUG'=> "errors",'EXECUTE_IN'=>"memory",'SAVE_SERVICE'=>"none",'DATABASE'=>"none"), "", "", '"');
+    write_conffile($avahips_config, array('ERRORS_PLUG'=> "errors",'EXECUTE_IN'=>"memory",'SAVE_SERVICE'=>"none",'DATABASE'=>"none"), null, null);
 }
 function createDefaultAvahiEtcFile()
 {
@@ -260,7 +267,7 @@ function createDefaultAvahiEtcFile()
     foreach ($avahipsetc_data as $k=>$v) {
         $tmparray[$k] = $v['default'];
     }
-    write_conffile($avahipsetc_config, $tmparray, "", "", '"');
+    write_conffile($avahipsetc_config, $tmparray, null, null);
 }
 function _existSerfConf()
 {
@@ -351,7 +358,7 @@ function removeserf()
     }
 
     // Save Avahi-PS configuration file
-    write_conffile($avahips_config, $aps_cfg, "", "", '"');
+    write_conffile($avahips_config, $aps_cfg, null, null);
 
     // Check if Serf was actually disabled and set a flash message before return
     if (! isEnabled()) {
@@ -380,7 +387,7 @@ function selectserf()
     }
 
     // Save Avahi-PS configuration file
-    write_conffile($avahips_config, $aps_cfg, "", "", '"');
+    write_conffile($avahips_config, $aps_cfg, null, null);
 
     // Check if Serf was actually enabled and set a flash message before return
     if (isEnabled()) {

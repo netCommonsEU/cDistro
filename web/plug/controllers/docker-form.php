@@ -53,7 +53,7 @@ function index_post()
     }
 
     $file="/var/local/cDistro/plug/resources/docker/containers/".$datesToSave['Img'];
-    write_conffile($file, $datesToSave, "", "", '"');
+    write_conffile($file, $datesToSave, "", "");
 
     setFlash("Config -> OK", "info");
     return(array('type'=> 'redirect', 'url' => $staticFile."/docker"));
