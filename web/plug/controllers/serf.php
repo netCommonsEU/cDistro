@@ -166,7 +166,7 @@ function index()
         }
 
         $page .= txt(t("serf_index_publication"));
-        if ($var_avahi['DATABASE'] != 'serf') {
+        if (! isEnabled()) {
             if (_isRun()) {
                 $page .= "<div class='alert alert-warning text-center'>".t("serf_alert_wont_publish")."</div>";
             } else {
