@@ -282,6 +282,13 @@ function ipfs_search()
     return($ret['output']);
 }
 
+function raw_ipfs_search()
+{
+    $ret = execute_program("SEARCH_ONLY=ipfs /usr/sbin/avahi-ps search");
+    $page = ptxt(print_r($ret, 1));
+    return(array('type'=>'render','page'=>$page));
+}
+
 function search()
 {
     global $staticFile,$staticPath;
