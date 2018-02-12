@@ -71,17 +71,20 @@ addS("menus_syncthing_clommunity", "Community");
 //Etcd
 addS("menu_etcd", "Búsqueda de servicios");
 addS("etcd_setup", "Configurar Etcd");
-addS("etcd_lookfor", "Buscar Servicos con Etcd");
+addS("etcd_lookfor", "Buscar servicos con Etcd");
 
 
 //Serf
 addS("menu_serf", "Búsqueda de servicios");
 addS("serf_setup", "Configurar Serf");
-addS("serf_lookfor", "Buscar Servicos con Serf");
+addS("serf_lookfor", "Buscar servicos con Serf");
 
 
 //IPFS
+addS("menu_ipfs", "Búsqueda de servicios");
 addS("ipfs_setup", "Configurar IPFS");
+addS("ipfs_lookfor", "Buscar servicos con IPFS");
+
 
 //Sweep
 addS("menus_sweep_sweep", "Sweep");

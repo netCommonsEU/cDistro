@@ -29,11 +29,13 @@ addS("serf_common_subtitle", "Una herramiente de Anuncio y Descubrimiento de Ser
 //flash
 addS("serf_flash_installed", "Serf ha sido instalado");
 addS("serf_flash_publishing", "Activando la publicación de servicios vía Serf...");
+addS("serf_flash_publishing_error", "No se ha podido activar la publicación de servicios vía Serf");
 addS("serf_flash_saving", "Guardando la configuración de Serf...");
 addS("serf_flash_starting", "Iniciando Serf...");
 addS("serf_flash_stopping", "Parando Serf...");
 addS("serf_flash_uninstalled", "Serf ha sido desinstalado");
 addS("serf_flash_unpublishing", "Desactivando la publicación de servicios vía Serf...");
+addS("serf_flash_unpublishing_error", "No se ha podido desactivar la publicación de servicios vía Serf");
 
 //index
 addS("serf_index_change_configuration", "Utilice este formulario para modificar la configuración de Serf:");

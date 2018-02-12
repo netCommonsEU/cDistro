@@ -29,11 +29,13 @@ addS("serf_common_subtitle", "A Distributed Services Announcement and Discovery 
 //flash
 addS("serf_flash_installed", "Serf has been installed");
 addS("serf_flash_publishing", "Enabling services publication via Serf...");
+addS("serf_flash_publishing_error", "Services publication via Serf was not enabled");
 addS("serf_flash_saving", "Saving Serf configuration...");
 addS("serf_flash_starting", "Starting Serf...");
 addS("serf_flash_stopping", "Stopping Serf...");
 addS("serf_flash_uninstalled", "Serf has been uninstalled");
 addS("serf_flash_unpublishing", "Disabling services publication via Serf...");
+addS("serf_flash_unpublishing_error", "Services publication via Serf was not disabled");
 
 //index
 addS("serf_index_change_configuration", "Use this form to modify Serf configuration:");

@@ -4,7 +4,8 @@ $docker_pkg = "docker-ce";
 $dev = "docker0";
 $form_dir = "/etc/cloudy/docker/templates/";
 
-function index() {
+function index()
+{
     global $title, $urlpath, $docker_pkg, $staticFile, $Parameters;
 
     //Recollim els paràmetres
@@ -59,22 +60,22 @@ function index_post()
 
     foreach ($_POST as $key => $value) {
         $datesToSave[$key] = $value;
-        if ($key=="ports"){
-		$sizel1=sizeof($datesToSave[$key]);
-		$l1 = preg_split("/[\s,]+/",$datesToSave[$key]);
-		$sizeoflist = sizeof($l1);
-		$arr1 = array();
-		for ($i=0 ; $i<$sizeoflist; $i++) {
-			$elem = $l1[$i];
-			$list = explode(":", $elem);
-			$arr1+=array($list[0]=>$list[1]);
-		}
-		$datesToSave[$key]=$arr1;
-	}
-        if ($key=="misc" && $datesToSave[$key] != null){
-                $list=explode(":",$datesToSave[$key]);
-                $arr2=array($list[0]=>$list[1]);
-                $datesToSave[$key]=$arr2;
+        if ($key=="ports") {
+            $sizel1=sizeof($datesToSave[$key]);
+            $l1 = preg_split("/[\s,]+/", $datesToSave[$key]);
+            $sizeoflist = sizeof($l1);
+            $arr1 = array();
+            for ($i=0 ; $i<$sizeoflist; $i++) {
+                $elem = $l1[$i];
+                $list = explode(":", $elem);
+                $arr1+=array($list[0]=>$list[1]);
+            }
+            $datesToSave[$key]=$arr1;
+        }
+        if ($key=="misc" && $datesToSave[$key] != null) {
+            $list=explode(":", $datesToSave[$key]);
+            $arr2=array($list[0]=>$list[1]);
+            $datesToSave[$key]=$arr2;
         }
     }
 
@@ -88,13 +89,14 @@ function index_post()
     // fwrite($fp, json_encode($datesToSave,JSON_PRETTY_PRINT));
     // fclose($fp);
 
-    if ( ! is_dir($form_dir) )
+    if (! is_dir($form_dir)) {
         mkdir($form_dir, 0755, true);
+    }
 
     $filename = $datesToSave['appname'] . "." . $ext;
     $fp1 = fopen($form_dir . "/" .$filename, 'w');
     // fwrite($fp1, json_encode($datesToSave,JSON_FORCE_OBJECT));
-    fwrite($fp1, json_encode($datesToSave,JSON_PRETTY_PRINT));
+    fwrite($fp1, json_encode($datesToSave, JSON_PRETTY_PRINT));
     fclose($fp1);
 
     setFlash("Config -> OK", "info");

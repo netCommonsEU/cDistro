@@ -28,12 +28,14 @@ addS("serf_common_subtitle", "Una eina d'Anunci i Descoberta de Serveis Distribu
 
 //flash
 addS("serf_flash_installed", "S'ha instal·lat Serf");
-addS("serf_flash_publishing", "S'està activant la publicació de serveis via Serf...");
+addS("serf_flash_publishing", "S'està activant la publicació de serveis mitjançant Serf...");
+addS("serf_flash_publishing_error", "No s'ha pogut activar la publicació de serveis mitjançant Serf");
 addS("serf_flash_saving", "S'està desant la configuració de Serf...");
 addS("serf_flash_starting", "S'està arrencant Serf...");
 addS("serf_flash_stopping", "S'està aturant Serf...");
 addS("serf_flash_uninstalled", "S'ha desinstal·lat Serf");
 addS("serf_flash_unpublishing", "S'està desactivant la publicació de serveis via Serf...");
+addS("serf_flash_unpublishing_error", "No s'ha pogut desactivar la publicació de serveis mitjançant Serf");
 
 //index
 addS("serf_index_change_configuration", "Feu servir aquest formulari per modificar la configuració de Serf:");
