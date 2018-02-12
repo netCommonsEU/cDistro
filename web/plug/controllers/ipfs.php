@@ -1,9 +1,6 @@
 <?php
 // controller/ipfs.php
 
-// TODO: https://github.com/Clommunity/cDistro/issues/73
-
-$title="IPFS";
 $ipfsbinpath="/usr/local/bin/";
 $ipfsbin="ipfs";
 $ipfspath="/etc/cloudy/ipfs/";
@@ -28,31 +25,30 @@ function index()
     $page = "";
     $buttons = "";
 
-    $page .= hlc(t($title));
-    $page .= hl(t("A Distributed Services Announcement and Discovery (DADS) tool"), 4);
+    $page .= hlc(t("ipfs_common_title"));
+    $page .= hl(t("ipfs_common_subtitle"), 4);
 
-    $page .= par(t('<a href="https://ipfs.io">IPFS</a> is  peer-to-peer hypermedia protocol to make the web faster, safer, and more open.'));
-
-    $page .= par(t("The Distributed Announcement and Discovery of Services (DADS) for Community Networks included in Cloudy uses IPFS to exchange information between nodes. If services publication is enabled, local services will be announced to the network and other users will be available to see and use them."));
+    $page .= txt(t("ipfs_common_desc_1"));
+    $page .= par(t("ipfs_common_desc_2"));
 
     if (! isIPFSInstalled()) {
-        $page .= "<div class='alert alert-error text-center'>".t("IPFS is not installed")."</div>\n";
-        $page .= par(t("Click on the button below to install IPFS or browse the available Cloudy packages at System => Updates."));
-        $buttons .= addButton(array('label'=>t("Install IPFS"),'class'=>'btn btn-success', 'href'=>$staticFile.'/cloudyupdate/update/ipfs'));
+        $page .= "<div class='alert alert-error text-center'>".t("ipfs_alert_not_installed")."</div>\n";
+        $page .= par(t("ipfs_index_install"));
+        $buttons .= addButton(array('label'=>t("ipfs_button_install"),'class'=>'btn btn-success', 'href'=>$staticFile.'/cloudyupdate/update/ipfs'));
         $page .= $buttons;
     } else {
-        $page .= "<div class='alert alert-success text-center'>".t("IPFS is installed")."</div>\n";
+        $page .= "<div class='alert alert-success text-center'>".t("ipfs_alert_installed")."</div>\n";
 
         if (! isIPFSInitialized()) {
-            $page .= "<div class='alert alert-error text-center'>".t("IPFS is not initialized")."</div>\n";
-            $page .= addButton(array('label'=>t('Initialize IPFS'),'href'=>$staticFile.'/ipfs/initialize'));
+            $page .= "<div class='alert alert-error text-center'>".t("ipfs_alert_not_initialized")."</div>\n";
+            $page .= addButton(array('label'=>t('ipfs_button_initialize'),'href'=>$staticFile.'/ipfs/initialize'));
         } else {
             if (isRunning()) {
-                $page .= "<div class='alert alert-success text-center'>".t("IPFS is running")."</div>\n";
-                $buttons .= addButton(array('label'=>t('Stop node'),'href'=>$staticFile.'/ipfs/stop'));
+                $page .= "<div class='alert alert-success text-center'>".t("ipfs_alert_running")."</div>\n";
+                $buttons .= addButton(array('label'=>t('ipfs_button_stop'),'href'=>$staticFile.'/ipfs/stop'));
             } else {
-                $page .= "<div class='alert alert-error text-center'>".t("IPFS is not running")."</div>\n";
-                $buttons .= addButton(array('label'=>t('Start IPFS daemon'),'href'=>$staticFile.'/ipfs/start'));
+                $page .= "<div class='alert alert-error text-center'>".t("ipfs_alert_stopped")."</div>\n";
+                $buttons .= addButton(array('label'=>t('ipfs_button_start'),'href'=>$staticFile.'/ipfs/start'));
             }
 
             if (isEnabled()) {
