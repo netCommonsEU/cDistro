@@ -64,11 +64,17 @@ addS("docker_flash_run_mid", "");
 addS("docker_flash_run_post", " en segundo plano. Puede tardar unos segundos");
 addS("docker_flash_publish_error_pre", "No se ha podido publicar el contenedor ");
 addS("docker_flash_publish_error_post", "");
+addS("docker_flash_publish_pre", "Publicando el contenedor ");
+addS("docker_flash_publish_post", "");
 addS("docker_flash_pull_pre", "Obteniendo imagen ");
 addS("docker_flash_pull_post", " en segundo plano. Puede tardar unos segundos");
 addS("docker_flash_stop_pre", "Parando contenedor ");
 addS("docker_flash_stop_mid", " (ID: ");
 addS("docker_flash_stop_post", ") en segundo plano. Puede tardar unos segundos");
+addS("docker_flash_unpublish_error_pre", "No se ha podido despublicar el contenedor Docker ");
+addS("docker_flash_unpublish_error_post", "");
+addS("docker_flash_unpublish_pre", "Se está despublicando el contenedor ");
+addS("docker_flash_unpublish_post", "");
 addS("docker_flash_vol_rm_pre", "Se está eliminando el volumen ");
 addS("docker_flash_vol_rm_post", " en segundo plano. Esto puede tardar unos segundos...");
 

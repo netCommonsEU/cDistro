@@ -73,6 +73,8 @@ addS("docker_flash_stop_mid", " (ID: ");
 addS("docker_flash_stop_post", ") in the background. This may take some seconds...");
 addS("docker_flash_unpublish_error_pre", "Unable to unpublish Docker container ");
 addS("docker_flash_unpublish_error_post", "");
+addS("docker_flash_unpublish_pre", "Unpublishing container ");
+addS("docker_flash_unpublish_post", "");
 addS("docker_flash_vol_rm_pre", "Removing volume ");
 addS("docker_flash_vol_rm_post", " in the background. This may take some seconds...");
 

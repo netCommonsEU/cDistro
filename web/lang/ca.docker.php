@@ -64,11 +64,17 @@ addS("docker_flash_run_mid", "");
 addS("docker_flash_run_post", " en segon pla. Pot trigar uns segons...");
 addS("docker_flash_publish_error_pre", "No s'ha pogut publicar el contenidor ");
 addS("docker_flash_publish_error_post", "");
+addS("docker_flash_publish_pre", "S'està publicant el contenidor ");
+addS("docker_flash_publish_post", "");
 addS("docker_flash_pull_pre", "S'està obtenint la imatge  ");
 addS("docker_flash_pull_post", " en segon pla. Pot trigar uns segons...");
 addS("docker_flash_stop_pre", "S'està aturant el contenidor ");
 addS("docker_flash_stop_mid", " (ID: ");
 addS("docker_flash_stop_post", ") en segon pla. Pot trigar uns segons...");
+addS("docker_flash_unpublish_error_pre", "No s'ha pogut despublicar el contenidor Docker ");
+addS("docker_flash_unpublish_error_post", "");
+addS("docker_flash_unpublish_pre", "S'està despublicant el contenidor ");
+addS("docker_flash_unpublish_post", "");
 addS("docker_flash_vol_rm_pre", "S'està esborrant el volum ");
 addS("docker_flash_vol_rm_post", " en segon pla. Això pot trigar uns segons...");
 
