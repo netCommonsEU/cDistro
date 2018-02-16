@@ -367,7 +367,7 @@ function templates_table($ttype, $templatesdir)
             $fcontent = file_get_contents($templatesdir . '/' . $fvalue);
             $jcontent = json_decode($fcontent, true);
 
-            if ( isset($jcontent["arch"]) && $jcontent['arch'] == aptArch() ) {
+            if ( isset($jcontent["arch"]) && ($jcontent['arch'] == aptArch() || in_array(aptArch(), $jcontent['arch']))) {
                 $fields = "";
                 $fields[] = $jcontent["appname"];
                 $fields[] = $jcontent["description"];
