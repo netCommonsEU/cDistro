@@ -20,6 +20,8 @@ function index()
 
     $page .= par(t("docker_add_desc"));
 
+    // Default templates
+    $page .= hlc(t("docker_add_subtitle_predefined"), 2);
     $page .= ajaxStr('tableDefaultTemplatesAjax', t("Searching for the default templates, please wait a moment..."));
     $page .= "<div id='tableDefaultTemplates' style='display:none'></div>";
     $page .= "<script>\n";
@@ -31,6 +33,8 @@ function index()
     $page .= "});\n";
     $page .= "</script>\n";
 
+    // User-defined templates
+    $page .= hlc(t("docker_add_subtitle_user"), 2);
     $page .= ajaxStr('tableUserTemplatesAjax', t("Searching for the user templates, please wait a moment..."));
     $page .= "<div id='tableUserTemplates' style='display:none'></div>";
     $page .= "<script>\n";
