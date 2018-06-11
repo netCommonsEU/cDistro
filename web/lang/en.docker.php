@@ -90,16 +90,15 @@ addS("docker_container_running", "running");
 
 //add
 addS("docker_add_config_desc", "Use the form below to customize the predefined template settings and launch the image.");
-addS("docker_add_subtitle", "Predefined templates for launching Docker containers");
 addS("docker_add_desc", 'The table below provides you a list of predefined Docker images, tested and ready to launch. Use the corresponding buttons to configure them before launching, or to launch them directly.');
+addS("docker_add_error_no_image", 'An error occurred:');
+addS("docker_add_error_no_template", 'An error occurred:');
 addS("docker_add_header_appname", 'Application');
 addS("docker_add_header_description", 'Description');
 addS("docker_add_header_ports", 'Ports');
 addS("docker_add_header_options", 'Options');
 addS("docker_add_header_links", 'Links');
 addS("docker_add_header_actions", 'Actions');
-addS("docker_add_error_no_image", 'An error occurred:');
-addS("docker_add_error_no_template", 'An error occurred:');
 addS("docker_add_pdform_image", "Docker image");
 addS("docker_add_pdform_image_tooltip", "The image to pull from the Docker repository.");
 addS("docker_add_pdform_name", "Container name");
@@ -112,6 +111,9 @@ addS("docker_add_pdform_option_tooltip_pre", "Configure the value for the ");
 addS("docker_add_pdform_option_tooltip_post", " option.");
 addS("docker_add_pdform_link", "Link");
 addS("docker_add_pdform_link_tooltip", "Link this container with another one.");
+addS("docker_add_subtitle", "Predefined templates for launching Docker containers");
+addS("docker_add_subtitle_predefined", "Predefined Docker container templates");
+addS("docker_add_subtitle_user", "User-defined Docker container templates");
 
 
 //search

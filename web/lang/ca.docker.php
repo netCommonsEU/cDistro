@@ -90,16 +90,15 @@ addS("docker_container_running", "engegat");
 
 //add
 addS("docker_add_config_desc", "Empreu el formulari de sota per configurar les opcions per defecto de la plantilla i arrencar la imatge.");
-addS("docker_add_subtitle", "Plantilles predefinides per iniciar contenidors Docker");
 addS("docker_add_desc", "La tabla de sota us mostra una llista d'imatges Docker predefinides, provades i llestes per arrencar. Empreu els botons corresponents per configurar-les abans d'iniciar-les o per engegar-les directament.");
+addS("docker_add_error_no_image", "S'ha produït un error:");
+addS("docker_add_error_no_template", "S'ha produït un error:");
 addS("docker_add_header_appname", 'Aplicació');
 addS("docker_add_header_description", 'Descripció');
 addS("docker_add_header_ports", 'Ports');
 addS("docker_add_header_options", 'Opcions');
 addS("docker_add_header_links", 'Enllaços');
 addS("docker_add_header_actions", 'Accions');
-addS("docker_add_error_no_image", "S'ha produït un error:");
-addS("docker_add_error_no_template", "S'ha produït un error:");
 addS("docker_add_pdform_image", "Imatge Docker");
 addS("docker_add_pdform_image_tooltip", "La imatge que es descarregarà del repositori de Docker.");
 addS("docker_add_pdform_name", "Nom del contenidor");
@@ -112,7 +111,9 @@ addS("docker_add_pdform_option_tooltip_pre", "Configureu el valor per a l'opció
 addS("docker_add_pdform_option_tooltip_post", " .");
 addS("docker_add_pdform_link", "Enllaç");
 addS("docker_add_pdform_link_tooltip", "Enllaça aquest contenidr amb un altre.");
-
+addS("docker_add_subtitle", "Plantilles predefinides per iniciar contenidors Docker");
+addS("docker_add_subtitle_predefined", "Plantilles de contenidors Docker predefinides");
+addS("docker_add_subtitle_user", "Plantilles de contenidors Docker de l'usuari");
 
 //search
 addS("docker_search_subtitle", "Cercar i instal·lar imatges de contenidors Docker");

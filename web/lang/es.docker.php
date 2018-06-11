@@ -90,16 +90,15 @@ addS("docker_container_running", "en ejecución");
 
 //add
 addS("docker_add_config_desc", "Use el formulario que hay a continuación para configurar las opciones por defecto de la plantilla e iniciar la imagen.");
-addS("docker_add_subtitle", "Plantillas predefinidas para iniciar contenedores Docker");
 addS("docker_add_desc", 'La tabla que hay a continuación le ofrece una lista de imágenes Docker predefinidas, probadas y listas para iniciar. Use los botones correspondientes para configurarlas antes de iniciarlas, o para arrancarlas directamente.');
+addS("docker_add_error_no_image", 'Ha ocurrido un error:');
+addS("docker_add_error_no_template", 'Ha ocurrido un error:');
 addS("docker_add_header_appname", 'Aplicación');
 addS("docker_add_header_description", 'Descripción');
 addS("docker_add_header_ports", 'Puertos');
 addS("docker_add_header_options", 'Opciones');
 addS("docker_add_header_links", 'Enlaces');
 addS("docker_add_header_actions", 'Acciones');
-addS("docker_add_error_no_image", 'Ha ocurrido un error:');
-addS("docker_add_error_no_template", 'Ha ocurrido un error:');
 addS("docker_add_pdform_image", "Imagen Docker");
 addS("docker_add_pdform_image_tooltip", "La imagen que se descargará del repositorio de Docker.");
 addS("docker_add_pdform_name", "Nombre del contenedor");
@@ -112,7 +111,9 @@ addS("docker_add_pdform_option_tooltip_pre", "Configure el valor para la opción
 addS("docker_add_pdform_option_tooltip_post", " .");
 addS("docker_add_pdform_link", "Enlace");
 addS("docker_add_pdform_link_tooltip", "Enlazar este contenedor con otro.");
-
+addS("docker_add_subtitle", "Plantillas predefinidas para iniciar contenedores Docker");
+addS("docker_add_subtitle_predefined", "Plantillas de contenedores Docker predefinidas");
+addS("docker_add_subtitle_user", "Plantillas de contenedores Docker del usuario");
 
 //search
 addS("docker_search_subtitle", "Buscar e instalar imágenes de contenedores Docker");
