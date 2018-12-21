@@ -7,7 +7,7 @@ $conf = parse_bash_file($CLOUDY_CONF_DIR.$CLOUDY_CONF_FILE);
 list($wi_ip, $wi_port) = explode(":", $_SERVER['HTTP_HOST']);
 $protocol="http";
 
-if (isset($conf['PORT_SSL'])) {
+if ( isset($conf['PORT_SSL']) && ( ! isset($conf['ALLOWHTTP']) || $conf['ALLOWHTTP'] === "0")) {
     if (($wi_port != $conf['PORT_SSL']) || ($_SERVER['REMOTE_ADDR'] != "127.0.0.1")) {
         header('Location: https://'.$wi_ip.':'.$conf['PORT_SSL']);
     } else {

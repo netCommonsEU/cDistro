@@ -8,6 +8,7 @@ addS("default_common_description", "El núvol per a xarxes comunitàries a les t
 
 //Buttons
 addS("default_button_back", "Enrere");
+addS("default_button_dummy", "Un botonet");
 addS("default_button_home", "Inici");
 
 //index

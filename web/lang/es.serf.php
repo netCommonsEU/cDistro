@@ -29,17 +29,19 @@ addS("serf_common_subtitle", "Una herramiente de Anuncio y Descubrimiento de Ser
 //flash
 addS("serf_flash_installed", "Serf ha sido instalado");
 addS("serf_flash_publishing", "Activando la publicación de servicios vía Serf...");
+addS("serf_flash_publishing_error", "No se ha podido activar la publicación de servicios vía Serf");
 addS("serf_flash_saving", "Guardando la configuración de Serf...");
 addS("serf_flash_starting", "Iniciando Serf...");
 addS("serf_flash_stopping", "Parando Serf...");
 addS("serf_flash_uninstalled", "Serf ha sido desinstalado");
 addS("serf_flash_unpublishing", "Desactivando la publicación de servicios vía Serf...");
+addS("serf_flash_unpublishing_error", "No se ha podido desactivar la publicación de servicios vía Serf");
 
 //index
 addS("serf_index_change_configuration", "Utilice este formulario para modificar la configuración de Serf:");
 addS("serf_index_current_configuration", "Esta es la configuración actual de Serf. Para cambiarla, pare Serf primero.");
 addS("serf_index_description_1", "<a href='https://serfdom.io/' target='_blank'>Serf</a> es una solución descentralizada, ligera y de alta disponibilidad para gestionar la pertenencia a clústeres, la detección de fallos y la orquestación de servicios. Utiliza un protocolo eficiente y ligero de <i>gossip</i> (cotilleo) para la comunicación entre nodos. Como Serf no depende de nodes maestros (<i>master</i>) no tiene puntos únicos de fallo.");
-addS("serf_index_description_2", "El sistema de Anuncio y Descubrimiento de Servicios Distribuido (en inglés, <i>DADS</i>) incluido en Cloudy utiliza Serf para intercambiar información entre nodes. Si la publicación de servicios está activada, los servicios locales serán anunciados a la red y otros usuarios podrán verlos y usarlos.");
+addS("serf_index_description_2", "El sistema de Anuncio y Descubrimiento de Servicios Distribuido (en inglés, <i>DADS</i>) incluido en Cloudy utiliza Serf para intercambiar información entre nodos. Si la publicación de servicios está activada, los servicios locales serán anunciados a la red y otros usuarios podrán verlos y usarlos.");
 addS("serf_index_form_bootstrap", "Nodo de arranque");
 addS("serf_index_form_bootstrap_tooltip", "Dirección IP y puerto de un node que esté corriendo Serf. Se utilizará para arrancar el servicio. Valor por defecto: 10.139.40.122:5000");
 addS("serf_index_form_rpc", "Adreça RPC");

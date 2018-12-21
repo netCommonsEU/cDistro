@@ -9,7 +9,7 @@ $avahips_config="/etc/avahi-ps.conf";
 $avahipsetc_config="/etc/avahi-ps-serf.conf";
 $urlpath='/serf';
 $serfgeturl='https://raw.githubusercontent.com/Clommunity/package-serf/master/getgithub';
-$serfmenu=dirname(__FILE__)."/../menus/serf.lookfor.menu.php";
+$serfmenu=dirname(__FILE__)."/../menus/r0101.serf.lookfor.menu.php";
 $avahipsetc_data=array(
                     'SERF_RPC_ADDR'=> array('default'=>'127.0.0.1:7373'),
                     'SERF_BIND'=> array('default'=>'5000'),
@@ -26,6 +26,13 @@ function serf_search()
 {
     $ret = execute_program("SEARCH_ONLY=serf /usr/sbin/avahi-ps search");
     return($ret['output']);
+}
+
+function raw_serf_search()
+{
+    $ret = execute_program("SEARCH_ONLY=serf /usr/sbin/avahi-ps search");
+    $page = ptxt(print_r($ret, 1));
+    return(array('type'=>'render','page'=>$page));
 }
 
 function search()
@@ -166,7 +173,7 @@ function index()
         }
 
         $page .= txt(t("serf_index_publication"));
-        if ($var_avahi['DATABASE'] != 'serf') {
+        if (! isEnabled()) {
             if (_isRun()) {
                 $page .= "<div class='alert alert-warning text-center'>".t("serf_alert_wont_publish")."</div>";
             } else {
@@ -223,7 +230,7 @@ function index_post()
     foreach ($_POST as $key => $value) {
         $datesToSave[$key] = $value;
     }
-    write_conffile($avahipsetc_config, $datesToSave, "", "", '"');
+    write_conffile($avahipsetc_config, $datesToSave, null, null);
 
     setFlash(t('serf_flash_saving'), "info");
     return(array('type'=> 'redirect', 'url' => $staticFile.$urlpath));
@@ -250,7 +257,7 @@ function createDefaultAvahiFile()
 {
     global $avahips_config;
 
-    write_conffile($avahips_config, array('ERRORS_PLUG'=> "errors",'EXECUTE_IN'=>"memory",'SAVE_SERVICE'=>"none",'DATABASE'=>"none"), "", "", '"');
+    write_conffile($avahips_config, array('ERRORS_PLUG'=> "errors",'EXECUTE_IN'=>"memory",'SAVE_SERVICE'=>"none",'DATABASE'=>"none"), null, null);
 }
 function createDefaultAvahiEtcFile()
 {
@@ -260,7 +267,7 @@ function createDefaultAvahiEtcFile()
     foreach ($avahipsetc_data as $k=>$v) {
         $tmparray[$k] = $v['default'];
     }
-    write_conffile($avahipsetc_config, $tmparray, "", "", '"');
+    write_conffile($avahipsetc_config, $tmparray, null, null);
 }
 function _existSerfConf()
 {
@@ -340,25 +347,84 @@ function stopprogram()
 
 function removeserf()
 {
-    global $avahips_config,$urlpath,$staticFile;
+    global $avahips_config, $urlpath, $staticFile;
 
-    $var_avahi = load_conffile($avahips_config);
-    $var_avahi['DATABASE'] = 'none';
-    write_conffile($avahips_config, $var_avahi, "", "", '"');
+    // Load Avahi-PS configuration file
+    $aps_cfg = load_conffile($avahips_config);
 
-    setFlash(t('serf_flash_unpublishing'), "info");
+    // Remove Serf as a backend database for publication
+    if (isset($aps_cfg['DATABASE'])) {
+        $aps_cfg['DATABASE'] = trim(str_replace("serf", "", $aps_cfg['DATABASE']));
+    }
+
+    // If there are no backends remaining, set it to "none"
+    if ((isset($aps_cfg['DATABASE']) && trim($aps_cfg['DATABASE']) === "") || !isset($aps_cfg['DATABASE'])) {
+        $aps_cfg['DATABASE'] = "none";
+    }
+
+    // Save Avahi-PS configuration file
+    write_conffile($avahips_config, $aps_cfg, null, null);
+
+    // Check if Serf was actually disabled and set a flash message before return
+    if (! isEnabled()) {
+        setFlash(t('serf_flash_unpublishing'), "success");
+    } else {
+        setFlash(t('serf_flash_unpublishing_error'), "error");
+    }
+
     return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
 }
 
 function selectserf()
 {
-    global $avahips_config,$urlpath,$staticFile;
+    global $avahips_config, $urlpath, $staticFile;
 
+    // Load Avahi-PS configuration file
+    $aps_cfg = load_conffile($avahips_config);
 
-    $var_avahi = load_conffile($avahips_config);
-    $var_avahi['DATABASE'] = 'serf';
-    write_conffile($avahips_config, $var_avahi, "", "", '"');
+    // Add Serf as a backend database for publication
+    if (isset($aps_cfg['DATABASE'])) {
+        if (strpos($aps_cfg['DATABASE'], 'serf') === false) {
+            $aps_cfg['DATABASE'] = trim($aps_cfg['DATABASE']." serf");
+        }
+        $aps_cfg['DATABASE'] = trim(str_replace("none", "", $aps_cfg['DATABASE']));
+    } else {
+        $aps_cfg['DATABASE'] = "serf";
+    }
 
-    setFlash(t('serf_flash_publishing'), "info");
+    // Save Avahi-PS configuration file
+    write_conffile($avahips_config, $aps_cfg, null, null);
+
+    // Check if Serf was actually enabled and set a flash message before return
+    if (isEnabled()) {
+        setFlash(t('serf_flash_publishing'), "success");
+    } else {
+        setFlash(t('serf_flash_publishing_error'), "error");
+    }
+
     return(array('type'=>'redirect','url'=>$staticFile.$urlpath));
+}
+
+/**
+ * function isEnabled(): check if Serf is enabled as a publication mechanism
+ *
+ * This function checks if Serf is enabled as a mechanism to publish local
+ * services to the community cloud.
+ *
+ * @param none
+ *
+ * @return bool
+ */
+function isEnabled()
+{
+    global $avahips_config;
+
+    // Load Avahi-PS configuration file
+    $aps_cfg = load_conffile($avahips_config);
+
+    // Check for Serf as a backend database for publication
+    if (isset($aps_cfg['DATABASE']) && strpos($aps_cfg['DATABASE'], 'serf') !== false) {
+        return true;
+    }
+    return false;
 }

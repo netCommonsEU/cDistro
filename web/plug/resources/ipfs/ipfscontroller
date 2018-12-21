@@ -7,11 +7,13 @@ IPFSBIN="ipfs"
 SERVICEDIR="services/"
 LOGFILE="/dev/null"
 IPFSUSER="nobody"
-IPFSFILE="ipfs.info"
+IPFSINFOFILE="ipfs.info"
 CONFIG="config"
 TMPCONFIG="tmpconfig"
 IPFSLOG="ipfs-daemon.log"
-BOOTSTRAP="/ip4/10.139.40.99/tcp/4001/ipfs/QmU2m75ucoNgRHufwpnLTJEDzgyAJ8RvhdZWsmfgQyFe5u"
+BOOTSTRAP="/ip4/10.139.40.122/tcp/4001/ipfs/QmUFGx2aum3ZcBzWNpwFFvKGCoNzhTGb3bgCo4sixkWKm8"
+INITDIPFS="/etc/init.d/cloudy-ipfs"
+PIDFILE="/var/run/cloudy-ipfs.pid"
 
 doInstall() {
 	if isInstalled
@@ -74,37 +76,48 @@ addBootstrapNode() {
 }
 
 doServer(){
-    local port=${1:-""}
-    local description=${2:-""}
+    local port=${1:-"5001"}
+    local description=${2:-"IPFS"}
     local ip=${3:-"0.0.0.0"}
 
-    export IPFS_PATH=$IPFSPATH
-    # Creating directory with nobody permissions
-   # mkdir -p "/var/local/ipfs" && cd "/var/local/ipfs"
-   # chmod 777 "/var/local/ipfs" && cd "/var/local/ipfs"
-    cd $IPFSPATH
-    # Running ipfs
-    $IPFSBINPATH$IPFSBIN daemon > $IPFSPATH$IPFSLOG 2>&1 &
-    pidipfs=$!
-  #  cmd='su '$IPFSUSER' -c "{ '$IPFSPATH$IPFSPROG' daemon > 'thingcalledlog' 2>&1 & }; echo \$!"'
-  #  pidipfs=$(eval $cmd)          # keeping PID for future needs...
+    # export IPFS_PATH=$IPFSPATH
+    # # Creating directory with nobody permissions
+    # # mkdir -p "/var/local/ipfs" && cd "/var/local/ipfs"
+    # # chmod 777 "/var/local/ipfs" && cd "/var/local/ipfs"
+    # cd $IPFSPATH
+    # # Running ipfs
+    # $IPFSBINPATH$IPFSBIN daemon > $IPFSPATH$IPFSLOG 2>&1 &
+    # pidipfs=$!
+    # #  cmd='su '$IPFSUSER' -c "{ '$IPFSPATH$IPFSPROG' daemon > 'thingcalledlog' 2>&1 & }; echo \$!"'
+    # #  pidipfs=$(eval $cmd)          # keeping PID for future needs...
 
-    cd -
+    # # Using the PID, we could carry on process control so if the ipfs process die, we can also
+    # # stop the avahi process to avoid "false connections"
 
-    # Using the PID, we could carry on process control so if the ipfs process die, we can also
-    # stop the avahi process to avoid "false connections"
-	info="$pidipfs http://$ip:$port"
-	echo $info > $IPFSPATH$IPFSFILE
-    return
+    # Start IPFS via init.d script
+    # TODO: manage failed starts
+    [ -f $INITDIPFS ] && { $INITDIPFS start > /dev/null 2>&1 ; }
+
+    # Save daemon info
+    #[ -f $PIDFILE ] && echo "$(cat $PIDFILE) http://$ip:$port" > $IPFSPATH$IPFSINFOFILE
+    pid="$(cat $PIDFILE)"
+    info="$pid http://$ip:$port"
+    echo $info > $IPFSPATH$IPFSINFOFILE
+    echo $info
+    return 0
 }
 
 doStop() {
-    # Stopping ipfs node
-    ipfspid=$(cat $IPFSPATH$IPFSFILE | cut -d' ' -f1)
-    kill $ipfspid
+    # # Stopping ipfs node
+    # ipfspid=$(cat $IPFSPATH$IPFSINFOFILE | cut -d' ' -f1)
+    # kill $ipfspid
+
+    [ -f $INITDIPFS ] && $INITDIPFS stop
 
     # Removing info file
-    rm $IPFSPATH$IPFSFILE
+    [ -f $INITDIPFS ]
+    echo $IPFSPATH$IPFSINFOFILE
+    rm $IPFSPATH$IPFSINFOFILE
 }
 
 doHelp() {

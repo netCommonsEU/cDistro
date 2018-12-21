@@ -10,6 +10,8 @@ addS("docker_alert_img_not_available", "No Docker images available");
 addS("docker_alert_no_sources", "Missing APT sources file for Docker package");
 addS("docker_alert_no_image_pre", "The Docker image ");
 addS("docker_alert_no_image_post", " could not be found locally");
+addS("docker_alert_no_predef_arch_pre", "There are no predefined Docker containers for the ");
+addS("docker_alert_no_predef_arch_post", " architecture");
 addS("docker_alert_no_template_pre", "The Docker template ");
 addS("docker_alert_no_template_post", " could not be found");
 addS("docker_alert_ps_not_running", "No running Docker containers");
@@ -71,6 +73,8 @@ addS("docker_flash_stop_mid", " (ID: ");
 addS("docker_flash_stop_post", ") in the background. This may take some seconds...");
 addS("docker_flash_unpublish_error_pre", "Unable to unpublish Docker container ");
 addS("docker_flash_unpublish_error_post", "");
+addS("docker_flash_unpublish_pre", "Unpublishing container ");
+addS("docker_flash_unpublish_post", "");
 addS("docker_flash_vol_rm_pre", "Removing volume ");
 addS("docker_flash_vol_rm_post", " in the background. This may take some seconds...");
 
@@ -86,16 +90,15 @@ addS("docker_container_running", "running");
 
 //add
 addS("docker_add_config_desc", "Use the form below to customize the predefined template settings and launch the image.");
-addS("docker_add_subtitle", "Predefined templates for launching Docker containers");
 addS("docker_add_desc", 'The table below provides you a list of predefined Docker images, tested and ready to launch. Use the corresponding buttons to configure them before launching, or to launch them directly.');
+addS("docker_add_error_no_image", 'An error occurred:');
+addS("docker_add_error_no_template", 'An error occurred:');
 addS("docker_add_header_appname", 'Application');
 addS("docker_add_header_description", 'Description');
 addS("docker_add_header_ports", 'Ports');
 addS("docker_add_header_options", 'Options');
 addS("docker_add_header_links", 'Links');
 addS("docker_add_header_actions", 'Actions');
-addS("docker_add_error_no_image", 'An error occurred:');
-addS("docker_add_error_no_template", 'An error occurred:');
 addS("docker_add_pdform_image", "Docker image");
 addS("docker_add_pdform_image_tooltip", "The image to pull from the Docker repository.");
 addS("docker_add_pdform_name", "Container name");
@@ -108,6 +111,9 @@ addS("docker_add_pdform_option_tooltip_pre", "Configure the value for the ");
 addS("docker_add_pdform_option_tooltip_post", " option.");
 addS("docker_add_pdform_link", "Link");
 addS("docker_add_pdform_link_tooltip", "Link this container with another one.");
+addS("docker_add_subtitle", "Predefined templates for launching Docker containers");
+addS("docker_add_subtitle_predefined", "Predefined Docker container templates");
+addS("docker_add_subtitle_user", "User-defined Docker container templates");
 
 
 //search

@@ -10,6 +10,8 @@ addS("docker_alert_img_not_available", "No hi ha imatges de Docker disponibles")
 addS("docker_alert_no_sources", "Falta el fitxer de fonts APT per al paquet de Docker");
 addS("docker_alert_no_image_pre", "No s'ha trobat la imatge de Docker ");
 addS("docker_alert_no_image_post", " al repositori local");
+addS("docker_alert_no_predef_arch_pre", "No hi ha contenidors Docker predefinits per a l'arquitectura ");
+addS("docker_alert_no_predef_arch_post", "");
 addS("docker_alert_no_template_pre", "No s'ha trobat la plantilla de Docker ");
 addS("docker_alert_no_template_post", "");
 addS("docker_alert_ps_not_running", "No hi ha contenidors Docker engegats");
@@ -62,11 +64,17 @@ addS("docker_flash_run_mid", "");
 addS("docker_flash_run_post", " en segon pla. Pot trigar uns segons...");
 addS("docker_flash_publish_error_pre", "No s'ha pogut publicar el contenidor ");
 addS("docker_flash_publish_error_post", "");
+addS("docker_flash_publish_pre", "S'està publicant el contenidor ");
+addS("docker_flash_publish_post", "");
 addS("docker_flash_pull_pre", "S'està obtenint la imatge  ");
 addS("docker_flash_pull_post", " en segon pla. Pot trigar uns segons...");
 addS("docker_flash_stop_pre", "S'està aturant el contenidor ");
 addS("docker_flash_stop_mid", " (ID: ");
 addS("docker_flash_stop_post", ") en segon pla. Pot trigar uns segons...");
+addS("docker_flash_unpublish_error_pre", "No s'ha pogut despublicar el contenidor Docker ");
+addS("docker_flash_unpublish_error_post", "");
+addS("docker_flash_unpublish_pre", "S'està despublicant el contenidor ");
+addS("docker_flash_unpublish_post", "");
 addS("docker_flash_vol_rm_pre", "S'està esborrant el volum ");
 addS("docker_flash_vol_rm_post", " en segon pla. Això pot trigar uns segons...");
 
@@ -82,16 +90,15 @@ addS("docker_container_running", "engegat");
 
 //add
 addS("docker_add_config_desc", "Empreu el formulari de sota per configurar les opcions per defecto de la plantilla i arrencar la imatge.");
-addS("docker_add_subtitle", "Plantilles predefinides per iniciar contenidors Docker");
 addS("docker_add_desc", "La tabla de sota us mostra una llista d'imatges Docker predefinides, provades i llestes per arrencar. Empreu els botons corresponents per configurar-les abans d'iniciar-les o per engegar-les directament.");
+addS("docker_add_error_no_image", "S'ha produït un error:");
+addS("docker_add_error_no_template", "S'ha produït un error:");
 addS("docker_add_header_appname", 'Aplicació');
 addS("docker_add_header_description", 'Descripció');
 addS("docker_add_header_ports", 'Ports');
 addS("docker_add_header_options", 'Opcions');
 addS("docker_add_header_links", 'Enllaços');
 addS("docker_add_header_actions", 'Accions');
-addS("docker_add_error_no_image", "S'ha produït un error:");
-addS("docker_add_error_no_template", "S'ha produït un error:");
 addS("docker_add_pdform_image", "Imatge Docker");
 addS("docker_add_pdform_image_tooltip", "La imatge que es descarregarà del repositori de Docker.");
 addS("docker_add_pdform_name", "Nom del contenidor");
@@ -104,7 +111,9 @@ addS("docker_add_pdform_option_tooltip_pre", "Configureu el valor per a l'opció
 addS("docker_add_pdform_option_tooltip_post", " .");
 addS("docker_add_pdform_link", "Enllaç");
 addS("docker_add_pdform_link_tooltip", "Enllaça aquest contenidr amb un altre.");
-
+addS("docker_add_subtitle", "Plantilles predefinides per iniciar contenidors Docker");
+addS("docker_add_subtitle_predefined", "Plantilles de contenidors Docker predefinides");
+addS("docker_add_subtitle_user", "Plantilles de contenidors Docker de l'usuari");
 
 //search
 addS("docker_search_subtitle", "Cercar i instal·lar imatges de contenidors Docker");

@@ -4,5 +4,6 @@
   "image": "owncloud:9.1.6",
   "ports": {
     "9916": "80"
-  }
+  },
+  "arch": "amd64"
 }

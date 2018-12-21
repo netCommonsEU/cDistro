@@ -78,7 +78,9 @@ addS("serf_setup", "Configurar Serf");
 addS("serf_lookfor", "Cercar serveis amb Serf");
 
 //IPFS
+addS("menu_ipfs", "Cercar");
 addS("ipfs_setup", "Configurar IPFS");
+addS("ipfs_lookfor", "Cercar serveis amb IPFS");
 
 //Sweep
 addS("menus_sweep_sweep", "Sweep");

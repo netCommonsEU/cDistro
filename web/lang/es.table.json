@@ -1,20 +1,20 @@
 {
-	"sEmptyTable":   	"Tabla vacia",
-	"sInfo":         	"_TOTAL_ registros",
-	"sInfoEmpty":    	"Vacio",
-	"sInfoFiltered": 	"(Filtrados _MAX_ registros)",
+	"sEmptyTable":   	"No hay datos que mostrar.",
+	"sInfo":         	"Mostrando _TOTAL_ elementos",
+	"sInfoEmpty":    	"Ningún elemento",
+	"sInfoFiltered": 	"(se han filtrado _MAX_ elementos)",
 	"sInfoPostFix":  	"",
 	"sInfoThousands":  	".",
-	"sLengthMenu":   	"Mostrar _MENU_",
+	"sLengthMenu":   	"Mostrar: _MENU_",
 	"sLoadingRecords": 	"Cargando...",
 	"sProcessing":   	"Procesando...",
-	"sSearch":       	"Buscar",
-	"sZeroRecords":  	"Ningún registro",
+	"sSearch":       	"Buscar en los elementos:",
+	"sZeroRecords":  	"Ningún elemento",
 	"oPaginate": {
 		"sFirst":    	"Primero",
-		"sPrevious": 	"Previo",
+		"sPrevious": 	"Anterior",
 		"sNext":     	"Siguiente",
-		"sLast":     	"Ultimo"
+		"sLast":     	"Último"
 	},
 	"oAria": {
 		"sSortAscending":  ": ascendente",

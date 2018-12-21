@@ -26,7 +26,6 @@ $js = array('jquery-1.11.0.min','jquery.dataTables.min','bootstrap.min');
 $js_end = array('main');
 $dir_configs="/etc/cloudy";
 
-
 if (isset($user) && !$post_login) {
     // Default
     $controller = "default";
@@ -63,6 +62,16 @@ if (isset($user) && !$post_login) {
         $action="notFunctionExist";
     }
     $cb = call_user_func_array($action, $Parameters);
+
+    list($wi_ip, $wi_port) = explode(":", $_SERVER['HTTP_HOST']);
+
+    if (isset($conf['PORT_SSL']) && $wi_port != $conf['PORT_SSL'] && isset ($conf['ALLOWHTTP']) && $conf['ALLOWHTTP'] === "1" ){
+        $https_url = 'https://'.$wi_ip.':'.$conf['PORT_SSL'];
+        $https_alert = "<div class='alert alert-warning text-center'>".t("https_http_pre") . "</br>". "<a href=$https_url>$https_url</a>" . t("https_http_post") . "</div>\n";
+        if (isset ($cb['page']) ){
+            $cb['page'] = $https_alert . $cb['page'];
+        }
+    }
 }
 
 switch ($cb['type']) {

@@ -1,10 +1,16 @@
 # Cloudy GNU/Linux Distribution 
 
+### About
 A community networking cloud in a box.
+
+The *Cloudy GNU/Linux Distribution* turns your embedded, barebone or mini computer into a *community networking cloud in a box*.
+
+### Installation
+This repository contains the source code for the scripts, daemons and web GUI of Cloudy. To install Cloudy on your network computing device, use the automated installation script located at https://github.com/Clommunity/cloudynitzar.
 
 ## Testing with cloudynitzar.sh [![Build Status](https://travis-ci.org/Clommunity/cloudynitzar.svg?branch=master)](https://travis-ci.org/Clommunity/cloudynitzar)
 
-### About
+### About Cloudynitzar
 Cloudynitzar is a shell script that turns your plain Debian or Ubuntu system into a community networking cloud in a box (i.e. a full-featured Cloudy device). It might as well work on Debian and Ubuntu derivatives, like Linux Mint. Feel free to test and report!
 
 ### Requirements
@@ -19,5 +25,5 @@ From your Debian system run, as root:
 apt-get update; apt-get install -y curl lsb-release
 curl -k https://raw.githubusercontent.com/Clommunity/cloudynitzar/master/cloudynitzar.sh | bash -
 ````
-
-and let the magic begin!
+### Learn more
+You can find more information about Cloudy at https://www.cloudy.community and https://www.clommunity-project.eu.

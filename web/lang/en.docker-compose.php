@@ -37,9 +37,6 @@ addS("docker_compose_button_clone", "Clone a Docker Compose project");
 addS("docker_compose_button_manage", "Manage");
 addS("docker_compose_button_delete", "Delete");
 addS("docker_compose_button_back", "Back");
-addS("docker_compose_button_create", "Create new Docker Compose project");
-
-
 
 
 //flash
@@ -65,7 +62,6 @@ addS("docker_compose_flash_delete_pre", "Project ");
 addS("docker_compose_flash_delete_post", " has been deleted.");
 addS("docker_compose_flash_delete_error_pre", "The directory ");
 addS("docker_compose_flash_delete_error_post", " could not be deleted.");
-
 
 
 //Common

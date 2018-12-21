@@ -43,7 +43,7 @@ function index_post()
     $eps_options = '--no-trunc ';
 
     if ($POSTdata['automated']) {
-        $eps_options .= '--automated ';
+        $eps_options .= '--filter is-automated=true ';
     }
 
     $ret = execute_program_shell('docker search ' . $eps_options . $POSTdata['search']);

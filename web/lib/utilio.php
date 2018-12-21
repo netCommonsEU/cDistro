@@ -26,7 +26,7 @@ function load_conffile($file, $default = null)
         }
         notReadFile($file);
     }
-    return($v);
+    return(del_quotes($v));
 }
 
 function load_singlevalue($file, $varis)
@@ -82,7 +82,7 @@ function write_conffile($file, $dates, $preinfo="", $postinfo="")
 {
     //Prepare file
     $str = $preinfo;
-    foreach ($dates as $k=>$v) {
+    foreach (add_quotes($dates) as $k=>$v) {
         $str .="$k=$v\n";
     }
     $str .= $postinfo;
@@ -112,7 +112,7 @@ function write_merge_conffile($file, $dates)
 
         foreach ($dates as $k=>$v) {
             if (array_key_exists($k, $conf)) {
-                $cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k." = ".$v."|g' ".$file;
+                $cmd = "sed -i -e 's|".$k." *= *[^;]*|".$k."=".$v."|g' ".$file;
 
                 if ($debug) {
                     echo $cmd;
@@ -398,14 +398,23 @@ function has_virtualization_extensions()
 
 function add_quotes($dates)
 {
-    foreach ($dates as $k=>$v) {
-        if (strpos($dates[$k], '"')===0) {
-            $dates[$k]=substr($dates[$k], 1, (strlen($dates[$k])-1));
-        }
-        if (strripos($dates[$k], '"')===(strlen($dates[$k])-1)) {
-            $v=substr($dates[$k], 0, -1);
-        }
+    foreach (del_quotes($dates) as $k=>$v) {
         $dates[$k] = '"'.$dates[$k].'"';
+    }
+    return $dates;
+}
+
+function del_quotes($dates)
+{
+    foreach ($dates as $k => $v) {
+        if (strpos($v, '"') === 0) {
+            $v = substr($v, 1, (strlen($v)-1));
+        }
+
+        if (strrpos($v, '"') === (strlen($v)-1)) {
+            $v=substr($v, 0, -1);
+        }
+        $dates[$k] = $v;
     }
     return $dates;
 }
